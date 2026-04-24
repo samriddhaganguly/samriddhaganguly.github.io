@@ -199,18 +199,22 @@
     <!-- FORM -->
     <div class="contact-section-title">Send a Message</div>
 
-    <form class="contact-form">
-      <div class="form-row">
-        <input type="text" class="form-input" placeholder="Your Name">
-        <input type="email" class="form-input" placeholder="Email Address">
-      </div>
+    <form class="contact-form" action="https://formspree.io/f/mojyrpqg" method="POST">
 
-      <input type="text" class="form-input" placeholder="Subject">
+  <div class="form-row">
+    <input type="text" name="name" class="form-input" placeholder="Your Name" required>
+    <input type="email" name="email" class="form-input" placeholder="Email Address" required>
+  </div>
 
-      <textarea class="form-textarea" placeholder="Your message..."></textarea>
+  <input type="text" name="subject" class="form-input" placeholder="Subject">
 
-      <button class="form-btn">Send Message</button>
-    </form>
+  <textarea name="message" class="form-textarea" placeholder="Your message..." required></textarea>
+
+  <!-- optional anti-spam -->
+  <input type="text" name="_gotcha" style="display:none">
+
+  <button class="form-btn">Send Message</button>
+</form>
 
   </div>
 </section>
