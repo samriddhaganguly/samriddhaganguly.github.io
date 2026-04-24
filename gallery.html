@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Gallery — Samriddha Ganguly</title>
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    /* ── GALLERY GRID ── */
+    .gallery-grid {
+      column-count: 3;
+      column-gap: 1px;
+      background: var(--border);
+    }
+
+    @media (max-width: 900px) {
+      .gallery-grid { column-count: 2; }
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid { column-count: 1; }
+    }
+
+    /* ── ITEM ── */
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 1px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      background: var(--bg2);
+    }
+
+    .gallery-img {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover .gallery-img {
+      transform: scale(1.05);
+    }
+
+    /* ── OVERLAY ── */
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10,10,15,0.85),
+        rgba(10,10,15,0.2),
+        transparent
+      );
+      display: flex;
+      align-items: flex-end;
+      padding: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-caption {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      flex-direction: column;
+      padding: 2rem;
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80vh;
+      margin-bottom: 1rem;
+    }
+
+    .lightbox-caption {
+      font-family: var(--serif);
+      color: var(--text);
+      font-size: 1rem;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 1.5rem;
+      color: var(--accent);
+      cursor: pointer;
+      font-family: var(--mono);
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="cv.html">CV</a></li>
+    <li><a href="publications.html">Publications</a></li>
+    <li><a href="simulations.html">Simulations</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Moments & Milestones</div>
+    <h1 class="page-title">Visual <em>Archive</em></h1>
+    <p class="page-subtitle">
+      Conferences, collaborations, academic milestones, and fragments of life around physics.
+    </p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <div class="gallery-grid">
+
+      <!-- ITEMS -->
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/IISC.jpg" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-caption">Indian Institute of Science, Bengaluru</div>
+        </div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/GROUPS.jpg" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-caption">Who says Physics people do not do Math?</div>
+        </div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/GMRT.jpg" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-caption">GMRT during RAWS December 2023</div>
+        </div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/NCRA.jpg" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-caption">NCRA-TIFR Main Building, Pune</div>
+        </div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/qmec1.jpeg" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-caption">Group Photo of International Conference on Quantum Materials and Emerging Concepts 2025 held at IISER Bhopal</div>
+        </div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/iicm.jpeg" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-caption">Inter-INCI Cultural Meet 2025 Quiz Gold Medal Winner</div>
+        </div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/cric1.jpeg" class="gallery-img">
+        <div class="gallery-overlay">
+          <div class="gallery-caption">Finalist Team for Dept. of Physics IISERB Cricket Tournament</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-close" onclick="closeLightbox()">×</div>
+  <img id="lightbox-img">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<script>
+function openLightbox(el) {
+  const img = el.querySelector("img").src;
+  const caption = el.querySelector(".gallery-caption").innerText;
+
+  document.getElementById("lightbox-img").src = img;
+  document.getElementById("lightbox-caption").innerText = caption;
+
+  document.getElementById("lightbox").classList.add("active");
+}
+
+function closeLightbox() {
+  document.getElementById("lightbox").classList.remove("active");
+}
+</script>
+
+</body>
+</html>
