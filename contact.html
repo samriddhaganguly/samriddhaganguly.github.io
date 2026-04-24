@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Contact — Samriddha Ganguly</title>
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    /* ── CONTACT GRID ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 4rem;
+    }
+
+    .contact-card {
+      background: var(--bg2);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: all 0.25s;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card:hover {
+      background: var(--bg3);
+      transform: translateY(-4px);
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+
+    .contact-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .contact-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .contact-value {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      line-height: 1.4;
+    }
+
+    .contact-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── FORM ── */
+    .contact-form {
+      border: 1px solid var(--border);
+      padding: 2rem;
+      background: var(--bg2);
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-input, .form-textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.75rem 1rem;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: rgba(200,169,110,0.4);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-btn {
+      align-self: flex-start;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      padding: 0.7rem 1.8rem;
+      background: var(--accent);
+      border: none;
+      color: var(--bg);
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .form-btn:hover { opacity: 0.85; }
+
+    /* ── SECTION TITLE ── */
+    .contact-section-title {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 700px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="cv.html">CV</a></li>
+    <li><a href="publications.html">Publications</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Get In Touch</div>
+    <h1 class="page-title">Contact <em>Me</em></h1>
+    <p class="page-subtitle">
+      For collaborations, research discussions, or general enquiries in condensed matter physics, quantum information, or computational methods.
+    </p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- CONTACT CARDS -->
+    <div class="contact-section-title">Direct Contact</div>
+
+    <div class="contact-grid">
+
+      <a href="mailto:samriddha22@iiserb.ac.in" class="contact-card">
+        <div class="contact-label">Email</div>
+        <div class="contact-value">samriddha22@iiserb.ac.in</div>
+        <div class="contact-desc">Primary academic contact. Best for formal communication.</div>
+      </a>
+
+      <a href="https://github.com/samriddhaganguly" class="contact-card" target="_blank">
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">github.com/YOUR_USERNAME</div>
+        <div class="contact-desc">Code, simulations, and computational physics work.</div>
+      </a>
+
+      <a href="https://www.linkedin.com/in/samriddha-ganguly-3360bb16a/" class="contact-card" target="_blank">
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">Professional Profile</div>
+        <div class="contact-desc">Academic and professional network.</div>
+      </a>
+
+      <a href="https://scholar.google.com/citations?user=A7Ec0RYAAAAJ&hl=en" class="contact-card" target="_blank">
+        <div class="contact-label">Google Scholar</div>
+        <div class="contact-value">Research Publications</div>
+        <div class="contact-desc">Citations, papers, and academic output.</div>
+      </a>
+
+    </div>
+
+    <!-- FORM -->
+    <div class="contact-section-title">Send a Message</div>
+
+    <form class="contact-form">
+      <div class="form-row">
+        <input type="text" class="form-input" placeholder="Your Name">
+        <input type="email" class="form-input" placeholder="Email Address">
+      </div>
+
+      <input type="text" class="form-input" placeholder="Subject">
+
+      <textarea class="form-textarea" placeholder="Your message..."></textarea>
+
+      <button class="form-btn">Send Message</button>
+    </form>
+
+  </div>
+</section>
+
+</body>
+</html>
