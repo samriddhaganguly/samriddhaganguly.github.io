@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>CV — Samriddha Ganguly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .cv-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    /* Sidebar */
+    .cv-sidebar { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 2.5rem; }
+    .cv-sidebar-block {}
+    .cv-sidebar-label {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .cv-contact-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .cv-contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .cv-contact-list li svg { color: var(--accent); flex-shrink: 0; }
+    .cv-contact-list a { color: var(--accent2); text-decoration: none; }
+    .cv-contact-list a:hover { text-decoration: underline; }
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+    .skill-list li {
+      font-family: var(--mono);
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .lang-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    /* Download box */
+    .cv-download {
+      border: 1px solid rgba(200,169,110,0.3);
+      padding: 1.75rem;
+      background: rgba(200,169,110,0.04);
+      margin-bottom: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .cv-download p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .cv-download strong {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    /* CV Main */
+    .cv-main { display: flex; flex-direction: column; gap: 3.5rem; }
+    .cv-section {}
+    .cv-section-title {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .cv-entries { display: flex; flex-direction: column; gap: 0; }
+    .cv-entry {
+      border-left: 1px solid var(--border);
+      padding: 0.25rem 0 1.75rem 1.75rem;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+    .cv-entry:hover { border-color: rgba(200,169,110,0.3); }
+    .cv-entry::before {
+      content: '';
+      position: absolute;
+      left: -5px; top: 8px;
+      width: 9px; height: 9px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+    }
+    .ce-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 0.2rem;
+      line-height: 1.3;
+    }
+    .ce-place { font-size: 0.82rem; color: var(--accent2); margin-bottom: 0.1rem; }
+    .ce-date {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+    }
+    .ce-detail {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+    .ce-detail ul { padding-left: 1.1rem; margin-top: 0.4rem; }
+    .ce-detail li { margin-bottom: 0.3rem; }
+    .ce-grade {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      border: 1px solid rgba(200,169,110,0.3);
+      padding: 0.15rem 0.6rem;
+      margin-top: 0.4rem;
+    }
+
+    /* Awards */
+    .award-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+    .award-item {
+      background: var(--bg2);
+      padding: 1.25rem 1.75rem;
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 1.25rem;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    .award-item:hover { background: var(--bg3); }
+    .award-year {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--accent);
+    }
+    .award-name {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.35;
+    }
+    .award-amount {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Positions */
+    .pos-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .pos-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      transition: border-color 0.2s;
+    }
+    .pos-item:hover { border-color: rgba(200,169,110,0.25); }
+    .pos-role {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 400;
+    }
+    .pos-org { font-size: 0.8rem; color: var(--text-muted); }
+    .pos-date {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-align: right;
+      padding-top: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .cv-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .cv-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="cv.html" class="active">CV</a></li>
+    <li><a href="publications.html">Publications</a></li>
+    <li><a href="simulations.html">Simulations</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <div class="bg-blob" style="width:500px;height:500px;background:radial-gradient(circle,rgba(123,158,168,0.06) 0%,transparent 70%);top:-80px;right:-80px;"></div>
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Academic Record</div>
+    <h1 class="page-title">Curriculum <em>Vitæ</em></h1>
+    <p class="page-subtitle">BS–MS Physics student at IISER Bhopal with research experience spanning topological condensed matter, quantum sensing, and computational physics.</p>
+  </div>
+</header>
+
+<section class="section" style="background:var(--bg);">
+  <div class="section-inner">
+    <div class="cv-download reveal">
+      <div>
+        <strong>Download Full CV</strong>
+        <p>Complete curriculum vitæ in PDF format, updated February 2026.</p>
+      </div>
+      <a href="assets/Samriddha_Ganguly_CV.pdf" class="btn-primary" download>
+        ↓ Download PDF
+      </a>
+    </div>
+
+    <div class="cv-layout">
+      <!-- SIDEBAR -->
+      <aside class="cv-sidebar">
+        <div class="cv-sidebar-block">
+          <div class="cv-sidebar-label">Contact</div>
+          <ul class="cv-contact-list">
+            <li>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 4l8 9 8-9"/></svg>
+              <a href="mailto:samriddha22@iiserb.ac.in">samriddha22@iiserb.ac.in</a>
+            </li>
+            <li>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+              +91-9830606317
+            </li>
+            <li>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              IISER Bhopal, MP, India
+            </li>
+          </ul>
+        </div>
+
+        <div class="cv-sidebar-block">
+          <div class="cv-sidebar-label">Programming</div>
+          <ul class="skill-list">
+            <li>Python</li>
+            <li>MATLAB</li>
+            <li>Mathematica</li>
+            <li>C / C++</li>
+            <li>Java</li>
+            <li>LaTeX</li>
+            <li>Linux / Bash</li>
+          </ul>
+        </div>
+
+        <div class="cv-sidebar-block">
+          <div class="cv-sidebar-label">Languages</div>
+          <div class="lang-grid">
+            <span class="tag">Bengali</span>
+            <span class="tag">English</span>
+            <span class="tag">Hindi</span>
+            <span class="tag" style="color:var(--text-dim);border-color:rgba(255,255,255,0.04)">Spanish (Elem.)</span>
+            <span class="tag" style="color:var(--text-dim);border-color:rgba(255,255,255,0.04)">German (Elem.)</span>
+          </div>
+        </div>
+
+        <div class="cv-sidebar-block">
+          <div class="cv-sidebar-label">Quick Links</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <a href="publications.html" class="btn-outline" style="font-size:0.62rem;padding:0.5rem 1rem;">Publications</a>
+            <a href="research.html" class="btn-outline" style="font-size:0.62rem;padding:0.5rem 1rem;">Research</a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="cv-main">
+
+        <!-- EDUCATION -->
+        <div class="cv-section reveal">
+          <div class="cv-section-title">Education</div>
+          <div class="cv-entries">
+            <div class="cv-entry">
+              <div class="ce-title">BS–MS Dual Degree, Physics Major</div>
+              <div class="ce-place">Indian Institute of Science Education and Research (IISER) Bhopal</div>
+              <div class="ce-date">Dec 2022 – May 2027 (Expected)</div>
+              <div class="ce-detail">
+                <span class="ce-grade">CGPA 3.8 / 4.0</span>
+                <p style="margin-top:0.75rem;">Relevant Coursework: Quantum Mechanics I & II, Advanced Quantum Mechanics, Statistical Mechanics, Condensed Matter Physics, Numerical Methods, Electromagnetism, Classical Mechanics, Linear Algebra, Complex Variables, Probability & Statistics, Groups & Symmetry, Real Analysis, Mathematical Methods for Physicists, Decoherence & Open Quantum Systems.</p>
+              </div>
+            </div>
+            <div class="cv-entry">
+              <div class="ce-title">Higher Secondary (XII)</div>
+              <div class="ce-place">St. Xavier's Institution, Kolkata</div>
+              <div class="ce-date">May 2020 – Apr 2022</div>
+              <div class="ce-detail"><span class="ce-grade">98.75%</span></div>
+            </div>
+            <div class="cv-entry">
+              <div class="ce-title">Secondary (X)</div>
+              <div class="ce-place">St. Xavier's Institution, Kolkata</div>
+              <div class="ce-date">June 2011 – Apr 2020</div>
+              <div class="ce-detail"><span class="ce-grade">98%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESEARCH EXPERIENCE -->
+        <div class="cv-section reveal">
+          <div class="cv-section-title">Research Experience</div>
+          <div class="cv-entries">
+            <div class="cv-entry">
+              <div class="ce-title">Research Intern</div>
+              <div class="ce-place">IISER Bhopal, under Dr. Nirmal Ganguli</div>
+              <div class="ce-date">Jun 2025 – Oct 2025 · Bhopal, India</div>
+              <div class="ce-detail">
+                <ul>
+                  <li>Studied classification of topological quantum matter with symmetries.</li>
+                  <li>Carried out comprehensive theoretical analysis of symmetry-protected topological Dirac nodal line (DNL) magnonic phases in layered honeycomb collinear antiferromagnets, including effects of Interlayer Spin Canting Interactions.</li>
+                  <li>Work accepted for Poster Presentation at 12th National Conference on Material Science, IIST Trivandrum.</li>
+                  <li>Also presented at QMEC 2025 (International Conference on Quantum Materials and Emerging Concepts).</li>
+                  <li>Further working on a manuscript for journal submission.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="cv-entry">
+              <div class="ce-title">TCS Research and Innovation Fellow</div>
+              <div class="ce-place">TCS Innovation Labs, IIT Kharagpur Research Park</div>
+              <div class="ce-date">May 2025 – Jul 2025 · Kolkata, India</div>
+              <div class="ce-detail">
+                <ul>
+                  <li>Worked in the Acoustic and Quantum Sensing Lab, gaining industrial R&D experience.</li>
+                  <li>Contributed to pipeline leak detection research using deep learning on acoustic data, leading to an IEEE Sensors Letters publication.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="cv-entry">
+              <div class="ce-title">UC Berkeley REYES Research Fellow</div>
+              <div class="ce-place">Temple University (Remote), under Dr. Martha Constantinou</div>
+              <div class="ce-date">Jul 2024 – Aug 2024</div>
+              <div class="ce-detail">
+                Worked on the internal structure of hadrons from numerical simulations of Quantum Chromodynamics (QCD). Project titled <em>"Internal structure of hadrons from numerical simulations of Quantum Chromodynamics."</em>
+              </div>
+            </div>
+            <div class="cv-entry">
+              <div class="ce-title">INSA–IASc–NASI Summer Research Fellow</div>
+              <div class="ce-place">Indian Institute of Science (IISc), Bengaluru — Dept. of Mathematics</div>
+              <div class="ce-date">May 2024 – Jul 2024 · Bangalore, India</div>
+              <div class="ce-detail">
+                Selected for prestigious Summer Research Fellowship. Worked under Dr. Arvind Ayyer on theoretical background of Markov Processes with emphasis on MCMC simulation of the 1-D Ising Model.
+              </div>
+            </div>
+            <div class="cv-entry">
+              <div class="ce-title">RAWS Winter Scholar</div>
+              <div class="ce-place">IUCAA–NCRA TIFR, Pune</div>
+              <div class="ce-date">Dec 2023 · Pune, India</div>
+              <div class="ce-detail">
+                Attended the Radio Astronomy Winter School (RAWS) 2023. Learned radio astronomy fundamentals with hands-on experiments using radio observation equipment.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PUBLICATIONS -->
+        <div class="cv-section reveal">
+          <div class="cv-section-title">Publications</div>
+          <div class="cv-entries">
+            <div class="cv-entry">
+              <div class="ce-title" style="font-size:1rem;">Decoherence of chiral magnon edge modes in a topological bosonic Chern insulator</div>
+              <div class="ce-place"><strong style="color:var(--accent)">Samriddha Ganguly</strong></div>
+              <div class="ce-date">Journal of Physics: Condensed Matter, 38, 075801 (2026) · doi:10.1088/1361-648X/ae44df</div>
+              <div class="ce-detail">Focus Issue on Topological Physics: From Fundamentals to Applications.</div>
+            </div>
+            <div class="cv-entry">
+              <div class="ce-title" style="font-size:1rem;">A Data-Driven Approach to Leak Identification and Severity Analysis in Pipelines Using Acoustic Sensing and Deep Learning</div>
+              <div class="ce-place">Mayukh Biswas; Aditya Narayan; Debaudh Ghosh; <strong style="color:var(--accent)">Samriddha Ganguly</strong>; Raj Rakshit; Chirabrata Bhaumik</div>
+              <div class="ce-date">IEEE Sensors Letters, 10(1) (2025) · doi:10.1109/LSENS.2025.3638602</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AWARDS -->
+        <div class="cv-section reveal">
+          <div class="cv-section-title">Awards & Fellowships</div>
+          <div class="award-list">
+            <div class="award-item">
+              <span class="award-year">2025</span>
+              <span class="award-name">TCS Research and Innovation Fellowship</span>
+              <span class="award-amount">₹50,000</span>
+            </div>
+            <div class="award-item">
+              <span class="award-year">2023</span>
+              <span class="award-name">CNR Rao Education Foundation Prize — Highest CPI, First Year</span>
+              <span class="award-amount">₹5,000</span>
+            </div>
+            <div class="award-item">
+              <span class="award-year">2022</span>
+              <span class="award-name">Academic Excellence — AIR 5 in West Bengal HS Examination</span>
+              <span class="award-amount">–</span>
+            </div>
+            <div class="award-item">
+              <span class="award-year">2022</span>
+              <span class="award-name">DST INSPIRE Fellow</span>
+              <span class="award-amount">₹3,00,000</span>
+            </div>
+            <div class="award-item">
+              <span class="award-year">2020</span>
+              <span class="award-name">JBNSTS Junior Fellow</span>
+              <span class="award-amount">₹40,000</span>
+            </div>
+            <div class="award-item">
+              <span class="award-year">2020</span>
+              <span class="award-name">INSA–IASc–NASI Summer Research Fellowship</span>
+              <span class="award-amount">₹25,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- POSITIONS -->
+        <div class="cv-section reveal">
+          <div class="cv-section-title">Positions of Responsibility</div>
+          <div class="pos-list">
+            <div class="pos-item">
+              <div>
+                <div class="pos-role">Secretary, Science Council</div>
+                <div class="pos-org">IISER Bhopal</div>
+              </div>
+              <div class="pos-date">2024–2025</div>
+            </div>
+            <div class="pos-item">
+              <div>
+                <div class="pos-role">Peer Counselor</div>
+                <div class="pos-org">Counselling Cell, IISER Bhopal</div>
+              </div>
+              <div class="pos-date">2023–2024</div>
+            </div>
+            <div class="pos-item">
+              <div>
+                <div class="pos-role">Departmental Representative, Dept. of Mathematics</div>
+                <div class="pos-org">IISER Bhopal</div>
+              </div>
+              <div class="pos-date">2023–2024</div>
+            </div>
+            <div class="pos-item">
+              <div>
+                <div class="pos-role">Student Mentor</div>
+                <div class="pos-org">Student Development Council, IISER Bhopal</div>
+              </div>
+              <div class="pos-date">2023–Present</div>
+            </div>
+            <div class="pos-item">
+              <div>
+                <div class="pos-role">Quiz Club Core Committee</div>
+                <div class="pos-org">IISER Bhopal</div>
+              </div>
+              <div class="pos-date">2023–Present</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INITIATIVES -->
+        <div class="cv-section reveal">
+          <div class="cv-section-title">Initiatives & Projects</div>
+          <div class="cv-entries">
+            <div class="cv-entry">
+              <div class="ce-title">open_board</div>
+              <div class="ce-place">Co-Founder & Lead Developer</div>
+              <div class="ce-detail">An interdisciplinary knowledge-sharing platform for students to present projects and research to non-specialist audiences in live sessions.</div>
+            </div>
+            <div class="cv-entry">
+              <div class="ce-title">A Hitchhiker's Guide to Physics @ IISERB</div>
+              <div class="ce-place">Lead Developer</div>
+              <div class="ce-detail">Built a comprehensive physics department website centralizing academic resources, course guides, notes, and a domain-restricted student forum.</div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">S<span>.</span>Ganguly</a>
+    <ul class="footer-links">
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(r => obs.observe(r));
+</script>
+</body>
+</html>

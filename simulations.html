@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Simulations — Samriddha Ganguly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .sim-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+    .sim-block {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .sim-block:hover { border-color: rgba(200,169,110,0.25); }
+
+    .sim-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .sim-tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .sim-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    .sim-title {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    /* Canvas area */
+    .sim-canvas {
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+    .sim-canvas canvas { display: block; width: 100%; }
+
+    .sim-controls {
+      padding: 1.25rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .ctrl-group { display: flex; flex-direction: column; gap: 0.3rem; flex: 1; min-width: 140px; }
+    .ctrl-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .ctrl-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 2px;
+      background: var(--border);
+      outline: none;
+      border-radius: 1px;
+    }
+    .ctrl-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .sim-theory {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+    }
+    .theory-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .theory-text {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+    .key-relation {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--text);
+      padding: 1rem 1.5rem;
+      border: 1px solid rgba(200,169,110,0.2);
+      background: rgba(200,169,110,0.04);
+      white-space: nowrap;
+      text-align: center;
+    }
+    .key-label {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 0.4rem;
+    }
+
+    .phase-display {
+      padding: 0.75rem 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: rgba(200,169,110,0.08);
+      border: 1px solid rgba(200,169,110,0.2);
+      letter-spacing: 0.12em;
+    }
+
+    @media (max-width: 700px) {
+      .sim-theory { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="cv.html">CV</a></li>
+    <li><a href="publications.html">Publications</a></li>
+    <li><a href="simulations.html" class="active">Simulations</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <div class="bg-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(123,158,168,0.07) 0%,transparent 70%);top:-80px;right:-80px;"></div>
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Interactive Demonstrations</div>
+    <h1 class="page-title">Physics is <em>Fun</em></h1>
+    <p class="page-subtitle">Interactive simulations of quantum and condensed matter models. Drag, rotate, and explore physical phenomena directly in the browser. Please be patient during calculations.</p>
+  </div>
+</header>
+
+<section class="section" style="background:var(--bg);">
+  <div class="section-inner">
+    <div class="sim-grid">
+
+      <!-- SIM 1: Dirac Cone Dispersion -->
+      <div class="sim-block reveal">
+        <div class="sim-header">
+          <div>
+            <div class="sim-tag">3D Interactive Dispersion // Drag to Rotate</div>
+            <div class="sim-title-row">
+              <div class="sim-title">Relativistic Dirac Dispersion</div>
+            </div>
+          </div>
+        </div>
+        <div class="sim-canvas" style="height:420px;">
+          <canvas id="diracCanvas"></canvas>
+        </div>
+        <div class="sim-controls">
+          <div class="ctrl-group">
+            <label class="ctrl-label">Mass Gap (m)</label>
+            <input type="range" class="ctrl-slider" id="massSlider" min="0" max="2" step="0.05" value="0.3">
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Fermi Velocity (v_f)</label>
+            <input type="range" class="ctrl-slider" id="vfSlider" min="0.5" max="2.0" step="0.05" value="1.0">
+          </div>
+        </div>
+        <div class="sim-theory">
+          <div>
+            <div class="theory-label">Theoretical Background: Dirac Dispersion</div>
+            <p class="theory-text">The relativistic Dirac Hamiltonian describes low-energy quasiparticles in topological materials, graphene, and surface states of topological insulators. The energy spectrum forms a characteristic double cone (Dirac cone) at zero mass. A finite mass gap m opens when time-reversal or inversion symmetry is broken — driving topological phase transitions.</p>
+          </div>
+          <div>
+            <div class="key-relation">E(k) = ±√(v_f²k² + m²)</div>
+            <div class="key-label">Key Relation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIM 2: Majorana Phase Diagram -->
+      <div class="sim-block reveal">
+        <div class="sim-header">
+          <div>
+            <div class="sim-tag">Topological Phase Diagram</div>
+            <div class="sim-title-row">
+              <div class="sim-title">Kitaev Chain: Majorana Zero Modes</div>
+            </div>
+          </div>
+          <div class="phase-display" id="phaseLabel">PHASE: TOPOLOGICAL</div>
+        </div>
+        <div class="sim-canvas" style="height:280px;">
+          <canvas id="majoranaCanvas"></canvas>
+        </div>
+        <div class="sim-controls">
+          <div class="ctrl-group">
+            <label class="ctrl-label">Chemical Potential (μ)</label>
+            <input type="range" class="ctrl-slider" id="muSlider" min="-3" max="3" step="0.05" value="-0.5">
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Gap (Δ)</label>
+            <input type="range" class="ctrl-slider" id="deltaSlider" min="0.1" max="2" step="0.05" value="1.0">
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Hopping (t)</label>
+            <input type="range" class="ctrl-slider" id="tSlider" min="0.1" max="2" step="0.05" value="1.0">
+          </div>
+        </div>
+        <div class="sim-theory">
+          <div>
+            <div class="theory-label">Theoretical Background: Majorana Zero Modes in 1D</div>
+            <p class="theory-text">In the Kitaev chain model of a 1D p-wave superconductor, Majorana fermions appear as zero-energy excitations localized at the ends when |μ| &lt; 2|t|. The topological phase transition occurs at the critical lines μ = ±2t. These modes are protected by the bulk gap and are candidates for fault-tolerant quantum computing.</p>
+          </div>
+          <div>
+            <div class="key-relation">E = ±√((ε−μ)² + Δ²)</div>
+            <div class="key-label">Key Relation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIM 3: Chern Number / Edge States -->
+      <div class="sim-block reveal">
+        <div class="sim-header">
+          <div>
+            <div class="sim-tag">Chiral Edge Modes // Topological Insulator</div>
+            <div class="sim-title-row">
+              <div class="sim-title">Bulk–Boundary Correspondence</div>
+            </div>
+          </div>
+        </div>
+        <div class="sim-canvas" style="height:300px;">
+          <canvas id="edgeCanvas"></canvas>
+        </div>
+        <div class="sim-controls">
+          <div class="ctrl-group">
+            <label class="ctrl-label">Disorder Strength</label>
+            <input type="range" class="ctrl-slider" id="disorderSlider" min="0" max="1" step="0.02" value="0">
+          </div>
+        </div>
+        <div class="sim-theory">
+          <div>
+            <div class="theory-label">Theoretical Background: Bulk–Boundary Correspondence</div>
+            <p class="theory-text">In Chern insulators, the quantized Hall conductance is determined by the bulk Chern number C. This topology forces gapless chiral states at the physical edges — modes that propagate in a single direction and are protected from backscattering by the bulk gap. The number of chiral edge modes equals |C|.</p>
+          </div>
+          <div>
+            <div class="key-relation">N_edge = |C_bulk|</div>
+            <div class="key-label">Key Relation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIM 4: Bloch Sphere -->
+      <div class="sim-block reveal">
+        <div class="sim-header">
+          <div>
+            <div class="sim-tag">Qubit Visualization</div>
+            <div class="sim-title-row">
+              <div class="sim-title">Bloch Sphere</div>
+            </div>
+          </div>
+          <div id="blochState" style="font-family:var(--mono);font-size:0.8rem;color:var(--text);padding:0.5rem 1rem;border:1px solid var(--border);">|ψ⟩ = |0⟩</div>
+        </div>
+        <div class="sim-canvas" style="height:360px;">
+          <canvas id="blochCanvas"></canvas>
+        </div>
+        <div class="sim-controls">
+          <div class="ctrl-group">
+            <label class="ctrl-label">Theta θ (Polar)</label>
+            <input type="range" class="ctrl-slider" id="thetaSlider" min="0" max="3.14159" step="0.02" value="0">
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Phi φ (Azimuthal)</label>
+            <input type="range" class="ctrl-slider" id="phiSlider" min="0" max="6.28318" step="0.04" value="0">
+          </div>
+        </div>
+        <div class="sim-theory">
+          <div>
+            <div class="theory-label">Theoretical Background: The Bloch Sphere</div>
+            <p class="theory-text">The Bloch sphere is the geometric representation of the pure state space of a two-level quantum system (qubit). The north and south poles represent |0⟩ and |1⟩. Any point on the surface represents a coherent superposition. Quantum gates are rotations on this sphere.</p>
+          </div>
+          <div>
+            <div class="key-relation">|ψ⟩ = cos(θ/2)|0⟩ + e^(iφ)sin(θ/2)|1⟩</div>
+            <div class="key-label">Key Relation</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">S<span>.</span>Ganguly</a>
+    <ul class="footer-links">
+      <li><a href="research.html">Research</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+
+  // ─── DIRAC CONE ───────────────────────────────
+  const diracCanvas = document.getElementById('diracCanvas');
+  const dctx = diracCanvas.getContext('2d');
+  let dRotX = 0.4, dRotY = 0.5, dDragging = false, dLastX = 0, dLastY = 0;
+
+  function resizeDirac() {
+    diracCanvas.width = diracCanvas.offsetWidth;
+    diracCanvas.height = diracCanvas.offsetHeight || 420;
+    drawDirac();
+  }
+
+  function project3D(x, y, z, cx, cy, scale) {
+    const rx = x, ry = y * Math.cos(dRotX) - z * Math.sin(dRotX), rz = y * Math.sin(dRotX) + z * Math.cos(dRotX);
+    const rx2 = rx * Math.cos(dRotY) + rz * Math.sin(dRotY), ry2 = ry, rz2 = -rx * Math.sin(dRotY) + rz * Math.cos(dRotY);
+    const d = 6;
+    const f = d / (d + rz2 * 0.3);
+    return { x: cx + rx2 * scale * f, y: cy - ry2 * scale * f };
+  }
+
+  function drawDirac() {
+    const W = diracCanvas.width, H = diracCanvas.height;
+    dctx.fillStyle = '#000';
+    dctx.fillRect(0, 0, W, H);
+    const cx = W / 2, cy = H / 2, scale = Math.min(W, H) * 0.22;
+    const m = parseFloat(document.getElementById('massSlider').value);
+    const vf = parseFloat(document.getElementById('vfSlider').value);
+    const N = 30;
+    for (let i = 0; i < N; i++) {
+      for (let sign = 1; sign >= -1; sign -= 2) {
+        const pts = [];
+        for (let j = 0; j <= N; j++) {
+          const kx = (i / (N - 1) - 0.5) * 2;
+          const ky = (j / N - 0.5) * 2;
+          const k2 = kx * kx + ky * ky;
+          const E = sign * Math.sqrt(vf * vf * k2 + m * m);
+          pts.push(project3D(kx, ky, E, cx, cy, scale));
+        }
+        dctx.beginPath();
+        pts.forEach((p, idx) => idx === 0 ? dctx.moveTo(p.x, p.y) : dctx.lineTo(p.x, p.y));
+        dctx.strokeStyle = sign > 0 ? 'rgba(0,220,200,0.4)' : 'rgba(180,0,220,0.4)';
+        dctx.lineWidth = 0.8;
+        dctx.stroke();
+      }
+    }
+    for (let j = 0; j < N; j++) {
+      for (let sign = 1; sign >= -1; sign -= 2) {
+        const pts = [];
+        for (let i = 0; i <= N; i++) {
+          const kx = (i / N - 0.5) * 2;
+          const ky = (j / (N - 1) - 0.5) * 2;
+          const k2 = kx * kx + ky * ky;
+          const E = sign * Math.sqrt(vf * vf * k2 + m * m);
+          pts.push(project3D(kx, ky, E, cx, cy, scale));
+        }
+        dctx.beginPath();
+        pts.forEach((p, idx) => idx === 0 ? dctx.moveTo(p.x, p.y) : dctx.lineTo(p.x, p.y));
+        dctx.strokeStyle = sign > 0 ? 'rgba(0,220,200,0.25)' : 'rgba(180,0,220,0.25)';
+        dctx.lineWidth = 0.5;
+        dctx.stroke();
+      }
+    }
+    // Label
+    dctx.fillStyle = 'rgba(0,220,200,0.7)';
+    dctx.font = '11px monospace';
+    dctx.fillText('E(k) = ±√(v_f²k² + m²)', 12, 22);
+    dctx.fillStyle = 'rgba(255,255,255,0.25)';
+    dctx.font = '10px monospace';
+    dctx.fillText('DRAG TO ROTATE', W - 110, H - 12);
+  }
+
+  diracCanvas.addEventListener('mousedown', e => { dDragging = true; dLastX = e.clientX; dLastY = e.clientY; });
+  window.addEventListener('mousemove', e => {
+    if (!dDragging) return;
+    dRotY += (e.clientX - dLastX) * 0.01;
+    dRotX += (e.clientY - dLastY) * 0.01;
+    dLastX = e.clientX; dLastY = e.clientY;
+    drawDirac();
+  });
+  window.addEventListener('mouseup', () => { dDragging = false; });
+  diracCanvas.addEventListener('touchstart', e => { dDragging = true; dLastX = e.touches[0].clientX; dLastY = e.touches[0].clientY; }, { passive: true });
+  diracCanvas.addEventListener('touchmove', e => {
+    if (!dDragging) return;
+    dRotY += (e.touches[0].clientX - dLastX) * 0.01;
+    dRotX += (e.touches[0].clientY - dLastY) * 0.01;
+    dLastX = e.touches[0].clientX; dLastY = e.touches[0].clientY;
+    drawDirac();
+  }, { passive: true });
+  document.getElementById('massSlider').addEventListener('input', drawDirac);
+  document.getElementById('vfSlider').addEventListener('input', drawDirac);
+
+  // ─── MAJORANA ─────────────────────────────────
+  const majCanvas = document.getElementById('majoranaCanvas');
+  const mctx = majCanvas.getContext('2d');
+
+  function resizeMaj() {
+    majCanvas.width = majCanvas.offsetWidth;
+    majCanvas.height = majCanvas.offsetHeight || 280;
+    drawMaj();
+  }
+
+  function drawMaj() {
+    const W = majCanvas.width, H = majCanvas.height;
+    mctx.fillStyle = '#000';
+    mctx.fillRect(0, 0, W, H);
+    const mu = parseFloat(document.getElementById('muSlider').value);
+    const delta = parseFloat(document.getElementById('deltaSlider').value);
+    const t = parseFloat(document.getElementById('tSlider').value);
+    const Nk = 200;
+    const cx = W / 2, cy = H / 2;
+    const scaleK = W / (2 * Math.PI * 2.2);
+    const scaleE = H / 6;
+
+    const isTopological = Math.abs(mu) < 2 * Math.abs(t);
+    document.getElementById('phaseLabel').textContent = isTopological ? 'PHASE: TOPOLOGICAL' : 'PHASE: TRIVIAL';
+    document.getElementById('phaseLabel').style.color = isTopological ? 'var(--accent)' : 'var(--text-muted)';
+
+    // Draw bands
+    for (let s = 1; s >= -1; s -= 2) {
+      mctx.beginPath();
+      for (let i = 0; i <= Nk; i++) {
+        const k = (i / Nk - 0.5) * 2 * Math.PI;
+        const eps = -2 * t * Math.cos(k) - mu;
+        const E = s * Math.sqrt(eps * eps + delta * delta * Math.sin(k) * Math.sin(k));
+        const x = cx + k * scaleK;
+        const y = cy - E * scaleE;
+        i === 0 ? mctx.moveTo(x, y) : mctx.lineTo(x, y);
+      }
+      mctx.strokeStyle = isTopological ? 'rgba(0,220,200,0.7)' : 'rgba(120,100,160,0.7)';
+      mctx.lineWidth = 1.5;
+      mctx.stroke();
+    }
+
+    // Phase boundary lines
+    [-2, 2].forEach(v => {
+      const x = cx + (v * t - mu) / t * W * 0.05;
+    });
+
+    // Axes
+    mctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    mctx.lineWidth = 1;
+    mctx.beginPath(); mctx.moveTo(0, cy); mctx.lineTo(W, cy); mctx.stroke();
+    mctx.beginPath(); mctx.moveTo(cx, 0); mctx.lineTo(cx, H); mctx.stroke();
+    mctx.fillStyle = 'rgba(255,255,255,0.25)';
+    mctx.font = '10px monospace';
+    mctx.fillText('k', W - 18, cy - 6);
+    mctx.fillText('E', cx + 6, 16);
+    mctx.fillText('-π', 10, cy + 14);
+    mctx.fillText('π', W - 18, cy + 14);
+  }
+
+  document.getElementById('muSlider').addEventListener('input', drawMaj);
+  document.getElementById('deltaSlider').addEventListener('input', drawMaj);
+  document.getElementById('tSlider').addEventListener('input', drawMaj);
+
+  // ─── EDGE STATES ──────────────────────────────
+  const edgeCanvas = document.getElementById('edgeCanvas');
+  const ectx = edgeCanvas.getContext('2d');
+  let edgeAnim;
+
+  function resizeEdge() {
+    edgeCanvas.width = edgeCanvas.offsetWidth;
+    edgeCanvas.height = edgeCanvas.offsetHeight || 300;
+  }
+
+  let edgeTime = 0;
+  function drawEdge() {
+    const W = edgeCanvas.width, H = edgeCanvas.height;
+    ectx.fillStyle = 'rgba(0,0,0,0.15)';
+    ectx.fillRect(0, 0, W, H);
+    const disorder = parseFloat(document.getElementById('disorderSlider').value);
+    const N = 40;
+    for (let i = 0; i < N; i++) {
+      const t = edgeTime * 0.02 + i * 0.3;
+      const noiseL = (Math.random() - 0.5) * disorder * 12;
+      const noiseR = (Math.random() - 0.5) * disorder * 12;
+      // Left edge
+      const lx = 20 + Math.sin(t) * 6 + noiseL;
+      const ly = (i / N) * H;
+      // Right edge (moves opposite)
+      const rx = W - 20 + Math.sin(-t + Math.PI) * 6 + noiseR;
+      const ry = (1 - i / N) * H;
+      ectx.beginPath();
+      ectx.arc(lx, ly, 2.5, 0, Math.PI * 2);
+      ectx.fillStyle = `rgba(0,220,200,${0.7 - disorder * 0.4})`;
+      ectx.fill();
+      ectx.beginPath();
+      ectx.arc(rx, ry, 2.5, 0, Math.PI * 2);
+      ectx.fillStyle = `rgba(180,0,220,${0.7 - disorder * 0.4})`;
+      ectx.fill();
+    }
+    // Bulk fill
+    ectx.fillStyle = 'rgba(30,30,50,0.02)';
+    ectx.fillRect(30, 0, W - 60, H);
+
+    // Labels
+    ectx.fillStyle = 'rgba(0,220,200,0.6)';
+    ectx.font = '10px monospace';
+    ectx.fillText('← chiral', 26, H / 2 - 8);
+    ectx.fillStyle = 'rgba(180,0,220,0.6)';
+    ectx.fillText('chiral →', W - 72, H / 2 - 8);
+    ectx.fillStyle = 'rgba(255,255,255,0.2)';
+    ectx.fillText('BULK GAP', W / 2 - 28, H / 2);
+
+    edgeTime++;
+    edgeAnim = requestAnimationFrame(drawEdge);
+  }
+
+  document.getElementById('disorderSlider').addEventListener('input', () => {});
+
+  // ─── BLOCH SPHERE ─────────────────────────────
+  const blochCanvas = document.getElementById('blochCanvas');
+  const bctx = blochCanvas.getContext('2d');
+  let blochRotY = 0.3;
+
+  function resizeBloch() {
+    blochCanvas.width = blochCanvas.offsetWidth;
+    blochCanvas.height = blochCanvas.offsetHeight || 360;
+    drawBloch();
+  }
+
+  function drawBloch() {
+    const W = blochCanvas.width, H = blochCanvas.height;
+    bctx.fillStyle = '#000';
+    bctx.fillRect(0, 0, W, H);
+    const cx = W / 2, cy = H / 2;
+    const R = Math.min(W, H) * 0.35;
+    const theta = parseFloat(document.getElementById('thetaSlider').value);
+    const phi = parseFloat(document.getElementById('phiSlider').value);
+
+    // State vector
+    const sx = Math.sin(theta) * Math.cos(phi);
+    const sy = Math.sin(theta) * Math.sin(phi);
+    const sz = Math.cos(theta);
+
+    // Rotate
+    const rx = sx * Math.cos(blochRotY) + sz * Math.sin(blochRotY);
+    const ry = sy;
+    const rz_s = -sx * Math.sin(blochRotY) + sz * Math.cos(blochRotY);
+
+    // Draw sphere outline
+    bctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    bctx.lineWidth = 1;
+    bctx.beginPath(); bctx.arc(cx, cy, R, 0, Math.PI * 2); bctx.stroke();
+
+    // Equator
+    bctx.beginPath();
+    for (let a = 0; a <= Math.PI * 2; a += 0.05) {
+      const ex = Math.cos(a);
+      const ez = Math.sin(a);
+      const rx2 = ex * Math.cos(blochRotY) + ez * Math.sin(blochRotY);
+      const px = cx + rx2 * R;
+      const py = cy;
+      a === 0 ? bctx.moveTo(px, py) : bctx.lineTo(px, py);
+    }
+    bctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    bctx.stroke();
+
+    // Axes
+    [
+      { v: [0, 0, 1], label: '|0⟩', color: 'rgba(200,169,110,0.6)' },
+      { v: [0, 0, -1], label: '|1⟩', color: 'rgba(200,169,110,0.4)' },
+      { v: [1, 0, 0], label: '|+⟩', color: 'rgba(123,158,168,0.4)' },
+      { v: [-1, 0, 0], label: '|−⟩', color: 'rgba(123,158,168,0.4)' },
+    ].forEach(({ v, label, color }) => {
+      const ax = v[0] * Math.cos(blochRotY) + v[2] * Math.sin(blochRotY);
+      const ay = v[1];
+      const px = cx + ax * R, py = cy - ay * R - v[2] * R * 0 - v[2] * R;
+      const pz = cx + ax * (R + 20), pzy = cy - ay * (R + 20) - v[2] * (R + 20);
+      bctx.strokeStyle = color;
+      bctx.lineWidth = 0.8;
+      bctx.beginPath(); bctx.moveTo(cx, cy); bctx.lineTo(cx + ax * R, cy - v[2] * R); bctx.stroke();
+      bctx.fillStyle = color;
+      bctx.font = '11px monospace';
+      bctx.fillText(label, cx + ax * (R + 15) - 8, cy - v[2] * (R + 15) + 4);
+    });
+
+    // State vector
+    const pvx = cx + rx * R;
+    const pvy = cy - rz_s * R;
+    bctx.strokeStyle = 'var(--accent)';
+    bctx.lineWidth = 2;
+    bctx.beginPath(); bctx.moveTo(cx, cy); bctx.lineTo(pvx, pvy); bctx.stroke();
+    bctx.beginPath(); bctx.arc(pvx, pvy, 5, 0, Math.PI * 2);
+    bctx.fillStyle = 'var(--accent)'; bctx.fill();
+
+    // Update state label
+    const c0 = Math.cos(theta / 2).toFixed(2);
+    const c1 = Math.sin(theta / 2).toFixed(2);
+    const phiStr = phi.toFixed(2);
+    document.getElementById('blochState').textContent = `|ψ⟩ = ${c0}|0⟩ + e^(i${phiStr})·${c1}|1⟩`;
+  }
+
+  document.getElementById('thetaSlider').addEventListener('input', drawBloch);
+  document.getElementById('phiSlider').addEventListener('input', drawBloch);
+
+  // ─── INIT & RESIZE ────────────────────────────
+  window.addEventListener('load', () => {
+    resizeDirac(); resizeMaj(); resizeEdge(); resizeBloch();
+    drawEdge();
+  });
+  window.addEventListener('resize', () => {
+    resizeDirac(); resizeMaj(); resizeBloch();
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 120); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.05 });
+  reveals.forEach(r => obs.observe(r));
+</script>
+</body>
+</html>
