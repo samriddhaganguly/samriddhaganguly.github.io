@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Resources — Samriddha Ganguly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+
+    /* ── TAB STRIP ── */
+    .tab-strip-wrap {
+      position: relative;
+      margin-bottom: 0;
+    }
+    .tab-strip {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .tab-strip::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1.1rem 1.5rem;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .tab-btn:hover {
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.02);
+    }
+    .tab-btn.active {
+      color: var(--accent);
+      background: rgba(200,169,110,0.04);
+    }
+    .tab-btn.active::after { transform: scaleX(1); }
+
+    .tab-icon {
+      display: inline-block;
+      margin-right: 0.5rem;
+      opacity: 0.7;
+      font-style: normal;
+    }
+
+    /* ── TAB PANELS ── */
+    .tab-panel {
+      display: none;
+      animation: tabFadeIn 0.45s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .tab-panel.active { display: block; }
+
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PANEL HEADER ── */
+    .panel-header {
+      padding: 3.5rem 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem;
+    }
+    .panel-category {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .panel-category::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    .panel-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      line-height: 1.1;
+    }
+    .panel-title em { font-style: italic; color: var(--accent); }
+    .panel-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      max-width: 600px;
+      margin-top: 0.75rem;
+    }
+    .panel-count {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-align: right;
+    }
+    .panel-count span {
+      display: block;
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    /* ── SUBTOPIC SECTIONS ── */
+    .subtopic-section {
+      margin-bottom: 4rem;
+    }
+    .subtopic-header {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .subtopic-num {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      flex-shrink: 0;
+    }
+    .subtopic-name {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      flex: 1;
+    }
+    .subtopic-bar {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(200,169,110,0.15), transparent);
+    }
+    .subtopic-count {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+
+    /* ── RESOURCE GRID ── */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+
+    /* ── RESOURCE CARD ── */
+    .res-card {
+      background: var(--bg2);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: background 0.25s;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .res-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .res-card:hover { background: var(--bg3); }
+    .res-card:hover::before { transform: scaleX(1); }
+
+    .res-type-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.1rem;
+    }
+    .res-type-badge {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .res-type-badge.pdf  { border-color: rgba(200,169,110,0.4); color: var(--accent); }
+    .res-type-badge.book { border-color: rgba(123,158,168,0.4); color: var(--accent2); }
+    .res-type-badge.notes { border-color: rgba(160,123,181,0.4); color: var(--accent3); }
+    .res-type-badge.link { border-color: rgba(255,255,255,0.12); color: var(--text-muted); }
+    .res-type-badge.video { border-color: rgba(200,169,110,0.3); color: var(--accent); }
+
+    .res-pdf-icon {
+      width: 28px; height: 34px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .res-pdf-icon svg { width: 100%; height: 100%; }
+
+    .res-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.4rem;
+      flex: 1;
+    }
+    .res-author {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+    .res-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.25rem;
+    }
+    .res-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .res-action {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: gap 0.2s;
+    }
+    .res-card:hover .res-action { gap: 0.65rem; }
+    .res-level {
+      font-family: var(--mono);
+      font-size: 0.57rem;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      padding: 0.15rem 0.5rem;
+      border: 1px solid var(--border);
+    }
+
+    /* placeholder shimmer */
+    .res-card.placeholder {
+      cursor: default;
+      opacity: 0.5;
+    }
+    .res-card.placeholder::before { display: none; }
+    .res-placeholder-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      padding: 0.2rem 0.5rem;
+      border: 1px dashed var(--border);
+    }
+
+    /* ── UPLOAD DROPZONE (decorative) ── */
+    .upload-zone {
+      border: 1px dashed rgba(200,169,110,0.2);
+      padding: 2rem;
+      text-align: center;
+      margin-top: 2rem;
+      background: rgba(200,169,110,0.02);
+      grid-column: 1 / -1;
+    }
+    .upload-zone-text {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+    }
+    .upload-zone-text span { color: var(--accent); }
+
+    /* ── FEATURED RESOURCE (wide card) ── */
+    .res-featured {
+      background: var(--bg2);
+      border: 1px solid rgba(200,169,110,0.15);
+      padding: 2rem 2.5rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      transition: border-color 0.25s, transform 0.25s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    .res-featured::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+    .res-featured:hover { border-color: rgba(200,169,110,0.3); transform: translateX(4px); }
+    .res-featured-tag {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      opacity: 0.6;
+    }
+    .res-featured-body {}
+    .res-featured-title {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      line-height: 1.35;
+      margin-bottom: 0.4rem;
+    }
+    .res-featured-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .res-featured-desc {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+    }
+    .res-featured-action {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      padding: 0.6rem 1.25rem;
+      border: 1px solid rgba(200,169,110,0.3);
+      white-space: nowrap;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .res-featured:hover .res-featured-action {
+      background: rgba(200,169,110,0.08);
+    }
+
+    /* ── PHYSICS DECOR ── */
+    .physics-glyph {
+      position: absolute;
+      font-family: var(--serif);
+      font-size: 8rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--accent);
+      opacity: 0.04;
+      pointer-events: none;
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* ── SEARCH BAR ── */
+    .res-search-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 3.5rem;
+      align-items: center;
+    }
+    .res-search {
+      flex: 1;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      padding: 0.85rem 1.25rem;
+      outline: none;
+      letter-spacing: 0.04em;
+      transition: border-color 0.2s;
+    }
+    .res-search::placeholder { color: var(--text-dim); }
+    .res-search:focus { border-color: rgba(200,169,110,0.35); }
+    .res-search-icon {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      padding: 0.85rem 1rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: none;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── LEVEL FILTER ── */
+    .level-filters {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .level-btn {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .level-btn:hover, .level-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── EQUATION STRIP ── */
+    .eq-strip {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem var(--pad);
+      display: flex;
+      gap: 4rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-bottom: 0;
+    }
+    .eq-strip::-webkit-scrollbar { display: none; }
+    .eq-item {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--text-dim);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .eq-item span { color: var(--accent); opacity: 0.5; }
+
+    @media (max-width: 700px) {
+      .panel-header { grid-template-columns: 1fr; }
+      .res-featured { grid-template-columns: 1fr; }
+      .res-featured-tag { writing-mode: horizontal-tb; transform: none; }
+      .panel-count { text-align: left; }
+      .resource-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="cv.html">CV</a></li>
+    <li><a href="publications.html">Publications</a></li>
+    <li><a href="simulations.html">Simulations</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="resources.html" class="active">Resources</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header" style="padding-bottom:3rem;">
+  <div class="physics-glyph" style="right:8%;top:60px;">ψ</div>
+  <div class="physics-glyph" style="right:22%;top:80px;font-size:5rem;opacity:0.03;">∇²</div>
+  <div class="bg-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(200,169,110,0.05) 0%,transparent 70%);top:-120px;left:-80px;"></div>
+  <div class="bg-blob" style="width:400px;height:400px;background:radial-gradient(circle,rgba(160,123,181,0.04) 0%,transparent 70%);top:0;right:10%;"></div>
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Curated Reading & References</div>
+    <h1 class="page-title">Physics <em>Resources</em></h1>
+    <p class="page-subtitle">A personally curated library of lecture notes, textbooks, papers, and references — organized by topic. Selections reflect what I find rigorous, illuminating, or unusually well-written.</p>
+  </div>
+</header>
+
+<!-- Equation decorative strip -->
+<div class="eq-strip">
+  <div class="eq-item"><span>H</span>|ψ⟩ = E|ψ⟩</div>
+  <div class="eq-item">∂<sub>μ</sub>F<sup>μν</sup> = <span>j</span><sup>ν</sup></div>
+  <div class="eq-item">Z = Tr[e<sup>−β<span>H</span></sup>]</div>
+  <div class="eq-item">σ<sub>xy</sub> = <span>e²/h</span> · C</div>
+  <div class="eq-item">Δ<sub>k</sub> = −Σ<sub>k'</sub> V<sub>kk'</sub> ⟨c<sub>−k'↓</sub>c<sub>k'↑</sub>⟩</div>
+  <div class="eq-item">S[φ] = ∫ d⁴x <span>ℒ</span>(φ, ∂φ)</div>
+  <div class="eq-item">C<sub>n</sub> = i/2π ∮ ⟨u<sub>k</sub>|∇<sub>k</sub>|u<sub>k</sub>⟩ · dk</div>
+  <div class="eq-item">iℏ ∂<sub>t</sub>ψ = <span>H</span>ψ</div>
+</div>
+
+<!-- ── TABS ── -->
+<div style="background: var(--bg); padding: 0 var(--pad);">
+  <div style="max-width: var(--max-w); margin: 0 auto;">
+    <div class="tab-strip" id="tabStrip">
+      <button class="tab-btn active" data-tab="math">
+        <span class="tab-icon">∂</span>Mathematical Physics
+      </button>
+      <button class="tab-btn" data-tab="sc">
+        <span class="tab-icon">⊗</span>Superconductivity
+      </button>
+      <button class="tab-btn" data-tab="topo">
+        <span class="tab-icon">χ</span>Topological Matter
+      </button>
+      <button class="tab-btn" data-tab="qft">
+        <span class="tab-icon">φ</span>Quantum Field Theory
+      </button>
+      <button class="tab-btn" data-tab="comp">
+        <span class="tab-icon">∑</span>Computational Physics
+      </button>
+      <button class="tab-btn" data-tab="pop">
+        <span class="tab-icon">★</span>Pop Physics
+      </button>
+    </div>
+  </div>
+</div>
+
+<section class="section" style="background:var(--bg); padding-top: 0;">
+  <div class="section-inner">
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 1 — MATHEMATICAL PHYSICS
+    ══════════════════════════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-math">
+      <div class="panel-header">
+        <div>
+          <div class="panel-category">Mathematical Aspects of Physics</div>
+          <h2 class="panel-title">Mathematical <em>Foundations</em></h2>
+          <p class="panel-desc">The language underneath. Resources on differential geometry, topology, group theory, functional analysis, and mathematical structures that physicists rely on — written with the rigour the subject demands.</p>
+        </div>
+        <div class="panel-count">
+          <span>9</span>Resources
+        </div>
+      </div>
+
+      <!-- Featured -->
+      <a href="#" class="res-featured reveal">
+        <div class="res-featured-tag">Foundational</div>
+        <div class="res-featured-body">
+          <div class="res-featured-title">Nakahara — Geometry, Topology and Physics</div>
+          <div class="res-featured-meta">Mikio Nakahara · IOP Press · Graduate Level</div>
+          <div class="res-featured-desc">The definitive bridge between mathematics and theoretical physics. Covers manifolds, fibre bundles, connections, de Rham cohomology, and characteristic classes — precisely what is needed for gauge theories and topological field theory.</div>
+        </div>
+        <div class="res-featured-action">Upload PDF →</div>
+      </a>
+
+      <!-- Subtopic 1 -->
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">01</span>
+          <h3 class="subtopic-name">Differential Geometry & Topology</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ PDF / Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Differential Forms in Algebraic Topology</div>
+            <div class="res-author">Bott & Tu</div>
+            <div class="res-desc">The best account of de Rham theory, spectral sequences, and characteristic classes for physicists who want honest mathematics.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Advanced UG</span>
+            </div>
+            <div class="res-title">Lecture Notes on Differential Geometry</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Compiled notes covering smooth manifolds, tangent bundles, Lie derivatives, and connections — with examples drawn from classical mechanics.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Topology from the Differentiable Viewpoint</div>
+            <div class="res-author">John Milnor</div>
+            <div class="res-desc">A masterclass in economy of thought. Milnor covers Sard's theorem, degree theory, and the Hopf invariant in under 70 pages of pure elegance.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Subtopic 2 -->
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">02</span>
+          <h3 class="subtopic-name">Group Theory & Symmetry</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Group Theory in Physics</div>
+            <div class="res-author">Wu-Ki Tung</div>
+            <div class="res-desc">Systematic treatment of finite groups, Lie groups, and their representations — directly aimed at physicists. Excellent for learning how representations constrain physical Hamiltonians.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ PDF / Notes</span>
+              <span class="res-level">Advanced UG</span>
+            </div>
+            <div class="res-title">Notes on Lie Algebras and Lie Groups</div>
+            <div class="res-author">Various Authors</div>
+            <div class="res-desc">Covering su(2), su(3), root systems, Dynkin diagrams, and the classification of semisimple Lie algebras with physical applications throughout.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Symmetry and the Monster</div>
+            <div class="res-author">Mark Ronan</div>
+            <div class="res-desc">A narrative account of the classification of finite simple groups — remarkable for making an abstract mathematical achievement feel genuinely dramatic.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Subtopic 3 -->
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">03</span>
+          <h3 class="subtopic-name">Functional Analysis & Operator Theory</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Mathematical Methods of Classical Mechanics</div>
+            <div class="res-author">V. I. Arnold</div>
+            <div class="res-desc">The gold standard for geometric mechanics — symplectic manifolds, Hamiltonian flows, and integrable systems treated with uncompromising mathematical precision.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Advanced UG</span>
+            </div>
+            <div class="res-title">Spectral Theory for Quantum Mechanics</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Self-adjoint operators, spectral theorem, Stone's theorem, and the rigorous foundations of quantum mechanics beyond Dirac notation.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ PDF / Notes</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Analysis on Manifolds</div>
+            <div class="res-author">James Munkres</div>
+            <div class="res-desc">Rigorous multivariable analysis culminating in Stokes' theorem on manifolds. The preparation every theoretical physicist should have before differential geometry.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 2 — SUPERCONDUCTIVITY
+    ══════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-sc">
+      <div class="panel-header">
+        <div>
+          <div class="panel-category">Superconductivity</div>
+          <h2 class="panel-title">Cooper Pairs & <em>Broken Symmetry</em></h2>
+          <p class="panel-desc">From BCS theory and Ginzburg-Landau phenomenology to unconventional pairing, Andreev physics, and topological superconductivity. Resources spanning experiment, theory, and computation.</p>
+        </div>
+        <div class="panel-count">
+          <span>9</span>Resources
+        </div>
+      </div>
+
+      <a href="#" class="res-featured reveal">
+        <div class="res-featured-tag">Foundational</div>
+        <div class="res-featured-body">
+          <div class="res-featured-title">de Gennes — Superconductivity of Metals and Alloys</div>
+          <div class="res-featured-meta">P. G. de Gennes · Addison-Wesley · Graduate Level</div>
+          <div class="res-featured-desc">Arguably the most elegant pedagogical treatment of superconductivity ever written. de Gennes moves from pairing to London theory to the microscopic picture with a clarity that few textbooks match.</div>
+        </div>
+        <div class="res-featured-action">Upload PDF →</div>
+      </a>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">01</span>
+          <h3 class="subtopic-name">BCS Theory & Conventional Superconductivity</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Introduction to Superconductivity</div>
+            <div class="res-author">Michael Tinkham</div>
+            <div class="res-desc">The standard reference for conventional superconductivity. Comprehensive treatment from Meissner effect and flux quantization through BCS and Josephson junctions.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Notes on BCS Theory and Gap Equation</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Derivation of the BCS ground state via variational approach, gap equation, density of states, quasiparticles, and the pairing interaction in momentum space.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Lecture Notes</span>
+              <span class="res-level">Advanced UG</span>
+            </div>
+            <div class="res-title">Ginzburg-Landau Theory</div>
+            <div class="res-author">Various</div>
+            <div class="res-desc">Phenomenological GL theory, coherence length, penetration depth, type-I vs type-II classification, Abrikosov vortex lattice, and the free energy landscape.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">02</span>
+          <h3 class="subtopic-name">Unconventional Pairing & Bogoliubov–de Gennes</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Bogoliubov-de Gennes Method and Its Applications</div>
+            <div class="res-author">Jian-Xin Zhu</div>
+            <div class="res-desc">Self-contained treatment of the BdG formalism, quasiparticle eigenstates, and its applications to inhomogeneous superconductors, interfaces, and vortices.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Notes on p-wave Superconductivity</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Triplet pairing, spin structure of the order parameter, Kitaev chain, and the emergence of Majorana zero modes at the ends of a 1D p-wave wire.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review Article</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Andreev Reflection and Crossed Andreev Reflection</div>
+            <div class="res-author">Blonder, Tinkham & Klapwijk + extensions</div>
+            <div class="res-desc">The BTK formalism, subgap conductance, and the physics of non-local Andreev processes at SC–normal and SC–SC–normal junctions.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">03</span>
+          <h3 class="subtopic-name">Majorana Modes & Topological SC</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review Article</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Alicea — New Directions in the Pursuit of Majorana Fermions</div>
+            <div class="res-author">Jason Alicea · Rep. Prog. Phys. 2012</div>
+            <div class="res-desc">Excellent review of the Kitaev chain, semiconductor nanowires, and topological superconducting phases. Clearly written with experiment in mind.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Non-Abelian Braiding Statistics</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Fusion rules, braid group representations, and why Majorana zero modes implement non-Abelian anyons relevant for fault-tolerant quantum computation.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Lecture Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Topological Quantum Computing — Lecture Notes</div>
+            <div class="res-author">Nayak, Simon, Stern, Freedman, Das Sarma</div>
+            <div class="res-desc">The canonical review. From anyons and topological quantum field theory to physical platforms and error correction. Dense but rewarding.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 3 — TOPOLOGICAL MATTER
+    ══════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-topo">
+      <div class="panel-header">
+        <div>
+          <div class="panel-category">Topological Matter</div>
+          <h2 class="panel-title">Topology Meets <em>Condensed Matter</em></h2>
+          <p class="panel-desc">Chern insulators, topological magnons, Berry phases, symmetry-protected topological phases, and the rich interplay between band geometry and physical observables. My primary research domain.</p>
+        </div>
+        <div class="panel-count">
+          <span>10</span>Resources
+        </div>
+      </div>
+
+      <a href="#" class="res-featured reveal">
+        <div class="res-featured-tag">Core Reference</div>
+        <div class="res-featured-body">
+          <div class="res-featured-title">Bernevig & Hughes — Topological Insulators and Superconductors</div>
+          <div class="res-featured-meta">B. A. Bernevig & T. L. Hughes · Princeton University Press · Graduate</div>
+          <div class="res-featured-desc">The textbook that defined a generation's approach to topological band theory. Model Hamiltonians, topological invariants, surface states, and the periodic table of topological phases, all developed from first principles.</div>
+        </div>
+        <div class="res-featured-action">Upload PDF →</div>
+      </a>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">01</span>
+          <h3 class="subtopic-name">Berry Phase & Topological Invariants</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Berry Phase, Berry Curvature, and Chern Numbers</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Adiabatic theorem, Berry's geometric phase, the Berry connection and curvature as a gauge field, Chern number as an integral invariant, and TKNN formula.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Advanced UG</span>
+            </div>
+            <div class="res-title">Xiao, Chang & Niu — Berry Phase Effects on Electronic Properties</div>
+            <div class="res-author">Rev. Mod. Phys. 82, 1959 (2010)</div>
+            <div class="res-desc">The go-to review on Berry phase effects — anomalous velocity, orbital magnetization, Hall effects — written with admirable clarity. Essential reading before research.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Geometry, Topology and Physics — Nakahara</div>
+            <div class="res-author">Mikio Nakahara</div>
+            <div class="res-desc">Fibre bundle perspective on Berry phase — the mathematical structure underlying gauge fields in quantum mechanics and band theory.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">02</span>
+          <h3 class="subtopic-name">Topological Magnons & Magnonic Phases</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Research Paper</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Topological Magnon Insulator in Insulating Ferromagnet</div>
+            <div class="res-author">L. Zhang, J. Ren, J.-S. Wang, B. Li</div>
+            <div class="res-desc">Pioneering paper establishing topological characterization of magnon bands in honeycomb ferromagnets — the bosonic analogue of electronic Chern insulators.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Linear Spin-Wave Theory and Magnon Bands</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Holstein-Primakoff transformation, spin-wave Hamiltonian, Bogoliubov transformation for bosons, and Chern number computation for magnon bands.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Dirac Nodal Line Magnons in Honeycomb Antiferromagnets</div>
+            <div class="res-author">Ganguly (2024) — Preprint Notes</div>
+            <div class="res-desc">Personal research notes on PT-symmetric magnonic phases in layered honeycomb AFMs, interlayer spin canting, and topological phase transitions.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">03</span>
+          <h3 class="subtopic-name">Symmetry-Protected Topological Phases</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">4 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Hasan & Kane — Colloquium: Topological Insulators</div>
+            <div class="res-author">Rev. Mod. Phys. 82, 3045 (2010)</div>
+            <div class="res-desc">The review that introduced the field to much of the physics community. Time-reversal symmetry, Z₂ invariant, surface states, and experimental discoveries.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Chiu et al. — Classification of Topological Quantum Matter with Symmetries</div>
+            <div class="res-author">Rev. Mod. Phys. 88, 035005 (2016)</div>
+            <div class="res-desc">The Altland-Zirnbauer classification, topological K-theory, and the periodic table of topological insulators and superconductors — systematic and comprehensive.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Bulk-Boundary Correspondence</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">The SSH model, winding numbers, edge states, and the precise statement of the bulk-boundary correspondence in 1D and 2D topological systems.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Lecture Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Topological Band Theory — Vanderbilt Group Notes</div>
+            <div class="res-author">David Vanderbilt</div>
+            <div class="res-desc">Wannier functions, modern theory of polarization, electric polarization as a Zak phase, and the connection to topological classification.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 4 — QUANTUM FIELD THEORY
+    ══════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-qft">
+      <div class="panel-header">
+        <div>
+          <div class="panel-category">Quantum Field Theory</div>
+          <h2 class="panel-title">Fields, Path Integrals & <em>Renormalisation</em></h2>
+          <p class="panel-desc">QFT from canonical quantisation and path integrals through renormalisation group, anomalies, and topological field theories. Both the particle physics and condensed matter perspectives.</p>
+        </div>
+        <div class="panel-count">
+          <span>9</span>Resources
+        </div>
+      </div>
+
+      <a href="#" class="res-featured reveal">
+        <div class="res-featured-tag">Essential</div>
+        <div class="res-featured-body">
+          <div class="res-featured-title">Altland & Simons — Condensed Matter Field Theory</div>
+          <div class="res-featured-meta">Alexander Altland & Ben Simons · Cambridge University Press · Graduate</div>
+          <div class="res-featured-desc">The indispensable field theory textbook for condensed matter physicists. Path integrals, coherent states, RG, broken symmetry, and topological field theories all developed through physically motivated examples.</div>
+        </div>
+        <div class="res-featured-action">Upload PDF →</div>
+      </a>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">01</span>
+          <h3 class="subtopic-name">Path Integrals & Canonical Quantisation</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Peskin & Schroeder — An Introduction to Quantum Field Theory</div>
+            <div class="res-author">M. E. Peskin & D. V. Schroeder</div>
+            <div class="res-desc">The standard first graduate QFT course. Canonical quantization, Feynman diagrams, QED, renormalization, and non-Abelian gauge theories.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Path Integral Formulation of QM and QFT</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Feynman's sum over paths, coherent state path integrals for bosons and fermions, generating functionals, and the Hubbard-Stratonovich transformation.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Advanced UG</span>
+            </div>
+            <div class="res-title">Zee — Quantum Field Theory in a Nutshell</div>
+            <div class="res-author">Anthony Zee</div>
+            <div class="res-desc">A conceptual tour of QFT with exceptional physical intuition. Better for building understanding than for calculation — the ideal companion to Peskin-Schroeder.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">02</span>
+          <h3 class="subtopic-name">Renormalisation Group & Critical Phenomena</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Lecture Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Shankar — Renormalisation Group for Interacting Fermions</div>
+            <div class="res-author">R. Shankar · Rev. Mod. Phys. (1994)</div>
+            <div class="res-desc">The clearest pedagogical account of Wilsonian RG applied to Fermi liquids. Shows how BCS superconductivity emerges as a marginal instability. Beautifully written.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">RG Flow, Fixed Points, and Universality</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Wilson's RG in real and momentum space, beta functions, relevant vs irrelevant operators, universality classes, and the epsilon expansion near d=4.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Textbook</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Kardar — Statistical Physics of Fields</div>
+            <div class="res-author">Mehran Kardar</div>
+            <div class="res-desc">Fluctuations, scaling, and the RG developed through the lens of statistical mechanics. Kardar writes with unusual clarity on a technically demanding subject.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">03</span>
+          <h3 class="subtopic-name">Topological Field Theories & Anomalies</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Chern-Simons Theory and Topological Order</div>
+            <div class="res-author">E. Witten & others</div>
+            <div class="res-desc">Chern-Simons gauge theories, their relation to knot invariants, fractional quantum Hall effect, and anyon statistics emerging from topological field theory.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Anomalies in Quantum Field Theory</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Chiral anomaly, 't Hooft anomaly matching, anomaly inflow, and the deep connection between bulk anomalies and boundary physics in topological phases.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Lecture Notes</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Wen — Quantum Field Theory of Many-Body Systems</div>
+            <div class="res-author">Xiao-Gang Wen</div>
+            <div class="res-desc">Topological order, string-net condensation, long-range entanglement, and the QFT of quantum Hall states. Wen's unique perspective on what makes a phase of matter truly new.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 5 — COMPUTATIONAL PHYSICS
+    ══════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-comp">
+      <div class="panel-header">
+        <div>
+          <div class="panel-category">Computational & Data-Driven Physics</div>
+          <h2 class="panel-title">Algorithms, Numerics & <em>ML for Physics</em></h2>
+          <p class="panel-desc">Exact diagonalization, tensor networks, Monte Carlo, and machine learning approaches to quantum many-body problems. Resources for both the mathematical foundations and practical implementation.</p>
+        </div>
+        <div class="panel-count">
+          <span>9</span>Resources
+        </div>
+      </div>
+
+      <a href="#" class="res-featured reveal">
+        <div class="res-featured-tag">Practical</div>
+        <div class="res-featured-body">
+          <div class="res-featured-title">Sandvik — Computational Studies of Quantum Spin Systems</div>
+          <div class="res-featured-meta">Anders W. Sandvik · AIP Conference Proceedings · Graduate</div>
+          <div class="res-featured-desc">Comprehensive lecture notes on exact diagonalization, quantum Monte Carlo, and stochastic series expansion for quantum spin systems. An invaluable practical guide to numerical many-body physics.</div>
+        </div>
+        <div class="res-featured-action">Upload PDF →</div>
+      </a>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">01</span>
+          <h3 class="subtopic-name">Exact Diagonalization & Tight-Binding</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Exact Diagonalization of Quantum Many-Body Systems</div>
+            <div class="res-author">Personal Notes + Weisse & Fehske</div>
+            <div class="res-desc">Hilbert space construction, symmetry sectors, sparse matrix methods, Lanczos algorithm, and spectral functions via continued fractions.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Tutorial</span>
+              <span class="res-level">Advanced UG</span>
+            </div>
+            <div class="res-title">PythTB and Tight-Binding Models</div>
+            <div class="res-author">Vanderbilt Group</div>
+            <div class="res-desc">Practical tutorial for constructing and solving tight-binding models using PythTB — computing band structures, Berry curvature, Chern numbers, and edge spectra.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Code Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Computing Topological Invariants Numerically</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Discretized Berry curvature, link variables for Chern number on a lattice, Z₂ invariant by parity eigenvalues, and Wannier charge centres.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">02</span>
+          <h3 class="subtopic-name">Tensor Networks & DMRG</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Orús — A Practical Introduction to Tensor Networks</div>
+            <div class="res-author">Román Orús · Ann. Phys. (2014)</div>
+            <div class="res-desc">MPS, PEPS, MERA, and the variational manifold perspective on tensor network methods. Accessible entry point to a technically deep subject.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Schollwöck — DMRG in the Age of Matrix Product States</div>
+            <div class="res-author">Ulrich Schollwöck · Ann. Phys. (2011)</div>
+            <div class="res-desc">The definitive modern account of DMRG. Unifies the original White algorithm with MPS formalism, time evolution, and finite-temperature methods.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Entanglement and Area Laws</div>
+            <div class="res-author">Personal Notes</div>
+            <div class="res-desc">Entanglement entropy in many-body systems, area laws for ground states, volume laws for excited states, and their implications for classical simulability.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">03</span>
+          <h3 class="subtopic-name">Machine Learning for Quantum Matter</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Research</span>
+            </div>
+            <div class="res-title">Carrasquilla & Melko — Machine Learning Phases of Matter</div>
+            <div class="res-author">Nature Physics 13, 431 (2017)</div>
+            <div class="res-desc">Seminal paper demonstrating that neural networks can learn to identify quantum phases of matter from Monte Carlo configurations — opening a rich research direction.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge notes">◈ Notes</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">Deep Learning for Acoustic Sensing — TCS Notes</div>
+            <div class="res-author">Ganguly et al. (2025 — IEEE Sensors Letters)</div>
+            <div class="res-desc">Notes from the TCS project on pipeline leak detection using CNNs and RNNs on acoustic time series. Methodology and architecture for the published IEEE paper.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge pdf">▣ Review</span>
+              <span class="res-level">Graduate</span>
+            </div>
+            <div class="res-title">A Review of ML Approaches to Phase Diagrams</div>
+            <div class="res-author">Mehta et al. · Physics Reports (2019)</div>
+            <div class="res-desc">High-dimensional survey connecting statistical mechanics to machine learning — renormalization group as a deep learning analogy, restricted Boltzmann machines, variational autoencoders.</div>
+            <div class="res-footer">
+              <span class="res-action">Upload PDF <span>→</span></span>
+              <span class="res-placeholder-label">placeholder</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB 6 — POP PHYSICS
+    ══════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-pop">
+      <div class="panel-header">
+        <div>
+          <div class="panel-category">Pop Physics</div>
+          <h2 class="panel-title">Physics for the <em>Curious</em></h2>
+          <p class="panel-desc">Books, articles, and talks that convey the wonder of physics to a broad audience — without sacrificing honesty. A selection of what I consider genuinely excellent popular science writing.</p>
+        </div>
+        <div class="panel-count">
+          <span>8</span>Resources
+        </div>
+      </div>
+
+      <a href="#" class="res-featured reveal">
+        <div class="res-featured-tag">Remarkable</div>
+        <div class="res-featured-body">
+          <div class="res-featured-title">Feynman — The Character of Physical Law</div>
+          <div class="res-featured-meta">Richard P. Feynman · MIT Press · General Audience</div>
+          <div class="res-featured-desc">Seven Messenger Lectures from 1964 in which Feynman distils what is most strange and beautiful about the laws of nature. On gravity, symmetry, the quantum, and what it means to understand something at all.</div>
+        </div>
+        <div class="res-featured-action">View →</div>
+      </a>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">01</span>
+          <h3 class="subtopic-name">Condensed Matter & Emergence</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Book</span>
+              <span class="res-level">General</span>
+            </div>
+            <div class="res-title">A Different Universe — Reinventing Physics from the Bottom Down</div>
+            <div class="res-author">Robert B. Laughlin</div>
+            <div class="res-desc">A Nobel laureate's manifesto for emergence as the central principle of modern physics. Bracing, heterodox, and honestly one of the most thought-provoking physics books written in recent decades.</div>
+            <div class="res-footer">
+              <span class="res-action">View <span>→</span></span>
+              <span class="res-level">General</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Book</span>
+              <span class="res-level">General</span>
+            </div>
+            <div class="res-title">The Order of Time</div>
+            <div class="res-author">Carlo Rovelli</div>
+            <div class="res-desc">An unusually literary meditation on time, thermal physics, entropy, and what quantum gravity might mean for our experience of the world. Rovelli writes physics like poetry.</div>
+            <div class="res-footer">
+              <span class="res-action">View <span>→</span></span>
+              <span class="res-level">General</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge link">⊞ Essay</span>
+              <span class="res-level">General</span>
+            </div>
+            <div class="res-title">More is Different — P. W. Anderson (1972)</div>
+            <div class="res-author">Philip W. Anderson · Science</div>
+            <div class="res-desc">Perhaps the most important two-page essay in all of condensed matter. Anderson's argument for emergence over reductionism — required reading for anyone thinking about what physics is really about.</div>
+            <div class="res-footer">
+              <span class="res-action">View <span>→</span></span>
+              <span class="res-level">General</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">02</span>
+          <h3 class="subtopic-name">Quantum Mechanics & Foundations</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">2 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Book</span>
+              <span class="res-level">General</span>
+            </div>
+            <div class="res-title">Something Deeply Hidden</div>
+            <div class="res-author">Sean Carroll</div>
+            <div class="res-desc">Carroll's defence of Many-Worlds quantum mechanics, written for a general audience. Lucid, philosophically honest, and genuinely engaging on the measurement problem.</div>
+            <div class="res-footer">
+              <span class="res-action">View <span>→</span></span>
+              <span class="res-level">General</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Book</span>
+              <span class="res-level">General</span>
+            </div>
+            <div class="res-title">QED: The Strange Theory of Light and Matter</div>
+            <div class="res-author">Richard P. Feynman</div>
+            <div class="res-desc">Feynman explains quantum electrodynamics — interference, scattering amplitudes, and photon-electron interactions — without a single equation. An almost miraculous piece of science communication.</div>
+            <div class="res-footer">
+              <span class="res-action">View <span>→</span></span>
+              <span class="res-level">General</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="subtopic-section">
+        <div class="subtopic-header">
+          <span class="subtopic-num">03</span>
+          <h3 class="subtopic-name">Biographies & History of Physics</h3>
+          <div class="subtopic-bar"></div>
+          <span class="subtopic-count">3 items</span>
+        </div>
+        <div class="resource-grid">
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Book</span>
+              <span class="res-level">General</span>
+            </div>
+            <div class="res-title">Surely You're Joking, Mr. Feynman!</div>
+            <div class="res-author">Richard P. Feynman</div>
+            <div class="res-desc">Adventures of a curious character — how the best physicist of the 20th century actually thought, played, and discovered. Irreplaceable for what it conveys about the culture of physics.</div>
+            <div class="res-footer">
+              <span class="res-action">View <span>→</span></span>
+              <span class="res-level">General</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Book</span>
+              <span class="res-level">General</span>
+            </div>
+            <div class="res-title">The Strangest Man — The Hidden Life of Paul Dirac</div>
+            <div class="res-author">Graham Farmelo</div>
+            <div class="res-desc">A masterful biography of Dirac, the most silent and strange of the founders of quantum mechanics — and arguably the deepest mathematical physicist of the 20th century.</div>
+            <div class="res-footer">
+              <span class="res-action">View <span>→</span></span>
+              <span class="res-level">General</span>
+            </div>
+          </a>
+          <a href="#" class="res-card reveal">
+            <div class="res-type-row">
+              <span class="res-type-badge book">◉ Book</span>
+              <span class="res-level">General</span>
+            </div>
+            <div class="res-title">The Dream of a Final Theory</div>
+            <div class="res-author">Steven Weinberg</div>
+            <div class="res-desc">Weinberg's case for reductionism and the search for ultimate physical laws. Thoughtful, honest about what physics can and cannot explain, and beautifully written by one of the architects of the Standard Model.</div>
+            <div class="res-footer">
+              <span class="res-action">View <span>→</span></span>
+              <span class="res-level">General</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">S<span>.</span>Ganguly</a>
+    <ul class="footer-links">
+      <li><a href="research.html">Research</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
+  </div>
+</footer>
+
+<script>
+  // Hamburger
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      tabPanels.forEach(p => {
+        if (p.id === 'tab-' + target) {
+          p.classList.add('active');
+          // Re-trigger reveals inside newly shown panel
+          p.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => {
+            setTimeout(() => el.classList.add('visible'), i * 60);
+          });
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      // Scroll tab into view on mobile
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    });
+  });
+
+  // Intersection observer for scroll reveals
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.06 });
+  reveals.forEach(r => obs.observe(r));
+
+  // Trigger reveals on initial active tab
+  setTimeout(() => {
+    document.querySelectorAll('#tab-math .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 60);
+    });
+  }, 300);
+</script>
+</body>
+</html>
