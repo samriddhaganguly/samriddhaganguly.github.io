@@ -1,116 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Gallery — Samriddha Ganguly</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Gallery — Samriddha Ganguly</title>
 
-  <link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="style.css"/>
 
-  <style>
-    /* ── GALLERY GRID ── */
-    .gallery-grid {
-      column-count: 3;
-      column-gap: 1px;
-      background: var(--border);
-    }
+<style>
 
-    @media (max-width: 900px) {
-      .gallery-grid { column-count: 2; }
-    }
+/* ───────── HEADER DECOR (subtle physics arcs) ───────── */
+.header-bg {
+  position:absolute;
+  right:0;
+  top:0;
+  width:400px;
+  height:400px;
+  opacity:0.15;
+  background:
+    radial-gradient(circle at center,
+      transparent 60%,
+      var(--accent) 61%,
+      transparent 62%),
+    radial-gradient(circle at center,
+      transparent 45%,
+      var(--accent) 46%,
+      transparent 47%);
+}
 
-    @media (max-width: 600px) {
-      .gallery-grid { column-count: 1; }
-    }
+/* ───────── FILTER BAR ───────── */
+.gallery-controls {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:2rem;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:0.8rem 0;
+}
 
-    /* ── ITEM ── */
-    .gallery-item {
-      break-inside: avoid;
-      margin-bottom: 1px;
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      background: var(--bg2);
-    }
+.filter-group {
+  display:flex;
+  gap:1.5rem;
+  font-family:var(--mono);
+  font-size:0.65rem;
+  letter-spacing:0.15em;
+}
 
-    .gallery-img {
-      width: 100%;
-      display: block;
-      transition: transform 0.5s ease;
-    }
+.filter-group span {
+  cursor:pointer;
+  color:var(--text-muted);
+}
 
-    .gallery-item:hover .gallery-img {
-      transform: scale(1.05);
-    }
+.filter-group span.active {
+  color:var(--accent);
+}
 
-    /* ── OVERLAY ── */
-    .gallery-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(10,10,15,0.85),
-        rgba(10,10,15,0.2),
-        transparent
-      );
-      display: flex;
-      align-items: flex-end;
-      padding: 1.2rem;
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
+.view-icons {
+  display:flex;
+  gap:1rem;
+  color:var(--accent);
+}
 
-    .gallery-item:hover .gallery-overlay {
-      opacity: 1;
-    }
+/* ───────── GRID ───────── */
+.gallery-grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:1px;
+  background:var(--border);
+}
 
-    .gallery-caption {
-      font-family: var(--serif);
-      font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text);
-    }
+@media(max-width:900px){
+  .gallery-grid { grid-template-columns: repeat(2,1fr); }
+}
 
-    /* ── LIGHTBOX ── */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      flex-direction: column;
-      padding: 2rem;
-    }
+@media(max-width:600px){
+  .gallery-grid { grid-template-columns: 1fr; }
+}
 
-    .lightbox.active { display: flex; }
+/* ───────── CARD ───────── */
+.gallery-card {
+  background:var(--bg2);
+  position:relative;
+  overflow:hidden;
+}
 
-    .lightbox img {
-      max-width: 90%;
-      max-height: 80vh;
-      margin-bottom: 1rem;
-    }
+.gallery-card img {
+  width:100%;
+  display:block;
+  transition: transform 0.5s ease;
+}
 
-    .lightbox-caption {
-      font-family: var(--serif);
-      color: var(--text);
-      font-size: 1rem;
-      text-align: center;
-      max-width: 600px;
-    }
+.gallery-card:hover img {
+  transform: scale(1.05);
+}
 
-    .lightbox-close {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 1.5rem;
-      color: var(--accent);
-      cursor: pointer;
-      font-family: var(--mono);
-    }
+/* overlay */
+.gallery-info {
+  padding:0.8rem 1rem;
+  border-top:1px solid var(--border);
+  font-family:var(--serif);
+  font-size:0.85rem;
+  line-height:1.5;
+}
 
-  </style>
+.gallery-index {
+  font-family:var(--mono);
+  font-size:0.65rem;
+  color:var(--accent);
+  margin-bottom:0.3rem;
+}
+
+/* ───────── QUOTE ───────── */
+.gallery-quote {
+  margin-top:3rem;
+  padding:2rem;
+  border-top:1px solid var(--border);
+  text-align:center;
+  font-family:var(--serif);
+  color:var(--text-muted);
+}
+
+.gallery-quote span {
+  display:block;
+  margin-top:0.8rem;
+  color:var(--accent);
+  font-family:var(--mono);
+  font-size:0.7rem;
+}
+
+</style>
 </head>
 
 <body>
@@ -123,7 +142,6 @@
     <li><a href="research.html">Research</a></li>
     <li><a href="cv.html">CV</a></li>
     <li><a href="publications.html">Publications</a></li>
-    <li><a href="simulations.html">Simulations</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="resources.html">Resources</a></li>
     <li><a href="gallery.html" class="active">Gallery</a></li>
@@ -132,98 +150,112 @@
 </nav>
 
 <!-- HEADER -->
-<header class="page-header">
+<header class="page-header" style="position:relative;">
+  <div class="header-bg"></div>
+
   <div class="page-header-inner">
-    <div class="page-eyebrow">Moments & Milestones</div>
-    <h1 class="page-title">Visual <em>Archive</em></h1>
+    <div class="page-eyebrow">Moments & Memories</div>
+    <h1 class="page-title">Photo <em>Gallery</em></h1>
     <p class="page-subtitle">
-      Conferences, collaborations, academic milestones, and fragments of life around physics.
+      A collection of moments from academic life, collaborations,
+      conferences, and adventures in physics.
     </p>
   </div>
 </header>
 
 <section class="section">
-  <div class="section-inner">
+<div class="section-inner">
 
-    <div class="gallery-grid">
-
-      <!-- ITEMS -->
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/IISC.jpg" class="gallery-img">
-        <div class="gallery-overlay">
-          <div class="gallery-caption">Indian Institute of Science, Bengaluru</div>
-        </div>
-      </div>
-
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/GROUPS.jpg" class="gallery-img">
-        <div class="gallery-overlay">
-          <div class="gallery-caption">Who says Physics people do not do Math?</div>
-        </div>
-      </div>
-
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/GMRT.jpg" class="gallery-img">
-        <div class="gallery-overlay">
-          <div class="gallery-caption">GMRT during RAWS December 2023</div>
-        </div>
-      </div>
-
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/NCRA.jpg" class="gallery-img">
-        <div class="gallery-overlay">
-          <div class="gallery-caption">NCRA-TIFR Main Building, Pune</div>
-        </div>
-      </div>
-
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/qmec1.jpeg" class="gallery-img">
-        <div class="gallery-overlay">
-          <div class="gallery-caption">Group Photo of International Conference on Quantum Materials and Emerging Concepts 2025 held at IISER Bhopal</div>
-        </div>
-      </div>
-
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/iicm.jpeg" class="gallery-img">
-        <div class="gallery-overlay">
-          <div class="gallery-caption">Inter-INCI Cultural Meet 2025 Quiz Gold Medal Winner</div>
-        </div>
-      </div>
-
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/cric1.jpeg" class="gallery-img">
-        <div class="gallery-overlay">
-          <div class="gallery-caption">Finalist Team for Dept. of Physics IISERB Cricket Tournament</div>
-        </div>
-      </div>
-
-    </div>
-
+<!-- FILTER BAR -->
+<div class="gallery-controls">
+  <div class="filter-group">
+    <span class="active">ALL</span>
+    <span>ACADEMIC</span>
+    <span>CONFERENCES</span>
+    <span>CAMPUS</span>
+    <span>ACHIEVEMENTS</span>
   </div>
-</section>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-  <div class="lightbox-close" onclick="closeLightbox()">×</div>
-  <img id="lightbox-img">
-  <div class="lightbox-caption" id="lightbox-caption"></div>
+  <div class="view-icons">
+    ▦ ▤
+  </div>
 </div>
 
-<script>
-function openLightbox(el) {
-  const img = el.querySelector("img").src;
-  const caption = el.querySelector(".gallery-caption").innerText;
+<!-- GRID -->
+<div class="gallery-grid">
 
-  document.getElementById("lightbox-img").src = img;
-  document.getElementById("lightbox-caption").innerText = caption;
+  <!-- 1 -->
+  <div class="gallery-card">
+    <img src="assets/IISC.jpg">
+    <div class="gallery-info">
+      <div class="gallery-index">01 —</div>
+      Indian Institute of Science, Bengaluru
+    </div>
+  </div>
 
-  document.getElementById("lightbox").classList.add("active");
-}
+  <!-- 2 -->
+  <div class="gallery-card">
+    <img src="assets/GROUPS.jpg">
+    <div class="gallery-info">
+      <div class="gallery-index">02 —</div>
+      Who says Physics people do not do Math?
+    </div>
+  </div>
 
-function closeLightbox() {
-  document.getElementById("lightbox").classList.remove("active");
-}
-</script>
+  <!-- 3 -->
+  <div class="gallery-card">
+    <img src="assets/GMRT.jpg">
+    <div class="gallery-info">
+      <div class="gallery-index">03 —</div>
+      GMRT during RAWS December 2023
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="gallery-card">
+    <img src="assets/NCRA.jpg">
+    <div class="gallery-info">
+      <div class="gallery-index">04 —</div>
+      NCRA-TIFR Main Building, Pune
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="gallery-card">
+    <img src="assets/qmec1.jpeg">
+    <div class="gallery-info">
+      <div class="gallery-index">05 —</div>
+      Group Photo of International Conference on Quantum Materials and Emerging Concepts 2025 held at IISER Bhopal
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="gallery-card">
+    <img src="assets/iicm.jpeg">
+    <div class="gallery-info">
+      <div class="gallery-index">06 —</div>
+      Inter-INCI Cultural Meet 2025 Quiz Gold Medal Winner
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="gallery-card">
+    <img src="assets/cric1.jpeg">
+    <div class="gallery-info">
+      <div class="gallery-index">07 —</div>
+      Finalist Team for Dept. of Physics IISERB Cricket Tournament
+    </div>
+  </div>
+
+</div>
+
+<!-- QUOTE -->
+<div class="gallery-quote">
+  “Physics is not just a subject, it’s a way of seeing.”
+</div>
+
+</div>
+</section>
 
 </body>
 </html>
