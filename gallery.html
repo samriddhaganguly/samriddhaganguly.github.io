@@ -9,124 +9,89 @@
 
 <style>
 
-/* ───────── HEADER DECOR (subtle physics arcs) ───────── */
-.header-bg {
-  position:absolute;
-  right:0;
-  top:0;
-  width:400px;
-  height:400px;
-  opacity:0.15;
-  background:
-    radial-gradient(circle at center,
-      transparent 60%,
-      var(--accent) 61%,
-      transparent 62%),
-    radial-gradient(circle at center,
-      transparent 45%,
-      var(--accent) 46%,
-      transparent 47%);
-}
-
-/* ───────── FILTER BAR ───────── */
-.gallery-controls {
+/* ───────── LAYOUT ───────── */
+.gallery-list {
   display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:2rem;
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-  padding:0.8rem 0;
+  flex-direction:column;
+  gap:3.5rem;
 }
 
-.filter-group {
-  display:flex;
-  gap:1.5rem;
-  font-family:var(--mono);
-  font-size:0.65rem;
-  letter-spacing:0.15em;
-}
-
-.filter-group span {
-  cursor:pointer;
-  color:var(--text-muted);
-}
-
-.filter-group span.active {
-  color:var(--accent);
-}
-
-.view-icons {
-  display:flex;
-  gap:1rem;
-  color:var(--accent);
-}
-
-/* ───────── GRID ───────── */
-.gallery-grid {
+/* ───────── FRAME ───────── */
+.gallery-item {
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap:1px;
-  background:var(--border);
+  grid-template-columns: 1.2fr 1fr;
+  gap:2.5rem;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+  padding-bottom:2.5rem;
 }
 
-@media(max-width:900px){
-  .gallery-grid { grid-template-columns: repeat(2,1fr); }
+.gallery-item:nth-child(even) {
+  grid-template-columns: 1fr 1.2fr;
 }
 
-@media(max-width:600px){
-  .gallery-grid { grid-template-columns: 1fr; }
+/* ───────── IMAGE FRAME ───────── */
+.gallery-frame {
+  background: var(--bg2);
+  padding:12px;
+  border:1px solid var(--border);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
-/* ───────── CARD ───────── */
-.gallery-card {
-  background:var(--bg2);
-  position:relative;
-  overflow:hidden;
-}
-
-.gallery-card img {
+.gallery-frame img {
   width:100%;
   display:block;
-  transition: transform 0.5s ease;
 }
 
-.gallery-card:hover img {
-  transform: scale(1.05);
-}
-
-/* overlay */
-.gallery-info {
-  padding:0.8rem 1rem;
-  border-top:1px solid var(--border);
-  font-family:var(--serif);
-  font-size:0.85rem;
-  line-height:1.5;
+/* ───────── TEXT ───────── */
+.gallery-text {
+  max-width:420px;
 }
 
 .gallery-index {
-  font-family:var(--mono);
+  font-family: var(--mono);
   font-size:0.65rem;
   color:var(--accent);
-  margin-bottom:0.3rem;
+  letter-spacing:0.15em;
+  margin-bottom:0.8rem;
+}
+
+.gallery-title {
+  font-family: var(--serif);
+  font-size:1.4rem;
+  line-height:1.5;
+  margin-bottom:0.6rem;
+}
+
+.gallery-desc {
+  font-size:0.85rem;
+  color:var(--text-muted);
+  line-height:1.7;
+}
+
+/* ───────── MOBILE ───────── */
+@media(max-width:800px){
+  .gallery-item {
+    grid-template-columns:1fr;
+  }
 }
 
 /* ───────── QUOTE ───────── */
 .gallery-quote {
   margin-top:3rem;
-  padding:2rem;
-  border-top:1px solid var(--border);
   text-align:center;
+  padding-top:2rem;
+  border-top:1px solid var(--border);
   font-family:var(--serif);
   color:var(--text-muted);
 }
 
 .gallery-quote span {
   display:block;
-  margin-top:0.8rem;
-  color:var(--accent);
+  margin-top:0.7rem;
   font-family:var(--mono);
   font-size:0.7rem;
+  color:var(--accent);
 }
 
 </style>
@@ -142,6 +107,7 @@
     <li><a href="research.html">Research</a></li>
     <li><a href="cv.html">CV</a></li>
     <li><a href="publications.html">Publications</a></li>
+    <li><a href="simulations.html">Simulations</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="resources.html">Resources</a></li>
     <li><a href="gallery.html" class="active">Gallery</a></li>
@@ -150,15 +116,12 @@
 </nav>
 
 <!-- HEADER -->
-<header class="page-header" style="position:relative;">
-  <div class="header-bg"></div>
-
+<header class="page-header">
   <div class="page-header-inner">
     <div class="page-eyebrow">Moments & Memories</div>
-    <h1 class="page-title">Photo <em>Gallery</em></h1>
+    <h1 class="page-title">Visual <em>Archive</em></h1>
     <p class="page-subtitle">
-      A collection of moments from academic life, collaborations,
-      conferences, and adventures in physics.
+      A curated selection of moments from academic life, conferences, and beyond.
     </p>
   </div>
 </header>
@@ -166,84 +129,89 @@
 <section class="section">
 <div class="section-inner">
 
-<!-- FILTER BAR -->
-<div class="gallery-controls">
-  <div class="filter-group">
-    <span class="active">ALL</span>
-    <span>ACADEMIC</span>
-    <span>CONFERENCES</span>
-    <span>CAMPUS</span>
-    <span>ACHIEVEMENTS</span>
-  </div>
-
-  <div class="view-icons">
-    ▦ ▤
-  </div>
-</div>
-
-<!-- GRID -->
-<div class="gallery-grid">
+<div class="gallery-list">
 
   <!-- 1 -->
-  <div class="gallery-card">
-    <img src="assets/IISC.jpg">
-    <div class="gallery-info">
-      <div class="gallery-index">01 —</div>
-      Indian Institute of Science, Bengaluru
+  <div class="gallery-item">
+    <div class="gallery-frame">
+      <img src="assets/IISC.jpg">
+    </div>
+    <div class="gallery-text">
+      <div class="gallery-index">01</div>
+      <div class="gallery-title">Indian Institute of Science, Bengaluru</div>
+      <div class="gallery-desc">One of the most inspiring academic spaces — where history, research, and architecture intersect.</div>
     </div>
   </div>
 
   <!-- 2 -->
-  <div class="gallery-card">
-    <img src="assets/GROUPS.jpg">
-    <div class="gallery-info">
-      <div class="gallery-index">02 —</div>
-      Who says Physics people do not do Math?
+  <div class="gallery-item">
+    <div class="gallery-frame">
+      <img src="assets/GROUPS.jpg">
+    </div>
+    <div class="gallery-text">
+      <div class="gallery-index">02</div>
+      <div class="gallery-title">Who says Physics people do not do Math?</div>
+      <div class="gallery-desc">Moments that capture the collaborative spirit of theoretical work and shared curiosity.</div>
     </div>
   </div>
 
   <!-- 3 -->
-  <div class="gallery-card">
-    <img src="assets/GMRT.jpg">
-    <div class="gallery-info">
-      <div class="gallery-index">03 —</div>
-      GMRT during RAWS December 2023
+  <div class="gallery-item">
+    <div class="gallery-frame">
+      <img src="assets/GMRT.jpg">
+    </div>
+    <div class="gallery-text">
+      <div class="gallery-index">03</div>
+      <div class="gallery-title">GMRT during RAWS December 2023</div>
+      <div class="gallery-desc">Exploring large-scale radio astronomy infrastructure and observational physics.</div>
     </div>
   </div>
 
   <!-- 4 -->
-  <div class="gallery-card">
-    <img src="assets/NCRA.jpg">
-    <div class="gallery-info">
-      <div class="gallery-index">04 —</div>
-      NCRA-TIFR Main Building, Pune
+  <div class="gallery-item">
+    <div class="gallery-frame">
+      <img src="assets/NCRA.jpg">
+    </div>
+    <div class="gallery-text">
+      <div class="gallery-index">04</div>
+      <div class="gallery-title">NCRA-TIFR Main Building, Pune</div>
+      <div class="gallery-desc">Where astrophysics research meets real-world instrumentation and observation.</div>
     </div>
   </div>
 
   <!-- 5 -->
-  <div class="gallery-card">
-    <img src="assets/qmec1.jpeg">
-    <div class="gallery-info">
-      <div class="gallery-index">05 —</div>
-      Group Photo of International Conference on Quantum Materials and Emerging Concepts 2025 held at IISER Bhopal
+  <div class="gallery-item">
+    <div class="gallery-frame">
+      <img src="assets/qmec1.jpeg">
+    </div>
+    <div class="gallery-text">
+      <div class="gallery-index">05</div>
+      <div class="gallery-title">International Conference on Quantum Materials (2025)</div>
+      <div class="gallery-desc">A convergence of ideas, discussions, and emerging directions in condensed matter physics.</div>
     </div>
   </div>
 
   <!-- 6 -->
-  <div class="gallery-card">
-    <img src="assets/iicm.jpeg">
-    <div class="gallery-info">
-      <div class="gallery-index">06 —</div>
-      Inter-INCI Cultural Meet 2025 Quiz Gold Medal Winner
+  <div class="gallery-item">
+    <div class="gallery-frame">
+      <img src="assets/iicm.jpeg">
+    </div>
+    <div class="gallery-text">
+      <div class="gallery-index">06</div>
+      <div class="gallery-title">Inter-INCI Cultural Meet 2025 — Gold Medal</div>
+      <div class="gallery-desc">Recognition beyond academics — celebrating interdisciplinary engagement.</div>
     </div>
   </div>
 
   <!-- 7 -->
-  <div class="gallery-card">
-    <img src="assets/cric1.jpeg">
-    <div class="gallery-info">
-      <div class="gallery-index">07 —</div>
-      Finalist Team for Dept. of Physics IISERB Cricket Tournament
+  <div class="gallery-item">
+    <div class="gallery-frame">
+      <img src="assets/cric1.jpeg">
+    </div>
+    <div class="gallery-text">
+      <div class="gallery-index">07</div>
+      <div class="gallery-title">Physics Department Cricket Team</div>
+      <div class="gallery-desc">Because physics also involves momentum — just in a different form.</div>
     </div>
   </div>
 
