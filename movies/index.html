@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Cinema — Samriddha Ganguly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="../style.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=Noto+Serif+TC:wght@300;400&display=swap');
+
+    /* ── WKW OVERRIDES ── */
+    :root {
+      --wkw-amber:    #f0a830;
+      --wkw-rust:     #c4552a;
+      --wkw-neon:     #e8734a;
+      --wkw-dusk:     #1a0d1f;
+      --wkw-deep:     #0d0810;
+      --wkw-haze:     rgba(240,168,48,0.08);
+      --wkw-glow:     rgba(240,168,48,0.18);
+    }
+
+    /* City-haze background */
+    body {
+      background: var(--wkw-deep);
+    }
+
+    /* animated bokeh city overlay */
+    .wkw-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .wkw-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 30%, rgba(240,120,30,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(180,60,20,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 10%, rgba(255,160,40,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 30% at 60% 90%, rgba(100,20,60,0.15) 0%, transparent 60%);
+      animation: cityPulse 12s ease-in-out infinite alternate;
+    }
+    .wkw-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='blur'%3E%3CfeGaussianBlur stdDeviation='40'/%3E%3C/filter%3E%3Ccircle cx='120' cy='200' r='60' fill='%23f0a830' opacity='0.06' filter='url(%23blur)'/%3E%3Ccircle cx='400' cy='150' r='40' fill='%23e85020' opacity='0.05' filter='url(%23blur)'/%3E%3Ccircle cx='500' cy='400' r='80' fill='%23f0a830' opacity='0.04' filter='url(%23blur)'/%3E%3Ccircle cx='200' cy='500' r='50' fill='%23c43020' opacity='0.06' filter='url(%23blur)'/%3E%3Ccircle cx='350' cy='350' r='30' fill='%23ffcc60' opacity='0.05' filter='url(%23blur)'/%3E%3C/svg%3E");
+      background-size: cover;
+      animation: bokehDrift 20s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes cityPulse {
+      0%   { opacity: 0.6; transform: scale(1); }
+      50%  { opacity: 1;   transform: scale(1.02); }
+      100% { opacity: 0.7; transform: scale(1); }
+    }
+    @keyframes bokehDrift {
+      0%   { transform: translateY(0) translateX(0); }
+      25%  { transform: translateY(-20px) translateX(10px); }
+      75%  { transform: translateY(10px) translateX(-15px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: rgba(13,8,16,0.92);
+      border-bottom: 1px solid rgba(240,168,48,0.12);
+    }
+
+    /* ── HERO ── */
+    .cinema-hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--nav-h) var(--pad) 0;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-timestamp {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--wkw-amber);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .cinema-hero-title {
+      font-family: var(--serif);
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 300;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+      position: relative;
+    }
+    .cinema-hero-title em {
+      font-style: italic;
+      color: var(--wkw-amber);
+      display: block;
+    }
+    .cinema-hero-title .chinese {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.35em;
+      font-weight: 300;
+      color: rgba(240,168,48,0.4);
+      letter-spacing: 0.5em;
+      display: block;
+      margin-top: 0.5rem;
+    }
+
+    .hero-tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(0.9rem, 2vw, 1.15rem);
+      color: rgba(232,228,220,0.55);
+      margin-top: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.9;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.7s forwards;
+    }
+
+    .letterboxd-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 2.5rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--wkw-amber);
+      text-decoration: none;
+      border: 1px solid rgba(240,168,48,0.3);
+      padding: 0.7rem 1.5rem;
+      transition: all 0.3s;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s forwards;
+      position: relative;
+      overflow: hidden;
+    }
+    .letterboxd-link::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(240,168,48,0.07);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .letterboxd-link:hover {
+      border-color: var(--wkw-amber);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(240,168,48,0.2);
+    }
+    .letterboxd-link:hover::before { transform: scaleX(1); }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s 1.5s forwards;
+    }
+    .scroll-indicator span {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: rgba(240,168,48,0.4);
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(240,168,48,0.5), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── TRIVIA TICKER ── */
+    .trivia-bar {
+      background: rgba(240,168,48,0.06);
+      border-top: 1px solid rgba(240,168,48,0.1);
+      border-bottom: 1px solid rgba(240,168,48,0.1);
+      padding: 0.75rem 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+    .trivia-track {
+      display: flex;
+      gap: 4rem;
+      animation: tickerScroll 40s linear infinite;
+      white-space: nowrap;
+    }
+    .trivia-item {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: rgba(240,168,48,0.6);
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+    .trivia-item span { color: var(--wkw-amber); }
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION SHARED ── */
+    .cinema-section {
+      padding: 6rem var(--pad);
+      position: relative;
+      z-index: 2;
+    }
+    .cinema-section-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .cinema-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--wkw-amber);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .cinema-eyebrow::before {
+      content: '';
+      width: 28px; height: 1px;
+      background: var(--wkw-amber);
+      opacity: 0.5;
+    }
+    .cinema-heading {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 3.5rem;
+    }
+    .cinema-heading em { font-style: italic; color: var(--wkw-amber); }
+
+    /* ── FAVORITE FILMS GRID ── */
+    .films-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 1000px) { .films-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .films-grid { grid-template-columns: 1fr; } }
+
+    .film-card {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 2/3;
+      background: var(--bg2);
+    }
+    .film-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s;
+      filter: saturate(0.85);
+    }
+    .film-card:hover img {
+      transform: scale(1.06);
+      filter: saturate(1.1);
+    }
+    .film-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(13,8,16,0.97) 0%,
+        rgba(13,8,16,0.4) 50%,
+        transparent 75%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      transform: translateY(40%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .film-card:hover .film-card-overlay {
+      transform: translateY(0);
+    }
+    .film-card-year {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--wkw-amber);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.4rem;
+    }
+    .film-card-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+    .film-stars {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 0.75rem;
+    }
+    .film-stars .star {
+      color: var(--wkw-amber);
+      font-size: 0.75rem;
+    }
+    .film-stars .half-star {
+      color: var(--wkw-amber);
+      font-size: 0.75rem;
+      opacity: 0.6;
+    }
+    .film-card-synopsis {
+      font-size: 0.78rem;
+      color: rgba(232,228,220,0.7);
+      line-height: 1.65;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+    }
+    .film-card:hover .film-card-synopsis {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .film-card-tag {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--bg);
+      background: var(--wkw-amber);
+      padding: 0.25rem 0.6rem;
+      text-transform: uppercase;
+    }
+
+    /* ── RECENTLY WATCHED ── */
+    .recent-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 1000px) { .recent-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .recent-grid { grid-template-columns: 1fr; } }
+
+    /* ── DIRECTOR TABS ── */
+    .director-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 800px) { .director-tabs { grid-template-columns: 1fr; } }
+
+    .dir-blob {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(26,13,31,0.6);
+      border: 1px solid rgba(240,168,48,0.12);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      cursor: pointer;
+    }
+    .dir-blob:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(240,168,48,0.1);
+      border-color: rgba(240,168,48,0.3);
+    }
+    .dir-blob-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.15;
+      background-size: cover;
+      background-position: center;
+      filter: blur(2px) saturate(0.6);
+      transition: opacity 0.4s, filter 0.4s;
+    }
+    .dir-blob:hover .dir-blob-bg {
+      opacity: 0.25;
+      filter: blur(1px) saturate(0.8);
+    }
+    .dir-blob-content {
+      position: relative;
+      z-index: 1;
+      padding: 2.5rem;
+    }
+    .dir-blob-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--wkw-amber);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .dir-blob-name {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .dir-blob-name em { font-style: italic; color: var(--wkw-amber); }
+    .dir-blob-body {
+      font-size: 0.85rem;
+      color: rgba(232,228,220,0.7);
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+    }
+    .dir-slideshow {
+      display: flex;
+      gap: 0.75rem;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .dir-slide-img {
+      width: 80px;
+      height: 115px;
+      object-fit: cover;
+      border-radius: 3px;
+      opacity: 0.75;
+      transition: opacity 0.3s, transform 0.3s;
+      flex-shrink: 0;
+      filter: sepia(0.2);
+    }
+    .dir-blob:hover .dir-slide-img { opacity: 0.9; }
+    .dir-slide-img:hover { transform: scale(1.05); opacity: 1; filter: none; }
+    .dir-films-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .dir-film-tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.07em;
+      padding: 0.25rem 0.65rem;
+      border: 1px solid rgba(240,168,48,0.2);
+      color: rgba(240,168,48,0.7);
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .dir-film-tag:hover {
+      border-color: var(--wkw-amber);
+      color: var(--wkw-amber);
+      background: rgba(240,168,48,0.05);
+    }
+
+    /* ── TRIVIA SECTION ── */
+    .trivia-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 800px) { .trivia-grid { grid-template-columns: 1fr; } }
+
+    .trivia-card {
+      background: rgba(26,13,31,0.5);
+      border: 1px solid rgba(240,168,48,0.08);
+      padding: 1.75rem;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .trivia-card:hover {
+      border-color: rgba(240,168,48,0.2);
+      transform: translateY(-2px);
+    }
+    .trivia-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(to right, var(--wkw-amber), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .trivia-card:hover::before { transform: scaleX(1); }
+    .trivia-card-num {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 300;
+      color: rgba(240,168,48,0.08);
+      line-height: 1;
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+    }
+    .trivia-card-icon {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      opacity: 0.7;
+    }
+    .trivia-card-q {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--wkw-amber);
+      margin-bottom: 0.6rem;
+      line-height: 1.5;
+    }
+    .trivia-card-a {
+      font-size: 0.82rem;
+      color: rgba(232,228,220,0.65);
+      line-height: 1.75;
+    }
+
+    /* ── DECORATIVE RAIN LINES ── */
+    .rain-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(240,168,48,0.2) 30%, rgba(240,168,48,0.2) 70%, transparent);
+      margin: 0;
+    }
+
+    /* ── CLOCK (WKW reference) ── */
+    .wkw-clock {
+      position: fixed;
+      top: calc(var(--nav-h) + 1.5rem);
+      right: var(--pad);
+      z-index: 100;
+      text-align: right;
+      pointer-events: none;
+    }
+    .wkw-clock-time {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-style: italic;
+      color: rgba(240,168,48,0.25);
+      line-height: 1;
+    }
+    .wkw-clock-date {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      color: rgba(240,168,48,0.12);
+      letter-spacing: 0.15em;
+      margin-top: 0.2rem;
+    }
+
+    /* ── QUOTE BLOCK ── */
+    .wkw-quote {
+      padding: 5rem var(--pad);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+    .wkw-quote::before {
+      content: '❝';
+      position: absolute;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 6rem;
+      color: rgba(240,168,48,0.04);
+      font-family: Georgia, serif;
+      pointer-events: none;
+    }
+    .wkw-quote blockquote {
+      font-family: var(--serif);
+      font-size: clamp(1.2rem, 2.5vw, 1.9rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.7;
+      color: rgba(232,228,220,0.8);
+      max-width: 760px;
+      margin: 0 auto 1.5rem;
+    }
+    .wkw-quote cite {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--wkw-amber);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-style: normal;
+    }
+
+    /* ── AKIRA SPECIAL ── */
+    .akira-blob .dir-blob-bg {
+      background-image: url('https://m.media-amazon.com/images/M/MV5BMGJlNGRmNWQtZjY4YS00YzMxLWI3NTQtMDZkODdlNDhhZTZiXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg');
+    }
+    .dv-blob .dir-blob-bg {
+      background-image: url('https://m.media-amazon.com/images/M/MV5BYTlkNzU0NjUtZmY3My00MDU1LTljNGQtZjI4ODZmZmQ3ZWMxXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg');
+    }
+    .wkw-blob .dir-blob-bg {
+      background-image: url('https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MDE@._V1_.jpg');
+    }
+    .kurosawa-blob .dir-blob-bg {
+      background-image: url('https://m.media-amazon.com/images/M/MV5BOGE4NzUzNDMtMmY5ZC00Y2NlLWIwNGMtYzVlMGQxZmQxNDFiXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg');
+    }
+
+    /* Amber glow around sections */
+    .glow-section {
+      position: relative;
+    }
+    .glow-section::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(240,168,48,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    footer {
+      background: rgba(10,8,12,0.95);
+      border-top: 1px solid rgba(240,168,48,0.1);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ── RAIN ANIM ── */
+    .rain-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+      opacity: 0.03;
+    }
+    .raindrop {
+      position: absolute;
+      top: -20px;
+      width: 1px;
+      height: clamp(40px,8vw,80px);
+      background: linear-gradient(to bottom, transparent, rgba(240,168,48,0.8), transparent);
+      animation: rainFall linear infinite;
+    }
+    @keyframes rainFall {
+      to { transform: translateY(110vh); }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .wkw-clock { display: none; }
+      .films-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .recent-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .director-tabs { grid-template-columns: 1fr; }
+      .trivia-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Ambient rain effect -->
+<div class="rain-container" id="rainContainer"></div>
+
+<!-- City haze BG -->
+<div class="wkw-bg"></div>
+
+<!-- Floating clock (WKW reference) -->
+<div class="wkw-clock">
+  <div class="wkw-clock-time" id="wkwTime">--:--</div>
+  <div class="wkw-clock-date" id="wkwDate">--</div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research/">Research</a></li>
+    <li><a href="/cv/">CV</a></li>
+    <li><a href="/publications/">Publications</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/resources/">Resources</a></li>
+    <li><a href="/open_board/">open_board</a></li>
+    <li><a href="/gallery/">Gallery</a></li>
+    <li><a href="/movies/" class="active">Cinema</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+  <button class="theme-toggle" onclick="document.body.classList.toggle('light')">theme</button>
+  <button class="nav-hamburger" id="burger" aria-label="Menu" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="cinema-hero">
+  <div style="position:relative;z-index:2;">
+    <div class="hero-timestamp">35mm · letterbox · 24fps</div>
+    <h1 class="cinema-hero-title">
+      <em>Cinema</em>
+      <span class="chinese">電影之愛</span>
+    </h1>
+    <p class="hero-tagline">
+      "The most beautiful things in life are useless: peacocks and lilies for instance — and films."<br>
+      <em style="font-size:0.85em;color:rgba(240,168,48,0.5);">— after John Ruskin</em>
+    </p>
+    <a href="https://boxd.it/3eINx" target="_blank" rel="noopener" class="letterboxd-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8.663 14.426c.085.08.17.161.253.241l-.02-.018C8.811 14.543 8.737 14.485 8.663 14.426z"/><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-2.47 13.787c-.67-.599-1.062-1.435-1.062-2.287 0-.52.155-1.024.448-1.464A5.51 5.51 0 0 1 8 10.5c0-3.038 2.462-5.5 5.5-5.5S19 7.462 19 10.5s-2.462 5.5-5.5 5.5c-.603 0-1.182-.098-1.722-.278-.266.225-.57.402-.9.522A3.48 3.48 0 0 1 9.53 15.787z"/></svg>
+      View on Letterboxd →
+    </a>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span>scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRIVIA TICKER ── -->
+<div class="trivia-bar">
+  <div class="trivia-track" id="triviaTrack"></div>
+</div>
+
+<div class="rain-divider"></div>
+
+<!-- ── FAVOURITE FILMS ── -->
+<section class="cinema-section glow-section reveal">
+  <div class="cinema-section-inner">
+    <div class="cinema-eyebrow">Favourite Films</div>
+    <h2 class="cinema-heading">Films that <em>changed</em> everything</h2>
+    <div class="films-grid" id="favFilmsGrid"></div>
+  </div>
+</section>
+
+<div class="rain-divider"></div>
+
+<!-- ── WKW QUOTE ── -->
+<div class="wkw-quote">
+  <blockquote>
+    "If memories could be canned, would they also have expiry dates? If so, I hope mine expire on a day I've long forgotten."
+  </blockquote>
+  <cite>— Chungking Express, 1994 · Wong Kar-wai</cite>
+</div>
+
+<div class="rain-divider"></div>
+
+<!-- ── RECENTLY WATCHED ── -->
+<section class="cinema-section glow-section reveal">
+  <div class="cinema-section-inner">
+    <div class="cinema-eyebrow">Recently Watched</div>
+    <h2 class="cinema-heading">Current <em>dispatches</em></h2>
+    <div class="recent-grid" id="recentFilmsGrid"></div>
+  </div>
+</section>
+
+<div class="rain-divider"></div>
+
+<!-- ── DIRECTOR BLOBS ── -->
+<section class="cinema-section reveal">
+  <div class="cinema-section-inner">
+    <div class="cinema-eyebrow">Directors</div>
+    <h2 class="cinema-heading">Four <em>visions</em> that haunt me</h2>
+    <div class="director-tabs">
+
+      <!-- Denis Villeneuve -->
+      <div class="dir-blob dv-blob reveal">
+        <div class="dir-blob-bg" style="background-image:url('https://m.media-amazon.com/images/M/MV5BYTlkNzU0NjUtZmY3My00MDU1LTljNGQtZjI4ODZmZmQ3ZWMxXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_FMjpg_UX800.jpg')"></div>
+        <div class="dir-blob-content">
+          <div class="dir-blob-label">Director Profile · 01</div>
+          <h3 class="dir-blob-name">Denis <em>Villeneuve</em></h3>
+          <p class="dir-blob-body">
+            Villeneuve constructs cinema as a meditative encounter with the sublime — vast, slow, vertiginous. Where other directors rush to explain, he lingers in the liminal. From the haunted ambiguity of <em>Incendies</em> to the geological patience of <em>Dune</em>, his frames breathe with a kind of cosmic dread. He understands that silence is its own dialogue, and that the most devastating revelations arrive not with a bang but with a held breath. His aesthetic is ruthlessly architectural — every scene a cathedral, every cut a door closing on something irretrievably lost.
+          </p>
+          <div class="dir-slideshow">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BYTlkNzU0NjUtZmY3My00MDU1LTljNGQtZjI4ODZmZmQ3ZWMxXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_FMjpg_UX300.jpg" alt="Dune" title="Dune (2021)">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BOTE1MDczMjMtNGQ0Mi00NjczLTljNTItNThlNmQ3MzZmMzBiXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_FMjpg_UX300.jpg" alt="Blade Runner 2049" title="Blade Runner 2049">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BMjE3MjEzNTY0Ml5BMl5BanBnXkFtZTgwNDU3ODA3MDE@._V1_FMjpg_UX300.jpg" alt="Arrival" title="Arrival">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BMTQwMDU3MzM2OV5BMl5BanBnXkFtZTcwMzE0OTAzMw@@._V1_FMjpg_UX300.jpg" alt="Incendies" title="Incendies">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BNzQzNjU5MzYtY2E5Ni00N2QzLThkYjctZjIxMGE5OWYxZTdiXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_FMjpg_UX300.jpg" alt="Sicario" title="Sicario">
+          </div>
+          <div class="dir-films-list">
+            <span class="dir-film-tag">Dune: Part One</span>
+            <span class="dir-film-tag">Dune: Part Two</span>
+            <span class="dir-film-tag">Blade Runner 2049</span>
+            <span class="dir-film-tag">Arrival</span>
+            <span class="dir-film-tag">Incendies</span>
+            <span class="dir-film-tag">Sicario</span>
+            <span class="dir-film-tag">Enemy</span>
+            <span class="dir-film-tag">Prisoners</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wong Kar-wai -->
+      <div class="dir-blob wkw-blob reveal">
+        <div class="dir-blob-bg" style="background-image:url('https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MDE@._V1_FMjpg_UX800.jpg')"></div>
+        <div class="dir-blob-content">
+          <div class="dir-blob-label">Director Profile · 02</div>
+          <h3 class="dir-blob-name">Wong <em>Kar-wai</em></h3>
+          <p class="dir-blob-body">
+            Wong Kar-wai is a poet of urban solitude. His films are made of rain and neon, of faces glimpsed in passing, of loves that exist only in the amber light of a Hong Kong corridor. He shoots without scripts, improvising entire films from pure feeling, often rewriting a movie in the edit. The step-printing blur, Doyle's swooning handheld, the obsessive calendrical timestamps — everything conspires to make you feel time as a physical weight. To watch <em>In the Mood for Love</em> or <em>Happy Together</em> is to be homesick for a place you have never been, for a love you have never had.
+          </p>
+          <div class="dir-slideshow">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MDE@._V1_FMjpg_UX300.jpg" alt="In the Mood for Love">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BNjM1NTgyNjMtZTBjMi00NmM5LWI1NjYtMTA4YWZhYTlmZmJmXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX300.jpg" alt="Chungking Express">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BZTlkNzU0NjUtZmY3My00MDU1LTljNGQtZjI4ODZmZmQ3ZWMxXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_FMjpg_UX300.jpg" alt="2046">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BMDZhNGViOTAtMDRhYS00YWQ1LWExOGItMTI2ZmM2OWFjODkzXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX300.jpg" alt="Happy Together">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BMGI4YjYwMGUtZTBiMy00NjIyLThlMDAtMTEwMzI4NzZhMjFmXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX300.jpg" alt="Fallen Angels">
+          </div>
+          <div class="dir-films-list">
+            <span class="dir-film-tag">In the Mood for Love</span>
+            <span class="dir-film-tag">Chungking Express</span>
+            <span class="dir-film-tag">2046</span>
+            <span class="dir-film-tag">Happy Together</span>
+            <span class="dir-film-tag">Fallen Angels</span>
+            <span class="dir-film-tag">Days of Being Wild</span>
+            <span class="dir-film-tag">The Grandmaster</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Akira (Otomo) -->
+      <div class="dir-blob akira-blob reveal">
+        <div class="dir-blob-bg" style="background-image:url('https://m.media-amazon.com/images/M/MV5BMGJlNGRmNWQtZjY4YS00YzMxLWI3NTQtMDZkODdlNDhhZTZiXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_FMjpg_UX800.jpg')"></div>
+        <div class="dir-blob-content">
+          <div class="dir-blob-label">Special Study · 03</div>
+          <h3 class="dir-blob-name">The Beauty of <em>Akira</em></h3>
+          <p class="dir-blob-body">
+            Katsuhiro Otomo's <em>Akira</em> (1988) is not merely an animated film — it is a tectonic event in the history of cinema. Hand-drawn at 24fps with 327 distinct shades of colour, 2212 shots, and lip-sync dialogue recorded before animation (the opposite of usual anime practice), it represents a level of craftsmanship that may never be replicated. Neo-Tokyo is a living organism of societal collapse, government conspiracy, and youth rage. The film's final act, as Tetsuo's body unravels into organic horror, remains the most disturbing and genuinely affecting sequence in animation history. It is simultaneously a punk rock manifesto and a meditation on the atomic sublime.
+          </p>
+          <div class="dir-slideshow">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BMGJlNGRmNWQtZjY4YS00YzMxLWI3NTQtMDZkODdlNDhhZTZiXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_FMjpg_UX300.jpg" alt="Akira">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BZjQ1NGNmZmUtY2I5OC00YjllLTkzOGQtOWQxZTJlNzM4OTk0XkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_FMjpg_UX300.jpg" alt="Akira still">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BMGIzOGVjNDItMGQxYi00MTMxLTljZTctNTIzNDM3MzIwNjBhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_FMjpg_UX300.jpg" alt="Akira bike scene">
+          </div>
+          <div class="dir-films-list">
+            <span class="dir-film-tag">2212 shots</span>
+            <span class="dir-film-tag">327 color shades</span>
+            <span class="dir-film-tag">24fps hand-drawn</span>
+            <span class="dir-film-tag">Neo-Tokyo</span>
+            <span class="dir-film-tag">Manga (1982–1990)</span>
+            <span class="dir-film-tag">Pre-recorded dialogue</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Akira Kurosawa -->
+      <div class="dir-blob kurosawa-blob reveal">
+        <div class="dir-blob-bg" style="background-image:url('https://m.media-amazon.com/images/M/MV5BOGE4NzUzNDMtMmY5ZC00Y2NlLWIwNGMtYzVlMGQxZmQxNDFiXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_FMjpg_UX800.jpg')"></div>
+        <div class="dir-blob-content">
+          <div class="dir-blob-label">Director Profile · 04</div>
+          <h3 class="dir-blob-name">Akira <em>Kurosawa</em></h3>
+          <p class="dir-blob-body">
+            Kurosawa is cinema's greatest teacher. His films are lessons in how light becomes moral weight, how rain becomes grief, how the movement of bodies through space can express the entire tragedy of the human condition. He invented the grammar that everyone else borrowed — the telephoto compression, the weather as emotional climate, the psychological depth of ensemble. <em>Seven Samurai</em> contains every action film ever made. <em>Rashomon</em> contains every philosophical thriller. <em>Ran</em> contains all of Shakespeare. He filmed the world as if it had never been filmed before, and it is impossible to watch him without feeling both humbled and electrified.
+          </p>
+          <div class="dir-slideshow">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BOGE4NzUzNDMtMmY5ZC00Y2NlLWIwNGMtYzVlMGQxZmQxNDFiXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_FMjpg_UX300.jpg" alt="Seven Samurai">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BMjEzNDA5MTQwNl5BMl5BanBnXkFtZTgwMzM4NjkxMDE@._V1_FMjpg_UX300.jpg" alt="Rashomon">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BNGRiNjFlNjQtMTQ1Yi00M2RiLWFiMGQtMjZjMGNlZDRlNTJiXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX300.jpg" alt="Ran">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BYjBmYTQ1NjItZWU5MS00YjI0LTg2OTYtYmFkN2JkMmNiYWQ4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX300.jpg" alt="Yojimbo">
+            <img class="dir-slide-img" src="https://m.media-amazon.com/images/M/MV5BMTgwMjkzZTktZmE5Yy00ZmYxLTgwYTMtMzE0NzgwMDkzZGU0XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX300.jpg" alt="Ikiru">
+          </div>
+          <div class="dir-films-list">
+            <span class="dir-film-tag">Seven Samurai</span>
+            <span class="dir-film-tag">Rashomon</span>
+            <span class="dir-film-tag">Ran</span>
+            <span class="dir-film-tag">Yojimbo</span>
+            <span class="dir-film-tag">Ikiru</span>
+            <span class="dir-film-tag">Kagemusha</span>
+            <span class="dir-film-tag">High and Low</span>
+            <span class="dir-film-tag">Stray Dog</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /director-tabs -->
+  </div>
+</section>
+
+<div class="rain-divider"></div>
+
+<!-- ── TRIVIA ── -->
+<section class="cinema-section reveal">
+  <div class="cinema-section-inner">
+    <div class="cinema-eyebrow">Film Trivia</div>
+    <h2 class="cinema-heading">Things you might not <em>know</em></h2>
+    <div class="trivia-grid" id="triviaGrid"></div>
+  </div>
+</section>
+
+<div class="rain-divider"></div>
+
+<!-- ── FINAL WKW QUOTE ── -->
+<div class="wkw-quote">
+  <blockquote>
+    "I used to think that there was only one way of looking at a light. But then I realized there were different kinds of light at different times of day."
+  </blockquote>
+  <cite>— Christopher Doyle, cinematographer · In the Mood for Love</cite>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
+    <span class="footer-copy">Cinema / Letters / Light</span>
+    <ul class="footer-links">
+      <li><a href="https://boxd.it/3eINx" target="_blank">Letterboxd</a></li>
+      <li><a href="/research/">Research</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const FAVE_FILMS = [
+  {
+    title: "2001: A Space Odyssey",
+    year: "1968",
+    dir: "Stanley Kubrick",
+    stars: 5,
+    half: false,
+    poster: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctZTIzNTI3NmQyMjBiXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_FMjpg_UX400.jpg",
+    tag: "ALL-TIME #1",
+    synopsis: "An enigmatic black monolith appears at the dawn of humanity, triggering an evolutionary leap. Millennia later, the discovery of a similar artefact on the Moon sends a mission to Jupiter — attended by the quietly lethal AI, HAL 9000. Kubrick's supreme achievement transforms science fiction into a silent symphony of light, space, and existential terror. Beyond allegory; beyond genre."
+  },
+  {
+    title: "Memories of Murder",
+    year: "2003",
+    dir: "Bong Joon-ho",
+    stars: 5,
+    half: false,
+    poster: "https://m.media-amazon.com/images/M/MV5BZjYyNDJmZWUtNzk4NC00YTFhLWFmZmItM2M1YTZiN2EzNmVhXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX400.jpg",
+    tag: "ALL-TIME #2",
+    synopsis: "South Korea's first serial killings, 1986. Two detectives — one local, one from Seoul — circle each other and a faceless killer in the rice-paddy dark. Bong's most controlled film pulses with frustration, black comedy, and genuine horror. The final shot is one of cinema's most devastating stares into the abyss — a direct confrontation with the viewer that asks: did you see him?"
+  },
+  {
+    title: "Everything Everywhere All at Once",
+    year: "2022",
+    dir: "Daniels",
+    stars: 5,
+    half: false,
+    poster: "https://m.media-amazon.com/images/M/MV5BYTdiOTIyZTQtNmQ1OS00NjZlLWIyMTgtYzk5Y2M3ZDVmMDk1XkEyXkFqcGdeQXVyMTAzMDg4NzU0._V1_FMjpg_UX400.jpg",
+    tag: "ALL-TIME #3",
+    synopsis: "A Chinese-American laundromat owner is swept into a multiverse conspiracy and discovers she alone can save existence. Disguised as absurdist chaos, this is a film of extraordinary emotional precision — a mother-daughter love story about nihilism, immigrant exhaustion, and the radical act of choosing tenderness in the face of meaninglessness. The bagel is the universe. The googly eyes are grace."
+  },
+  {
+    title: "Before Sunset",
+    year: "2004",
+    dir: "Richard Linklater",
+    stars: 5,
+    half: false,
+    poster: "https://m.media-amazon.com/images/M/MV5BYzJiMGUyZWMtNzY5NS00MjEyLWIzNjktZjZjMmUyNzE1YmE4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX400.jpg",
+    tag: "ALL-TIME #4",
+    synopsis: "Nine years after a chance meeting on a Vienna train, Jesse and Céline walk through Paris for eighty minutes. Nothing happens. Everything happens. Linklater films a real-time conversation as though the fate of the world depends on each unfinished sentence. The film ends before it ends, on a gesture and a line so perfect that to describe it would be criminal. The most romantic film ever made about regret."
+  }
+];
+
+const RECENT_FILMS = [
+  {
+    title: "Bugonia",
+    year: "2025",
+    dir: "John Cho",
+    stars: 3,
+    half: false,
+    poster: "https://m.media-amazon.com/images/M/MV5BODA3NTEwOTItMjFjNS00NTM5LTgxZGItNTViNTViMWU5NWE1XkEyXkFqcGdeQXVyMTY3ODkyNDkz._V1_FMjpg_UX400.jpg",
+    tag: "RECENT",
+    synopsis: "A corporate heir and his friend become convinced that their company's CEO is an alien controlling humanity through a mysterious phone line. A darkly comic sci-fi satire about tech obsession, conspiracy thinking, and the lengths people go to believe in something. Stylish but slightly uneven — the premise outshines the execution."
+  },
+  {
+    title: "Project Hail Mary",
+    year: "2025",
+    dir: "Phil Lord & Chris Miller",
+    stars: 4,
+    half: true,
+    poster: "https://m.media-amazon.com/images/M/MV5BMTgxNTQ5NTgtMGFiZS00OGJiLTllOWUtNGMxZjljYTEwYTFkXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX400.jpg",
+    tag: "RECENT",
+    synopsis: "An astronaut wakes alone on a ship millions of miles from Earth with no memory of his mission. Andy Weir's propulsive novel translated into pure cinematic joy — a film about the ecstasy of scientific problem-solving and an unexpected friendship across species. Ryan Gosling is luminous. The film earns every emotional beat it reaches for."
+  },
+  {
+    title: "One Battle After Another",
+    year: "2025",
+    dir: "Paul Thomas Anderson",
+    stars: 4,
+    half: false,
+    poster: "https://m.media-amazon.com/images/M/MV5BMzExZjFmOGEtZGIzYy00YjkxLWI0NjUtYTlkZGZhYzE4NTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX400.jpg",
+    tag: "RECENT",
+    synopsis: "PTA returns with another deep dive into California mythology — this one a sun-drenched saga of men in conflict, loyalty tested by time and circumstance. Leonardo DiCaprio gives a career-defining turn as a figure caught between violence and tenderness. Anderson's camera, as always, watches everything without blinking."
+  },
+  {
+    title: "Marty Supreme",
+    year: "2025",
+    dir: "Josh Safdie",
+    stars: 5,
+    half: false,
+    poster: "https://m.media-amazon.com/images/M/MV5BYjZhMGRmYjAtOTU4ZC00OGY5LTliOGQtNDNmNjliNWYwMTFjXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX400.jpg",
+    tag: "RECENT ★★★★★",
+    synopsis: "Timothée Chalamet plays a table tennis prodigy burning through the 1970s New York underground with the ferocity of a comet. Josh Safdie's solo debut is a seismic portrait of obsession, masculinity, and the unbearable lightness of talent. Electrifying pacing, a stunning period evocation, and a central performance of shocking physical and emotional commitment."
+  }
+];
+
+const TRIVIA = [
+  { q: "Why does 2001 have no dialogue for the first 25 minutes?", a: "Kubrick felt that human speech would trivialise the cosmic scope of the Dawn of Man sequence. The film's first spoken word arrives only after the bone-tool edit to the orbiting spacecraft.", icon: "🎬" },
+  { q: "How many takes did Kubrick shoot for The Shining's hedge maze ending?", a: "Over 800 takes of Shelley Duvall's staircase scene were filmed, reportedly reducing Duvall to tears daily. Kubrick believed psychological exhaustion would produce authentic fear.", icon: "🎭" },
+  { q: "How was Akira's colour palette achieved?", a: "Toho commissioned 327 unique paint colours specifically for the film. The backgrounds alone required teams of over 50 painters. Each frame involved layers of cel animation lit from below on glass-topped light tables.", icon: "🎨" },
+  { q: "Did Wong Kar-wai have a script for In the Mood for Love?", a: "No. The film was assembled from improvised footage over 15 months of shooting, largely without his cast knowing the final story. Christopher Doyle said they 'discovered the film in the dark' each night.", icon: "🌆" },
+  { q: "How long did Seven Samurai take to film?", a: "148 days over a year — an unprecedented length at the time. The rain in the final battle sequence was produced using fire hoses and dyed water. Kurosawa was meticulous to the point of being considered a madman.", icon: "⚔️" },
+  { q: "What is the '2046' in Wong Kar-wai's film?", a: "The room number where the couple in In the Mood for Love conducted their affair, and also the year Hong Kong's 'one country, two systems' arrangement expires. A number haunted by nostalgia and political anxiety.", icon: "🏙️" },
+  { q: "How did Bong Joon-ho find the final shot of Memories of Murder?", a: "The closing shot — a direct address to the camera — was Bong's own idea late in production. The actor was told only 'look into the lens and think about the person you fear most.' The result became one of cinema's most haunting endings.", icon: "👁️" },
+  { q: "What does the monolith's dimensions mean in 2001?", a: "The monolith's proportions are 1:4:9 — the squares of 1, 2, and 3. Kubrick intentionally left its purpose unexplained, believing any concrete interpretation would diminish the film's philosophical resonance.", icon: "🌌" },
+  { q: "Why was Blade Runner 2049 shot on film emulsion for some scenes?", a: "Villeneuve and Roger Deakins used practical elements — actual fire, dust, and water — to create the film's textures rather than CGI. The Las Vegas sequence's amber dust was real volcanic ash sprayed through sprinklers.", icon: "🌅" }
+];
+
+const TICKER_TRIVIA = [
+  "<span>FACT:</span> 2001's Star Gate sequence was created using slit-scan photography — a technique requiring weeks to film single minutes",
+  "<span>FACT:</span> Wong Kar-wai shot over 1,000 hours of footage for The Grandmaster, editing it down to 2 hours",
+  "<span>FACT:</span> Kurosawa was colourblind to certain hues and worked with a colour consultant for Ran",
+  "<span>FACT:</span> Akira was Japan's most expensive animated film when released — ¥1.1 billion",
+  "<span>FACT:</span> Denis Villeneuve spent over 5 years developing Dune before a single frame was shot",
+  "<span>FACT:</span> Memories of Murder is based on South Korea's first documented serial killer case, which remained unsolved for 33 years",
+  "<span>FACT:</span> In the Mood for Love has only one original piece of music — all other themes are borrowed from other films",
+  "<span>FACT:</span> Before Sunset was written partly by Ethan Hawke and Julie Delpy alongside Linklater — they shared the Oscar nomination",
+];
+
+// ── RENDER ────────────────────────────────────────────
+function stars(n, half) {
+  let s = '';
+  for (let i = 0; i < n; i++) s += '<span class="star">★</span>';
+  if (half) s += '<span class="half-star">½</span>';
+  return `<div class="film-stars">${s}</div>`;
+}
+
+function renderFilmCard(f) {
+  return `
+    <div class="film-card reveal">
+      ${f.tag ? `<div class="film-card-tag">${f.tag}</div>` : ''}
+      <img src="${f.poster}" alt="${f.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x600/1c1c27/c8a96e?text=${encodeURIComponent(f.title)}'">
+      <div class="film-card-overlay">
+        <div class="film-card-year">${f.year} · ${f.dir}</div>
+        <div class="film-card-title">${f.title}</div>
+        ${stars(f.stars, f.half)}
+        <div class="film-card-synopsis">${f.synopsis}</div>
+      </div>
+    </div>`;
+}
+
+document.getElementById('favFilmsGrid').innerHTML = FAVE_FILMS.map(renderFilmCard).join('');
+document.getElementById('recentFilmsGrid').innerHTML = RECENT_FILMS.map(renderFilmCard).join('');
+
+// Trivia cards
+document.getElementById('triviaGrid').innerHTML = TRIVIA.map((t, i) => `
+  <div class="trivia-card reveal">
+    <div class="trivia-card-num">${String(i+1).padStart(2,'0')}</div>
+    <div class="trivia-card-icon">${t.icon}</div>
+    <div class="trivia-card-q">${t.q}</div>
+    <div class="trivia-card-a">${t.a}</div>
+  </div>`).join('');
+
+// Ticker
+const track = document.getElementById('triviaTrack');
+const doubled = [...TICKER_TRIVIA, ...TICKER_TRIVIA];
+track.innerHTML = doubled.map(t => `<div class="trivia-item">${t}</div>`).join('');
+
+// ── RAIN ──────────────────────────────────────────────
+const rain = document.getElementById('rainContainer');
+for (let i = 0; i < 30; i++) {
+  const drop = document.createElement('div');
+  drop.className = 'raindrop';
+  drop.style.left = Math.random() * 100 + '%';
+  drop.style.animationDuration = (2 + Math.random() * 4) + 's';
+  drop.style.animationDelay = (Math.random() * 5) + 's';
+  drop.style.height = (30 + Math.random() * 60) + 'px';
+  rain.appendChild(drop);
+}
+
+// ── CLOCK ─────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('wkwTime').textContent = `${h}:${m}:${s}`;
+  const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  document.getElementById('wkwDate').textContent = `${days[now.getDay()]} · ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ── SCROLL REVEAL ─────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }});
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
