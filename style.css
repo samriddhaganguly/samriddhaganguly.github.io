@@ -25,7 +25,22 @@
   --max-w: 1200px;
   --pad:   clamp(24px, 5vw, 80px);
 }
+/* ── LIGHT MODE ── */
+body.light {
+  --bg:       #f6f5f2;
+  --bg2:      #ffffff;
+  --bg3:      #f0eee9;
+  --surface:  #ffffff;
+  --border:   rgba(0,0,0,0.08);
 
+  --text:     #121212;
+  --text-muted: #555555;
+  --text-dim:   #888888;
+
+  --accent:   #8b6f3d;   /* toned gold */
+  --accent2:  #5f7f88;
+  --accent3:  #7d5fa0;
+}
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
@@ -66,7 +81,7 @@ nav {
   justify-content: space-between;
   padding: 0 var(--pad);
   border-bottom: 1px solid var(--border);
-  background: rgba(10,10,15,0.9);
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
