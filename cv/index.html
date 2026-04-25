@@ -13,6 +13,99 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="stylesheet" href="/style.css"/>
   <style>
+    /* layout wrapper */
+.res-featured-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* main card */
+.res-featured {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.6rem 1.75rem;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+}
+
+/* LEFT ACCENT LINE (your style) */
+.res-featured::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* hover motion */
+.res-featured:hover {
+  border-color: rgba(200,169,110,0.3);
+  transform: translateX(4px);
+}
+
+/* vertical tag */
+.res-featured-tag {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  opacity: 0.6;
+}
+
+/* body */
+.res-featured-body {
+  flex: 1;
+}
+
+/* title */
+.res-featured-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+}
+
+/* meta */
+.res-featured-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+/* description */
+.res-featured-desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+}
+
+/* action button */
+.res-featured-action {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  padding: 0.6rem 1.25rem;
+  border: 1px solid rgba(200,169,110,0.3);
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+/* hover effect */
+.res-featured:hover .res-featured-action {
+  background: rgba(200,169,110,0.08);
+}
     .cv-layout {
       display: grid;
       grid-template-columns: 260px 1fr;
@@ -490,25 +583,41 @@
         </div>
 
         <!-- INITIATIVES -->
-  <div class="cv-section reveal">
+<div class="cv-section reveal">
   <div class="cv-section-title">Initiatives & Projects</div>
 
-  <div class="cv-entries">
+  <div class="res-featured-list">
 
-    <a href="https://openboard-web.vercel.app/" target="_blank" class="cv-entry">
-      <div class="ce-title">open_board</div>
-      <div class="ce-place">Co-Founder & Lead Developer</div>
-      <div class="ce-detail">
-        An interdisciplinary knowledge-sharing platform for students to present projects and research to non-specialist audiences in live sessions.
+    <!-- open_board -->
+    <a href="https://your-openboard-link.com" target="_blank" class="res-featured">
+      
+      <div class="res-featured-tag">PROJECT</div>
+
+      <div class="res-featured-body">
+        <div class="res-featured-title">open_board</div>
+        <div class="res-featured-meta">Co-Founder & Lead Developer</div>
+        <div class="res-featured-desc">
+          An interdisciplinary knowledge-sharing platform for students to present projects and research to non-specialist audiences in live sessions.
+        </div>
       </div>
+
+      <div class="res-featured-action">OPEN ↗</div>
     </a>
 
-    <a href="https://physicsiiserb.vercel.app/" target="_blank" class="cv-entry">
-      <div class="ce-title">A Hitchhiker's Guide to Physics @ IISERB</div>
-      <div class="ce-place">Lead Developer</div>
-      <div class="ce-detail">
-        Built a comprehensive physics department website centralizing academic resources, course guides, notes, and a domain-restricted student forum.
+    <!-- Hitchhiker -->
+    <a href="https://your-site-link.com" target="_blank" class="res-featured">
+      
+      <div class="res-featured-tag">PLATFORM</div>
+
+      <div class="res-featured-body">
+        <div class="res-featured-title">A Hitchhiker’s Guide to Physics @ IISERB</div>
+        <div class="res-featured-meta">Lead Developer</div>
+        <div class="res-featured-desc">
+          Built a comprehensive physics department website centralizing academic resources, course guides, notes, and a domain-restricted student forum.
+        </div>
       </div>
+
+      <div class="res-featured-action">VISIT ↗</div>
     </a>
 
   </div>
