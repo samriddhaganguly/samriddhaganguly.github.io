@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>open_board — Samriddha Ganguly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+
+    /* ── OPEN_BOARD COLOUR LAYER ──
+       We inherit the site tokens but add a second accent for the
+       green terminal feel of open_board's own brand.            */
+    :root {
+      --ob-green:   #39ff85;
+      --ob-green2:  #00c957;
+      --ob-pink:    #ff4d8f;
+      --ob-dim:     rgba(57,255,133,0.08);
+      --ob-border:  rgba(57,255,133,0.18);
+    }
+
+    /* ── HERO ── */
+    #ob-hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: var(--nav-h) var(--pad) 0;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .ob-hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    /* Animated particle canvas backdrop */
+    #ob-canvas {
+      position: absolute;
+      inset: 0;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    /* Glowing orb */
+    .ob-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(120px);
+    }
+
+    /* terminal prompt eyebrow */
+    .ob-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--ob-green);
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.1s forwards;
+    }
+    .ob-eyebrow .cursor {
+      display: inline-block;
+      width: 8px; height: 14px;
+      background: var(--ob-green);
+      animation: blink 1.1s step-end infinite;
+      vertical-align: middle;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .ob-logo-text {
+      font-family: var(--mono);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.25s forwards;
+    }
+    .ob-logo-text .kw  { color: var(--ob-pink); }
+    .ob-logo-text .nm  { color: var(--ob-green); }
+    .ob-logo-text .sub {
+      display: block;
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      margin-top: 0.6rem;
+    }
+
+    .ob-tagline {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--ob-green);
+      letter-spacing: 0.04em;
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s forwards;
+    }
+    .ob-tagline::before { content: '>>> '; opacity: 0.5; }
+
+    .ob-bio {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.55s forwards;
+    }
+
+    .ob-cta-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.7s forwards;
+    }
+
+    /* Green primary CTA */
+    .btn-ob {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      background: var(--ob-green);
+      color: #000;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-ob::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+    .btn-ob:hover { transform: translateY(-2px); box-shadow: 0 0 24px rgba(57,255,133,0.35); }
+    .btn-ob:hover::after { transform: translateX(0); }
+
+    /* Pink/accent secondary */
+    .btn-ob-outline {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--ob-pink);
+      border: 1px solid var(--ob-pink);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-ob-outline:hover {
+      background: rgba(255,77,143,0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(255,77,143,0.25);
+    }
+
+    /* ── TERMINAL CARD (right side hero) ── */
+    .ob-terminal {
+      background: #0a0f0a;
+      border: 1px solid var(--ob-border);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--ob-green);
+      line-height: 1.9;
+      padding: 0;
+      opacity: 0;
+      animation: fadeIn 1s 0.6s forwards;
+      position: relative;
+      box-shadow: 0 0 60px rgba(57,255,133,0.06), inset 0 0 60px rgba(0,0,0,0.5);
+    }
+    .ob-terminal-bar {
+      background: rgba(57,255,133,0.06);
+      border-bottom: 1px solid var(--ob-border);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .ob-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .ob-dot-r { background: #ff5f57; }
+    .ob-dot-y { background: #febc2e; }
+    .ob-dot-g { background: #28c840; }
+    .ob-terminal-title {
+      flex: 1;
+      text-align: center;
+      font-size: 0.62rem;
+      color: rgba(57,255,133,0.4);
+      letter-spacing: 0.08em;
+    }
+    .ob-terminal-body { padding: 1.5rem 1.75rem; }
+    .ob-line { display: block; margin-bottom: 0.15rem; }
+    .ob-line .prompt { color: rgba(57,255,133,0.4); }
+    .ob-line .cmd    { color: var(--ob-green); }
+    .ob-line .kw2    { color: var(--ob-pink); }
+    .ob-line .str    { color: var(--accent); }
+    .ob-line .cmt    { color: rgba(57,255,133,0.28); font-style: italic; }
+    .ob-line .val    { color: var(--accent2); }
+    .ob-line .out    { color: rgba(255,255,255,0.5); }
+    .ob-blank        { height: 0.6rem; display: block; }
+    .ob-line-cursor  { display: inline-block; width: 7px; height: 13px; background: var(--ob-green); animation: blink 1.1s step-end infinite; vertical-align: middle; }
+
+    /* ── STATS STRIP ── */
+    .ob-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--ob-border);
+      border-top: 1px solid var(--ob-border);
+      border-bottom: 1px solid var(--ob-border);
+    }
+    .ob-stat {
+      background: var(--bg2);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .ob-stat:hover { background: var(--ob-dim); }
+    .ob-stat-num {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--ob-green);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .ob-stat-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── MISSION SECTION ── */
+    .ob-section-dark { background: var(--bg); }
+    .ob-section-alt  { background: var(--bg2); }
+
+    .ob-function-block {
+      border: 1px solid var(--ob-border);
+      background: rgba(0,10,0,0.5);
+      padding: 0;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .ob-function-block:hover {
+      border-color: rgba(57,255,133,0.35);
+      box-shadow: 0 0 40px rgba(57,255,133,0.05);
+    }
+    .ob-function-block::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--ob-green);
+      opacity: 0.5;
+      transition: opacity 0.3s;
+    }
+    .ob-function-block:hover::before { opacity: 1; }
+    .ob-fn-header {
+      background: rgba(57,255,133,0.04);
+      border-bottom: 1px solid var(--ob-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .ob-fn-keyword {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--ob-pink);
+      letter-spacing: 0.06em;
+    }
+    .ob-fn-name {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--ob-green);
+      letter-spacing: 0.04em;
+    }
+    .ob-fn-paren { color: rgba(57,255,133,0.4); }
+    .ob-fn-body {
+      padding: 2rem 2.5rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+    .ob-fn-body .triple { color: rgba(57,255,133,0.3); }
+    .ob-fn-body p {
+      font-family: var(--sans);
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      margin: 0.75rem 0 0.75rem 1.5rem;
+    }
+
+    /* ── MY TALK CARD ── */
+    .ob-talk-card {
+      background: var(--bg);
+      border: 1px solid var(--ob-border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3rem;
+      align-items: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .ob-talk-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--ob-green), transparent);
+      opacity: 0.5;
+    }
+    .ob-talk-card:hover {
+      border-color: rgba(57,255,133,0.3);
+      box-shadow: 0 0 50px rgba(57,255,133,0.06);
+    }
+    .ob-talk-body { padding: 2.5rem 3rem; }
+    .ob-talk-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--ob-green);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .ob-talk-label::before { content: '▶'; font-size: 0.5rem; }
+    .ob-talk-title {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 300;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+    .ob-talk-title em { font-style: italic; color: var(--accent); }
+    .ob-talk-sub {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--accent2);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+    .ob-talk-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      max-width: 600px;
+      margin-bottom: 1.75rem;
+    }
+    .ob-talk-badges {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .ob-badge {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      padding: 0.2rem 0.65rem;
+      border: 1px solid;
+      text-transform: uppercase;
+    }
+    .ob-badge-g  { border-color: var(--ob-green); color: var(--ob-green); }
+    .ob-badge-a  { border-color: var(--accent); color: var(--accent); }
+    .ob-badge-b  { border-color: var(--accent2); color: var(--accent2); }
+    .ob-badge-p  { border-color: var(--accent3); color: var(--accent3); }
+    .ob-talk-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* slide preview thumbnails */
+    .ob-talk-preview {
+      padding: 2rem 3rem 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      align-items: flex-end;
+    }
+    .ob-slide-thumb {
+      width: 200px;
+      height: 120px;
+      background: #080d0e;
+      border: 1px solid var(--ob-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .ob-slide-thumb:hover { border-color: var(--ob-green); transform: scale(1.02); }
+    .ob-slide-thumb-inner {
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      color: rgba(57,255,133,0.35);
+      text-align: center;
+      line-height: 1.6;
+      padding: 0.5rem;
+    }
+    .ob-slide-thumb-inner .stitle {
+      display: block;
+      font-family: var(--serif);
+      font-style: italic;
+      color: rgba(200,169,110,0.5);
+      font-size: 0.6rem;
+      margin-bottom: 0.25rem;
+    }
+    .ob-slide-num {
+      position: absolute;
+      bottom: 4px; right: 6px;
+      font-family: var(--mono);
+      font-size: 0.48rem;
+      color: rgba(57,255,133,0.2);
+    }
+
+    /* ── HOW IT WORKS / FORMAT ── */
+    .ob-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--ob-border);
+    }
+    .ob-step {
+      background: var(--bg);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .ob-step:hover { background: var(--ob-dim); }
+    .ob-step-num {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--ob-green);
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    .ob-step-icon {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .ob-step-title {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 0.7rem;
+      line-height: 1.3;
+    }
+    .ob-step-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .ob-step::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--ob-green), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .ob-step:hover::after { opacity: 0.4; }
+
+    /* ── JOIN SECTION ── */
+    .ob-join {
+      background: #030806;
+      border: 1px solid var(--ob-border);
+      padding: 5rem var(--pad);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ob-join-glow {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(57,255,133,0.06) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .ob-join-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--ob-green);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .ob-join-eyebrow::before,
+    .ob-join-eyebrow::after {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--ob-green);
+      opacity: 0.3;
+    }
+    .ob-join-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .ob-join-title em { font-style: italic; color: var(--ob-green); }
+    .ob-join-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 580px;
+      margin: 0 auto 3rem;
+      line-height: 1.85;
+    }
+    .ob-join-roles {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .ob-role-pill {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--ob-border);
+      color: var(--text-muted);
+      transition: all 0.2s;
+      cursor: default;
+    }
+    .ob-role-pill:hover {
+      border-color: var(--ob-green);
+      color: var(--ob-green);
+      background: var(--ob-dim);
+    }
+    .ob-join-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    /* ── GUIDELINES BOX ── */
+    .ob-guidelines {
+      background: rgba(0,10,0,0.6);
+      border: 1px solid var(--ob-border);
+      padding: 2.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .ob-guidelines::before {
+      content: 'submission_guidelines()';
+      position: absolute;
+      top: 0; right: 0;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      color: rgba(57,255,133,0.15);
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid var(--ob-border);
+      border-left: 1px solid var(--ob-border);
+      letter-spacing: 0.08em;
+    }
+    .ob-guide-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .ob-guide-item {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+    .ob-guide-bullet {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--ob-green);
+      flex-shrink: 0;
+      padding-top: 3px;
+    }
+    .ob-guide-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+    .ob-guide-text code {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--ob-green);
+      background: var(--ob-dim);
+      padding: 0.1rem 0.4rem;
+    }
+
+    /* ── FLOATING PARTICLE decorations ── */
+    .ob-particle {
+      position: absolute;
+      border-radius: 2px;
+      background: var(--ob-green);
+      opacity: 0;
+      animation: floatParticle var(--dur) var(--delay) infinite linear;
+    }
+    @keyframes floatParticle {
+      0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+      10%  { opacity: var(--op); }
+      90%  { opacity: var(--op); }
+      100% { opacity: 0; transform: translateY(-120px) rotate(90deg); }
+    }
+
+    /* Scan line on terminal */
+    .ob-scanline {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, rgba(57,255,133,0.08), transparent);
+      animation: scan 4s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes scan {
+      from { top: 0; }
+      to   { top: 100%; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .ob-hero-inner { grid-template-columns: 1fr; }
+      .ob-terminal { display: none; }
+      .ob-stats { grid-template-columns: repeat(2,1fr); }
+      .ob-steps { grid-template-columns: 1fr; }
+      .ob-talk-card { grid-template-columns: 1fr; }
+      .ob-talk-preview { display: none; }
+    }
+    @media (max-width: 600px) {
+      .ob-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════ -->
+<nav>
+  <a href="index.html" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="cv.html">CV</a></li>
+    <li><a href="publications.html">Publications</a></li>
+    <li><a href="simulations.html">Simulations</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="open_board.html" class="active">open_board</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════════ -->
+<section id="ob-hero">
+  <canvas id="ob-canvas"></canvas>
+
+  <!-- ambient glows -->
+  <div class="ob-orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(57,255,133,0.04) 0%,transparent 70%);top:-100px;right:-200px;"></div>
+  <div class="ob-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(255,77,143,0.04) 0%,transparent 70%);bottom:10%;left:-100px;"></div>
+
+  <div class="ob-hero-inner">
+    <!-- LEFT -->
+    <div>
+      <div class="ob-eyebrow">
+        <span>~/pedagogical_initiative</span>
+        <span class="cursor"></span>
+      </div>
+      <h1 class="ob-logo-text">
+        <span class="kw">open</span><span style="color:rgba(255,255,255,0.15)">_</span><span class="nm">board</span>
+        <span class="sub">Open Knowledge, Shared Insights</span>
+      </h1>
+      <p class="ob-tagline">print("An interdisciplinary pedagogical initiative")</p>
+      <p class="ob-bio">
+        open_board is a peer-to-peer knowledge-sharing platform built to demolish academic silos. 
+        We bring together students from every field — physics, mathematics, history, literature, engineering, biology — 
+        to share passion projects and research in a way that is accessible, honest, and genuinely exciting 
+        to a non-specialist audience.
+      </p>
+      <div class="ob-cta-row">
+        <a href="https://openboard-web.vercel.app/" target="_blank" class="btn-ob">
+          Visit Website ↗
+        </a>
+        <a href="#ob-join" class="btn-ob-outline">
+          Get Involved →
+        </a>
+        <a href="#ob-talk" class="btn-outline" style="color:var(--accent);border-color:rgba(200,169,110,0.3);">
+          My Talk ↓
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: terminal -->
+    <div class="ob-terminal reveal">
+      <div class="ob-scanline"></div>
+      <div class="ob-terminal-bar">
+        <div class="ob-dot ob-dot-r"></div>
+        <div class="ob-dot ob-dot-y"></div>
+        <div class="ob-dot ob-dot-g"></div>
+        <span class="ob-terminal-title">open_board — mission.py</span>
+      </div>
+      <div class="ob-terminal-body">
+        <span class="ob-line"><span class="cmt"># open_board pedagogical initiative</span></span>
+        <span class="ob-line"><span class="cmt"># IISER Bhopal · Est. 2025</span></span>
+        <span class="ob-blank"></span>
+        <span class="ob-line"><span class="kw2">class</span> <span class="cmd">OpenBoard</span><span class="ob-fn-paren">:</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="str">"""</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="out">A space where a historian learns</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="out">machine learning, a chemist</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="out">appreciates poetic structure, an</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="out">artist understands a theorem.</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="str">"""</span></span>
+        <span class="ob-blank"></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="cmd">mission</span> <span class="ob-fn-paren">=</span> <span class="str">"break academic silos"</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="cmd">format</span>  <span class="ob-fn-paren">=</span> <span class="str">"30–45 min talks"</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="cmd">level</span>   <span class="ob-fn-paren">=</span> <span class="str">"1st–2nd year accessible"</span></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="cmd">fields</span>  <span class="ob-fn-paren">=</span> <span class="val">["physics","cs","bio","arts",</span></span>
+        <span class="ob-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="val">"math","history","econ", ...]</span></span>
+        <span class="ob-blank"></span>
+        <span class="ob-line">&nbsp;&nbsp;<span class="kw2">def</span> <span class="cmd">ignite_curiosity</span><span class="ob-fn-paren">(</span><span class="val">self</span><span class="ob-fn-paren">)</span><span class="ob-fn-paren">:</span></span>
+        <span class="ob-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">return</span> <span class="str">"one fascinating talk at a time"</span></span>
+        <span class="ob-blank"></span>
+        <span class="ob-line"><span class="prompt">>>> </span><span class="cmd">ob</span> <span class="ob-fn-paren">=</span> OpenBoard<span class="ob-fn-paren">()</span></span>
+        <span class="ob-line"><span class="prompt">>>> </span><span class="cmd">ob</span>.ignite_curiosity<span class="ob-fn-paren">()</span></span>
+        <span class="ob-line"><span class="str">'one fascinating talk at a time'</span></span>
+        <span class="ob-blank"></span>
+        <span class="ob-line"><span class="prompt">>>> </span><span class="ob-line-cursor"></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- ══ STATS ══════════════════════════════════════════════════════════ -->
+<div class="ob-stats">
+  <div class="ob-stat reveal">
+    <div class="ob-stat-num">∞</div>
+    <div class="ob-stat-label">Fields Welcome</div>
+  </div>
+  <div class="ob-stat reveal">
+    <div class="ob-stat-num">30<span style="font-size:1.5rem">+</span></div>
+    <div class="ob-stat-label">Minutes Per Talk</div>
+  </div>
+  <div class="ob-stat reveal">
+    <div class="ob-stat-num">0</div>
+    <div class="ob-stat-label">Prerequisite Gatekeeping</div>
+  </div>
+  <div class="ob-stat reveal">
+    <div class="ob-stat-num">1</div>
+    <div class="ob-stat-label">Goal: Ignite Curiosity</div>
+  </div>
+</div>
+
+
+<!-- ══ MISSION & VISION ══════════════════════════════════════════════ -->
+<section class="section ob-section-dark" style="padding-top:5rem;">
+  <div class="section-inner">
+    <div class="section-label">What We Are</div>
+    <h2 class="section-heading" style="margin-bottom:2.5rem;">Mission & <em>Vision</em></h2>
+
+    <div class="ob-function-block reveal">
+      <div class="ob-fn-header">
+        <span class="ob-fn-keyword">def</span>
+        <span class="ob-fn-name">our_mission<span class="ob-fn-paren">()</span><span style="color:rgba(57,255,133,0.4)">:</span></span>
+      </div>
+      <div class="ob-fn-body">
+        <span class="triple">"""</span>
+        <p>
+          open_board is a peer-to-peer knowledge-sharing platform designed to break down academic silos. 
+          Our mission is to create a space where students from <em style="color:var(--accent)">any field</em> can present their passion projects 
+          and research in a way that is accessible and engaging to a non-specialist audience. 
+          We believe the best ideas travel furthest when they are told well — clearly, 
+          honestly, and with genuine enthusiasm for the subject.
+        </p>
+        <span class="triple">"""</span>
+      </div>
+    </div>
+
+    <div class="ob-function-block reveal">
+      <div class="ob-fn-header">
+        <span class="ob-fn-keyword">def</span>
+        <span class="ob-fn-name">the_vision<span class="ob-fn-paren">()</span><span style="color:rgba(57,255,133,0.4)">:</span></span>
+      </div>
+      <div class="ob-fn-body">
+        <span class="triple">"""</span>
+        <p>
+          We envision a community fueled by curiosity — a place where a future historian can learn about 
+          machine learning, a budding chemist can appreciate poetic structures, and an aspiring artist 
+          can understand the elegance of a mathematical theorem. It's an opportunity to traverse the 
+          vast landscape of human knowledge, one fascinating talk at a time. 
+          The boundaries between disciplines are not walls — they are invitations.
+        </p>
+        <span class="triple">"""</span>
+      </div>
+    </div>
+
+    <div class="ob-function-block reveal">
+      <div class="ob-fn-header">
+        <span class="ob-fn-keyword">def</span>
+        <span class="ob-fn-name">why_it_matters<span class="ob-fn-paren">()</span><span style="color:rgba(57,255,133,0.4)">:</span></span>
+      </div>
+      <div class="ob-fn-body">
+        <span class="triple">"""</span>
+        <p>
+          The deepest scientific breakthroughs have always happened at the intersection of fields. 
+          Information theory met molecular biology and gave us the modern understanding of DNA. 
+          Topology met condensed matter physics and gave us materials we could barely have imagined. 
+          open_board exists because the next generation of ideas lives in the minds of people 
+          who are willing to talk — and listen — across disciplinary lines.
+        </p>
+        <span class="triple">"""</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FORMAT / HOW IT WORKS ═════════════════════════════════════════ -->
+<section class="section ob-section-alt">
+  <div class="section-inner">
+    <div class="section-label">The Format</div>
+    <h2 class="section-heading">How <em>It Works</em></h2>
+
+    <div class="ob-steps">
+      <div class="ob-step reveal">
+        <div class="ob-step-num">01 // propose</div>
+        <span class="ob-step-icon">📄</span>
+        <h3 class="ob-step-title">Submit Your Abstract</h3>
+        <p class="ob-step-desc">
+          Write a short abstract for your proposed talk — include your topic, 
+          what question you are answering, any prerequisites you recommend, 
+          and motivating articles or keywords. Keep it honest and approachable.
+        </p>
+      </div>
+      <div class="ob-step reveal">
+        <div class="ob-step-num">02 // present</div>
+        <span class="ob-step-icon">🎤</span>
+        <h3 class="ob-step-title">Give the Talk</h3>
+        <p class="ob-step-desc">
+          Talks run 30–45 minutes, aimed at an audience with at most 
+          2nd-year knowledge of your subject — ideally, even 1st-years 
+          should be able to follow with proper motivation. 
+          The goal is clarity, not comprehensiveness.
+        </p>
+      </div>
+      <div class="ob-step reveal">
+        <div class="ob-step-num">03 // archive</div>
+        <span class="ob-step-icon">📚</span>
+        <h3 class="ob-step-title">Archived & Shared</h3>
+        <p class="ob-step-desc">
+          Slides and resources are archived on the open_board platform 
+          for future students to access, explore, and build upon. 
+          Every talk becomes a permanent node in a growing 
+          interdisciplinary knowledge graph.
+        </p>
+      </div>
+    </div>
+
+    <!-- Guidelines -->
+    <div class="ob-guidelines reveal" style="margin-top:2rem;">
+      <div class="section-label" style="margin-bottom:1.5rem;">Submission Criteria</div>
+      <ul class="ob-guide-list">
+        <li class="ob-guide-item">
+          <span class="ob-guide-bullet">◈</span>
+          <span class="ob-guide-text">
+            Accessible to an audience with at most <code>2nd-year</code> knowledge of any subject — 
+            preferably even 1st years should be able to grasp with proper motivation.
+          </span>
+        </li>
+        <li class="ob-guide-item">
+          <span class="ob-guide-bullet">◈</span>
+          <span class="ob-guide-text">
+            Talk should be at least <code>30–45 mins</code>. Quality over speed — 
+            take the audience on a journey.
+          </span>
+        </li>
+        <li class="ob-guide-item">
+          <span class="ob-guide-bullet">◈</span>
+          <span class="ob-guide-text">
+            Please mention any <code>prerequisites</code>, motivational articles, or keywords for your abstract 
+            so attendees can prepare and self-select.
+          </span>
+        </li>
+        <li class="ob-guide-item">
+          <span class="ob-guide-bullet">◈</span>
+          <span class="ob-guide-text">
+            All fields welcome — from physics and mathematics to history, economics, literature, biology, 
+            computer science, engineering, and philosophy. If you are excited about it, it belongs here.
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ MY TALK ═══════════════════════════════════════════════════════ -->
+<section class="section ob-section-dark" id="ob-talk">
+  <div class="section-inner">
+    <div class="section-label">Featured Talk</div>
+    <h2 class="section-heading">My Contribution <em>to open_board</em></h2>
+
+    <div class="ob-talk-card reveal">
+      <div class="ob-talk-body">
+        <div class="ob-talk-label">open_board · Oct 2, 2025 · IISER Bhopal</div>
+        <h3 class="ob-talk-title">Everything, Entangled, <em>All At Once</em></h3>
+        <div class="ob-talk-sub">Making Sense of Non-Locality and the Jaynes-Cummings Model</div>
+        <p class="ob-talk-desc">
+          A 60+ slide talk spanning qubits and Dirac notation, Bell states, the EPR paradox, 
+          Bell's theorem and the CHSH game, loophole-free Bell tests from Aspect (1982) 
+          to Hensen et al. (2015), quantum teleportation, the No-Communication theorem, 
+          the density matrix, and the Jaynes-Cummings model — from cavity QED to trapped ions. 
+          Designed to be accessible to a motivated 1st-year student with no prior quantum mechanics.
+        </p>
+        <div class="ob-talk-badges">
+          <span class="ob-badge ob-badge-g">Quantum Information</span>
+          <span class="ob-badge ob-badge-a">Entanglement</span>
+          <span class="ob-badge ob-badge-b">Jaynes-Cummings</span>
+          <span class="ob-badge ob-badge-p">Bell's Theorem</span>
+          <span class="ob-badge ob-badge-g">open_board 2025</span>
+        </div>
+        <div class="ob-talk-actions">
+          <a href="assets/Everything__Entangled__All_At_Once.pdf" target="_blank" class="btn-ob">
+            ↓ Download Slides (PDF)
+          </a>
+          <a href="https://openboard-web.vercel.app/" target="_blank" class="btn-ob-outline">
+            View on open_board ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- slide previews -->
+      <div class="ob-talk-preview">
+        <div class="ob-slide-thumb">
+          <div class="ob-slide-thumb-inner">
+            <span class="stitle">Everything, Entangled,<br>All At Once</span>
+            <span>Samriddha Ganguly</span><br>
+            <span>IISER Bhopal</span><br>
+            <span>Oct 2, 2025</span>
+          </div>
+          <span class="ob-slide-num">slide 01</span>
+        </div>
+        <div class="ob-slide-thumb">
+          <div class="ob-slide-thumb-inner">
+            <span class="stitle">The Bell States</span>
+            |Φ⁺⟩ = 1/√2(|00⟩+|11⟩)<br>
+            |Φ⁻⟩ = 1/√2(|00⟩−|11⟩)<br>
+            |Ψ⁺⟩ = 1/√2(|01⟩+|10⟩)
+          </div>
+          <span class="ob-slide-num">slide 06</span>
+        </div>
+        <div class="ob-slide-thumb">
+          <div class="ob-slide-thumb-inner">
+            <span class="stitle">Jaynes-Cummings H</span>
+            Ĥ = ℏωₐσ̂_z/2 + ℏωc↠â<br>
+            + ℏg(↠σ̂₋ + âσ̂₊)<br>
+            <span style="color:rgba(200,169,110,0.4)">vacuum rabi oscillations</span>
+          </div>
+          <span class="ob-slide-num">slide 55</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- talk outline -->
+    <div style="margin-top:3rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;" class="reveal">
+      <div style="background:var(--bg2);border:1px solid var(--ob-border);padding:2rem;">
+        <div style="font-family:var(--mono);font-size:0.62rem;color:var(--ob-green);letter-spacing:0.15em;margin-bottom:1.25rem;">PART 1 // ENTANGLEMENT</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.6rem;">
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--ob-green);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Qubits, Dirac notation, superposition</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--ob-green);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Tensor products & two-qubit systems</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--ob-green);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Bell states & measurement collapse</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--ob-green);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>EPR paradox & local hidden variables</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--ob-green);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Bell's theorem & the CHSH game</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--ob-green);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Loophole-free Bell tests (2015)</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--ob-green);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>No-communication theorem</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--ob-green);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Density matrix & Von Neumann entropy</li>
+        </ul>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--ob-border);padding:2rem;">
+        <div style="font-family:var(--mono);font-size:0.62rem;color:var(--accent);letter-spacing:0.15em;margin-bottom:1.25rem;">PART 2 // JAYNES-CUMMINGS MODEL</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.6rem;">
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--accent);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>The two-level atom & quantised field</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--accent);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>JC Hamiltonian & rotating wave approx.</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--accent);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Vacuum Rabi oscillations</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--accent);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Generating entanglement at t = π/4g</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--accent);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Dressed states & vacuum Rabi splitting</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--accent);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Collapse and revival dynamics</li>
+          <li style="font-size:0.84rem;color:var(--text-muted);display:flex;gap:0.75rem;align-items:flex-start;"><span style="color:var(--accent);font-family:var(--mono);font-size:0.6rem;flex-shrink:0;padding-top:3px;">→</span>Cavity QED, Circuit QED & trapped ions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ JOIN / CALL TO ACTION ══════════════════════════════════════════ -->
+<section id="ob-join">
+  <div class="ob-join">
+    <div class="ob-join-glow"></div>
+    <div style="position:relative;z-index:1;">
+      <div class="ob-join-eyebrow">Join the Initiative</div>
+      <h2 class="ob-join-title">Help Us <em>Carry It Forward</em></h2>
+      <p class="ob-join-sub">
+        open_board is only as alive as the people who bring their ideas to it. 
+        Whether you are a physicist, historian, artist, biologist, economist, or computer scientist 
+        — if you have something worth sharing, we want to hear it. 
+        We are always looking for speakers, organisers, and curious minds.
+      </p>
+
+      <!-- role pills -->
+      <div class="ob-join-roles">
+        <span class="ob-role-pill">🎤 Give a Talk</span>
+        <span class="ob-role-pill">📋 Help Organise</span>
+        <span class="ob-role-pill">📢 Spread the Word</span>
+        <span class="ob-role-pill">🎨 Design & Media</span>
+        <span class="ob-role-pill">💻 Web & Tech</span>
+        <span class="ob-role-pill">📸 Document Events</span>
+      </div>
+
+      <div class="ob-join-actions">
+        <a href="https://openboard-web.vercel.app/" target="_blank" class="btn-ob">
+          Submit an Abstract ↗
+        </a>
+        <a href="contact.html" class="btn-ob-outline">
+          Get in Touch →
+        </a>
+      </div>
+
+      <!-- bottom quote -->
+      <p style="margin-top:4rem;font-family:var(--serif);font-size:1.1rem;font-style:italic;color:var(--text-dim);max-width:500px;margin-left:auto;margin-right:auto;line-height:1.8;">
+        "One fascinating talk at a time."
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">S<span>.</span>Ganguly</a>
+    <ul class="footer-links">
+      <li><a href="research.html">Research</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://openboard-web.vercel.app/" target="_blank" style="color:var(--ob-green);">open_board ↗</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
+  </div>
+</footer>
+
+
+<script>
+  /* ── Mobile nav ── */
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+
+  /* ── Scroll reveal ── */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+
+  /* ── Particle canvas ── */
+  (function() {
+    const canvas = document.getElementById('ob-canvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function rand(a, b) { return a + Math.random() * (b - a); }
+
+    // Create tiny floating squares (matching open_board brand aesthetic)
+    for (let i = 0; i < 90; i++) {
+      particles.push({
+        x: rand(0, 1),
+        y: rand(0, 1),
+        size: rand(1, 4),
+        speed: rand(0.00008, 0.00025),
+        opacity: rand(0.05, 0.35),
+        hue: Math.random() > 0.7 ? 'pink' : 'green',
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.y -= p.speed;
+        if (p.y < 0) { p.y = 1; p.x = rand(0, 1); }
+        ctx.fillStyle = p.hue === 'green'
+          ? `rgba(57,255,133,${p.opacity})`
+          : `rgba(255,77,143,${p.opacity * 0.6})`;
+        ctx.fillRect(p.x * W, p.y * H, p.size, p.size);
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ── Smooth scroll for anchor links ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
