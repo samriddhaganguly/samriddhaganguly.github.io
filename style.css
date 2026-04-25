@@ -81,7 +81,7 @@ nav {
   justify-content: space-between;
   padding: 0 var(--pad);
   border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  background: rgba(10,10,15,0.9);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
