@@ -85,7 +85,22 @@ nav {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
+.theme-toggle {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 0.8rem;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.25s;
+}
 
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 .nav-logo {
   font-family: var(--serif);
   font-size: 1.1rem;
