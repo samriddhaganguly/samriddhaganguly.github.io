@@ -580,16 +580,8 @@
       overflow: hidden;
     }
     .wkw-quote::before {
-      content: '❝';
-      position: absolute;
-      top: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 6rem;
-      color: rgba(240,168,48,0.04);
-      font-family: Georgia, serif;
-      pointer-events: none;
-    }
+  content: none;
+}
     .wkw-quote blockquote {
       font-family: var(--serif);
       font-size: clamp(1.2rem, 2.5vw, 1.9rem);
@@ -706,7 +698,6 @@
     <li><a href="/movies/" class="active">Cinema</a></li>
     <li><a href="/contact/">Contact</a></li>
   </ul>
-  <button class="theme-toggle" onclick="document.body.classList.toggle('light')">theme</button>
   <button class="nav-hamburger" id="burger" aria-label="Menu" onclick="document.getElementById('navLinks').classList.toggle('open')">
     <span></span><span></span><span></span>
   </button>
