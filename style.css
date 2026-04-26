@@ -27,26 +27,17 @@
 }
 /* ── LIGHT MODE ── */
 body.light {
-  /* ── BACKGROUNDS (warm ivory system) ── */
-  --bg:       #f6f1e8;   /* main creamy ivory */
-  --bg2:      #fffdf9;   /* cards (slightly lifted) */
-  --bg3:      #efe7db;   /* subtle section contrast */
-  --surface:  #ffffff;   /* clean surfaces */
-
-  /* ── BORDERS ── */
-  --border:   rgba(139,111,61,0.18);  /* warm gold-tinted border */
-
-  /* ── TEXT (ink-like, not harsh black) ── */
-  --text:     #1a1816;
+  --bg:         #f6f1e8;
+  --bg2:        #fffdf9;
+  --bg3:        #efe7db;
+  --surface:    #ffffff;
+  --border:     rgba(139,111,61,0.22);
+  --text:       #1a1816;
   --text-muted: #5f5a52;
   --text-dim:   #8a847a;
-
-  /* ── ACCENTS (refined academic gold palette) ── */
-  --accent: #a07840;    /* primary gold (richer than before) */
-  --accent2:  #6f8a91;   /* muted blue-grey (nice secondary) */
-  --accent3:  #8a6fa3;   /* soft academic violet */
-
-  /* Optional: subtle highlight tone */
+  --accent:     #a07840;   /* gold — hovers, buttons, underlines */
+  --accent2:    #1a3a5c;   /* fountain pen navy — institution labels, tags */
+  --accent3:    #2c5282;   /* deeper ink blue — secondary highlights */
   --accent-soft: #e8dcc6;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
