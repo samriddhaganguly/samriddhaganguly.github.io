@@ -7,10 +7,10 @@
 
 /* ── TOKENS ── */
 :root {
---bg:      #f0ede8;   /* cooler, less creamy */
---bg2:     #f7f5f2;   /* cards */
---bg3:     #e8e4de;   /* section contrast */
---surface: #ffffff;
+  --bg:         #04080f;   /* near-black navy */
+  --bg2:        #070d1a;   /* cards */
+  --bg3:        #0a1120;   /* section contrast */
+  --surface:    #0d1628;   /* surfaces */
   --border:     rgba(100,140,200,0.09);  /* blue-tinted border */
   --accent:     #c8a96e;   /* gold — unchanged */
   --accent2:    #7b9ea8;   /* steel blue — unchanged */
@@ -27,10 +27,10 @@
 }
 /* ── LIGHT MODE ── */
 body.light {
-  --bg:         #f6f1e8;
-  --bg2:        #fffdf9;
-  --bg3:        #efe7db;
-  --surface:    #ffffff;
+--bg:      #f0ede8;   /* cooler, less creamy */
+--bg2:     #f7f5f2;   /* cards */
+--bg3:     #e8e4de;   /* section contrast */
+--surface: #ffffff;
   --border:     rgba(139,111,61,0.22);
   --text:       #1a1816;
   --text-muted: #5f5a52;
