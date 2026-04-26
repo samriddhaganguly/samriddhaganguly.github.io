@@ -18,87 +18,144 @@
 
 /* ───────── LAYOUT ───────── */
 .gallery-list {
-  display:flex;
-  flex-direction:column;
-  gap:3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-/* ───────── FRAME ───────── */
+/* ───────── ITEM ───────── */
 .gallery-item {
-  display:grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap:2.5rem;
-  align-items:center;
-  border-bottom:1px solid var(--border);
-  padding-bottom:2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 420px;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
 }
 
 .gallery-item:nth-child(even) {
-  grid-template-columns: 1fr 1.2fr;
+  direction: rtl;
 }
 
-/* ───────── IMAGE FRAME ───────── */
+.gallery-item:nth-child(even) > * {
+  direction: ltr;
+}
+
+/* ───────── IMAGE SIDE ───────── */
 .gallery-frame {
+  position: relative;
+  overflow: hidden;
   background: var(--bg2);
-  padding:12px;
-  border:1px solid var(--border);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
 .gallery-frame img {
-  width:100%;
-  display:block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s ease;
 }
 
-/* ───────── TEXT ───────── */
+.gallery-item:hover .gallery-frame img {
+  transform: scale(1.03);
+}
+
+/* ───────── TEXT SIDE ───────── */
 .gallery-text {
-  max-width:420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 3.5rem;
+  background: var(--bg);
 }
 
 .gallery-index {
   font-family: var(--mono);
-  font-size:0.65rem;
-  color:var(--accent);
-  letter-spacing:0.15em;
-  margin-bottom:0.8rem;
+  font-size: 0.62rem;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
 }
 
 .gallery-title {
   font-family: var(--serif);
-  font-size:1.4rem;
-  line-height:1.5;
-  margin-bottom:0.6rem;
+  font-size: 1.45rem;
+  line-height: 1.45;
+  margin-bottom: 0.8rem;
 }
 
 .gallery-desc {
-  font-size:0.85rem;
-  color:var(--text-muted);
-  line-height:1.7;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  max-width: 340px;
+}
+
+/* ───────── TABLET ───────── */
+@media (max-width: 900px) {
+  .gallery-item {
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+
+  .gallery-item:nth-child(even) {
+    direction: ltr;
+  }
+
+  .gallery-frame {
+    position: relative;
+    aspect-ratio: 16 / 10;
+  }
+
+  .gallery-frame img {
+    position: absolute;
+  }
+
+  .gallery-text {
+    padding: 2rem 2rem;
+  }
+
+  .gallery-desc {
+    max-width: 100%;
+  }
 }
 
 /* ───────── MOBILE ───────── */
-@media(max-width:800px){
-  .gallery-item {
-    grid-template-columns:1fr;
+@media (max-width: 560px) {
+  .gallery-text {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .gallery-title {
+    font-size: 1.15rem;
+  }
+
+  .gallery-frame {
+    aspect-ratio: 4 / 3;
   }
 }
 
 /* ───────── QUOTE ───────── */
 .gallery-quote {
-  margin-top:3rem;
-  text-align:center;
-  padding-top:2rem;
-  border-top:1px solid var(--border);
-  font-family:var(--serif);
-  color:var(--text-muted);
+  margin-top: 3.5rem;
+  text-align: center;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
 }
 
 .gallery-quote span {
-  display:block;
-  margin-top:0.7rem;
-  font-family:var(--mono);
-  font-size:0.7rem;
-  color:var(--accent);
+  display: block;
+  margin-top: 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
 }
 
 </style>
@@ -148,7 +205,7 @@
   <!-- 1 -->
   <div class="gallery-item">
     <div class="gallery-frame">
-      <img src="/assets/IISC.jpg">
+      <img src="/assets/IISC.jpg" alt="Indian Institute of Science, Bengaluru">
     </div>
     <div class="gallery-text">
       <div class="gallery-index">01</div>
@@ -160,7 +217,7 @@
   <!-- 2 -->
   <div class="gallery-item">
     <div class="gallery-frame">
-      <img src="/assets/GROUPS.jpg">
+      <img src="/assets/GROUPS.jpg" alt="Who says Physics people do not do Math?">
     </div>
     <div class="gallery-text">
       <div class="gallery-index">02</div>
@@ -172,7 +229,7 @@
   <!-- 3 -->
   <div class="gallery-item">
     <div class="gallery-frame">
-      <img src="/assets/GMRT.jpg">
+      <img src="/assets/GMRT.jpg" alt="GMRT during RAWS December 2023">
     </div>
     <div class="gallery-text">
       <div class="gallery-index">03</div>
@@ -184,7 +241,7 @@
   <!-- 4 -->
   <div class="gallery-item">
     <div class="gallery-frame">
-      <img src="/assets/NCRA.jpg">
+      <img src="/assets/NCRA.jpg" alt="NCRA-TIFR Main Building, Pune">
     </div>
     <div class="gallery-text">
       <div class="gallery-index">04</div>
@@ -196,7 +253,7 @@
   <!-- 5 -->
   <div class="gallery-item">
     <div class="gallery-frame">
-      <img src="/assets/qmec1.jpeg">
+      <img src="/assets/qmec1.jpeg" alt="International Conference on Quantum Materials (2025)">
     </div>
     <div class="gallery-text">
       <div class="gallery-index">05</div>
@@ -208,7 +265,7 @@
   <!-- 6 -->
   <div class="gallery-item">
     <div class="gallery-frame">
-      <img src="/assets/iicm.jpeg">
+      <img src="/assets/iicm.jpeg" alt="Inter-INCI Cultural Meet 2025 — Gold Medal">
     </div>
     <div class="gallery-text">
       <div class="gallery-index">06</div>
@@ -220,7 +277,7 @@
   <!-- 7 -->
   <div class="gallery-item">
     <div class="gallery-frame">
-      <img src="/assets/cric1.jpeg">
+      <img src="/assets/cric1.jpeg" alt="Physics Department Cricket Team">
     </div>
     <div class="gallery-text">
       <div class="gallery-index">07</div>
@@ -233,11 +290,12 @@
 
 <!-- QUOTE -->
 <div class="gallery-quote">
-  “Physics is not just a subject, it’s a way of seeing.”
+  "Physics is not just a subject, it's a way of seeing."
 </div>
 
 </div>
 </section>
+
 <footer>
   <div class="footer-inner">
     <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
@@ -267,18 +325,19 @@
     });
   }, { threshold: 0.1 });
   reveals.forEach(r => observer.observe(r));
+
   // Theme toggle
-const themeBtn = document.getElementById('themeBtn');
-const saved = localStorage.getItem('theme');
-if (saved === 'light') {
-  document.body.classList.add('light');
-  themeBtn.textContent = 'DARK';
-}
-themeBtn.addEventListener('click', () => {
-  const isLight = document.body.classList.toggle('light');
-  themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-});
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    themeBtn.textContent = 'DARK';
+  }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
 </script>
 </body>
 </html>
