@@ -250,7 +250,9 @@ nav {
   margin-bottom: 3rem;
 }
 .section-heading em { font-style: italic; color: var(--accent); }
-
+body.light nav {
+  background: rgba(246, 241, 232, 0.92); /* matches --bg in light */
+}
 /* ── BUTTONS ── */
 .btn-primary {
   font-family: var(--mono);
