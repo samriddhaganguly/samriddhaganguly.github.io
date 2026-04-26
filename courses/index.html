@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Courses — Samriddha Ganguly</title>
+  <meta property="og:title" content="Courses — Samriddha Ganguly">
+  <meta property="og:description" content="Courses taken at IISER Bhopal — BS-MS Physics">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── COURSES PAGE ── */
+
+    /* Tab System */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.9rem 1.5rem;
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* Semester label */
+    .sem-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      color: var(--accent2);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .sem-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .sem-label:first-child { margin-top: 0; }
+
+    /* Course grid */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* Course card */
+    .course-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .course-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .course-card:hover {
+      border-color: rgba(200,169,110,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .course-card:hover::before { transform: scaleX(1); }
+    .course-card.current-card::before {
+      background: linear-gradient(to right, var(--accent3), transparent);
+      transform: scaleX(1);
+    }
+    .course-card.current-card {
+      border-color: rgba(160,123,181,0.2);
+    }
+
+    .course-card-header {
+      padding: 1.5rem 1.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .course-code {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .current-card .course-code { color: var(--accent3); }
+    .course-title-text {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+    .grade-badge {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.3rem 0.65rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      flex-shrink: 0;
+      letter-spacing: 0.05em;
+    }
+    .grade-badge.grade-O { border-color: rgba(200,169,110,0.5); color: var(--accent); }
+    .grade-badge.grade-A { border-color: rgba(123,158,168,0.5); color: var(--accent2); }
+    .grade-badge.grade-Ap { border-color: rgba(123,158,168,0.4); color: var(--accent2); }
+    .grade-badge.grade-B { border-color: rgba(100,140,200,0.3); color: #7a9ec8; }
+    .grade-badge.grade-Bp { border-color: rgba(100,140,200,0.4); color: #7a9ec8; }
+    .grade-badge.grade-C { border-color: rgba(160,123,181,0.3); color: var(--accent3); }
+    .grade-badge.grade-Cp { border-color: rgba(160,123,181,0.4); color: var(--accent3); }
+    .grade-badge.grade-S { border-color: rgba(100,180,100,0.4); color: #7ac87a; }
+    .grade-badge.grade-IP { border-color: rgba(200,169,110,0.3); color: var(--accent); font-style: italic; }
+
+    .course-card-meta {
+      padding: 0 1.75rem 1rem;
+      display: flex;
+      gap: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+    .course-card-meta span { color: var(--text-muted); }
+
+    .course-card-tags {
+      padding: 0 1.75rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .ctag {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.07em;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    .course-card-expand {
+      padding: 0 1.75rem 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .course-card:hover .course-card-expand { color: var(--accent); }
+    .expand-arrow {
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+    .course-card.open .expand-arrow { transform: rotate(90deg); }
+
+    /* Expandable panel */
+    .course-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .course-panel.open { max-height: 1200px; }
+    .course-panel-inner {
+      border-top: 1px solid var(--border);
+      padding: 1.75rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 600px) {
+      .course-panel-inner { grid-template-columns: 1fr; }
+    }
+
+    .panel-section { }
+    .panel-section-title {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .current-card .panel-section-title { color: var(--accent3); }
+    .panel-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .panel-list li {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      padding-left: 1rem;
+      position: relative;
+    }
+    .panel-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--text-dim);
+      font-size: 0.65rem;
+    }
+    .panel-thought {
+      font-family: var(--serif);
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.8;
+      grid-column: 1 / -1;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .panel-thought::before {
+      content: '" ';
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    .panel-thought::after {
+      content: ' "';
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    .panel-instructor {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      margin-top: 0.5rem;
+      letter-spacing: 0.06em;
+    }
+    .panel-instructor span { color: var(--accent2); }
+
+    /* Stats bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+    .stat-cell {
+      background: var(--bg2);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .stat-val {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .stat-key {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* Current semester special */
+    .current-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--accent3);
+      border: 1px solid rgba(160,123,181,0.3);
+      padding: 0.25rem 0.7rem;
+      margin-bottom: 2rem;
+    }
+    .current-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent3);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Courses nav widget on index */
+    .courses-widget {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .cw-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cw-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: var(--accent3);
+      text-transform: uppercase;
+    }
+    .cw-sem {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+    .cw-course-row {
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transition: background 0.2s;
+    }
+    .cw-course-row:last-child { border-bottom: none; }
+    .cw-course-row:hover { background: var(--bg3); }
+    .cw-course-code {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--accent3);
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+    .cw-course-name {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      flex: 1;
+    }
+    .cw-cred {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+    .cw-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg3);
+    }
+
+    @media (max-width: 768px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .course-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research/">Research</a></li>
+    <li><a href="/cv/">CV</a></li>
+    <li><a href="/publications/">Publications</a></li>
+    <li><a href="/courses/" class="active">Courses</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <button class="theme-toggle" id="themeBtn">LIGHT</button>
+    <button class="nav-hamburger" id="menuBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">IISER Bhopal · BS-MS Physics · 2022–2027</div>
+    <h1 class="page-title">Academic <em>Coursework</em></h1>
+    <p class="page-subtitle">A record of every course taken across eight semesters — with references, notes, assignments, and reflections. Currently in Semester VIII of X.</p>
+  </div>
+  <!-- bg blobs -->
+  <div class="bg-blob" style="width:500px;height:500px;background:rgba(160,123,181,0.04);top:-100px;right:-100px;"></div>
+  <div class="bg-blob" style="width:300px;height:300px;background:rgba(200,169,110,0.03);bottom:0;left:200px;"></div>
+</header>
+
+<!-- MAIN -->
+<section class="section" style="padding-top:0;">
+  <div class="section-inner">
+
+    <!-- STATS BAR -->
+    <div class="stats-bar reveal">
+      <div class="stat-cell">
+        <div class="stat-val">147</div>
+        <div class="stat-key">Credits Earned</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-val">9.42</div>
+        <div class="stat-key">CPI / 10</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-val">8</div>
+        <div class="stat-key">Semesters</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-val">52</div>
+        <div class="stat-key">Courses Taken</div>
+      </div>
+    </div>
+
+    <!-- TAB BAR -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="current">Current (Sem VIII)</button>
+      <button class="tab-btn" data-tab="s7">Semester VII</button>
+      <button class="tab-btn" data-tab="s6">Semester VI</button>
+      <button class="tab-btn" data-tab="s5">Semester V</button>
+      <button class="tab-btn" data-tab="s4">Semester IV</button>
+      <button class="tab-btn" data-tab="s3">Semester III</button>
+      <button class="tab-btn" data-tab="s2">Semester II</button>
+      <button class="tab-btn" data-tab="s1">Semester I</button>
+    </div>
+
+    <!-- ═══════════════════ CURRENT SEMESTER ═══════════════════ -->
+    <div class="tab-pane active" id="tab-current">
+      <div class="current-badge">Live · 2025–2026 Semester I (Sem VIII)</div>
+      <div class="course-grid">
+
+        <!-- PHY403 -->
+        <div class="course-card current-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div>
+              <div class="course-code">PHY403 · 4 Credits</div>
+              <div class="course-title-text">Condensed Matter Physics</div>
+            </div>
+            <div class="grade-badge grade-O">O</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Anindya Das</span></div>
+          <div class="course-card-tags">
+            <span class="ctag">Bands</span><span class="ctag">Phonons</span><span class="ctag">Magnetism</span><span class="ctag">Superconductivity</span>
+          </div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Kittel — Introduction to Solid State Physics</li>
+                  <li>Ashcroft & Mermin — Solid State Physics</li>
+                  <li>Marder — Condensed Matter Physics</li>
+                  <li>Simon — Oxford Solid State Basics</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Crystal structure, reciprocal lattice, Brillouin zones</li>
+                  <li>Drude & Sommerfeld models, Fermi surfaces</li>
+                  <li>Band theory: tight binding, nearly free electron</li>
+                  <li>Phonons, Debye/Einstein models, specific heat</li>
+                  <li>Magnetism: dia-, para-, ferro-, antiferro-</li>
+                  <li>BCS theory, Cooper pairs, gap equation</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Problem Sets</div>
+                <ul class="panel-list">
+                  <li>PS1 — Lattice structures, symmetry groups</li>
+                  <li>PS2 — Free electron gas, density of states</li>
+                  <li>PS3 — Tight binding chains and 2D lattices</li>
+                  <li>PS4 — Phonon dispersion, heat capacity</li>
+                  <li>PS5 — Magnetic susceptibilities</li>
+                  <li>PS6 — BCS gap equation, Bogoliubov transformation</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Grading</div>
+                <ul class="panel-list">
+                  <li>Mid-semester exam — 30%</li>
+                  <li>End-semester exam — 40%</li>
+                  <li>Problem sets — 20%</li>
+                  <li>Presentations / viva — 10%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Anindya Das</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">PYQs & Notes</div>
+                <ul class="panel-list">
+                  <li>End-sem 2023 — Band structure problems</li>
+                  <li>End-sem 2022 — Phonon & magnetic ordering</li>
+                  <li>Personal notes on topological extensions of band theory</li>
+                </ul>
+              </div>
+              <div class="panel-thought">This course was where everything clicked. Seeing how BCS, band theory, and magnetism all emerge from the same Hamiltonian framework made my topological research feel much more grounded. Earned an O and it genuinely felt deserved.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHY405 -->
+        <div class="course-card current-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div>
+              <div class="course-code">PHY405 · 3 Credits</div>
+              <div class="course-title-text">Condensed Matter Physics Laboratory</div>
+            </div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Rajesh Kumar</span></div>
+          <div class="course-card-tags">
+            <span class="ctag">Lab</span><span class="ctag">Transport</span><span class="ctag">XRD</span>
+          </div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Experiments Performed</div>
+                <ul class="panel-list">
+                  <li>X-ray diffraction: crystal structure determination</li>
+                  <li>Hall effect — carrier density & mobility</li>
+                  <li>Four-probe resistivity (van der Pauw)</li>
+                  <li>Magnetic susceptibility (Gouy balance)</li>
+                  <li>Dielectric constant measurement</li>
+                  <li>Thermal conductivity by comparative method</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Reports & Grading</div>
+                <ul class="panel-list">
+                  <li>Lab report per experiment — 50%</li>
+                  <li>Viva voce — 30%</li>
+                  <li>Lab notebook maintenance — 20%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Rajesh Kumar</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-thought">The Hall effect experiment was genuinely satisfying — computing a carrier density that matched the textbook value to within 5% felt like magic. Lab skills are underrated.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHY407 -->
+        <div class="course-card current-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div>
+              <div class="course-code">PHY407 · 4 Credits</div>
+              <div class="course-title-text">Electrodynamics</div>
+            </div>
+            <div class="grade-badge grade-Bp">B+</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Saurabh Basu</span></div>
+          <div class="course-card-tags">
+            <span class="ctag">Maxwell</span><span class="ctag">Radiation</span><span class="ctag">Gauge Theory</span>
+          </div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Griffiths — Introduction to Electrodynamics</li>
+                  <li>Jackson — Classical Electrodynamics</li>
+                  <li>Zangwill — Modern Electrodynamics</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Review of statics; boundary value problems</li>
+                  <li>Maxwell equations in matter, potentials</li>
+                  <li>Electromagnetic waves; reflection & refraction</li>
+                  <li>Waveguides, cavities</li>
+                  <li>Radiation from accelerating charges; Larmor formula</li>
+                  <li>Introduction to gauge invariance</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Assignments & PYQs</div>
+                <ul class="panel-list">
+                  <li>HW1–HW5 (statics to radiation)</li>
+                  <li>End-sem 2024 — multipole expansion & radiation</li>
+                  <li>End-sem 2023 — waveguides & retarded potentials</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Grading</div>
+                <ul class="panel-list">
+                  <li>Mid-sem — 30%, End-sem — 50%</li>
+                  <li>Assignments — 20%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Saurabh Basu</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-thought">Jackson is brutal but rewarding. I wish I had spent more time on Green's function methods earlier — they show up everywhere in my QFT and CMP courses.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHY615 -->
+        <div class="course-card current-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div>
+              <div class="course-code">PHY615 · 4 Credits</div>
+              <div class="course-title-text">Quantum Field Theory I</div>
+            </div>
+            <div class="grade-badge grade-O">O</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Nirmal Ganguli</span></div>
+          <div class="course-card-tags">
+            <span class="ctag">QFT</span><span class="ctag">Feynman</span><span class="ctag">Renormalization</span>
+          </div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Peskin & Schroeder — An Introduction to QFT</li>
+                  <li>Srednicki — Quantum Field Theory</li>
+                  <li>Tong — QFT lecture notes (Cambridge)</li>
+                  <li>Weinberg — The Quantum Theory of Fields Vol. I</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Classical field theory, Noether's theorem</li>
+                  <li>Canonical quantization: scalar, Dirac, EM fields</li>
+                  <li>Path integral formulation</li>
+                  <li>Feynman diagrams and rules in φ⁴, QED</li>
+                  <li>Loops, divergences, dimensional regularization</li>
+                  <li>Renormalization group: beta functions, fixed points</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Problem Sets & PYQs</div>
+                <ul class="panel-list">
+                  <li>PS1–PS6 (canonical quantization to RG)</li>
+                  <li>Take-home midterm: Feynman diagram calculation</li>
+                  <li>End-sem 2023: path integrals + renormalization</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Grading</div>
+                <ul class="panel-list">
+                  <li>Problem sets (6) — 40%</li>
+                  <li>Mid-sem — 25%</li>
+                  <li>End-sem — 35%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Nirmal Ganguli</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-thought">The most intellectually demanding course I have taken. The moment renormalization stopped feeling like a trick and started feeling like profound physics was a turning point. Getting an O here means more to me than any other grade.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHY637 -->
+        <div class="course-card current-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div>
+              <div class="course-code">PHY637 · 4 Credits</div>
+              <div class="course-title-text">Decoherence and Open Quantum Systems</div>
+            </div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Manabendra Nath Bera</span></div>
+          <div class="course-card-tags">
+            <span class="ctag">Lindblad</span><span class="ctag">Master Eq.</span><span class="ctag">Entanglement</span>
+          </div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Breuer & Petruccione — Open Quantum Systems</li>
+                  <li>Schlosshauer — Decoherence and the Quantum-to-Classical Transition</li>
+                  <li>Nielsen & Chuang — Quantum Computation (Chs. 8–9)</li>
+                  <li>Weiss — Quantum Dissipative Systems</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Density matrices, reduced density matrix, partial trace</li>
+                  <li>Quantum channels: Kraus operators, CPTP maps</li>
+                  <li>Lindblad master equation derivation</li>
+                  <li>Caldeira–Leggett model, spin-boson model</li>
+                  <li>Quantum Zeno effect, decoherence timescales</li>
+                  <li>Non-Markovian dynamics, memory kernel</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Assignments & PYQs</div>
+                <ul class="panel-list">
+                  <li>HW1–HW4 (density matrices to non-Markovian)</li>
+                  <li>Term paper: "Decoherence in magnonic systems"</li>
+                  <li>End-sem 2024: Lindblad & Zeno problems</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Grading</div>
+                <ul class="panel-list">
+                  <li>Assignments — 30%</li>
+                  <li>Term paper + presentation — 30%</li>
+                  <li>End-sem — 40%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Manabendra Nath Bera</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-thought">This course directly fed into my published paper on chiral magnon decoherence. The Lindblad formalism is something every condensed matter physicist should know — it connects seamlessly to Green's function methods.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHY642 -->
+        <div class="course-card current-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div>
+              <div class="course-code">PHY642 · 4 Credits</div>
+              <div class="course-title-text">Special Topics in Quantum Mechanics</div>
+            </div>
+            <div class="grade-badge grade-B">B</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Arijit Saha</span></div>
+          <div class="course-card-tags">
+            <span class="ctag">Topology</span><span class="ctag">Berry Phase</span><span class="ctag">Scattering</span>
+          </div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Sakurai & Napolitano — Modern Quantum Mechanics</li>
+                  <li>Bernevig & Hughes — Topological Insulators and Superconductors</li>
+                  <li>Xiao, Chang, Niu — Berry phase effects (RMP 2010)</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Adiabatic theorem, Berry phase & Berry curvature</li>
+                  <li>Chern numbers, bulk-boundary correspondence</li>
+                  <li>Scattering theory: S-matrix, T-matrix, Born series</li>
+                  <li>WKB approximation and tunneling</li>
+                  <li>Symmetry classes of topological phases (K-theory intro)</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Assignments & PYQs</div>
+                <ul class="panel-list">
+                  <li>HW1–HW4 (Berry phase to scattering)</li>
+                  <li>Project: Chern insulator on a lattice (numerics)</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Grading</div>
+                <ul class="panel-list">
+                  <li>Assignments — 25%</li>
+                  <li>Project — 25%</li>
+                  <li>Mid-sem + End-sem — 50%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Arijit Saha</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-thought">The Berry phase section was revelatory — I had used Chern numbers in research without truly understanding their geometric origin. The scattering theory part felt more routine by comparison.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /tab-current -->
+
+
+    <!-- ═══════════════════ SEMESTER VII (2024-25 Sem II) ═══════════════════ -->
+    <div class="tab-pane" id="tab-s7">
+      <div class="sem-label">2024–2025 · Semester II</div>
+      <div class="course-grid">
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY302 · 4 Credits</div><div class="course-title-text">Mathematical Methods II</div></div>
+            <div class="grade-badge grade-B">B</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Debashis Ghoshal</span></div>
+          <div class="course-card-tags"><span class="ctag">PDEs</span><span class="ctag">Green's Functions</span><span class="ctag">Integral Transforms</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Arfken, Weber & Harris — Mathematical Methods for Physicists</li>
+                  <li>Boas — Mathematical Methods in the Physical Sciences</li>
+                  <li>Stakgold — Green's Functions and Boundary Value Problems</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>PDEs: wave, heat, Laplace equations</li>
+                  <li>Separation of variables, Sturm-Liouville theory</li>
+                  <li>Green's functions for differential operators</li>
+                  <li>Fourier & Laplace transforms, convolution theorem</li>
+                  <li>Tensor analysis, differential forms (intro)</li>
+                  <li>Calculus of variations</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Assignments</div>
+                <ul class="panel-list">
+                  <li>HW1–HW5 (PDEs through variational methods)</li>
+                  <li>End-sem 2023: Green's functions & transforms</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Grading</div>
+                <ul class="panel-list">
+                  <li>Assignments — 20%, Mid-sem — 30%, End-sem — 50%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Debashis Ghoshal</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-thought">Green's functions finally made sense here. I regret not spending more time on the tensor analysis section — it would have saved me weeks later in Electrodynamics and GR reading.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY304 · 4 Credits</div><div class="course-title-text">Advanced Quantum Mechanics</div></div>
+            <div class="grade-badge grade-Cp">C+</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Subhashis Basak</span></div>
+          <div class="course-card-tags"><span class="ctag">Relativistic QM</span><span class="ctag">Many-Body</span><span class="ctag">Path Integrals</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Sakurai — Modern Quantum Mechanics</li>
+                  <li>Shankar — Principles of Quantum Mechanics</li>
+                  <li>Baym — Lectures on Quantum Mechanics</li>
+                  <li>Feynman & Hibbs — Quantum Mechanics & Path Integrals</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Time-independent perturbation theory (degenerate & non-degenerate)</li>
+                  <li>Time-dependent perturbation theory, Fermi's golden rule</li>
+                  <li>Dirac equation, relativistic corrections</li>
+                  <li>Introduction to second quantization</li>
+                  <li>Feynman path integral formulation</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Assignments & PYQs</div>
+                <ul class="panel-list">
+                  <li>HW1–HW4</li>
+                  <li>End-sem 2022, 2023: perturbation theory problems</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Grading</div>
+                <ul class="panel-list">
+                  <li>Mid-sem — 30%, End-sem — 50%, HW — 20%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Subhashis Basak</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-thought">My worst performance, and honest about why: I underestimated the Dirac equation section and over-relied on my intuition from QM1. A humbling but necessary course. The path integral material became my foundation for QFT later.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY306 · 4 Credits</div><div class="course-title-text">Statistical Mechanics</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Subhro Bhatterjee</span></div>
+          <div class="course-card-tags"><span class="ctag">Ensembles</span><span class="ctag">Phase Transitions</span><span class="ctag">Renormalization</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Pathria & Beale — Statistical Mechanics</li>
+                  <li>Kardar — Statistical Physics of Particles</li>
+                  <li>Goldenfeld — Lectures on Phase Transitions and the Renormalization Group</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Microstates, entropy, Boltzmann distribution</li>
+                  <li>Canonical, grand canonical, microcanonical ensembles</li>
+                  <li>Ideal quantum gases: Fermi-Dirac, Bose-Einstein</li>
+                  <li>Ising model, mean field theory, Landau theory</li>
+                  <li>Critical phenomena, scaling, universality</li>
+                  <li>Wilson RG, ε-expansion (intro)</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Assignments & PYQs</div>
+                <ul class="panel-list">
+                  <li>HW1–HW5 (ensembles to RG)</li>
+                  <li>End-sem 2023: phase transitions & Ising model</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Grading</div>
+                <ul class="panel-list">
+                  <li>HW — 20%, Mid-sem — 30%, End-sem — 50%</li>
+                </ul>
+                <div class="panel-instructor">Prof. <span>Subhro Bhatterjee</span> · PHY Dept.</div>
+              </div>
+              <div class="panel-thought">The Wilson RG section connected directly to my QFT course the following semester — seeing the same ideas appear independently in stat mech and field theory was one of those moments you remember as a physics student.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY308 · 3 Credits</div><div class="course-title-text">Physics Laboratory II</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Saurabh Basu</span></div>
+          <div class="course-card-tags"><span class="ctag">Lab</span><span class="ctag">Electronics</span><span class="ctag">Optics</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Experiments</div>
+                <ul class="panel-list">
+                  <li>Franck-Hertz experiment</li>
+                  <li>Michelson interferometer</li>
+                  <li>Faraday effect in glass</li>
+                  <li>Lock-in amplifier techniques</li>
+                  <li>Op-amp circuits: filters, oscillators</li>
+                </ul>
+              </div>
+              <div class="panel-thought">A solid lab course. The Faraday effect experiment gave me genuine intuition for magneto-optics that no lecture had managed to convey.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY312 · 4 Credits</div><div class="course-title-text">Numerical Methods and Programming</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Debashis Ghoshal</span></div>
+          <div class="course-card-tags"><span class="ctag">Python</span><span class="ctag">ODE Solvers</span><span class="ctag">Monte Carlo</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Newman — Computational Physics (Python)</li>
+                  <li>Press et al. — Numerical Recipes</li>
+                  <li>Landau, Páez & Bordeianu — Computational Physics</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics & Projects</div>
+                <ul class="panel-list">
+                  <li>Root finding, numerical integration, ODE/PDE solvers</li>
+                  <li>Linear algebra: LU decomp, eigenvalue problems</li>
+                  <li>Monte Carlo integration & Metropolis algorithm</li>
+                  <li>Fast Fourier Transform and spectral analysis</li>
+                  <li>Final project: Ising model via Metropolis MC</li>
+                </ul>
+              </div>
+              <div class="panel-thought">This course directly improved my research output. Implementing the Metropolis algorithm from scratch gave me the numerical confidence I needed for exact diagonalization work later.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY314 · 3 Credits</div><div class="course-title-text">Introduction to Special Relativity</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Vijay A. Singh</span></div>
+          <div class="course-card-tags"><span class="ctag">4-Vectors</span><span class="ctag">Lorentz</span><span class="ctag">Covariance</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Taylor & Wheeler — Spacetime Physics</li>
+                  <li>Griffiths — Introduction to Electrodynamics (Ch. 12)</li>
+                  <li>Rindler — Introduction to Special Relativity</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Postulates, time dilation, length contraction</li>
+                  <li>Lorentz transformations, 4-vectors, spacetime diagrams</li>
+                  <li>Relativistic mechanics: energy, momentum, collisions</li>
+                  <li>Covariant formulation of electrodynamics</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The covariant formulation of EM was the highlight — it made the symmetry of Maxwell's equations feel almost inevitable rather than miraculous. Essential before QFT.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /s7 -->
+
+
+    <!-- ═══════════════════ SEMESTER VI (2024-25 Sem I) ═══════════════════ -->
+    <div class="tab-pane" id="tab-s6">
+      <div class="sem-label">2024–2025 · Semester I</div>
+      <div class="course-grid">
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">MTH303 · 4 Credits</div><div class="course-title-text">Real Analysis I</div></div>
+            <div class="grade-badge grade-B">B</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ramakrishna Nanduri</span></div>
+          <div class="course-card-tags"><span class="ctag">Analysis</span><span class="ctag">Topology</span><span class="ctag">Convergence</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Rudin — Principles of Mathematical Analysis</li>
+                  <li>Abbott — Understanding Analysis</li>
+                  <li>Apostol — Mathematical Analysis</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Real number system, completeness axiom</li>
+                  <li>Sequences and series: convergence, Cauchy criterion</li>
+                  <li>Metric spaces, open/closed sets, compactness</li>
+                  <li>Continuity, uniform continuity</li>
+                  <li>Differentiation, Mean Value Theorem, Taylor's theorem</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Baby Rudin is as hard as advertised. The epsilon-delta proofs were painful but permanently sharpened my mathematical thinking. Useful for functional analysis in QFT later.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY301 · 4 Credits</div><div class="course-title-text">Mathematical Methods I</div></div>
+            <div class="grade-badge grade-Bp">B+</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Vijay A. Singh</span></div>
+          <div class="course-card-tags"><span class="ctag">Complex Analysis</span><span class="ctag">Contour Integration</span><span class="ctag">Special Functions</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Arfken & Weber — Mathematical Methods for Physicists</li>
+                  <li>Churchill & Brown — Complex Variables and Applications</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Complex analysis: Cauchy-Riemann, contour integration</li>
+                  <li>Residue theorem and applications</li>
+                  <li>Special functions: Bessel, Legendre, Hermite, Laguerre</li>
+                  <li>Orthogonality, generating functions, recurrence relations</li>
+                  <li>Laplace & Fourier transform methods</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Contour integration is genuinely magical once it clicks. I use residue theorem calculations constantly in my research — it's one of the most immediately applicable tools in the physicist's toolkit.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY303 · 4 Credits</div><div class="course-title-text">Introduction to Quantum Mechanics</div></div>
+            <div class="grade-badge grade-C">C</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Saurabh Basu</span></div>
+          <div class="course-card-tags"><span class="ctag">Schrödinger</span><span class="ctag">Angular Momentum</span><span class="ctag">Spin</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Griffiths — Introduction to Quantum Mechanics</li>
+                  <li>Shankar — Principles of Quantum Mechanics</li>
+                  <li>Cohen-Tannoudji — Quantum Mechanics Vol. I</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Wave functions, Schrödinger equation, Hilbert space</li>
+                  <li>1D problems: wells, barriers, harmonic oscillator</li>
+                  <li>Formalism: operators, eigenstates, uncertainty principle</li>
+                  <li>3D: hydrogen atom, spherical harmonics</li>
+                  <li>Angular momentum, spin, addition of angular momenta</li>
+                  <li>Identical particles, exchange symmetry</li>
+                </ul>
+              </div>
+              <div class="panel-thought">A C is honest — I was overconfident coming in from Quantum Physics (PHY106) and underestimated how much more rigorous this course was. A defining lesson in the difference between familiarity and understanding.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY305 · 4 Credits</div><div class="course-title-text">Classical Mechanics</div></div>
+            <div class="grade-badge grade-Bp">B+</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Manabendra Nath Bera</span></div>
+          <div class="course-card-tags"><span class="ctag">Lagrangian</span><span class="ctag">Hamiltonian</span><span class="ctag">Chaos</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Goldstein, Poole & Safko — Classical Mechanics</li>
+                  <li>Landau & Lifshitz — Mechanics</li>
+                  <li>Hand & Finch — Analytical Mechanics</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Lagrangian mechanics, Euler-Lagrange equations, constraints</li>
+                  <li>Noether's theorem, conservation laws</li>
+                  <li>Hamiltonian mechanics, canonical transformations</li>
+                  <li>Poisson brackets, action-angle variables</li>
+                  <li>Small oscillations, normal modes</li>
+                  <li>Nonlinear dynamics and chaos (intro)</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Landau & Lifshitz's Mechanics is a masterpiece of concision. Noether's theorem connecting symmetries to conservation laws felt like unlocking a secret layer of physics. This course reframed everything I thought I knew about mechanics.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY307 · 3 Credits</div><div class="course-title-text">Physics Laboratory I</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Rajesh Kumar</span></div>
+          <div class="course-card-tags"><span class="ctag">Lab</span><span class="ctag">Error Analysis</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Experiments</div>
+                <ul class="panel-list">
+                  <li>Millikan oil drop experiment</li>
+                  <li>Zeeman effect & spectroscopy</li>
+                  <li>e/m ratio of electrons</li>
+                  <li>Diffraction grating & sodium doublet</li>
+                  <li>Torsion balance (Cavendish)</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The Zeeman effect experiment is one of the few times in a physics degree where you directly observe quantum mechanics with your hands. Memorable.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY311 · 3 Credits</div><div class="course-title-text">Basic Electronics</div></div>
+            <div class="grade-badge grade-Bp">B+</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Subhashis Basak</span></div>
+          <div class="course-card-tags"><span class="ctag">Diodes</span><span class="ctag">Transistors</span><span class="ctag">Op-Amps</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Malvino & Bates — Electronic Principles</li>
+                  <li>Sedra & Smith — Microelectronic Circuits</li>
+                  <li>Horowitz & Hill — The Art of Electronics</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Diodes, rectifiers, Zener regulators</li>
+                  <li>BJT and FET: biasing, amplifiers</li>
+                  <li>Op-amp: inverting, non-inverting, integrator, differentiator</li>
+                  <li>Oscillators: LC, Colpitts, Wien bridge</li>
+                  <li>Digital logic basics, ADC/DAC</li>
+                </ul>
+              </div>
+              <div class="panel-thought">More practical than I expected. Understanding lock-in amplifiers — which I use routinely in lab — required exactly the op-amp circuits covered here. Wished I had taken it more seriously.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">IPR500 · 1 Credit</div><div class="course-title-text">Law Relating to Intellectual Property and Patents</div></div>
+            <div class="grade-badge grade-S">S</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ritu Gupta</span></div>
+          <div class="course-card-tags"><span class="ctag">IPR</span><span class="ctag">Patents</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics</div>
+                <ul class="panel-list">
+                  <li>Indian patent law, PCT applications</li>
+                  <li>Copyright, trademarks, trade secrets</li>
+                  <li>IP in academic research and industry</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Short but surprisingly useful. Understanding what constitutes patentable invention vs. scientific discovery changed how I think about research disclosure.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /s6 -->
+
+
+    <!-- ═══════════════════ SEMESTER V (2023-24 Sem II) ═══════════════════ -->
+    <div class="tab-pane" id="tab-s5">
+      <div class="sem-label">2023–2024 · Semester II</div>
+      <div class="course-grid">
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">CHM204 · 3 Credits</div><div class="course-title-text">Basic Inorganic Chemistry</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ananya Banik</span></div>
+          <div class="course-card-tags"><span class="ctag">Coordination</span><span class="ctag">Crystal Field</span><span class="ctag">Organometallics</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Shriver & Atkins — Inorganic Chemistry</li>
+                  <li>Miessler, Fischer & Tarr — Inorganic Chemistry</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Periodic trends, atomic structure</li>
+                  <li>Coordination chemistry, VSEPR, ligand field theory</li>
+                  <li>Crystal field theory, splitting patterns</li>
+                  <li>Organometallics, catalysis basics</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Crystal field theory was unexpectedly connected to the physics of spin-orbit coupling — another reminder that the disciplines are more continuous than the curriculum implies.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">CHM222 · 3 Credits</div><div class="course-title-text">Classical Thermodynamics</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Manish Kumar</span></div>
+          <div class="course-card-tags"><span class="ctag">Thermodynamics</span><span class="ctag">Gibbs Free Energy</span><span class="ctag">Cycles</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Laws of thermodynamics, Carnot cycle</li>
+                  <li>Entropy, Helmholtz and Gibbs free energies</li>
+                  <li>Chemical potential, phase equilibria, phase rule</li>
+                  <li>Mixtures, colligative properties, chemical equilibrium</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The chemical perspective on thermodynamics complemented the physics stat mech course nicely. Seeing Gibbs free energy as the natural equilibrium criterion rather than entropy was clarifying.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">MTH202 · 3 Credits</div><div class="course-title-text">Probability and Statistics</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Debashis Ghoshal</span></div>
+          <div class="course-card-tags"><span class="ctag">Probability</span><span class="ctag">Bayesian</span><span class="ctag">Statistics</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Probability spaces, random variables, distributions</li>
+                  <li>Central limit theorem, law of large numbers</li>
+                  <li>Estimation: MLE, Bayesian, confidence intervals</li>
+                  <li>Hypothesis testing, chi-square and t-tests</li>
+                  <li>Linear regression, ANOVA basics</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Foundational for data-driven physics and machine learning approaches to phase identification — directly applicable to my computational work.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">MTH204 · 3 Credits</div><div class="course-title-text">Complex Variables</div></div>
+            <div class="grade-badge grade-Bp">B+</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ramakrishna Nanduri</span></div>
+          <div class="course-card-tags"><span class="ctag">Complex Analysis</span><span class="ctag">Conformal Maps</span><span class="ctag">Residues</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Analytic functions, Cauchy-Riemann equations</li>
+                  <li>Cauchy's integral theorem and formula</li>
+                  <li>Laurent series, poles, residues</li>
+                  <li>Contour integration, real integral evaluation</li>
+                  <li>Conformal mappings, Möbius transformations</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The rigorous mathematics version of what Mathematical Methods I covered — approaching it from the math side first made the physics applications feel cleaner when they appeared later.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY206 · 3 Credits</div><div class="course-title-text">Physics Through Computational Thinking</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Subhashis Basak</span></div>
+          <div class="course-card-tags"><span class="ctag">Simulation</span><span class="ctag">Python</span><span class="ctag">Visualization</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics & Projects</div>
+                <ul class="panel-list">
+                  <li>Projectile motion and N-body simulation</li>
+                  <li>Numerical solution of Schrödinger equation</li>
+                  <li>Molecular dynamics simulation</li>
+                  <li>Cellular automata, Conway's Game of Life</li>
+                  <li>Data visualization: matplotlib, numpy</li>
+                </ul>
+              </div>
+              <div class="panel-thought">This is where I first programmed a quantum mechanical system. Watching a wavefunction evolve numerically made the time-dependent Schrödinger equation suddenly feel real.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY208 · 3 Credits</div><div class="course-title-text">General Properties of Matter</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Vijay A. Singh</span></div>
+          <div class="course-card-tags"><span class="ctag">Elasticity</span><span class="ctag">Fluid Dynamics</span><span class="ctag">Surface Tension</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Elasticity: stress, strain, moduli</li>
+                  <li>Fluid statics and dynamics: Bernoulli, viscosity</li>
+                  <li>Surface tension, capillarity, wetting</li>
+                  <li>Diffusion, Brownian motion</li>
+                </ul>
+              </div>
+              <div class="panel-thought">A pleasant, intuitive course. Brownian motion connects beautifully to statistical mechanics and field theory — one of those bridges between macroscopic observation and microscopic theory.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /s5 -->
+
+
+    <!-- ═══════════════════ SEMESTER IV (2023-24 Sem I) ═══════════════════ -->
+    <div class="tab-pane" id="tab-s4">
+      <div class="sem-label">2023–2024 · Semester I</div>
+      <div class="course-grid">
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">MTH201 · 3 Credits</div><div class="course-title-text">Multivariable Calculus</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ramakrishna Nanduri</span></div>
+          <div class="course-card-tags"><span class="ctag">Vector Calculus</span><span class="ctag">Stokes</span><span class="ctag">Manifolds</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Partial derivatives, gradient, divergence, curl</li>
+                  <li>Multiple integrals: change of variables</li>
+                  <li>Line and surface integrals</li>
+                  <li>Green's, Stokes', Divergence theorems</li>
+                  <li>Introduction to differential geometry (curves, surfaces)</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Stokes' theorem generalises beautifully into differential forms and de Rham cohomology — the foundation for everything topological I do now. This course planted that seed.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">MTH203 · 3 Credits</div><div class="course-title-text">Introduction to Groups and Symmetry</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Debashis Ghoshal</span></div>
+          <div class="course-card-tags"><span class="ctag">Group Theory</span><span class="ctag">Representations</span><span class="ctag">Lie Groups</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Artin — Algebra</li>
+                  <li>Georgi — Lie Algebras in Particle Physics</li>
+                  <li>Zee — Group Theory in a Nutshell for Physicists</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Groups, subgroups, quotient groups, homomorphisms</li>
+                  <li>Group representations, characters, Schur's lemma</li>
+                  <li>Point groups and crystal symmetry</li>
+                  <li>Lie groups and Lie algebras: SO(3), SU(2), SU(3)</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The single most useful mathematics course for my research. Understanding representation theory changed how I think about Hamiltonians, topological invariants, and symmetry classes. A course I return to constantly.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY201 · 3 Credits</div><div class="course-title-text">Waves and Optics</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Saurabh Basu</span></div>
+          <div class="course-card-tags"><span class="ctag">Wave Mechanics</span><span class="ctag">Interference</span><span class="ctag">Diffraction</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Wave equation, superposition, standing waves</li>
+                  <li>Interference: Young's, thin films, Fabry-Perot</li>
+                  <li>Fraunhofer and Fresnel diffraction</li>
+                  <li>Polarisation, birefringence, optical activity</li>
+                  <li>Lasers, coherence, holography</li>
+                </ul>
+              </div>
+              <div class="panel-thought">My first serious encounter with the concept of coherence — which later became central to my work on magnon decoherence. The conceptual threads from a second-year optics course ran further than I expected.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY209 · 3 Credits</div><div class="course-title-text">Electromagnetism</div></div>
+            <div class="grade-badge grade-B">B</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Manabendra Nath Bera</span></div>
+          <div class="course-card-tags"><span class="ctag">Maxwell</span><span class="ctag">Potentials</span><span class="ctag">EM Waves</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Griffiths — Introduction to Electrodynamics</li>
+                  <li>Griffiths — Problems from the textbook (all odd-numbered)</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Electrostatics, conductors, dielectrics</li>
+                  <li>Magnetostatics, vector potential, Biot-Savart</li>
+                  <li>Faraday's law, displacement current, Maxwell equations</li>
+                  <li>Electromagnetic waves, Poynting vector</li>
+                  <li>Introduction to potentials: scalar, vector</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Griffiths is a joy to read but the boundary value problems were where I struggled. My B reflects that. The Maxwell equations feel deeply beautiful — their symmetry and completeness is remarkable.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /s4 -->
+
+
+    <!-- ═══════════════════ SEMESTER III (2022-23 Sem II) ═══════════════════ -->
+    <div class="tab-pane" id="tab-s3">
+      <div class="sem-label">2023–2024 · Semester I</div>
+      <div class="course-grid">
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">CHM211 · 3 Credits</div><div class="course-title-text">Basic Organic Chemistry II</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ananya Banik</span></div>
+          <div class="course-card-tags"><span class="ctag">Organic</span><span class="ctag">Reactions</span><span class="ctag">Synthesis</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Carbonyl chemistry, aldehydes & ketones</li>
+                  <li>Carboxylic acids and derivatives</li>
+                  <li>Amines, aromatic chemistry</li>
+                  <li>Multi-step synthesis strategies</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Enjoyable as a puzzle-solving exercise — organic synthesis has an aesthetic to it. Not directly relevant to my current research, but the problem-solving discipline transfers.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">CHM221 · 3 Credits</div><div class="course-title-text">Basic Physical Chemistry</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Manish Kumar</span></div>
+          <div class="course-card-tags"><span class="ctag">Kinetics</span><span class="ctag">Quantum Chem</span><span class="ctag">Spectroscopy</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Chemical kinetics, rate laws, mechanisms</li>
+                  <li>Quantum chemistry: particle in a box, molecular orbitals</li>
+                  <li>Rotational, vibrational, electronic spectroscopy</li>
+                  <li>Statistical thermodynamics intro</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The statistical thermodynamics intro here paired well with my physics stat mech course. The spectroscopy section was my first encounter with energy quantisation in a chemistry context.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY201 · 3 Credits</div><div class="course-title-text">Waves and Optics</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Saurabh Basu</span></div>
+          <div class="course-card-tags"><span class="ctag">Waves</span><span class="ctag">Interference</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Mechanical and EM waves, superposition</li>
+                  <li>Interference, diffraction, polarisation</li>
+                  <li>Fourier decomposition of wave packets</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Fourier analysis of wave packets felt like the seed from which quantum mechanics would later grow. A conceptually rich course.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /s3 -->
+
+
+    <!-- ═══════════════════ SEMESTER II (2022-23 Sem II) ═══════════════════ -->
+    <div class="tab-pane" id="tab-s2">
+      <div class="sem-label">2022–2023 · Semester II</div>
+      <div class="course-grid">
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">BIO102 · 3 Credits</div><div class="course-title-text">Biology II: Fundamentals of Cell Biology</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Krishanu Ray</span></div>
+          <div class="course-card-tags"><span class="ctag">Cell Biology</span><span class="ctag">Genetics</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Cell organelles, membrane transport</li>
+                  <li>Cell cycle, mitosis and meiosis</li>
+                  <li>Signal transduction, gene expression</li>
+                  <li>Mendelian genetics, molecular basis of heredity</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The IISER breadth requirement. Useful to have a basic model of how living systems work — the statistical mechanics of gene regulation is genuinely interesting.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">CHM112 · 3 Credits</div><div class="course-title-text">Basic Organic Chemistry I</div></div>
+            <div class="grade-badge grade-O">O</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ananya Banik</span></div>
+          <div class="course-card-tags"><span class="ctag">Organic</span><span class="ctag">Stereochemistry</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Functional groups, nomenclature</li>
+                  <li>Stereochemistry: chirality, R/S, E/Z</li>
+                  <li>Substitution (SN1, SN2) and elimination reactions</li>
+                  <li>Alkene and alkyne chemistry</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The stereochemistry section was where I first encountered chirality as a physical concept — a thread that runs through everything from molecular handedness to topological phases.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">ECS102 · 3 Credits</div><div class="course-title-text">Introduction to Programming</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ayan Seal</span></div>
+          <div class="course-card-tags"><span class="ctag">Python</span><span class="ctag">Algorithms</span><span class="ctag">CS Fundamentals</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Python: data types, control flow, functions</li>
+                  <li>Data structures: lists, dicts, sets</li>
+                  <li>Algorithmic thinking: sorting, searching</li>
+                  <li>Basic OOP and file I/O</li>
+                  <li>Intro to scientific computing: numpy, matplotlib</li>
+                </ul>
+              </div>
+              <div class="panel-thought">This course gave me Python — the most useful tool I have acquired in my education. Everything in computational physics flows from being fluent in a programming language. Wish there had been more of it.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">EES102 · 3 Credits</div><div class="course-title-text">Introduction to Environmental Sciences</div></div>
+            <div class="grade-badge grade-O">O</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Rahul Srivastava</span></div>
+          <div class="course-card-tags"><span class="ctag">Environment</span><span class="ctag">Climate</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Ecosystems, biogeochemical cycles</li>
+                  <li>Climate science, greenhouse effect</li>
+                  <li>Pollution, resource depletion, biodiversity</li>
+                  <li>Environmental policy and sustainability</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The physics of climate feedbacks — radiative forcing, albedo, tipping points — maps naturally onto dynamical systems and phase transition ideas. An underrated connection.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">MTH102 · 3 Credits</div><div class="course-title-text">Linear Algebra</div></div>
+            <div class="grade-badge grade-B">B</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Ramakrishna Nanduri</span></div>
+          <div class="course-card-tags"><span class="ctag">Linear Algebra</span><span class="ctag">Eigenvalues</span><span class="ctag">Vector Spaces</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Strang — Introduction to Linear Algebra</li>
+                  <li>Hoffman & Kunze — Linear Algebra</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Vector spaces, basis, dimension, linear maps</li>
+                  <li>Matrices, row reduction, determinants</li>
+                  <li>Eigenvalues, eigenvectors, diagonalisation</li>
+                  <li>Inner product spaces, orthogonality, SVD</li>
+                  <li>Jordan normal form</li>
+                </ul>
+              </div>
+              <div class="panel-thought">In hindsight, linear algebra is the language of quantum mechanics — but I didn't appreciate that until much later. If I were doing it again, I would treat this as the most important course of the first year.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY106 · 3 Credits</div><div class="course-title-text">Quantum Physics</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Vijay A. Singh</span></div>
+          <div class="course-card-tags"><span class="ctag">Modern Physics</span><span class="ctag">Wave-Particle</span><span class="ctag">Hydrogen Atom</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Blackbody radiation, photoelectric effect, Compton scattering</li>
+                  <li>de Broglie waves, Bohr model, matter waves</li>
+                  <li>Schrödinger equation, uncertainty principle</li>
+                  <li>Hydrogen atom, spectral series</li>
+                  <li>Spin, Pauli exclusion principle</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The course that made me certain physics was what I wanted to do. The moment the ultraviolet catastrophe was explained — and how Planck's quantisation resolved it — was genuinely thrilling. A landmark course in my education.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /s2 -->
+
+
+    <!-- ═══════════════════ SEMESTER I (2022-23 Sem I) ═══════════════════ -->
+    <div class="tab-pane" id="tab-s1">
+      <div class="sem-label">2022–2023 · Semester I</div>
+      <div class="course-grid">
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">BIO101 · 3 Credits</div><div class="course-title-text">Biology I: Biomolecules</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Krishanu Ray</span></div>
+          <div class="course-card-tags"><span class="ctag">Biochemistry</span><span class="ctag">Proteins</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Amino acids, proteins, nucleic acids</li>
+                  <li>Lipids, carbohydrates, membranes</li>
+                  <li>Enzymology: kinetics, inhibition</li>
+                  <li>Central dogma: transcription, translation</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Required breadth for IISER. The physical chemistry of protein folding is a fascinating statistical mechanics problem in disguise.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">CHM101 · 3 Credits</div><div class="course-title-text">General Chemistry</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Manish Kumar</span></div>
+          <div class="course-card-tags"><span class="ctag">Periodic Table</span><span class="ctag">Bonding</span><span class="ctag">Thermochemistry</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Atomic structure, periodic trends</li>
+                  <li>Chemical bonding: ionic, covalent, metallic, VSEPR</li>
+                  <li>Thermochemistry, Hess's law, enthalpy</li>
+                  <li>Electrochemistry, equilibrium basics</li>
+                </ul>
+              </div>
+              <div class="panel-thought">A solid foundation. The connection between chemical bonding and the quantum mechanics of electrons became clearer only later — but this course built the vocabulary.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">EES101 · 3 Credits</div><div class="course-title-text">Earth Materials and Processes</div></div>
+            <div class="grade-badge grade-O">O</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Rahul Srivastava</span></div>
+          <div class="course-card-tags"><span class="ctag">Geoscience</span><span class="ctag">Mineralogy</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Mineralogy, rock types, geological time</li>
+                  <li>Plate tectonics, seismology basics</li>
+                  <li>Earth's interior: composition, dynamics</li>
+                  <li>Surface processes: erosion, weathering, sedimentation</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Unexpectedly fun. Plate tectonics as a convection problem — heat flowing through a viscous mantle — has satisfying physics underneath.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">MTH101 · 3 Credits</div><div class="course-title-text">Calculus of One Variable</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Debashis Ghoshal</span></div>
+          <div class="course-card-tags"><span class="ctag">Calculus</span><span class="ctag">Sequences</span><span class="ctag">Integration</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Limits, continuity, differentiation</li>
+                  <li>Mean Value Theorem, Taylor series</li>
+                  <li>Riemann integration, Fundamental Theorem</li>
+                  <li>Sequences and series, convergence tests</li>
+                </ul>
+              </div>
+              <div class="panel-thought">The course that marks the transition from school mathematics to university mathematics. Rigour matters — and that lesson took longer than a single semester to fully absorb.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">PHY101 · 3 Credits</div><div class="course-title-text">Mechanics</div></div>
+            <div class="grade-badge grade-A">A</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Vijay A. Singh</span></div>
+          <div class="course-card-tags"><span class="ctag">Newtonian</span><span class="ctag">Oscillations</span><span class="ctag">Central Force</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">References</div>
+                <ul class="panel-list">
+                  <li>Kleppner & Kolenkow — An Introduction to Mechanics</li>
+                  <li>Morin — Introduction to Classical Mechanics</li>
+                </ul>
+              </div>
+              <div class="panel-section">
+                <div class="panel-section-title">Topics Covered</div>
+                <ul class="panel-list">
+                  <li>Newton's laws, frames of reference, pseudo-forces</li>
+                  <li>Work, energy, conservation laws</li>
+                  <li>Central force problem, Kepler's laws</li>
+                  <li>Rotation, rigid body dynamics, gyroscopes</li>
+                  <li>Oscillations: SHM, damped, driven, resonance</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Kleppner & Kolenkow is beautifully difficult for a first physics course. The problems are hard in the right way — they build physical intuition, not just computational skill. My love of mechanics started here.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card reveal" onclick="toggleCard(this)">
+          <div class="course-card-header">
+            <div><div class="course-code">HSS101 · 2 Credits</div><div class="course-title-text">English for Communication</div></div>
+            <div class="grade-badge grade-S">S</div>
+          </div>
+          <div class="course-card-meta">Instructor: <span>Prof. Anil Pratap Singh</span></div>
+          <div class="course-card-tags"><span class="ctag">Writing</span><span class="ctag">Communication</span></div>
+          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
+          <div class="course-panel">
+            <div class="course-panel-inner">
+              <div class="panel-section">
+                <div class="panel-section-title">Topics</div>
+                <ul class="panel-list">
+                  <li>Academic writing, essay structure, précis writing</li>
+                  <li>Presentation skills, technical communication</li>
+                  <li>Reading comprehension, critical analysis</li>
+                </ul>
+              </div>
+              <div class="panel-thought">Undervalued. Clear scientific writing is genuinely difficult — and this course planted the early seeds. Writing my first paper reminded me how much good communication matters in science.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /s1 -->
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
+    <ul class="footer-links">
+      <li><a href="/research/">Research</a></li>
+      <li><a href="/publications/">Publications</a></li>
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+
+  // Theme toggle
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    themeBtn.textContent = 'DARK';
+  }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      // re-trigger reveal for newly shown tab
+      triggerReveal();
+    });
+  });
+
+  // Card expand
+  function toggleCard(card) {
+    const panel = card.querySelector('.course-panel');
+    const isOpen = card.classList.contains('open');
+    // Close all in same grid
+    card.closest('.course-grid').querySelectorAll('.course-card.open').forEach(c => {
+      c.classList.remove('open');
+      c.querySelector('.course-panel').classList.remove('open');
+    });
+    if (!isOpen) {
+      card.classList.add('open');
+      panel.classList.add('open');
+    }
+  }
+
+  // Scroll reveal
+  function triggerReveal() {
+    const reveals = document.querySelectorAll('.tab-pane.active .reveal:not(.visible)');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 50);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    reveals.forEach(r => observer.observe(r));
+  }
+
+  triggerReveal();
+
+  // Also observe the stats bar
+  const statObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        statObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.stats-bar.reveal').forEach(el => statObserver.observe(el));
+</script>
+</body>
+</html>
