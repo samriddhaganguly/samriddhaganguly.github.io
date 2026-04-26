@@ -6,307 +6,581 @@
   <title>CV — Samriddha Ganguly</title>
   <meta property="og:title" content="Samriddha Ganguly">
   <meta property="og:description" content="Research in condensed matter, topology, and quantum systems.">
-  <meta property="og:url" content="https://samriddhaganguly.github.io/">
+  <meta property="og:url" content="https://samriddhaganguly.github.io/cv/">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://samriddhaganguly.github.io/assets/preview.png">
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/style.css"/>
   <style>
-    /* layout wrapper */
-.res-featured-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
+    /* ═══════ CV PAGE OVERRIDES + CARD SYSTEM ═══════ */
 
-/* main card */
-.res-featured {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.6rem 1.75rem;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  position: relative;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.25s ease;
-}
+    /* Section tabs */
+    .cv-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .cv-tabs::-webkit-scrollbar { display: none; }
+    .cv-tab {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.5rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .cv-tab:hover { color: var(--text-muted); }
+    .cv-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-/* LEFT ACCENT LINE (your style) */
-.res-featured::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 2px;
-  background: var(--accent);
-  opacity: 0.6;
-}
-
-/* hover motion */
-.res-featured:hover {
-  border-color: rgba(200,169,110,0.3);
-  transform: translateX(4px);
-}
-
-/* vertical tag */
-.res-featured-tag {
-  font-family: var(--mono);
-  font-size: 0.58rem;
-  color: var(--accent);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  writing-mode: vertical-lr;
-  transform: rotate(180deg);
-  opacity: 0.6;
-}
-
-/* body */
-.res-featured-body {
-  flex: 1;
-}
-
-/* title */
-.res-featured-title {
-  font-family: var(--serif);
-  font-size: 1.25rem;
-  font-weight: 400;
-  line-height: 1.35;
-  margin-bottom: 0.4rem;
-}
-
-/* meta */
-.res-featured-meta {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
-}
-
-/* description */
-.res-featured-desc {
-  font-size: 0.82rem;
-  color: var(--text-dim);
-  line-height: 1.75;
-}
-
-/* action button */
-.res-featured-action {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  color: var(--accent);
-  letter-spacing: 0.1em;
-  padding: 0.6rem 1.25rem;
-  border: 1px solid rgba(200,169,110,0.3);
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-
-/* hover effect */
-.res-featured:hover .res-featured-action {
-  background: rgba(200,169,110,0.08);
-}
+    /* Layout */
     .cv-layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 5rem;
+      grid-template-columns: 240px 1fr;
+      gap: 4rem;
       align-items: start;
     }
-    /* Sidebar */
-    .cv-sidebar { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 2.5rem; }
+    .cv-sidebar {
+      position: sticky;
+      top: 90px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
     .cv-sidebar-block {}
     .cv-sidebar-label {
       font-family: var(--mono);
-      font-size: 0.63rem;
+      font-size: 0.6rem;
       color: var(--accent);
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid var(--border);
     }
-    .cv-contact-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+
+    /* Contact */
+    .cv-contact-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
     .cv-contact-list li {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      font-size: 0.82rem;
+      gap: 0.65rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
-    .cv-contact-list li svg { color: var(--accent); flex-shrink: 0; }
-    .cv-contact-list a { color: var(--accent2); text-decoration: none; }
-    .cv-contact-list a:hover { text-decoration: underline; }
-    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
-    .skill-list li {
-      font-family: var(--mono);
-      font-size: 0.73rem;
-      color: var(--text-muted);
-      padding: 0.3rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .lang-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
+    .cv-contact-list li svg { color: var(--accent); flex-shrink: 0; opacity: 0.7; }
+    .cv-contact-list a { color: var(--accent2); text-decoration: none; font-size: 0.78rem; }
+    .cv-contact-list a:hover { color: var(--accent); }
 
-    /* Download box */
+    /* Skills */
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .skill-pill {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      padding: 0.25rem 0.65rem;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      cursor: default;
+    }
+    .skill-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Lang */
+    .lang-grid { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+    /* Download card */
     .cv-download {
-      border: 1px solid rgba(200,169,110,0.3);
-      padding: 1.75rem;
-      background: rgba(200,169,110,0.04);
-      margin-bottom: 3.5rem;
+      border: 1px solid rgba(200,169,110,0.25);
+      padding: 1.5rem 1.75rem;
+      background: rgba(200,169,110,0.03);
+      margin-bottom: 2.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1.5rem;
       flex-wrap: wrap;
-    }
-    .cv-download p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-    .cv-download strong {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-
-    /* CV Main */
-    .cv-main { display: flex; flex-direction: column; gap: 3.5rem; }
-    .cv-section {}
-    .cv-section-title {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .cv-entries { display: flex; flex-direction: column; gap: 0; }
-    .cv-entry {
-      border-left: 1px solid var(--border);
-      padding: 0.25rem 0 1.75rem 1.75rem;
       position: relative;
-      transition: border-color 0.3s;
+      overflow: hidden;
     }
-    .cv-entry:hover { border-color: rgba(200,169,110,0.3); }
-    .cv-entry::before {
+    .cv-download::before {
       content: '';
       position: absolute;
-      left: -5px; top: 8px;
-      width: 9px; height: 9px;
-      background: var(--accent);
-      border-radius: 50%;
-      border: 2px solid var(--bg);
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
     }
-    .ce-title {
+    .cv-download p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+    .cv-download strong {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    /* CV panel system */
+    .cv-panel { display: none; }
+    .cv-panel.active { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    /* ── EXPERIENCE CARD ── */
+    .exp-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .exp-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .exp-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200,169,110,0.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    }
+    .exp-card:hover::before { opacity: 1; }
+    .exp-card:hover::after { transform: scaleX(1); }
+
+    .exp-card-header {
+      padding: 1.5rem 1.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .exp-card-title {
       font-family: var(--serif);
       font-size: 1.1rem;
       font-weight: 400;
-      margin-bottom: 0.2rem;
       line-height: 1.3;
+      margin-bottom: 0.2rem;
     }
-    .ce-place { font-size: 0.82rem; color: var(--accent2); margin-bottom: 0.1rem; }
-    .ce-date {
+    .exp-card-place { font-size: 0.8rem; color: var(--accent2); margin-bottom: 0.15rem; }
+    .exp-card-date {
       font-family: var(--mono);
-      font-size: 0.63rem;
+      font-size: 0.6rem;
       color: var(--text-dim);
-      letter-spacing: 0.08em;
-      margin-bottom: 0.6rem;
-    }
-    .ce-detail {
-      font-size: 0.83rem;
-      color: var(--text-muted);
-      line-height: 1.75;
-    }
-    .ce-detail ul { padding-left: 1.1rem; margin-top: 0.4rem; }
-    .ce-detail li { margin-bottom: 0.3rem; }
-    .ce-grade {
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--accent);
-      border: 1px solid rgba(200,169,110,0.3);
-      padding: 0.15rem 0.6rem;
-      margin-top: 0.4rem;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+      padding: 0.25rem 0.65rem;
+      border: 1px solid var(--border);
+      height: fit-content;
+      flex-shrink: 0;
     }
 
-    /* Awards */
-    .award-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
-    .award-item {
-      background: var(--bg2);
-      padding: 1.25rem 1.75rem;
-      display: grid;
-      grid-template-columns: 60px 1fr auto;
-      gap: 1.25rem;
-      align-items: center;
-      transition: background 0.2s;
+    .exp-card-body {
+      padding: 0 1.75rem 1.5rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.8;
     }
-    .award-item:hover { background: var(--bg3); }
+    .exp-card-body ul { padding-left: 1.1rem; }
+    .exp-card-body li { margin-bottom: 0.3rem; }
+
+    .exp-card-footer {
+      padding: 0.85rem 1.75rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      background: rgba(255,255,255,0.015);
+    }
+
+    .exp-badge {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+    .exp-badge.gold { border-color: rgba(200,169,110,0.35); color: var(--accent); }
+    .exp-badge.blue { border-color: rgba(123,158,168,0.35); color: var(--accent2); }
+
+    /* Expandable detail toggle */
+    .exp-card-toggle {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+    .exp-card-toggle:hover { color: var(--accent); }
+    .exp-card-toggle .toggle-icon { transition: transform 0.3s; display: inline-block; }
+    .exp-card-toggle.open .toggle-icon { transform: rotate(180deg); }
+    .exp-card-extra {
+      display: none;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .exp-card-extra.open { display: block; }
+
+    /* ── AWARD CARD ── */
+    .award-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+    .award-card {
+      background: var(--bg2);
+      padding: 1.5rem 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.25s;
+      cursor: default;
+    }
+    .award-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .award-card:hover { transform: translateY(-3px); background: var(--bg3); }
+    .award-card:hover::before { transform: scaleX(1); }
     .award-year {
       font-family: var(--mono);
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
     }
     .award-name {
       font-family: var(--serif);
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.35;
+      margin-bottom: 0.4rem;
     }
     .award-amount {
       font-family: var(--mono);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
-      white-space: nowrap;
     }
+    .award-amount.notable { color: var(--accent2); }
 
-    /* Positions */
-    .pos-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .pos-item {
+    /* ── POSITION CARD ── */
+    .pos-grid {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1rem;
-      padding: 1rem 1.5rem;
+    }
+    .pos-card {
       border: 1px solid var(--border);
       background: var(--bg2);
-      transition: border-color 0.2s;
+      padding: 1.4rem 1.6rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s;
+      cursor: default;
     }
-    .pos-item:hover { border-color: rgba(200,169,110,0.25); }
+    .pos-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent2), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .pos-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(123,158,168,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .pos-card:hover::before { transform: scaleX(1); }
     .pos-role {
       font-family: var(--serif);
       font-size: 1rem;
       font-weight: 400;
+      margin-bottom: 0.25rem;
+      line-height: 1.3;
     }
-    .pos-org { font-size: 0.8rem; color: var(--text-muted); }
+    .pos-org { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem; }
     .pos-date {
       font-family: var(--mono);
-      font-size: 0.63rem;
-      color: var(--accent);
-      letter-spacing: 0.06em;
-      text-align: right;
-      padding-top: 2px;
+      font-size: 0.6rem;
+      color: var(--accent2);
+      letter-spacing: 0.08em;
     }
 
+    /* ── EDUCATION CARD ── */
+    .edu-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
+    .edu-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .edu-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200,169,110,0.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .edu-card:hover::before { opacity: 1; }
+    .edu-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .edu-degree {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+    .edu-grade {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      border: 1px solid rgba(200,169,110,0.3);
+      padding: 0.2rem 0.7rem;
+      white-space: nowrap;
+      height: fit-content;
+    }
+    .edu-inst { font-size: 0.82rem; color: var(--accent2); margin-bottom: 0.25rem; }
+    .edu-date {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.85rem;
+    }
+    .edu-courses {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .edu-courses-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .edu-tag-wrap { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.75rem; }
+    .edu-tag {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      padding: 0.18rem 0.55rem;
+      border: 1px solid var(--border);
+    }
+
+    /* ── PROJECT CARD ── */
+    .proj-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s;
+      display: flex;
+      gap: 0;
+    }
+    .proj-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .proj-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(200,169,110,0.3);
+      box-shadow: 0 16px 50px rgba(0,0,0,0.4);
+    }
+    .proj-card:hover::after { transform: scaleX(1); }
+    .proj-tag-side {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      padding: 1.5rem 0.85rem;
+      border-right: 1px solid var(--border);
+      opacity: 0.6;
+      background: rgba(200,169,110,0.03);
+    }
+    .proj-body { flex: 1; padding: 1.5rem 1.75rem; }
+    .proj-title {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+    .proj-role { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.6rem; }
+    .proj-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.8; }
+    .proj-action {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      padding: 1.5rem 1.25rem;
+      border-left: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .proj-card:hover .proj-action { background: rgba(200,169,110,0.06); }
+
+    /* Publication card */
+    .pub-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 1.6rem 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s;
+    }
+    .pub-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .pub-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200,169,110,0.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    }
+    .pub-card:hover::before { transform: scaleX(1); }
+    .pub-year {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.6rem;
+    }
+    .pub-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.4rem;
+    }
+    .pub-authors { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem; }
+    .pub-venue { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.85rem; }
+    .pub-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .badge {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      padding: 0.22rem 0.65rem;
+      text-decoration: none;
+    }
+    .badge-gold { border: 1px solid rgba(200,169,110,0.4); color: var(--accent); }
+    .badge-blue { border: 1px solid rgba(123,158,168,0.35); color: var(--accent2); }
+    .badge-purple { border: 1px solid rgba(160,123,181,0.35); color: var(--accent3); }
+    .badge-gold:hover { background: rgba(200,169,110,0.1); }
+
+    /* Section heading inside panel */
+    .panel-section { margin-bottom: 2.5rem; }
+    .panel-section-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--accent);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .panel-section-label::after {
+      content: attr(data-count);
+      font-size: 0.55rem;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.45rem;
+    }
+
+    /* Responsive */
     @media (max-width: 900px) {
       .cv-layout { grid-template-columns: 1fr; gap: 2.5rem; }
       .cv-sidebar { position: static; }
+      .award-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .award-grid { grid-template-columns: 1fr; }
+      .pos-grid { grid-template-columns: 1fr; }
+      .exp-card-header { flex-direction: column; gap: 0.5rem; }
     }
   </style>
 </head>
-  <script src="script.js"></script>
 <body>
 <nav>
   <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
-
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/research/">Research</a></li>
@@ -319,7 +593,7 @@
     <li><a href="/movies/">Cinema</a></li>
     <li><a href="/contact/">Contact</a></li>
   </ul>
-<button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
   <button class="nav-hamburger" id="menuBtn">
     <span></span><span></span><span></span>
   </button>
@@ -336,14 +610,14 @@
 
 <section class="section" style="background:var(--bg);">
   <div class="section-inner">
+
+    <!-- Download -->
     <div class="cv-download reveal">
       <div>
         <strong>Download Full CV</strong>
         <p>Complete curriculum vitæ in PDF format, updated February 2026.</p>
       </div>
-      <a href="/assets/Samriddha_Ganguly_CV.pdf" class="btn-primary" download>
-        ↓ Download PDF
-      </a>
+      <a href="/assets/Samriddha_Ganguly_CV.pdf" class="btn-primary" download>↓ Download PDF</a>
     </div>
 
     <div class="cv-layout">
@@ -353,15 +627,15 @@
           <div class="cv-sidebar-label">Contact</div>
           <ul class="cv-contact-list">
             <li>
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 4l8 9 8-9"/></svg>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="1"/><path d="M2 4l10 9 10-9"/></svg>
               <a href="mailto:samriddha22@iiserb.ac.in">samriddha22@iiserb.ac.in</a>
             </li>
             <li>
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
               +91-9830606317
             </li>
             <li>
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
               IISER Bhopal, MP, India
             </li>
           </ul>
@@ -369,15 +643,15 @@
 
         <div class="cv-sidebar-block">
           <div class="cv-sidebar-label">Programming</div>
-          <ul class="skill-list">
-            <li>Python</li>
-            <li>MATLAB</li>
-            <li>Mathematica</li>
-            <li>C / C++</li>
-            <li>Java</li>
-            <li>LaTeX</li>
-            <li>Linux / Bash</li>
-          </ul>
+          <div class="skill-pills">
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">MATLAB</span>
+            <span class="skill-pill">Mathematica</span>
+            <span class="skill-pill">C / C++</span>
+            <span class="skill-pill">Java</span>
+            <span class="skill-pill">LaTeX</span>
+            <span class="skill-pill">Linux / Bash</span>
+          </div>
         </div>
 
         <div class="cv-sidebar-block">
@@ -386,8 +660,8 @@
             <span class="tag">Bengali</span>
             <span class="tag">English</span>
             <span class="tag">Hindi</span>
-            <span class="tag" style="color:var(--text-dim);border-color:rgba(255,255,255,0.04)">Spanish (Elem.)</span>
-            <span class="tag" style="color:var(--text-dim);border-color:rgba(255,255,255,0.04)">German (Elem.)</span>
+            <span class="tag" style="color:var(--text-dim);border-color:var(--border)">Spanish (Elem.)</span>
+            <span class="tag" style="color:var(--text-dim);border-color:var(--border)">German (Elem.)</span>
           </div>
         </div>
 
@@ -398,232 +672,340 @@
             <a href="/research/" class="btn-outline" style="font-size:0.62rem;padding:0.5rem 1rem;">Research</a>
           </div>
         </div>
+
+        <!-- Mini stats -->
+        <div class="cv-sidebar-block">
+          <div class="cv-sidebar-label">At a Glance</div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-size:0.78rem;color:var(--text-muted);">Publications</span>
+              <span style="font-family:var(--mono);font-size:1.1rem;color:var(--accent);">2</span>
+            </div>
+            <div style="height:1px;background:var(--border);"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-size:0.78rem;color:var(--text-muted);">Fellowships</span>
+              <span style="font-family:var(--mono);font-size:1.1rem;color:var(--accent);">5</span>
+            </div>
+            <div style="height:1px;background:var(--border);"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-size:0.78rem;color:var(--text-muted);">CGPA</span>
+              <span style="font-family:var(--mono);font-size:1.1rem;color:var(--accent);">3.8</span>
+            </div>
+            <div style="height:1px;background:var(--border);"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-size:0.78rem;color:var(--text-muted);">AIR</span>
+              <span style="font-family:var(--mono);font-size:1.1rem;color:var(--accent);">#5 WB</span>
+            </div>
+          </div>
+        </div>
       </aside>
 
       <!-- MAIN -->
-      <main class="cv-main">
+      <main>
+        <!-- TABS -->
+        <div class="cv-tabs">
+          <button class="cv-tab active" data-panel="experience">Experience</button>
+          <button class="cv-tab" data-panel="education">Education</button>
+          <button class="cv-tab" data-panel="publications">Publications</button>
+          <button class="cv-tab" data-panel="awards">Awards</button>
+          <button class="cv-tab" data-panel="positions">Positions</button>
+          <button class="cv-tab" data-panel="projects">Projects</button>
+        </div>
 
-        <!-- EDUCATION -->
-        <div class="cv-section reveal">
-          <div class="cv-section-title">Education</div>
-          <div class="cv-entries">
-            <div class="cv-entry">
-              <div class="ce-title">BS–MS Dual Degree, Physics Major</div>
-              <div class="ce-place">Indian Institute of Science Education and Research (IISER) Bhopal</div>
-              <div class="ce-date">Dec 2022 – May 2027 (Expected)</div>
-              <div class="ce-detail">
-                <span class="ce-grade">CGPA 3.8 / 4.0</span>
-                <p style="margin-top:0.75rem;">Relevant Coursework: Quantum Mechanics I & II, Advanced Quantum Mechanics, Statistical Mechanics, Condensed Matter Physics, Numerical Methods, Electromagnetism, Classical Mechanics, Linear Algebra, Complex Variables, Probability & Statistics, Groups & Symmetry, Real Analysis, Mathematical Methods for Physicists, Decoherence & Open Quantum Systems.</p>
+        <!-- EXPERIENCE PANEL -->
+        <div class="cv-panel active" id="panel-experience">
+
+          <!-- Current -->
+          <div class="panel-section-label" data-count="CURRENT">Research Internship</div>
+          <div class="exp-card reveal">
+            <div class="exp-card-header">
+              <div>
+                <div class="exp-card-title">Research Intern</div>
+                <div class="exp-card-place">IISER Bhopal, under Prof. Ravi Prakash Singh</div>
+              </div>
+              <div class="exp-card-date">Summer 2026</div>
+            </div>
+            <div class="exp-card-body">
+              <p>SC–FM heterostructures, studying proximity-induced triplet pairing, spin transport, and interfacial superconductivity.</p>
+            </div>
+            <div class="exp-card-footer">
+              <span class="exp-badge gold">Ongoing</span>
+              <span class="exp-badge blue">Topological SC</span>
+              <span class="exp-badge">Heterostructures</span>
+            </div>
+          </div>
+
+          <!-- IISER Ganguli -->
+          <div class="exp-card reveal">
+            <div class="exp-card-header">
+              <div>
+                <div class="exp-card-title">Research Intern</div>
+                <div class="exp-card-place">IISER Bhopal, under Dr. Nirmal Ganguli</div>
+              </div>
+              <div class="exp-card-date">Jun – Oct 2025</div>
+            </div>
+            <div class="exp-card-body">
+              <ul>
+                <li>Studied classification of topological quantum matter with symmetries.</li>
+                <li>Comprehensive theoretical analysis of symmetry-protected topological Dirac nodal line (DNL) magnonic phases in layered honeycomb collinear antiferromagnets, including Interlayer Spin Canting Interactions.</li>
+                <li>Poster accepted at QMEC 2025 and 12th National Conference on Material Science, IIST Trivandrum.</li>
+              </ul>
+              <button class="exp-card-toggle" onclick="toggleExtra(this)">
+                Show posters & output <span class="toggle-icon">▾</span>
+              </button>
+              <div class="exp-card-extra">
+                <p style="font-size:0.8rem;color:var(--text-muted);">Working on a manuscript for journal submission on topological magnon nodal lines.</p>
               </div>
             </div>
-            <div class="cv-entry">
-              <div class="ce-title">Higher Secondary (XII)</div>
-              <div class="ce-place">St. Xavier's Institution, Kolkata</div>
-              <div class="ce-date">May 2020 – Apr 2022</div>
-              <div class="ce-detail"><span class="ce-grade">98.75%</span></div>
+            <div class="exp-card-footer">
+              <span class="exp-badge gold">2 Posters</span>
+              <span class="exp-badge blue">Topological Magnons</span>
+              <span class="exp-badge">QMEC 2025</span>
+              <span class="exp-badge">IIST Trivandrum</span>
             </div>
-            <div class="cv-entry">
-              <div class="ce-title">Secondary (X)</div>
-              <div class="ce-place">St. Xavier's Institution, Kolkata</div>
-              <div class="ce-date">June 2011 – Apr 2020</div>
-              <div class="ce-detail"><span class="ce-grade">98%</span></div>
+          </div>
+
+          <!-- TCS -->
+          <div class="exp-card reveal">
+            <div class="exp-card-header">
+              <div>
+                <div class="exp-card-title">TCS Research and Innovation Fellow</div>
+                <div class="exp-card-place">TCS Innovation Labs, IIT Kharagpur Research Park</div>
+              </div>
+              <div class="exp-card-date">May – Jul 2025 · Kolkata</div>
+            </div>
+            <div class="exp-card-body">
+              <ul>
+                <li>Worked in the Acoustic and Quantum Sensing Lab, gaining industrial R&D experience.</li>
+                <li>Contributed to pipeline leak detection research using deep learning on acoustic data, leading to an IEEE Sensors Letters publication.</li>
+              </ul>
+            </div>
+            <div class="exp-card-footer">
+              <span class="exp-badge gold">IEEE Publication</span>
+              <span class="exp-badge blue">Deep Learning</span>
+              <span class="exp-badge">Acoustic Sensing</span>
+            </div>
+          </div>
+
+          <!-- Berkeley -->
+          <div class="exp-card reveal">
+            <div class="exp-card-header">
+              <div>
+                <div class="exp-card-title">UC Berkeley REYES Research Fellow</div>
+                <div class="exp-card-place">Temple University (Remote), under Dr. Martha Constantinou</div>
+              </div>
+              <div class="exp-card-date">Jul – Aug 2024</div>
+            </div>
+            <div class="exp-card-body">
+              <p>Worked on the internal structure of hadrons from numerical simulations of Quantum Chromodynamics (QCD). Project: <em>"Internal structure of hadrons from numerical simulations of QCD."</em></p>
+            </div>
+            <div class="exp-card-footer">
+              <span class="exp-badge gold">UC Berkeley</span>
+              <span class="exp-badge blue">QCD</span>
+              <span class="exp-badge">Lattice QCD</span>
+            </div>
+          </div>
+
+          <!-- IISc -->
+          <div class="exp-card reveal">
+            <div class="exp-card-header">
+              <div>
+                <div class="exp-card-title">INSA–IASc–NASI Summer Research Fellow</div>
+                <div class="exp-card-place">Indian Institute of Science (IISc), Bengaluru — Dept. of Mathematics</div>
+              </div>
+              <div class="exp-card-date">May – Jul 2024 · Bangalore</div>
+            </div>
+            <div class="exp-card-body">
+              <p>Selected for prestigious Summer Research Fellowship. Worked under Dr. Arvind Ayyer on theoretical background of Markov Processes with emphasis on MCMC simulation of the 1-D Ising Model.</p>
+            </div>
+            <div class="exp-card-footer">
+              <span class="exp-badge gold">IISc</span>
+              <span class="exp-badge blue">MCMC</span>
+              <span class="exp-badge">Ising Model</span>
+            </div>
+          </div>
+
+          <!-- RAWS -->
+          <div class="exp-card reveal">
+            <div class="exp-card-header">
+              <div>
+                <div class="exp-card-title">RAWS Winter Scholar</div>
+                <div class="exp-card-place">IUCAA–NCRA TIFR, Pune</div>
+              </div>
+              <div class="exp-card-date">Dec 2023 · Pune</div>
+            </div>
+            <div class="exp-card-body">
+              <p>Attended the Radio Astronomy Winter School (RAWS) 2023. Learned radio astronomy fundamentals with hands-on experiments using radio observation equipment.</p>
+            </div>
+            <div class="exp-card-footer">
+              <span class="exp-badge blue">TIFR</span>
+              <span class="exp-badge">Radio Astronomy</span>
             </div>
           </div>
         </div>
 
-        <!-- RESEARCH EXPERIENCE -->
-        <div class="cv-section reveal">
-          <div class="cv-section-title">Research Experience</div>
-          <div class="cv-entries">
-            <div class="cv-entry">
-              <div class="ce-title">Research Intern</div>
-              <div class="ce-place">IISER Bhopal, under Dr. Nirmal Ganguli</div>
-              <div class="ce-date">Jun 2025 – Oct 2025 · Bhopal, India</div>
-              <div class="ce-detail">
-                <ul>
-                  <li>Studied classification of topological quantum matter with symmetries.</li>
-                  <li>Carried out comprehensive theoretical analysis of symmetry-protected topological Dirac nodal line (DNL) magnonic phases in layered honeycomb collinear antiferromagnets, including effects of Interlayer Spin Canting Interactions.</li>
-                  <li>Work accepted for Poster Presentation at 12th National Conference on Material Science, IIST Trivandrum.</li>
-                  <li>Also presented at QMEC 2025 (International Conference on Quantum Materials and Emerging Concepts).</li>
-                  <li>Further working on a manuscript for journal submission.</li>
-                </ul>
-              </div>
+        <!-- EDUCATION PANEL -->
+        <div class="cv-panel" id="panel-education">
+          <div class="edu-card reveal">
+            <div class="edu-card-header">
+              <div class="edu-degree">BS–MS Dual Degree, Physics Major</div>
+              <div class="edu-grade">CGPA 3.8 / 4.0</div>
             </div>
-            <div class="cv-entry">
-              <div class="ce-title">TCS Research and Innovation Fellow</div>
-              <div class="ce-place">TCS Innovation Labs, IIT Kharagpur Research Park</div>
-              <div class="ce-date">May 2025 – Jul 2025 · Kolkata, India</div>
-              <div class="ce-detail">
-                <ul>
-                  <li>Worked in the Acoustic and Quantum Sensing Lab, gaining industrial R&D experience.</li>
-                  <li>Contributed to pipeline leak detection research using deep learning on acoustic data, leading to an IEEE Sensors Letters publication.</li>
-                </ul>
-              </div>
+            <div class="edu-inst">Indian Institute of Science Education and Research (IISER) Bhopal</div>
+            <div class="edu-date">Dec 2022 – May 2027 (Expected)</div>
+            <div class="edu-courses-label">Relevant Coursework</div>
+            <div class="edu-tag-wrap">
+              <span class="edu-tag">Quantum Mechanics I & II</span>
+              <span class="edu-tag">Advanced QM</span>
+              <span class="edu-tag">Statistical Mechanics</span>
+              <span class="edu-tag">Condensed Matter Physics</span>
+              <span class="edu-tag">Numerical Methods</span>
+              <span class="edu-tag">Electromagnetism</span>
+              <span class="edu-tag">Classical Mechanics</span>
+              <span class="edu-tag">Linear Algebra</span>
+              <span class="edu-tag">Complex Variables</span>
+              <span class="edu-tag">Probability & Statistics</span>
+              <span class="edu-tag">Groups & Symmetry</span>
+              <span class="edu-tag">Real Analysis</span>
+              <span class="edu-tag">Mathematical Methods</span>
+              <span class="edu-tag">Decoherence & Open QS</span>
             </div>
-            <div class="cv-entry">
-              <div class="ce-title">UC Berkeley REYES Research Fellow</div>
-              <div class="ce-place">Temple University (Remote), under Dr. Martha Constantinou</div>
-              <div class="ce-date">Jul 2024 – Aug 2024</div>
-              <div class="ce-detail">
-                Worked on the internal structure of hadrons from numerical simulations of Quantum Chromodynamics (QCD). Project titled <em>"Internal structure of hadrons from numerical simulations of Quantum Chromodynamics."</em>
-              </div>
+          </div>
+
+          <div class="edu-card reveal">
+            <div class="edu-card-header">
+              <div class="edu-degree">Higher Secondary (XII)</div>
+              <div class="edu-grade">98.75%</div>
             </div>
-            <div class="cv-entry">
-              <div class="ce-title">INSA–IASc–NASI Summer Research Fellow</div>
-              <div class="ce-place">Indian Institute of Science (IISc), Bengaluru — Dept. of Mathematics</div>
-              <div class="ce-date">May 2024 – Jul 2024 · Bangalore, India</div>
-              <div class="ce-detail">
-                Selected for prestigious Summer Research Fellowship. Worked under Dr. Arvind Ayyer on theoretical background of Markov Processes with emphasis on MCMC simulation of the 1-D Ising Model.
-              </div>
+            <div class="edu-inst">St. Xavier's Institution, Kolkata</div>
+            <div class="edu-date">May 2020 – Apr 2022</div>
+          </div>
+
+          <div class="edu-card reveal">
+            <div class="edu-card-header">
+              <div class="edu-degree">Secondary (X)</div>
+              <div class="edu-grade">98%</div>
             </div>
-            <div class="cv-entry">
-              <div class="ce-title">RAWS Winter Scholar</div>
-              <div class="ce-place">IUCAA–NCRA TIFR, Pune</div>
-              <div class="ce-date">Dec 2023 · Pune, India</div>
-              <div class="ce-detail">
-                Attended the Radio Astronomy Winter School (RAWS) 2023. Learned radio astronomy fundamentals with hands-on experiments using radio observation equipment.
-              </div>
+            <div class="edu-inst">St. Xavier's Institution, Kolkata</div>
+            <div class="edu-date">June 2011 – Apr 2020</div>
+          </div>
+        </div>
+
+        <!-- PUBLICATIONS PANEL -->
+        <div class="cv-panel" id="panel-publications">
+          <div class="pub-card reveal">
+            <div class="pub-year">2026</div>
+            <div class="pub-title">Decoherence of chiral magnon edge modes in a topological bosonic Chern insulator</div>
+            <div class="pub-authors"><strong style="color:var(--accent)">Samriddha Ganguly</strong></div>
+            <div class="pub-venue">Journal of Physics: Condensed Matter, 38, 075801 (2026) — Focus Issue on Topological Physics</div>
+            <div class="pub-badges">
+              <a class="badge badge-gold" href="https://doi.org/10.1088/1361-648X/ae44df" target="_blank">DOI ↗</a>
+              <span class="badge badge-purple">Focus Issue</span>
+              <span class="badge badge-blue">Condensed Matter</span>
+            </div>
+          </div>
+
+          <div class="pub-card reveal">
+            <div class="pub-year">2025</div>
+            <div class="pub-title">A Data-Driven Approach to Leak Identification and Severity Analysis in Pipelines Using Acoustic Sensing and Deep Learning</div>
+            <div class="pub-authors">Mayukh Biswas; Aditya Narayan; Debaudh Ghosh; <strong style="color:var(--accent)">Samriddha Ganguly</strong>; Raj Rakshit; Chirabrata Bhaumik</div>
+            <div class="pub-venue">IEEE Sensors Letters, 10(1) (2025) · doi:10.1109/LSENS.2025.3638602</div>
+            <div class="pub-badges">
+              <a class="badge badge-gold" href="https://doi.org/10.1109/LSENS.2025.3638602" target="_blank">DOI ↗</a>
+              <span class="badge badge-blue">IEEE</span>
             </div>
           </div>
         </div>
 
-        <!-- PUBLICATIONS -->
-        <div class="cv-section reveal">
-          <div class="cv-section-title">Publications</div>
-          <div class="cv-entries">
-            <div class="cv-entry">
-              <div class="ce-title" style="font-size:1rem;">Decoherence of chiral magnon edge modes in a topological bosonic Chern insulator</div>
-              <div class="ce-place"><strong style="color:var(--accent)">Samriddha Ganguly</strong></div>
-              <div class="ce-date">Journal of Physics: Condensed Matter, 38, 075801 (2026) · doi:10.1088/1361-648X/ae44df</div>
-              <div class="ce-detail">Focus Issue on Topological Physics: From Fundamentals to Applications.</div>
+        <!-- AWARDS PANEL -->
+        <div class="cv-panel" id="panel-awards">
+          <div class="award-grid reveal">
+            <div class="award-card">
+              <div class="award-year">2025</div>
+              <div class="award-name">TCS Research and Innovation Fellowship</div>
+              <div class="award-amount notable">₹50,000</div>
             </div>
-            <div class="cv-entry">
-              <div class="ce-title" style="font-size:1rem;">A Data-Driven Approach to Leak Identification and Severity Analysis in Pipelines Using Acoustic Sensing and Deep Learning</div>
-              <div class="ce-place">Mayukh Biswas; Aditya Narayan; Debaudh Ghosh; <strong style="color:var(--accent)">Samriddha Ganguly</strong>; Raj Rakshit; Chirabrata Bhaumik</div>
-              <div class="ce-date">IEEE Sensors Letters, 10(1) (2025) · doi:10.1109/LSENS.2025.3638602</div>
+            <div class="award-card">
+              <div class="award-year">2023</div>
+              <div class="award-name">CNR Rao Education Foundation Prize — Highest CPI, First Year</div>
+              <div class="award-amount">₹5,000</div>
             </div>
-          </div>
-        </div>
-
-        <!-- AWARDS -->
-        <div class="cv-section reveal">
-          <div class="cv-section-title">Awards & Fellowships</div>
-          <div class="award-list">
-            <div class="award-item">
-              <span class="award-year">2025</span>
-              <span class="award-name">TCS Research and Innovation Fellowship</span>
-              <span class="award-amount">₹50,000</span>
+            <div class="award-card">
+              <div class="award-year">2022</div>
+              <div class="award-name">Academic Excellence — AIR 5 in West Bengal HS Examination</div>
+              <div class="award-amount">—</div>
             </div>
-            <div class="award-item">
-              <span class="award-year">2023</span>
-              <span class="award-name">CNR Rao Education Foundation Prize — Highest CPI, First Year</span>
-              <span class="award-amount">₹5,000</span>
+            <div class="award-card">
+              <div class="award-year">2022</div>
+              <div class="award-name">DST INSPIRE Fellow</div>
+              <div class="award-amount notable">₹3,00,000</div>
             </div>
-            <div class="award-item">
-              <span class="award-year">2022</span>
-              <span class="award-name">Academic Excellence — AIR 5 in West Bengal HS Examination</span>
-              <span class="award-amount">–</span>
+            <div class="award-card">
+              <div class="award-year">2020</div>
+              <div class="award-name">JBNSTS Junior Fellow</div>
+              <div class="award-amount notable">₹40,000</div>
             </div>
-            <div class="award-item">
-              <span class="award-year">2022</span>
-              <span class="award-name">DST INSPIRE Fellow</span>
-              <span class="award-amount">₹3,00,000</span>
-            </div>
-            <div class="award-item">
-              <span class="award-year">2020</span>
-              <span class="award-name">JBNSTS Junior Fellow</span>
-              <span class="award-amount">₹40,000</span>
-            </div>
-            <div class="award-item">
-              <span class="award-year">2020</span>
-              <span class="award-name">INSA–IASc–NASI Summer Research Fellowship</span>
-              <span class="award-amount">₹25,000</span>
+            <div class="award-card">
+              <div class="award-year">2020</div>
+              <div class="award-name">INSA–IASc–NASI Summer Research Fellowship</div>
+              <div class="award-amount">₹25,000</div>
             </div>
           </div>
         </div>
 
-        <!-- POSITIONS -->
-        <div class="cv-section reveal">
-          <div class="cv-section-title">Positions of Responsibility</div>
-          <div class="pos-list">
-            <div class="pos-item">
-              <div>
-                <div class="pos-role">Secretary, Science Council</div>
-                <div class="pos-org">IISER Bhopal</div>
-              </div>
-              <div class="pos-date">2024–2025</div>
+        <!-- POSITIONS PANEL -->
+        <div class="cv-panel" id="panel-positions">
+          <div class="pos-grid">
+            <div class="pos-card reveal">
+              <div class="pos-role">Secretary, Science Council</div>
+              <div class="pos-org">IISER Bhopal</div>
+              <div class="pos-date">2024 – 2025</div>
             </div>
-            <div class="pos-item">
-              <div>
-                <div class="pos-role">Peer Counselor</div>
-                <div class="pos-org">Counselling Cell, IISER Bhopal</div>
-              </div>
-              <div class="pos-date">2023–2024</div>
+            <div class="pos-card reveal">
+              <div class="pos-role">Peer Counselor</div>
+              <div class="pos-org">Counselling Cell, IISER Bhopal</div>
+              <div class="pos-date">2023 – 2024</div>
             </div>
-            <div class="pos-item">
-              <div>
-                <div class="pos-role">Departmental Representative, Dept. of Mathematics</div>
-                <div class="pos-org">IISER Bhopal</div>
-              </div>
-              <div class="pos-date">2023–2024</div>
+            <div class="pos-card reveal">
+              <div class="pos-role">Departmental Representative</div>
+              <div class="pos-org">Dept. of Mathematics, IISER Bhopal</div>
+              <div class="pos-date">2023 – 2024</div>
             </div>
-            <div class="pos-item">
-              <div>
-                <div class="pos-role">Student Mentor</div>
-                <div class="pos-org">Student Development Council, IISER Bhopal</div>
-              </div>
-              <div class="pos-date">2023–Present</div>
+            <div class="pos-card reveal">
+              <div class="pos-role">Student Mentor</div>
+              <div class="pos-org">Student Development Council, IISER Bhopal</div>
+              <div class="pos-date">2023 – Present</div>
             </div>
-            <div class="pos-item">
-              <div>
-                <div class="pos-role">Quiz Club Core Committee</div>
-                <div class="pos-org">IISER Bhopal</div>
-              </div>
-              <div class="pos-date">2023–Present</div>
+            <div class="pos-card reveal">
+              <div class="pos-role">Quiz Club Core Committee</div>
+              <div class="pos-org">IISER Bhopal</div>
+              <div class="pos-date">2023 – Present</div>
             </div>
           </div>
         </div>
 
-        <!-- INITIATIVES -->
-<div class="cv-section reveal">
-  <div class="cv-section-title">Initiatives & Projects</div>
+        <!-- PROJECTS PANEL -->
+        <div class="cv-panel" id="panel-projects">
+          <a href="https://openboard-web.vercel.app/" target="_blank" class="proj-card reveal" style="text-decoration:none;color:inherit;">
+            <div class="proj-tag-side">PROJECT</div>
+            <div class="proj-body">
+              <div class="proj-title">open_board</div>
+              <div class="proj-role">Co-Founder & Lead Developer</div>
+              <div class="proj-desc">An interdisciplinary knowledge-sharing platform for students to present projects and research to non-specialist audiences in live sessions.</div>
+            </div>
+            <div class="proj-action">OPEN ↗</div>
+          </a>
 
-  <div class="res-featured-list">
-
-    <!-- open_board -->
-    <a href="https://openboard-web.vercel.app/" target="_blank" class="res-featured">
-      
-      <div class="res-featured-tag">PROJECT</div>
-
-      <div class="res-featured-body">
-        <div class="res-featured-title">open_board</div>
-        <div class="res-featured-meta">Co-Founder & Lead Developer</div>
-        <div class="res-featured-desc">
-          An interdisciplinary knowledge-sharing platform for students to present projects and research to non-specialist audiences in live sessions.
+          <a href="https://physicsiiserb.vercel.app/" target="_blank" class="proj-card reveal" style="text-decoration:none;color:inherit;">
+            <div class="proj-tag-side">PLATFORM</div>
+            <div class="proj-body">
+              <div class="proj-title">A Hitchhiker's Guide to Physics @ IISERB</div>
+              <div class="proj-role">Lead Developer</div>
+              <div class="proj-desc">Comprehensive physics department website centralizing academic resources, course guides, notes, and a domain-restricted student forum.</div>
+            </div>
+            <div class="proj-action">VISIT ↗</div>
+          </a>
         </div>
-      </div>
-
-      <div class="res-featured-action">OPEN ↗</div>
-    </a>
-
-    <!-- Hitchhiker -->
-    <a href="https://physicsiiserb.vercel.app/" target="_blank" class="res-featured">
-      
-      <div class="res-featured-tag">PLATFORM</div>
-
-      <div class="res-featured-body">
-        <div class="res-featured-title">A Hitchhiker’s Guide to Physics @ IISERB</div>
-        <div class="res-featured-meta">Lead Developer</div>
-        <div class="res-featured-desc">
-          Built a comprehensive physics department website centralizing academic resources, course guides, notes, and a domain-restricted student forum.
-        </div>
-      </div>
-
-      <div class="res-featured-action">VISIT ↗</div>
-    </a>
-
-  </div>
-</div>
 
       </main>
     </div>
@@ -643,28 +1025,61 @@
 </footer>
 
 <script>
+  // Mobile nav
   document.getElementById('menuBtn').addEventListener('click', () => {
     document.querySelector('.nav-links').classList.toggle('open');
   });
+
+  // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver(entries => {
     entries.forEach((e, i) => {
-      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); }
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 70);
+        obs.unobserve(e.target);
+      }
     });
-  }, { threshold: 0.08 });
+  }, { threshold: 0.06 });
   reveals.forEach(r => obs.observe(r));
+
   // Theme toggle
-const themeBtn = document.getElementById('themeBtn');
-const saved = localStorage.getItem('theme');
-if (saved === 'light') {
-  document.body.classList.add('light');
-  themeBtn.textContent = 'DARK';
-}
-themeBtn.addEventListener('click', () => {
-  const isLight = document.body.classList.toggle('light');
-  themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-});
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    themeBtn.textContent = 'DARK';
+  }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+
+  // Tab switching
+  const tabs = document.querySelectorAll('.cv-tab');
+  const panels = document.querySelectorAll('.cv-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const panel = document.getElementById('panel-' + tab.dataset.panel);
+      panel.classList.add('active');
+      // Re-trigger reveals in newly shown panel
+      panel.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 70);
+      });
+    });
+  });
+
+  // Expandable detail toggle
+  function toggleExtra(btn) {
+    btn.classList.toggle('open');
+    const extra = btn.nextElementSibling;
+    extra.classList.toggle('open');
+    btn.querySelector('.toggle-icon').style.transform =
+      btn.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
 </script>
 </body>
 </html>
