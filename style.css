@@ -27,7 +27,7 @@
 }
 /* ── LIGHT MODE ── */
 body.light {
---bg:      #f8f6f2;   /* near-white, just a breath of warmth */
+--bg:      #ffffff;   /* near-white, just a breath of warmth */
 --bg2:     #fdfcfa;   /* cards — almost pure white */
 --bg3:     #f2efe9;   /* subtle contrast */
 --surface: #ffffff;
