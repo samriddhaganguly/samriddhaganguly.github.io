@@ -142,7 +142,7 @@
     <li><a href="/movies/">Cinema</a></li>
     <li><a href="/contact/">Contact</a></li>
   </ul>
-
+<button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
   <button class="nav-hamburger" id="menuBtn">
     <span></span><span></span><span></span>
   </button>
@@ -343,6 +343,18 @@
     });
   }, { threshold: 0.08 });
   reveals.forEach(r => obs.observe(r));
+  // Theme toggle
+const themeBtn = document.getElementById('themeBtn');
+const saved = localStorage.getItem('theme');
+if (saved === 'light') {
+  document.body.classList.add('light');
+  themeBtn.textContent = 'DARK';
+}
+themeBtn.addEventListener('click', () => {
+  const isLight = document.body.classList.toggle('light');
+  themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+});
 </script>
 </body>
 </html>
