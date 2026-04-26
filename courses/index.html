@@ -274,7 +274,7 @@
     /* Stats bar */
     .stats-bar {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
@@ -443,10 +443,6 @@
         <div class="stat-key">Credits Earned</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-val">9.42</div>
-        <div class="stat-key">CPI / 10</div>
-      </div>
-      <div class="stat-cell">
         <div class="stat-val">9</div>
         <div class="stat-key">Semesters</div>
       </div>
@@ -458,7 +454,7 @@
 
     <!-- TAB BAR -->
     <div class="tab-bar">
-      <button class="tab-btn active" data-tab="current">Current (Sem IX)</button>
+      <button class="tab-btn active" data-tab="current">Current (Sem VIII)</button>
       <button class="tab-btn" data-tab="s8">Semester VIII</button>
       <button class="tab-btn" data-tab="s7">Semester VII</button>
       <button class="tab-btn" data-tab="s6">Semester VI</button>
@@ -803,7 +799,7 @@
 
 
     <!-- ═══════════════════ SEMESTER VIII (2025-26 Sem I) ═══════════════════ -->
-    <div class="tab-pane" id="tab-s8">
+    <div class="tab-pane" id="tab-s7">
       <div class="sem-label">2025–2026 · Semester I</div>
       <div class="course-grid">
 
@@ -1108,7 +1104,7 @@
 
 
     <!-- ═══════════════════ SEMESTER VII (2024-25 Sem II) ═══════════════════ -->
-    <div class="tab-pane" id="tab-s7">
+    <div class="tab-pane" id="tab-s6">
       <div class="sem-label">2024–2025 · Semester II</div>
       <div class="course-grid">
 
@@ -1345,7 +1341,7 @@
 
 
     <!-- ═══════════════════ SEMESTER VI (2024-25 Sem I) ═══════════════════ -->
-    <div class="tab-pane" id="tab-s6">
+    <div class="tab-pane" id="tab-s5">
       <div class="sem-label">2024–2025 · Semester I</div>
       <div class="course-grid">
 
@@ -1561,7 +1557,7 @@
 
 
     <!-- ═══════════════════ SEMESTER V (2023-24 Sem II) ═══════════════════ -->
-    <div class="tab-pane" id="tab-s5">
+    <div class="tab-pane" id="tab-s4">
       <div class="sem-label">2023–2024 · Semester II</div>
       <div class="course-grid">
 
@@ -1763,7 +1759,7 @@
 
 
     <!-- ═══════════════════ SEMESTER IV (2023-24 Sem I) ═══════════════════ -->
-    <div class="tab-pane" id="tab-s4">
+    <div class="tab-pane" id="tab-s3">
       <div class="sem-label">2023–2024 · Semester I</div>
       <div class="course-grid">
 
@@ -1972,182 +1968,7 @@
     </div><!-- /s4 -->
 
 
-    <!-- ═══════════════════ SEMESTER III (2023-24 Sem I) ═══════════════════ -->
-    <div class="tab-pane" id="tab-s3">
-      <div class="sem-label">2023–2024 · Semester I</div>
-      <div class="course-grid">
-
-        <div class="course-card reveal" onclick="toggleCard(this)">
-          <div class="course-card-header">
-            <div><div class="course-code">CHM211 · 3 Credits</div><div class="course-title-text">Basic Organic Chemistry II</div></div>
-          </div>
-          <div class="course-card-meta">Instructor: <span>Prof. Ananya Banik</span></div>
-          <div class="course-card-tags"><span class="ctag">Organic</span><span class="ctag">Reactions</span><span class="ctag">Synthesis</span></div>
-          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
-          <div class="course-panel">
-            <div class="course-panel-inner">
-              <div class="panel-section">
-                <div class="panel-section-title">Topics Covered</div>
-                <ul class="panel-list">
-                  <li>Carbonyl chemistry, aldehydes & ketones</li>
-                  <li>Carboxylic acids and derivatives</li>
-                  <li>Amines, aromatic chemistry</li>
-                  <li>Multi-step synthesis strategies</li>
-                </ul>
-              </div>
-              <div class="panel-thought">Enjoyable as a puzzle-solving exercise — organic synthesis has an aesthetic to it. Not directly relevant to my current research, but the problem-solving discipline transfers.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="course-card reveal" onclick="toggleCard(this)">
-          <div class="course-card-header">
-            <div><div class="course-code">CHM221 · 3 Credits</div><div class="course-title-text">Basic Physical Chemistry</div></div>
-          </div>
-          <div class="course-card-meta">Instructor: <span>Prof. Manish Kumar</span></div>
-          <div class="course-card-tags"><span class="ctag">Kinetics</span><span class="ctag">Quantum Chem</span><span class="ctag">Spectroscopy</span></div>
-          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
-          <div class="course-panel">
-            <div class="course-panel-inner">
-              <div class="panel-section">
-                <div class="panel-section-title">Topics Covered</div>
-                <ul class="panel-list">
-                  <li>Chemical kinetics, rate laws, mechanisms</li>
-                  <li>Quantum chemistry: particle in a box, molecular orbitals</li>
-                  <li>Rotational, vibrational, electronic spectroscopy</li>
-                  <li>Statistical thermodynamics intro</li>
-                </ul>
-              </div>
-              <div class="panel-thought">The statistical thermodynamics intro here paired well with my physics stat mech course. The spectroscopy section was my first encounter with energy quantisation in a chemistry context.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="course-card reveal" onclick="toggleCard(this)">
-          <div class="course-card-header">
-            <div><div class="course-code">CHM223 · 1 Credit</div><div class="course-title-text">Chemistry Laboratory II</div></div>
-          </div>
-          <div class="course-card-meta">Instructor: <span>Prof. Manish Kumar</span></div>
-          <div class="course-card-tags"><span class="ctag">Lab</span><span class="ctag">Organic Synthesis</span></div>
-          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
-          <div class="course-panel">
-            <div class="course-panel-inner">
-              <div class="panel-section">
-                <div class="panel-section-title">Experiments</div>
-                <ul class="panel-list">
-                  <li>Multi-step organic synthesis: aspirin, paracetamol</li>
-                  <li>TLC for product identification</li>
-                  <li>Recrystallisation and melting point determination</li>
-                </ul>
-              </div>
-              <div class="panel-thought">Synthesis lab — satisfying when the reaction works, frustrating when it doesn't. Good practice in experimental patience.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="course-card reveal" onclick="toggleCard(this)">
-          <div class="course-card-header">
-            <div><div class="course-code">MTH201 · 3 Credits</div><div class="course-title-text">Multivariable Calculus</div></div>
-          </div>
-          <div class="course-card-meta">Instructor: <span>Prof. Ramakrishna Nanduri</span></div>
-          <div class="course-card-tags"><span class="ctag">Vector Calculus</span><span class="ctag">Stokes</span><span class="ctag">Manifolds</span></div>
-          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
-          <div class="course-panel">
-            <div class="course-panel-inner">
-              <div class="panel-section">
-                <div class="panel-section-title">Topics Covered</div>
-                <ul class="panel-list">
-                  <li>Partial derivatives, gradient, divergence, curl</li>
-                  <li>Multiple integrals: change of variables</li>
-                  <li>Line and surface integrals</li>
-                  <li>Green's, Stokes', Divergence theorems</li>
-                  <li>Introduction to differential geometry</li>
-                </ul>
-              </div>
-              <div class="panel-thought">Stokes' theorem generalises beautifully into differential forms and de Rham cohomology — the foundation for everything topological I do now. This course planted that seed.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="course-card reveal" onclick="toggleCard(this)">
-          <div class="course-card-header">
-            <div><div class="course-code">MTH203 · 3 Credits</div><div class="course-title-text">Introduction to Groups and Symmetry</div></div>
-          </div>
-          <div class="course-card-meta">Instructor: <span>Prof. Debashis Ghoshal</span></div>
-          <div class="course-card-tags"><span class="ctag">Group Theory</span><span class="ctag">Representations</span><span class="ctag">Lie Groups</span></div>
-          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
-          <div class="course-panel">
-            <div class="course-panel-inner">
-              <div class="panel-section">
-                <div class="panel-section-title">References</div>
-                <ul class="panel-list">
-                  <li>Artin — Algebra</li>
-                  <li>Georgi — Lie Algebras in Particle Physics</li>
-                  <li>Zee — Group Theory in a Nutshell for Physicists</li>
-                </ul>
-              </div>
-              <div class="panel-section">
-                <div class="panel-section-title">Topics Covered</div>
-                <ul class="panel-list">
-                  <li>Groups, subgroups, quotient groups, homomorphisms</li>
-                  <li>Group representations, characters, Schur's lemma</li>
-                  <li>Point groups and crystal symmetry</li>
-                  <li>Lie groups and Lie algebras: SO(3), SU(2), SU(3)</li>
-                </ul>
-              </div>
-              <div class="panel-thought">The single most useful mathematics course for my research. Understanding representation theory changed how I think about Hamiltonians, topological invariants, and symmetry classes. A course I return to constantly.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="course-card reveal" onclick="toggleCard(this)">
-          <div class="course-card-header">
-            <div><div class="course-code">PHY201 · 3 Credits</div><div class="course-title-text">Waves and Optics</div></div>
-          </div>
-          <div class="course-card-meta">Instructor: <span>Prof. Saurabh Basu</span></div>
-          <div class="course-card-tags"><span class="ctag">Waves</span><span class="ctag">Interference</span><span class="ctag">Diffraction</span></div>
-          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
-          <div class="course-panel">
-            <div class="course-panel-inner">
-              <div class="panel-section">
-                <div class="panel-section-title">Topics Covered</div>
-                <ul class="panel-list">
-                  <li>Mechanical and EM waves, superposition</li>
-                  <li>Interference, diffraction, polarisation</li>
-                  <li>Fourier decomposition of wave packets</li>
-                </ul>
-              </div>
-              <div class="panel-thought">Fourier analysis of wave packets felt like the seed from which quantum mechanics would later grow. A conceptually rich course.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="course-card reveal" onclick="toggleCard(this)">
-          <div class="course-card-header">
-            <div><div class="course-code">PHY205 · 1 Credit</div><div class="course-title-text">General Physics Laboratory II</div></div>
-          </div>
-          <div class="course-card-meta">Instructor: <span>Prof. Rajesh Kumar</span></div>
-          <div class="course-card-tags"><span class="ctag">Lab</span><span class="ctag">Optics</span></div>
-          <div class="course-card-expand">Details <span class="expand-arrow">›</span></div>
-          <div class="course-panel">
-            <div class="course-panel-inner">
-              <div class="panel-section">
-                <div class="panel-section-title">Experiments</div>
-                <ul class="panel-list">
-                  <li>Newton's rings and interference patterns</li>
-                  <li>Polarimetry and optical rotation</li>
-                  <li>Acoustic resonance in air columns</li>
-                  <li>Young's modulus by bending beam</li>
-                </ul>
-              </div>
-              <div class="panel-thought">Hands-on wave optics — watching interference fringes shift in real time is a pleasingly direct demonstration of the wave nature of light.</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div><!-- /s3 -->
-
+    
 
     <!-- ═══════════════════ SEMESTER II (2022-23 Sem II) ═══════════════════ -->
     <div class="tab-pane" id="tab-s2">
