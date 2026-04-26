@@ -35,9 +35,9 @@ body.light {
   --text:       #1a1816;
   --text-muted: #5f5a52;
   --text-dim:   #8a847a;
-  --accent:     #a07840;   /* gold — hovers, buttons, underlines */
-  --accent2:    #1a3a5c;   /* fountain pen navy — institution labels, tags */
-  --accent3:    #2c5282;   /* deeper ink blue — secondary highlights */
+--accent:  #1e3a5f;   /* deep fountain pen blue */
+--accent2: #4a7c96;   /* slate blue-grey */
+--accent3: #6b4f8a;   /* muted violet */
   --accent-soft: #e8dcc6;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
