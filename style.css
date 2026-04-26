@@ -7,10 +7,10 @@
 
 /* ── TOKENS ── */
 :root {
-  --bg:         #04080f;   /* near-black navy */
-  --bg2:        #070d1a;   /* cards */
-  --bg3:        #0a1120;   /* section contrast */
-  --surface:    #0d1628;   /* surfaces */
+--bg:      #f0ede8;   /* cooler, less creamy */
+--bg2:     #f7f5f2;   /* cards */
+--bg3:     #e8e4de;   /* section contrast */
+--surface: #ffffff;
   --border:     rgba(100,140,200,0.09);  /* blue-tinted border */
   --accent:     #c8a96e;   /* gold — unchanged */
   --accent2:    #7b9ea8;   /* steel blue — unchanged */
