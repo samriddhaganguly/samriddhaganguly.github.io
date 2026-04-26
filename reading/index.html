@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Reading — Samriddha Ganguly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/style.css"/>
+  <style>
+
+    /* ══════════════════════════════════════
+       READING PAGE
+    ══════════════════════════════════════ */
+
+    /* Tab switcher */
+    .read-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4rem;
+    }
+    .read-tab {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .read-tab:hover { color: var(--text-muted); }
+    .read-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .read-tab-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.5;
+    }
+    .read-tab.active .read-tab-dot { opacity: 1; animation: pulse-dot 2s infinite; }
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.6; }
+    }
+
+    /* Panel */
+    .read-panel { display: none; }
+    .read-panel.active { display: block; }
+
+    /* ═══ NON-ACADEMIC: BOOKSHELF ═══ */
+
+    /* Currently reading hero */
+    .now-reading-hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin-bottom: 4rem;
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden;
+    }
+    .now-reading-hero::before {
+      content: 'NOW READING';
+      position: absolute;
+      top: 1.25rem; right: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      opacity: 0.5;
+    }
+    .now-reading-hero::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), var(--accent2), transparent);
+    }
+
+    /* Animated book */
+    .book-3d {
+      width: 110px;
+      perspective: 600px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .book-inner {
+      width: 110px;
+      height: 155px;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateY(-20deg) rotateX(4deg);
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+      animation: book-float 4s ease-in-out infinite;
+    }
+    .book-3d:hover .book-inner {
+      transform: rotateY(-35deg) rotateX(6deg) scale(1.04);
+      animation-play-state: paused;
+    }
+    @keyframes book-float {
+      0%, 100% { transform: rotateY(-20deg) rotateX(4deg) translateY(0); }
+      50% { transform: rotateY(-20deg) rotateX(4deg) translateY(-6px); }
+    }
+    .book-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+    }
+    .book-cover {
+      background: linear-gradient(145deg, #1a2a4a 0%, #0d1628 60%, #1a2a4a 100%);
+      border-radius: 2px 6px 6px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0.75rem;
+      gap: 0.5rem;
+      box-shadow: inset -3px 0 8px rgba(0,0,0,0.4), inset 3px 0 6px rgba(255,255,255,0.04);
+      border: 1px solid rgba(200,169,110,0.15);
+    }
+    .book-cover-title {
+      font-family: var(--serif);
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .book-cover-deco {
+      width: 40px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+      opacity: 0.5;
+    }
+    .book-cover-author {
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      color: rgba(200,169,110,0.5);
+      text-align: center;
+      letter-spacing: 0.08em;
+    }
+    /* book spine */
+    .book-spine {
+      position: absolute;
+      left: -12px; top: 2px;
+      width: 12px;
+      height: calc(100% - 4px);
+      background: linear-gradient(to right, #0a1020, #1a2a4a);
+      transform: rotateY(-90deg);
+      transform-origin: right center;
+      border-radius: 2px 0 0 2px;
+      border: 1px solid rgba(200,169,110,0.1);
+      border-right: none;
+    }
+    /* book pages */
+    .book-pages {
+      position: absolute;
+      right: -8px; top: 3px;
+      width: 8px;
+      height: calc(100% - 6px);
+      background: repeating-linear-gradient(
+        to bottom,
+        #d4cfc4 0px, #d4cfc4 1px,
+        #ece8e0 1px, #ece8e0 3px
+      );
+      transform: rotateY(90deg);
+      transform-origin: left center;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* Progress bar */
+    .read-progress-wrap {
+      margin-top: 0.85rem;
+    }
+    .read-progress-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+    }
+    .read-progress-bar {
+      height: 2px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .read-progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--accent), var(--accent2));
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0;
+    }
+    .read-progress-fill.animated { width: var(--prog); }
+
+    .now-reading-meta { padding-top: 0.5rem; }
+    .now-reading-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      opacity: 0.7;
+    }
+    .now-reading-title {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+    }
+    .now-reading-author {
+      font-size: 0.85rem;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+    .now-reading-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      max-width: 480px;
+      font-style: italic;
+      border-left: 2px solid rgba(200,169,110,0.2);
+      padding-left: 1rem;
+    }
+    .now-reading-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1rem; }
+
+    /* Book grid — non-academic */
+    .shelf-section-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--accent);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .shelf-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+    .book-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 1.4rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
+    .book-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s;
+    }
+    .book-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(200,169,110,0.25);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+    }
+    .book-card:hover::before { transform: scaleX(1); }
+    .book-card-spine {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+    }
+    .book-card-status {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .status-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .book-card-title {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.35;
+      margin-bottom: 0.25rem;
+    }
+    .book-card-author {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .book-card-note {
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      font-style: italic;
+    }
+    .book-card-mini-prog {
+      margin-top: 0.85rem;
+      height: 1px;
+      background: var(--border);
+      position: relative;
+    }
+    .book-card-mini-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: var(--accent);
+      transition: width 1.2s 0.3s;
+      width: 0;
+    }
+    .book-card-mini-fill.animated { width: var(--prog); }
+
+    /* ═══ ACADEMIC PANEL ═══ */
+
+    .paper-currently {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 2rem 2.25rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+    .paper-currently::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent2), var(--accent), transparent);
+    }
+    .paper-currently-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--accent2);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .paper-currently-label::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent2);
+      animation: pulse-dot 2s infinite;
+    }
+    .paper-currently-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.35rem;
+    }
+    .paper-currently-authors {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .paper-currently-venue {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      margin-bottom: 1rem;
+    }
+    .paper-currently-note {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-style: italic;
+      border-left: 2px solid rgba(123,158,168,0.3);
+      padding-left: 1rem;
+    }
+
+    /* Paper list */
+    .paper-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); margin-bottom: 3rem; }
+    .paper-item {
+      background: var(--bg2);
+      padding: 1.4rem 1.75rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: start;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s, transform 0.25s;
+      cursor: default;
+    }
+    .paper-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent2);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.3s;
+    }
+    .paper-item:hover { background: var(--bg3); transform: translateX(3px); }
+    .paper-item:hover::before { transform: scaleY(1); }
+    .paper-item-title {
+      font-family: var(--serif);
+      font-size: 0.98rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.25rem;
+    }
+    .paper-item-authors { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+    .paper-item-venue { font-family: var(--mono); font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.06em; }
+    .paper-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; flex-shrink: 0; }
+    .paper-status-tag {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+    .tag-reading { color: var(--accent2); border-color: rgba(123,158,168,0.35); }
+    .tag-queue  { color: var(--text-dim); border-color: var(--border); }
+    .tag-done   { color: var(--accent); border-color: rgba(200,169,110,0.3); }
+    .paper-area {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+
+    /* book list - academic */
+    .abook-list { display: flex; flex-direction: column; gap: 0.85rem; }
+    .abook-item {
+      display: grid;
+      grid-template-columns: 3px 1fr auto;
+      gap: 1.25rem;
+      align-items: start;
+      padding: 1.25rem 1.5rem 1.25rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: transform 0.25s;
+      cursor: default;
+    }
+    .abook-item:hover { transform: translateX(4px); }
+    .abook-bar { height: 100%; min-height: 40px; }
+    .abook-title {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.35;
+      margin-bottom: 0.2rem;
+    }
+    .abook-author { font-size: 0.76rem; color: var(--text-muted); }
+    .abook-right { text-align: right; }
+    .abook-status {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 700px) {
+      .now-reading-hero { grid-template-columns: 1fr; }
+      .book-3d { margin: 0 auto; }
+      .paper-item { grid-template-columns: 1fr; }
+      .paper-item-right { flex-direction: row; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research/">Research</a></li>
+    <li><a href="/cv/">CV</a></li>
+    <li><a href="/publications/">Publications</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/resources/">Resources</a></li>
+    <li><a href="/open_board/">open_board</a></li>
+    <li><a href="/gallery/">Gallery</a></li>
+    <li><a href="/movies/">Cinema</a></li>
+    <li><a href="/reading/" class="active">Reading</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+  <button class="theme-toggle" id="themeBtn">LIGHT</button>
+  <button class="nav-hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <div class="bg-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(200,169,110,0.05) 0%,transparent 70%);top:-100px;left:-100px;"></div>
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Shelf & Stack</div>
+    <h1 class="page-title">What I'm <em>Reading</em></h1>
+    <p class="page-subtitle">Two lists — what I read for pleasure, and what I read for physics. Updated when I remember to.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- TABS -->
+    <div class="read-tabs">
+      <button class="read-tab active" data-panel="leisure">
+        <span class="read-tab-dot"></span>
+        For Pleasure
+      </button>
+      <button class="read-tab" data-panel="academic">
+        <span class="read-tab-dot"></span>
+        Academic Stack
+      </button>
+    </div>
+
+    <!-- ══════════════ LEISURE PANEL ══════════════ -->
+    <div class="read-panel active" id="panel-leisure">
+
+      <!-- NOW READING HERO -->
+      <div class="now-reading-hero reveal">
+        <!-- Animated 3D Book -->
+        <div class="book-3d" title="Click to open book">
+          <div class="book-inner" id="heroBook">
+            <div class="book-face book-cover">
+              <div class="book-cover-deco"></div>
+              <div class="book-cover-title">The Master<br>and<br>Margarita</div>
+              <div class="book-cover-deco"></div>
+              <div class="book-cover-author">Bulgakov</div>
+            </div>
+            <div class="book-spine"></div>
+            <div class="book-pages"></div>
+          </div>
+        </div>
+
+        <div class="now-reading-meta">
+          <div class="now-reading-label">Currently Reading</div>
+          <div class="now-reading-title">The Master and Margarita</div>
+          <div class="now-reading-author">Mikhail Bulgakov</div>
+          <div class="now-reading-note">
+            "Cowardice is the greatest sin." — Haven't met a book that felt this simultaneously absurd and devastating. The Devil visits Soviet Moscow and chaos ensues. Reading it slowly.
+          </div>
+          <div class="now-reading-tags">
+            <span class="tag">Russian Lit</span>
+            <span class="tag">Satire</span>
+            <span class="tag">Magic Realism</span>
+          </div>
+          <div class="read-progress-wrap" style="margin-top:1.25rem;">
+            <div class="read-progress-label">
+              <span>Progress</span>
+              <span>62%</span>
+            </div>
+            <div class="read-progress-bar">
+              <div class="read-progress-fill" style="--prog: 62%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- READING -->
+      <div class="shelf-section-label">Also Reading</div>
+      <div class="book-grid">
+
+        <div class="book-card reveal">
+          <div class="book-card-spine" style="background: linear-gradient(to bottom, #4a7c6a, #2d5a4a);"></div>
+          <div class="book-card-status" style="color: var(--accent2);">
+            <span class="status-dot" style="background: var(--accent2);"></span>
+            In Progress
+          </div>
+          <div class="book-card-title">Surely You're Joking, Mr. Feynman!</div>
+          <div class="book-card-author">Richard P. Feynman</div>
+          <div class="book-card-note">Re-reading for the third time. Always find something new.</div>
+          <div class="book-card-mini-prog">
+            <div class="book-card-mini-fill" style="--prog: 45%; background: var(--accent2);"></div>
+          </div>
+        </div>
+
+        <div class="book-card reveal">
+          <div class="book-card-spine" style="background: linear-gradient(to bottom, #6a4a7c, #4a2d5a);"></div>
+          <div class="book-card-status" style="color: var(--accent3);">
+            <span class="status-dot" style="background: var(--accent3);"></span>
+            In Progress
+          </div>
+          <div class="book-card-title">Flowers for Algernon</div>
+          <div class="book-card-author">Daniel Keyes</div>
+          <div class="book-card-note">Deeply uncomfortable. Exactly what good fiction should do.</div>
+          <div class="book-card-mini-prog">
+            <div class="book-card-mini-fill" style="--prog: 30%; background: var(--accent3);"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- QUEUE -->
+      <div class="shelf-section-label">Up Next</div>
+      <div class="book-grid">
+
+        <div class="book-card reveal">
+          <div class="book-card-spine" style="background: linear-gradient(to bottom, #7c6a4a, #5a4a2d);"></div>
+          <div class="book-card-status" style="color: var(--text-dim);">
+            <span class="status-dot" style="background: var(--text-dim);"></span>
+            Queue
+          </div>
+          <div class="book-card-title">The Stranger</div>
+          <div class="book-card-author">Albert Camus</div>
+          <div class="book-card-note">Long overdue. Everyone keeps quoting it at me.</div>
+        </div>
+
+        <div class="book-card reveal">
+          <div class="book-card-spine" style="background: linear-gradient(to bottom, #4a5a7c, #2d3a5a);"></div>
+          <div class="book-card-status" style="color: var(--text-dim);">
+            <span class="status-dot" style="background: var(--text-dim);"></span>
+            Queue
+          </div>
+          <div class="book-card-title">Crime and Punishment</div>
+          <div class="book-card-author">Fyodor Dostoevsky</div>
+          <div class="book-card-note">Started twice. Third time will be it.</div>
+        </div>
+
+        <div class="book-card reveal">
+          <div class="book-card-spine" style="background: linear-gradient(to bottom, #5a7c4a, #3a5a2d);"></div>
+          <div class="book-card-status" style="color: var(--text-dim);">
+            <span class="status-dot" style="background: var(--text-dim);"></span>
+            Queue
+          </div>
+          <div class="book-card-title">Gödel, Escher, Bach</div>
+          <div class="book-card-author">Douglas Hofstadter</div>
+          <div class="book-card-note">Has been on my list since I was 16. Someday.</div>
+        </div>
+
+      </div>
+
+      <!-- DONE -->
+      <div class="shelf-section-label">Recently Finished</div>
+      <div class="book-grid">
+
+        <div class="book-card reveal" style="opacity: 0.75;">
+          <div class="book-card-spine" style="background: linear-gradient(to bottom, var(--accent), #8a6a3a);"></div>
+          <div class="book-card-status" style="color: var(--accent);">
+            <span class="status-dot" style="background: var(--accent);"></span>
+            Finished
+          </div>
+          <div class="book-card-title">The Remains of the Day</div>
+          <div class="book-card-author">Kazuo Ishiguro</div>
+          <div class="book-card-note">The most quietly devastating book I have ever read.</div>
+        </div>
+
+        <div class="book-card reveal" style="opacity: 0.75;">
+          <div class="book-card-spine" style="background: linear-gradient(to bottom, var(--accent), #8a6a3a);"></div>
+          <div class="book-card-status" style="color: var(--accent);">
+            <span class="status-dot" style="background: var(--accent);"></span>
+            Finished
+          </div>
+          <div class="book-card-title">The Glass Bead Game</div>
+          <div class="book-card-author">Hermann Hesse</div>
+          <div class="book-card-note">About a fictional scholar. Felt like reading about myself in another universe.</div>
+        </div>
+
+        <div class="book-card reveal" style="opacity: 0.75;">
+          <div class="book-card-spine" style="background: linear-gradient(to bottom, var(--accent), #8a6a3a);"></div>
+          <div class="book-card-status" style="color: var(--accent);">
+            <span class="status-dot" style="background: var(--accent);"></span>
+            Finished
+          </div>
+          <div class="book-card-title">QED: The Strange Theory of Light and Matter</div>
+          <div class="book-card-author">Richard Feynman</div>
+          <div class="book-card-note">The best popular physics book. No contest.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════ ACADEMIC PANEL ══════════════ -->
+    <div class="read-panel" id="panel-academic">
+
+      <!-- Current paper -->
+      <div class="paper-currently reveal">
+        <div class="paper-currently-label">Currently Working Through</div>
+        <div class="paper-currently-title">Quasiclassical theory of superconductivity: A multiple-interface geometry</div>
+        <div class="paper-currently-authors">Nikolai Kopnin</div>
+        <div class="paper-currently-venue">Journal of Low Temperature Physics · 2001</div>
+        <div class="paper-currently-note">
+          Dense but foundational. Working through the Usadel equations section carefully — directly relevant to my SC–FM heterostructure work with Prof. Singh. The Green's function formalism is clicking into place slowly.
+        </div>
+      </div>
+
+      <!-- Papers reading/queue -->
+      <div class="shelf-section-label">Papers</div>
+      <div class="paper-list">
+
+        <div class="paper-item reveal">
+          <div>
+            <div class="paper-item-title">Topological superconductors on superstring worldsheets</div>
+            <div class="paper-item-authors">Ioannis Florakis, Iñaki García-Etxebarria, Daniel Lüst, Diego Regalado</div>
+            <div class="paper-item-venue">SciPost Phys. · 2020</div>
+          </div>
+          <div class="paper-item-right">
+            <span class="paper-status-tag tag-reading">Reading</span>
+            <span class="paper-area">Top. SC</span>
+          </div>
+        </div>
+
+        <div class="paper-item reveal">
+          <div>
+            <div class="paper-item-title">Majorana fermions and a topological phase transition in semiconductor-superconductor heterostructures</div>
+            <div class="paper-item-authors">Lutchyn, Sau, Das Sarma</div>
+            <div class="paper-item-venue">Phys. Rev. Lett. 105 · 2010</div>
+          </div>
+          <div class="paper-item-right">
+            <span class="paper-status-tag tag-done">Read</span>
+            <span class="paper-area">Majorana</span>
+          </div>
+        </div>
+
+        <div class="paper-item reveal">
+          <div>
+            <div class="paper-item-title">Unpaired Majorana fermions in quantum wires</div>
+            <div class="paper-item-authors">Alexei Kitaev</div>
+            <div class="paper-item-venue">Physics-Uspekhi 44 · 2001</div>
+          </div>
+          <div class="paper-item-right">
+            <span class="paper-status-tag tag-done">Read</span>
+            <span class="paper-area">Kitaev Chain</span>
+          </div>
+        </div>
+
+        <div class="paper-item reveal">
+          <div>
+            <div class="paper-item-title">K-theory and reality</div>
+            <div class="paper-item-authors">Michael Atiyah</div>
+            <div class="paper-item-venue">Quarterly Journal of Mathematics · 1966</div>
+          </div>
+          <div class="paper-item-right">
+            <span class="paper-status-tag tag-queue">Queue</span>
+            <span class="paper-area">K-Theory</span>
+          </div>
+        </div>
+
+        <div class="paper-item reveal">
+          <div>
+            <div class="paper-item-title">Periodic table for topological insulators and superconductors</div>
+            <div class="paper-item-authors">Alexei Kitaev</div>
+            <div class="paper-item-venue">AIP Conference Proceedings · 2009</div>
+          </div>
+          <div class="paper-item-right">
+            <span class="paper-status-tag tag-queue">Queue</span>
+            <span class="paper-area">Classification</span>
+          </div>
+        </div>
+
+        <div class="paper-item reveal">
+          <div>
+            <div class="paper-item-title">Spin-triplet superconductivity in ferromagnet/superconductor heterostructures</div>
+            <div class="paper-item-authors">Bergeret, Volkov, Efetov</div>
+            <div class="paper-item-venue">Rev. Mod. Phys. 77 · 2005</div>
+          </div>
+          <div class="paper-item-right">
+            <span class="paper-status-tag tag-reading">Reading</span>
+            <span class="paper-area">SC-FM</span>
+          </div>
+        </div>
+
+        <div class="paper-item reveal">
+          <div>
+            <div class="paper-item-title">Colloquium: Andreev reflection and Klein tunneling in graphene</div>
+            <div class="paper-item-authors">C.W.J. Beenakker</div>
+            <div class="paper-item-venue">Rev. Mod. Phys. 80 · 2008</div>
+          </div>
+          <div class="paper-item-right">
+            <span class="paper-status-tag tag-queue">Queue</span>
+            <span class="paper-area">Andreev</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Academic books -->
+      <div class="shelf-section-label" style="margin-top:1rem;">Textbooks & References</div>
+      <div class="abook-list">
+
+        <div class="abook-item reveal">
+          <div class="abook-bar" style="background: linear-gradient(to bottom, var(--accent), transparent); border-radius:2px;"></div>
+          <div>
+            <div class="abook-title">Introduction to Many-Body Physics</div>
+            <div class="abook-author">Piers Coleman</div>
+          </div>
+          <div class="abook-right">
+            <div class="abook-status" style="color: var(--accent2);">Reading</div>
+          </div>
+        </div>
+
+        <div class="abook-item reveal">
+          <div class="abook-bar" style="background: linear-gradient(to bottom, var(--accent2), transparent); border-radius:2px;"></div>
+          <div>
+            <div class="abook-title">Topological Insulators and Topological Superconductors</div>
+            <div class="abook-author">Bernevig & Hughes</div>
+          </div>
+          <div class="abook-right">
+            <div class="abook-status" style="color: var(--accent);">Reference</div>
+          </div>
+        </div>
+
+        <div class="abook-item reveal">
+          <div class="abook-bar" style="background: linear-gradient(to bottom, var(--accent3), transparent); border-radius:2px;"></div>
+          <div>
+            <div class="abook-title">Quantum Theory of Solids</div>
+            <div class="abook-author">Charles Kittel</div>
+          </div>
+          <div class="abook-right">
+            <div class="abook-status" style="color: var(--text-dim);">Queue</div>
+          </div>
+        </div>
+
+        <div class="abook-item reveal">
+          <div class="abook-bar" style="background: linear-gradient(to bottom, var(--accent), transparent); border-radius:2px;"></div>
+          <div>
+            <div class="abook-title">Methods of Quantum Field Theory in Statistical Physics</div>
+            <div class="abook-author">Abrikosov, Gorkov, Dzyaloshinski</div>
+          </div>
+          <div class="abook-right">
+            <div class="abook-status" style="color: var(--text-dim);">Queue</div>
+          </div>
+        </div>
+
+        <div class="abook-item reveal">
+          <div class="abook-bar" style="background: linear-gradient(to bottom, var(--accent2), transparent); border-radius:2px;"></div>
+          <div>
+            <div class="abook-title">Superconductivity, Superfluidity and Condensates</div>
+            <div class="abook-author">Annett</div>
+          </div>
+          <div class="abook-right">
+            <div class="abook-status" style="color: var(--accent);">Reference</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
+    <ul class="footer-links">
+      <li><a href="/research/">Research</a></li>
+      <li><a href="/publications/">Publications</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
+  </div>
+</footer>
+
+<script>
+  // Nav
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+
+  // Theme
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') { document.body.classList.add('light'); themeBtn.textContent = 'DARK'; }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+
+  // Tabs
+  document.querySelectorAll('.read-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.read-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.read-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const panel = document.getElementById('panel-' + tab.dataset.panel);
+      panel.classList.add('active');
+      panel.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 60);
+      });
+      // Animate progress bars
+      panel.querySelectorAll('.read-progress-fill, .book-card-mini-fill').forEach(el => {
+        setTimeout(() => el.classList.add('animated'), 100);
+      });
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+  // Animate progress bars on load
+  setTimeout(() => {
+    document.querySelectorAll('.read-progress-fill, .book-card-mini-fill').forEach(el => {
+      el.classList.add('animated');
+    });
+  }, 400);
+
+  // Book click tilt
+  document.getElementById('heroBook')?.addEventListener('click', function() {
+    this.style.transform = 'rotateY(-50deg) rotateX(8deg) scale(1.08)';
+    setTimeout(() => { this.style.transform = ''; }, 800);
+  });
+</script>
+</body>
+</html>
