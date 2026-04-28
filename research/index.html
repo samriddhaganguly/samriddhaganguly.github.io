@@ -3,17 +3,62 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Research — Samriddha Ganguly</title>
-    <meta property="og:title" content="Samriddha Ganguly">
+  <title>Research & Publications — Samriddha Ganguly</title>
+  <meta property="og:title" content="Research & Publications — Samriddha Ganguly">
   <meta property="og:description" content="Research in condensed matter, topology, and quantum systems.">
-  <meta property="og:url" content="https://samriddhaganguly.github.io/">
+  <meta property="og:url" content="https://samriddhaganguly.github.io/research/">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://samriddhaganguly.github.io/assets/preview.png">
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="stylesheet" href="/style.css"/>
+
   <style>
-    .research-areas { display: flex; flex-direction: column; gap: 3px; background: var(--border); margin-bottom: 5rem; }
+    /* ─── PAGE-LEVEL NAV ANCHOR BAR ─── */
+    .section-nav {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .section-nav::-webkit-scrollbar { display: none; }
+    .section-nav a {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.85rem 1.6rem;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .section-nav a:hover,
+    .section-nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ─── SHARED SECTION DIVIDER ─── */
+    .page-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* ════════════════════════════════
+       RESEARCH STYLES
+    ════════════════════════════════ */
+    .research-areas {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      background: var(--border);
+      margin-bottom: 5rem;
+    }
     .ra-item {
       background: var(--bg);
       padding: 2.5rem 3rem;
@@ -44,7 +89,6 @@
       line-height: 1;
       padding-top: 4px;
     }
-    .ra-content {}
     .ra-title {
       font-family: var(--serif);
       font-size: 1.5rem;
@@ -88,28 +132,26 @@
       line-height: 1.8;
     }
 
-    /* Methods section */
+    /* Methods grid */
     .methods-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 1px;
       background: var(--border);
     }
-   .method-card {
-  background: var(--bg2);
-  padding: 1.75rem;
-  
-  /* Lift effect */
-  transform: translateY(0);
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  cursor: default;
-}
-.method-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
-  border-top: 2px solid var(--accent); /* accent line appears on lift */
-}
+    .method-card {
+      background: var(--bg2);
+      padding: 1.75rem;
+      transform: translateY(0);
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: default;
+    }
+    .method-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+      border-top: 2px solid var(--accent);
+    }
     .method-card h4 {
       font-family: var(--mono);
       font-size: 0.68rem;
@@ -130,59 +172,241 @@
     }
     .method-card li::before { content: '·'; color: var(--accent); }
 
+    /* ════════════════════════════════
+       PUBLICATIONS STYLES
+    ════════════════════════════════ */
+
+    /* Stats banner */
+    .pub-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 4rem;
+    }
+    .stat-box {
+      background: var(--bg2);
+      padding: 1.75rem 2rem;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .pub-filters {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .filter-btn {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+
+    .pub-list { display: flex; flex-direction: column; }
+    .pub-item {
+      display: grid;
+      grid-template-columns: 70px 1fr auto;
+      gap: 1.75rem;
+      align-items: start;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .pub-item:hover { padding-left: 0.75rem; }
+    .pub-yr {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      padding-top: 4px;
+    }
+    .pub-ti {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.4rem;
+    }
+    .pub-au {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      line-height: 1.5;
+    }
+    .pub-au strong { color: var(--accent); font-weight: 500; }
+    .pub-ve {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent2);
+      margin-bottom: 0.6rem;
+    }
+    .pub-abstract {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 700px;
+      margin-top: 0.75rem;
+      display: none;
+    }
+    .pub-abstract.open { display: block; }
+    .pub-badges-row {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .badge:hover { opacity: 0.7; }
+    .badge-gold  { border-color: var(--accent);    color: var(--accent); }
+    .badge-blue  { border-color: var(--accent2);   color: var(--accent2); }
+    .badge-purple{ border-color: var(--accent3);   color: var(--accent3); }
+    .badge-dim   { border-color: var(--text-dim);  color: var(--text-muted); }
+
+    .pub-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      min-width: 60px;
+      align-items: flex-end;
+    }
+    .abs-toggle {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .abs-toggle:hover { color: var(--accent); }
+
+    /* ─── RESPONSIVE ─── */
     @media (max-width: 700px) {
-      .ra-item { grid-template-columns: 1fr; gap: 0.5rem; padding: 2rem; }
-      .ra-num { font-size: 1.2rem; }
+      .ra-item           { grid-template-columns: 1fr; gap: 0.5rem; padding: 2rem; }
+      .ra-num            { font-size: 1.2rem; }
+      .pub-item          { grid-template-columns: 1fr; gap: 0.75rem; }
+      .pub-links         { flex-direction: row; align-items: center; }
+      .pub-stats         { grid-template-columns: 1fr; }
+      .section-nav a     { padding: 0.85rem 1rem; }
     }
   </style>
 </head>
-  <script src="script.js"></script>
+
+<script src="script.js"></script>
 <body>
+
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
 <nav>
   <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
-
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/research/" class="active">Research</a></li>
-    <li><a href="/cv/">CV</a></li>
-    <li><a href="/publications/">Publications</a></li>
+    <li><a href="/cv/">About Me</a></li>
     <li><a href="/blog/">Blog</a></li>
     <li><a href="/resources/">Resources</a></li>
     <li><a href="/open_board/">open_board</a></li>
-        <li><a href="/courses/">Courses</a></li>
+    <li><a href="/courses/">Courses</a></li>
     <li><a href="/gallery/">Gallery</a></li>
     <li><a href="/movies/">Cinema</a></li>
     <li><a href="/reading/">Reading</a></li>
     <li><a href="/contact/">Contact</a></li>
   </ul>
-<button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
   <button class="nav-hamburger" id="menuBtn">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
+<!-- ══════════════════════════════════════
+     PAGE HEADER
+══════════════════════════════════════ -->
 <header class="page-header">
   <div class="bg-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(200,169,110,0.06) 0%,transparent 70%);top:-100px;right:-100px;"></div>
+  <div class="bg-blob" style="width:400px;height:400px;background:radial-gradient(circle,rgba(160,123,181,0.05) 0%,transparent 70%);bottom:-60px;left:-60px;"></div>
   <div class="page-header-inner">
     <div class="page-eyebrow">IISER Bhopal · Theoretical Physics</div>
-    <h1 class="page-title">Research <em>Interests</em></h1>
-    <p class="page-subtitle">Exploring topological phases, unconventional superconductivity, and quantum magnetism through analytical theory and numerical computation.</p>
+    <h1 class="page-title">Research & <em>Publications</em></h1>
+    <p class="page-subtitle">Exploring topological phases, unconventional superconductivity, and quantum magnetism — and the peer-reviewed work that has come out of it.</p>
   </div>
 </header>
 
-<section class="section" style="background:var(--bg);">
+<!-- ══════════════════════════════════════
+     STICKY SECTION NAV
+══════════════════════════════════════ -->
+<nav class="section-nav" id="sectionNav" aria-label="Page sections">
+  <a href="#current"      data-target="current">Current Direction</a>
+  <a href="#topics"       data-target="topics">Research Topics</a>
+  <a href="#methods"      data-target="methods">Methods & Tools</a>
+  <a href="#publications" data-target="publications">Publications</a>
+  <a href="#posters"      data-target="posters">Presentations</a>
+</nav>
+
+<!-- ══════════════════════════════════════
+     SECTION 1 — CURRENT DIRECTION
+══════════════════════════════════════ -->
+<section class="section" id="current" style="background:var(--bg);">
   <div class="section-inner">
+
     <div class="direction-banner reveal">
       <strong>Current Research Direction</strong>
-      <p>I am working with Prof. Ravi Prakash Singh on the study of superconducting–ferromagnetic (SC–FM) heterostructures, with a focus on naturally occurring systems and their interfacial proximity effects. The project involves investigating the emergence of spin-triplet pairing correlations, as well as characterizing spin transport, spin diffusion, and supercurrent propagation across SC–FM interfaces through transport measurements. A key objective is to identify signatures of topological superconductivity in such hybrid structures. On the theoretical side, the work is guided by the framework of dirty superconductors, employing quasiclassical Green’s function methods and the Usadel equations to model interfacial phenomena, complemented by first-principles-informed approaches to connect microscopic mechanisms with experimental observations.
-      
-        On a more personal side, I am trying to learn about K-Theoretic Classification of Topological Phases of Matter, trying to well-define myself on the more mathematical aspects of Physics.</p>
+      <p>I am working with Prof. Ravi Prakash Singh on the study of superconducting–ferromagnetic (SC–FM) heterostructures, with a focus on naturally occurring systems and their interfacial proximity effects. The project involves investigating the emergence of spin-triplet pairing correlations, as well as characterizing spin transport, spin diffusion, and supercurrent propagation across SC–FM interfaces through transport measurements. A key objective is to identify signatures of topological superconductivity in such hybrid structures. On the theoretical side, the work is guided by the framework of dirty superconductors, employing quasiclassical Green's function methods and the Usadel equations to model interfacial phenomena, complemented by first-principles-informed approaches to connect microscopic mechanisms with experimental observations.</p>
+      <p style="margin-top:1rem;">On a more personal side, I am trying to learn about K-Theoretic Classification of Topological Phases of Matter, trying to well-define myself on the more mathematical aspects of Physics.</p>
     </div>
+
+  </div>
+</section>
+
+<div class="page-divider"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 2 — RESEARCH TOPICS
+══════════════════════════════════════ -->
+<section class="section" id="topics" style="background:var(--bg);">
+  <div class="section-inner">
 
     <div class="section-label">Areas of Focus</div>
     <h2 class="section-heading">Research <em>Topics</em></h2>
 
     <div class="research-areas">
+
       <div class="ra-item reveal">
         <div class="ra-num">01</div>
         <div class="ra-content">
@@ -261,15 +485,24 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Methods -->
+    </div>
+  </div>
+</section>
+
+<div class="page-divider"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 3 — METHODS & TOOLS
+══════════════════════════════════════ -->
+<section class="section" id="methods" style="background:var(--bg2);">
+  <div class="section-inner">
+
     <div class="section-label">Toolbox</div>
     <h2 class="section-heading">Methods & <em>Tools</em></h2>
 
     <div class="methods-grid">
 
-      <!-- 1. TOPOLOGICAL -->
       <div class="method-card reveal">
         <h4>Topological Methods</h4>
         <ul>
@@ -281,7 +514,6 @@
         </ul>
       </div>
 
-      <!-- 2. MANY BODY -->
       <div class="method-card reveal">
         <h4>Many-Body & Field-Theoretic Techniques</h4>
         <ul>
@@ -293,7 +525,6 @@
         </ul>
       </div>
 
-      <!-- 3. OPEN SYSTEMS -->
       <div class="method-card reveal">
         <h4>Open Quantum Systems & Information</h4>
         <ul>
@@ -305,7 +536,6 @@
         </ul>
       </div>
 
-      <!-- 4. COMPUTATIONAL -->
       <div class="method-card reveal">
         <h4>Computational & Numerical Methods</h4>
         <ul>
@@ -317,7 +547,6 @@
         </ul>
       </div>
 
-      <!-- 5. EXPERIMENTAL -->
       <div class="method-card reveal">
         <h4>Experimental Interfaces</h4>
         <ul>
@@ -333,6 +562,126 @@
   </div>
 </section>
 
+<div class="page-divider"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 4 — PUBLICATIONS
+══════════════════════════════════════ -->
+<section class="section" id="publications" style="background:var(--bg);">
+  <div class="section-inner">
+
+    <div class="section-label">Peer-Reviewed Work</div>
+    <h2 class="section-heading"><em>Publications</em></h2>
+    <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.75;max-width:620px;margin-bottom:3rem;">Peer-reviewed journal articles, conference proceedings, and preprints. Authored and co-authored work in condensed matter physics and quantum sensing.</p>
+
+    <div class="pub-stats reveal">
+      <div class="stat-box">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Publications</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Journals</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">1</div>
+        <div class="stat-label">Solo Authored</div>
+      </div>
+    </div>
+
+    <div class="pub-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="condensed-matter">Condensed Matter</button>
+      <button class="filter-btn" data-filter="ml">Machine Learning</button>
+    </div>
+
+    <div class="pub-list">
+
+      <!-- PUB 1 -->
+      <div class="pub-item reveal" data-cat="condensed-matter">
+        <div class="pub-yr">2026</div>
+        <div>
+          <div class="pub-ti">Decoherence of chiral magnon edge modes in a topological bosonic Chern insulator</div>
+          <div class="pub-au"><strong>Samriddha Ganguly</strong></div>
+          <div class="pub-ve">Journal of Physics: Condensed Matter, 38, 075801 (2026)</div>
+          <div class="pub-badges-row">
+            <a class="badge badge-gold" href="https://doi.org/10.1088/1361-648X/ae44df" target="_blank">DOI</a>
+            <span class="badge badge-purple">Focus Issue</span>
+            <span class="badge badge-blue">Condensed Matter</span>
+            <span class="badge badge-dim">Solo-Authored</span>
+          </div>
+          <div class="pub-abstract" id="abs1">
+            This work studies the decoherence of chiral magnon edge modes in a topological bosonic Chern insulator. The paper appears in the Focus Issue on Topological Physics: From Fundamentals to Applications in the Journal of Physics: Condensed Matter. We analyze how the topologically protected edge modes lose quantum coherence due to environmental coupling, and characterize the timescales and mechanisms of decoherence relevant to quantum magnonic devices.
+          </div>
+          <button class="abs-toggle" onclick="toggleAbs('abs1', this)" style="margin-top:0.6rem;">▸ Abstract</button>
+        </div>
+        <div class="pub-links">
+          <a class="badge badge-gold" href="https://doi.org/10.1088/1361-648X/ae44df" target="_blank">PDF</a>
+        </div>
+      </div>
+
+      <!-- PUB 2 -->
+      <div class="pub-item reveal" data-cat="ml">
+        <div class="pub-yr">2025</div>
+        <div>
+          <div class="pub-ti">A Data-Driven Approach to Leak Identification and Severity Analysis in Pipelines Using Acoustic Sensing and Deep Learning</div>
+          <div class="pub-au">Mayukh Biswas; Aditya Narayan; Debaudh Ghosh; <strong>Samriddha Ganguly</strong>; Raj Rakshit; Chirabrata Bhaumik</div>
+          <div class="pub-ve">IEEE Sensors Letters, 10(1) (2025) · Publisher: IEEE</div>
+          <div class="pub-badges-row">
+            <a class="badge badge-gold" href="https://doi.org/10.1109/LSENS.2025.3638602" target="_blank">DOI</a>
+            <span class="badge badge-blue">IEEE</span>
+            <span class="badge badge-dim">Acoustic Sensing</span>
+          </div>
+          <div class="pub-abstract" id="abs2">
+            We present a data-driven methodology for pipeline leak identification and severity analysis, combining acoustic sensing with deep learning models. The approach uses time-series acoustic data collected along industrial pipelines, processed through convolutional and recurrent neural network architectures for leak localization and severity classification. Validation on real-world pipeline data demonstrates high accuracy in both tasks. This work arose from the TCS Research and Innovation Fellowship at IIT Kharagpur Research Park.
+          </div>
+          <button class="abs-toggle" onclick="toggleAbs('abs2', this)" style="margin-top:0.6rem;">▸ Abstract</button>
+        </div>
+        <div class="pub-links">
+          <a class="badge badge-gold" href="https://doi.org/10.1109/LSENS.2025.3638602" target="_blank">PDF</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="page-divider"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 5 — POSTERS / PRESENTATIONS
+══════════════════════════════════════ -->
+<section class="section" id="posters" style="background:var(--bg);">
+  <div class="section-inner">
+
+    <div class="section-label">Conference Activity</div>
+    <h2 class="section-heading">Presentations & <em>Posters</em></h2>
+
+    <div class="pub-list">
+      <div class="pub-item reveal">
+        <div class="pub-yr">2025</div>
+        <div>
+          <div class="pub-ti">Topological Dirac Nodal Line Magnonic Phases in Layered Honeycomb Antiferromagnets</div>
+          <div class="pub-au"><strong>Samriddha Ganguly</strong></div>
+          <div class="pub-ve">International Conference on Quantum Materials and Emerging Concepts (QMEC 2025) — Poster</div>
+        </div>
+      </div>
+      <div class="pub-item reveal">
+        <div class="pub-yr">2025</div>
+        <div>
+          <div class="pub-ti">Topological Dirac Nodal Line Magnonic Phases with Interlayer Spin Canting</div>
+          <div class="pub-au"><strong>Samriddha Ganguly</strong></div>
+          <div class="pub-ve">12th National Conference on Recent Trends in Material Science and Technology, IIST Trivandrum — Poster</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
 <footer>
   <div class="footer-inner">
     <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
@@ -345,29 +694,78 @@
   </div>
 </footer>
 
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
 <script>
+  /* ── Hamburger ── */
   document.getElementById('menuBtn').addEventListener('click', () => {
     document.querySelector('.nav-links').classList.toggle('open');
   });
+
+  /* ── Theme toggle ── */
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    themeBtn.textContent = 'DARK';
+  }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+
+  /* ── Abstract toggle ── */
+  function toggleAbs(id, btn) {
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+    btn.textContent = el.classList.contains('open') ? '▾ Abstract' : '▸ Abstract';
+  }
+
+  /* ── Publication filter ── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.pub-item[data-cat]').forEach(item => {
+        item.style.display = (f === 'all' || item.dataset.cat === f) ? '' : 'none';
+      });
+    });
+  });
+
+  /* ── Scroll reveal ── */
   const reveals = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver(entries => {
     entries.forEach((e, i) => {
-      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); }
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
     });
   }, { threshold: 0.08 });
   reveals.forEach(r => obs.observe(r));
-  // Theme toggle
-const themeBtn = document.getElementById('themeBtn');
-const saved = localStorage.getItem('theme');
-if (saved === 'light') {
-  document.body.classList.add('light');
-  themeBtn.textContent = 'DARK';
-}
-themeBtn.addEventListener('click', () => {
-  const isLight = document.body.classList.toggle('light');
-  themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-});
+
+  /* ── Sticky section nav active state ── */
+  const sections = ['current', 'topics', 'methods', 'publications', 'posters'];
+  const navLinks = document.querySelectorAll('.section-nav a');
+
+  const sectionObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.dataset.target === id);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) sectionObs.observe(el);
+  });
 </script>
 </body>
 </html>
