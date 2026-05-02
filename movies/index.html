@@ -733,24 +733,44 @@
 </div>
 
 <!-- ── NAV ── -->
-<nav>
-  <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="/">Home</a></li>
-    <li><a href="/research/">Research</a></li>
-    <li><a href="/cv/">About Me</a></li>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="/resources/">Resources</a></li>
-    <li><a href="/open_board/">open_board</a></li>
-        <li><a href="/courses/">Courses</a></li>
-    <li><a href="/gallery/">Gallery</a></li>
-    <li><a href="/movies/" class="active">Cinema</a></li>
-    <li><a href="/reading/">Reading</a></li>
-    <li><a href="/contact/">Contact</a></li>
-  </ul>
-<button class="nav-hamburger" id="menuBtn">
-    <span></span><span></span><span></span>
-  </button>
+<nav style="
+  position:fixed; top:0; left:0; right:0;
+  height:56px; z-index:1000;
+  display:flex; align-items:center;
+  justify-content:space-between;
+  padding:0 clamp(24px,5vw,80px);
+  border-bottom:1px solid rgba(240,168,48,0.12);
+  background:rgba(13,8,16,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+">
+
+  <div style="display:flex;gap:1.25rem;align-items:center;">
+    <a href="/interests/" style="
+      font-family:var(--mono); font-size:0.64rem;
+      letter-spacing:0.15em; text-transform:uppercase;
+      color:var(--text-muted); text-decoration:none;
+      display:flex; align-items:center; gap:0.5rem;
+      transition:color 0.2s;
+    " onmouseover="this.style.color='var(--wkw-amber)'"
+       onmouseout="this.style.color='var(--text-muted)'">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 12H5M5 12l7-7M5 12l7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Interests
+    </a>
+    <span style="color:var(--text-dim);font-family:var(--mono);font-size:0.6rem;">/</span>
+    <a href="/" style="
+      font-family:var(--mono); font-size:0.64rem;
+      letter-spacing:0.15em; text-transform:uppercase;
+      color:var(--text-muted); text-decoration:none;
+      transition:color 0.2s;
+    " onmouseover="this.style.color='var(--wkw-amber)'"
+       onmouseout="this.style.color='var(--text-muted)'">
+      Home
+    </a>
+  </div>
+
+  <span style="font-family:var(--mono);font-size:0.62rem;color:var(--text-dim);letter-spacing:0.12em;">電影之愛</span>
+
 </nav>
 
 <!-- ── HERO ── -->
@@ -1198,9 +1218,7 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
-  document.getElementById('menuBtn').addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.toggle('open');
-  });
+
 // ── SCROLL REVEAL ─────────────────────────────────────
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }});
