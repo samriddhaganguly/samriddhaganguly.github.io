@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Interests — Samriddha Ganguly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="/style.css"/>
+  <style>
+    /* ══════════════════════════════════════════════
+       INTERESTS PAGE — intentionally distinct feel
+       No standard nav. Organic, typographic, quiet.
+    ══════════════════════════════════════════════ */
+
+    /* Page-level palette shifts — warmer, more intimate */
+    :root {
+      --int-warm:   #d4a96a;   /* warmer gold */
+      --int-book:   #8ab4c0;   /* pale ink blue */
+      --int-film:   #c87060;   /* burnt amber */
+      --int-bg:     #050810;
+      --int-card:   #080e1c;
+      --int-border: rgba(212,169,106,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--int-bg);
+      color: var(--text, #e8e4dc);
+      font-family: var(--sans, 'DM Sans', sans-serif);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Light mode */
+    body.light {
+      --int-bg:   #faf8f5;
+      --int-card: #f5f1ea;
+      --int-border: rgba(139,111,61,0.18);
+    }
+
+    /* Noise */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.022;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Ambient blobs */
+    .int-blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── MINIMAL TOP BAR ── */
+    .int-topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(24px, 5vw, 80px);
+      border-bottom: 1px solid var(--int-border);
+      background: rgba(5,8,16,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    body.light .int-topbar {
+      background: rgba(250,248,245,0.9);
+    }
+
+    .int-back {
+      font-family: var(--mono, 'DM Mono', monospace);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted, #7a7f90);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: color 0.2s;
+    }
+    .int-back:hover { color: var(--int-warm); }
+    .int-back svg { flex-shrink: 0; }
+
+    .int-topbar-logo {
+      font-family: var(--serif, 'Cormorant Garamond', serif);
+      font-size: 0.95rem;
+      color: var(--text-muted, #7a7f90);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+    .int-topbar-logo span { color: var(--int-warm); }
+
+    .int-theme-btn {
+      font-family: var(--mono, monospace);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      padding: 0.3rem 0.7rem;
+      background: transparent;
+      color: var(--text-muted, #7a7f90);
+      border: 1px solid var(--int-border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .int-theme-btn:hover { border-color: var(--int-warm); color: var(--int-warm); }
+
+    /* ── MAIN LAYOUT ── */
+    .int-main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 56px clamp(24px, 6vw, 100px) 5rem;
+    }
+
+    /* ── HEADER ── */
+    .int-header {
+      text-align: center;
+      margin-bottom: clamp(3rem, 8vw, 6rem);
+      opacity: 0;
+      animation: intFadeUp 0.9s 0.1s forwards;
+    }
+
+    .int-eyebrow {
+      font-family: var(--mono, monospace);
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--int-warm);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .int-eyebrow::before,
+    .int-eyebrow::after {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--int-warm);
+      opacity: 0.4;
+    }
+
+    .int-title {
+      font-family: var(--serif, 'Cormorant Garamond', serif);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+    }
+    .int-title em {
+      font-style: italic;
+      color: var(--int-warm);
+      display: block;
+    }
+
+    .int-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted, #7a7f90);
+      max-width: 440px;
+      margin: 0 auto;
+      line-height: 1.85;
+      font-style: italic;
+      font-family: var(--serif, 'Cormorant Garamond', serif);
+      font-size: 1.1rem;
+      font-weight: 300;
+    }
+
+    /* ── CARDS ROW ── */
+    .int-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 100%;
+      max-width: 860px;
+      opacity: 0;
+      animation: intFadeUp 0.9s 0.35s forwards;
+    }
+
+    .int-card {
+      position: relative;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--int-card);
+      border-radius: 16px;
+      border: 1px solid var(--int-border);
+      padding: 2.8rem 2.4rem 2.4rem;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1),
+                  border-color 0.3s,
+                  box-shadow 0.4s;
+      cursor: pointer;
+    }
+
+    /* Distinct glow per card */
+    .int-card--books::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(138,180,192,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      transition: opacity 0.4s;
+      opacity: 0.5;
+    }
+
+    .int-card--films::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,112,96,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      transition: opacity 0.4s;
+      opacity: 0.5;
+    }
+
+    .int-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+
+    .int-card--books:hover {
+      border-color: rgba(138,180,192,0.35);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 60px rgba(138,180,192,0.07);
+    }
+    .int-card--books:hover::before { opacity: 1; }
+
+    .int-card--films:hover {
+      border-color: rgba(200,112,96,0.35);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 60px rgba(200,112,96,0.07);
+    }
+    .int-card--films:hover::before { opacity: 1; }
+
+    /* Card top accent line */
+    .int-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: 16px 16px 0 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .int-card--books::after { background: linear-gradient(to right, var(--int-book), transparent); }
+    .int-card--films::after { background: linear-gradient(to right, var(--int-film), transparent); }
+    .int-card:hover::after { transform: scaleX(1); }
+
+    /* Card content */
+    .int-card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .int-card-label {
+      font-family: var(--mono, monospace);
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+    .int-card--books .int-card-label { color: var(--int-book); }
+    .int-card--films .int-card-label { color: var(--int-film); }
+
+    .int-card-title {
+      font-family: var(--serif, 'Cormorant Garamond', serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    .int-card-title em { font-style: italic; }
+    .int-card--books .int-card-title em { color: var(--int-book); }
+    .int-card--films .int-card-title em { color: var(--int-film); }
+
+    .int-card-desc {
+      font-size: 0.83rem;
+      color: var(--text-muted, #7a7f90);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+      max-width: 280px;
+    }
+
+    /* Snippets — small teaser items inside card */
+    .int-card-snippets {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .int-snippet {
+      font-family: var(--mono, monospace);
+      font-size: 0.62rem;
+      letter-spacing: 0.05em;
+      color: var(--text-dim, #3a3f52);
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--int-border);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .int-snippet-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .int-card--books .int-snippet-dot { background: var(--int-book); opacity: 0.6; }
+    .int-card--films .int-snippet-dot { background: var(--int-film); opacity: 0.6; }
+
+    /* Enter arrow */
+    .int-card-enter {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--mono, monospace);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: gap 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+    .int-card--books .int-card-enter { color: var(--int-book); }
+    .int-card--films .int-card-enter { color: var(--int-film); }
+    .int-card:hover .int-card-enter { gap: 1rem; }
+
+    .int-card-enter-line {
+      flex: 1;
+      height: 1px;
+      max-width: 40px;
+      opacity: 0.4;
+      transition: max-width 0.3s, opacity 0.3s;
+    }
+    .int-card--books .int-card-enter-line { background: var(--int-book); }
+    .int-card--films .int-card-enter-line { background: var(--int-film); }
+    .int-card:hover .int-card-enter-line { max-width: 60px; opacity: 0.7; }
+
+    /* ── FOOTER NOTE ── */
+    .int-footer-note {
+      margin-top: 3.5rem;
+      text-align: center;
+      opacity: 0;
+      animation: intFadeUp 0.9s 0.55s forwards;
+    }
+    .int-footer-note p {
+      font-family: var(--serif, 'Cormorant Garamond', serif);
+      font-size: 0.95rem;
+      color: var(--text-dim, #3a3f52);
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes intFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .int-cards {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+      .int-card { padding: 2.2rem 1.8rem 2rem; }
+      .int-card-title { font-size: 2rem; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--int-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--int-warm); }
+  </style>
+</head>
+<body>
+
+<!-- Ambient background blobs -->
+<div class="int-blob" style="width:600px;height:600px;background:radial-gradient(circle,rgba(138,180,192,0.055) 0%,transparent 70%);top:-100px;left:-200px;"></div>
+<div class="int-blob" style="width:500px;height:500px;background:radial-gradient(circle,rgba(200,112,96,0.05) 0%,transparent 70%);bottom:-80px;right:-150px;"></div>
+<div class="int-blob" style="width:300px;height:300px;background:radial-gradient(circle,rgba(212,169,106,0.04) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+
+<!-- MINIMAL TOP BAR -->
+<header class="int-topbar">
+  <a href="/" class="int-back" aria-label="Return to main website">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path d="M19 12H5M5 12l7-7M5 12l7 7" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Back to site
+  </a>
+
+  <a href="/" class="int-topbar-logo">S<span>.</span>Ganguly</a>
+
+  <button class="int-theme-btn" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
+</header>
+
+<!-- MAIN -->
+<main class="int-main">
+
+  <!-- Header -->
+  <div class="int-header">
+    <div class="int-eyebrow">Beyond the equations</div>
+    <h1 class="int-title">
+      Other
+      <em>Interests</em>
+    </h1>
+    <p class="int-subtitle">
+      What I return to when the physics gets quiet —<br>
+      books that linger, and films I keep thinking about.
+    </p>
+  </div>
+
+  <!-- Cards -->
+  <div class="int-cards">
+
+    <!-- READING CARD -->
+    <a href="/reading/" class="int-card int-card--books" aria-label="Go to Reading page">
+      <span class="int-card-icon">◎</span>
+      <div class="int-card-label">Reading</div>
+      <h2 class="int-card-title">Books &amp;<br><em>Papers</em></h2>
+      <p class="int-card-desc">
+        Fiction, philosophy, and the academic stack — what's on the shelf and what's on the desk.
+      </p>
+      <div class="int-card-snippets">
+        <div class="int-snippet">
+          <span class="int-snippet-dot"></span>
+          Currently: The Master &amp; Margarita — Bulgakov
+        </div>
+        <div class="int-snippet">
+          <span class="int-snippet-dot"></span>
+          Paper: Quasiclassical theory of superconductivity
+        </div>
+        <div class="int-snippet">
+          <span class="int-snippet-dot"></span>
+          Queue: Crime &amp; Punishment · Gödel, Escher, Bach
+        </div>
+      </div>
+      <div class="int-card-enter">
+        <span class="int-card-enter-line"></span>
+        Enter Reading Room
+        <span>→</span>
+      </div>
+    </a>
+
+    <!-- CINEMA CARD -->
+    <a href="/movies/" class="int-card int-card--films" aria-label="Go to Cinema page">
+      <span class="int-card-icon">◈</span>
+      <div class="int-card-label">Cinema</div>
+      <h2 class="int-card-title">Film &amp;<br><em>Moving Image</em></h2>
+      <p class="int-card-desc">
+        A deep love for slow cinema, long takes, and films that trust silence more than dialogue.
+      </p>
+      <div class="int-card-snippets">
+        <div class="int-snippet">
+          <span class="int-snippet-dot"></span>
+          Directors: Wong Kar-wai · Tarkovsky · Kubrick
+        </div>
+        <div class="int-snippet">
+          <span class="int-snippet-dot"></span>
+          Letterboxd: boxd.it/3eINx
+        </div>
+        <div class="int-snippet">
+          <span class="int-snippet-dot"></span>
+          35mm · letterbox · 24fps
+        </div>
+      </div>
+      <div class="int-card-enter">
+        <span class="int-card-enter-line"></span>
+        Enter Cinema Room
+        <span>→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Footer note -->
+  <div class="int-footer-note">
+    <p>"The most beautiful things in life are useless: peacocks and lilies — and films."</p>
+  </div>
+
+</main>
+
+<script>
+  // Theme toggle (synced with rest of site)
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    themeBtn.textContent = 'DARK';
+  }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>
