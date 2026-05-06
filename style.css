@@ -215,6 +215,7 @@ nav {
 .section-inner {
   max-width: var(--max-w);
   margin: 0 auto;
+  min-width: 0;
 }
 .section-label {
   font-family: var(--mono);
