@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Yoichiro Nambu: Symmetry, Spontaneity, and the Unity of Physics — Samriddha Ganguly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/style.css"/>
+
+  <style>
+    :root {
+      --paper:       #faf7f0;
+      --paper2:      #f4f0e6;
+      --rule:        rgba(100,130,180,0.12);
+      --margin-line: rgba(180,60,60,0.15);
+      --tape:        rgba(200,169,110,0.18);
+      --tape-dark:   rgba(100,80,40,0.22);
+    }
+
+    #read-progress { position:fixed; top:var(--nav-h); left:0; right:0; height:2px; background:var(--border); z-index:999; }
+    #read-progress-fill { height:100%; background:var(--accent); width:0%; transition:width 0.1s linear; }
+
+    .article-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 4rem) var(--pad) 6rem;
+    }
+
+    .art-back {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.05s forwards;
+    }
+    .art-back:hover { color: var(--accent); }
+
+    .art-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--accent);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.1s forwards;
+    }
+    .art-eyebrow::before { content:''; width:24px; height:1px; background:var(--accent); }
+
+    .art-title {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.25s forwards;
+    }
+
+    .art-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.4s forwards;
+    }
+    .art-meta-sep { color: var(--text-dim); }
+
+    .art-hero-img {
+      width: calc(100% + 4rem);
+      margin-left: -2rem;
+      height: 360px;
+      object-fit: cover;
+      filter: sepia(25%) contrast(1.05);
+      margin-bottom: 0.5rem;
+      display: block;
+      opacity: 0;
+      animation: fadeIn 1s 0.5s forwards;
+    }
+    .art-hero-caption {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-align: center;
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+
+    /* ── JOURNAL BODY ── */
+    .journal-body { position: relative; }
+    .journal-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, var(--rule) 31px, var(--rule) 32px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .journal-body::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 52px;
+      width: 1px;
+      background: var(--margin-line);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .journal-body > * { position: relative; z-index: 1; }
+
+    .journal-body p {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.05rem;
+      line-height: 2.0;
+      color: var(--text);
+      margin-bottom: 2rem;
+      padding-left: 68px;
+    }
+    .journal-body h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 3rem 0 1rem;
+      padding-left: 68px;
+      line-height: 1.2;
+    }
+    .journal-body h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2rem 0 0.75rem;
+      padding-left: 68px;
+    }
+
+    /* Scrapbook images */
+    .scrap-right { float:right; clear:right; width:280px; margin:0.5rem -1.5rem 2rem 2.5rem; position:relative; z-index:2; }
+    .scrap-left  { float:left;  clear:left;  width:260px; margin:0.5rem 2.5rem 2rem -1rem; position:relative; z-index:2; }
+    .scrap-full  { clear:both; width:calc(100% + 2rem); margin-left:-1rem; margin-bottom:2.5rem; position:relative; z-index:2; }
+    .scrap-center{ clear:both; width:65%; margin:0 auto 2.5rem; display:block; position:relative; z-index:2; }
+
+    .scrap-photo { display:block; width:100%; position:relative; }
+    .scrap-photo img { display:block; width:100%; height:auto; filter:sepia(15%) contrast(1.05); object-fit:cover; }
+
+    .scrap-polaroid {
+      background: #fff; padding:8px 8px 32px;
+      box-shadow: 2px 4px 18px rgba(0,0,0,0.35);
+    }
+    .scrap-polaroid img { display:block; width:100%; height:200px; object-fit:cover; filter:sepia(20%) contrast(1.05) saturate(0.85); }
+    .scrap-polaroid .polaroid-label { font-family:'Caveat',cursive; font-size:0.95rem; color:#333; text-align:center; padding-top:8px; line-height:1.2; }
+
+    .scrap-right .scrap-photo, .scrap-right .scrap-polaroid { transform:rotate(1.8deg); }
+    .scrap-left  .scrap-photo, .scrap-left  .scrap-polaroid { transform:rotate(-2.2deg); }
+
+    .scrap-photo::before, .scrap-polaroid::before {
+      content:''; position:absolute; top:-10px; left:50%;
+      transform:translateX(-50%) rotate(-1deg);
+      width:60px; height:22px;
+      background:var(--tape); border:1px solid var(--tape-dark);
+      z-index:3; border-radius:1px;
+    }
+    .scrap-left .scrap-photo::before, .scrap-left .scrap-polaroid::before { transform:translateX(-50%) rotate(1.5deg); }
+
+    .scrap-caption { font-family:'Caveat',cursive; font-size:0.92rem; color:var(--text-muted); text-align:center; margin-top:0.5rem; line-height:1.3; display:block; }
+
+    .img-placeholder { width:100%; height:200px; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-family:'Caveat',cursive; font-size:1rem; color:var(--text-dim); border:1px dashed var(--border); }
+
+    .annotation { font-family:'Caveat',cursive; font-size:1.1rem; color:var(--accent); transform:rotate(-2deg); display:inline-block; margin:0.5rem 0 0.5rem 68px; position:relative; }
+    .annotation::after { content:''; position:absolute; bottom:2px; left:0; right:0; height:1px; background:var(--accent); opacity:0.4; }
+
+    .pull-quote { clear:both; margin:2.5rem 0 2.5rem 68px; padding:1.25rem 1.75rem; border-left:3px solid var(--accent); background:var(--bg2); }
+    .pull-quote p { font-family:'Caveat',cursive; font-size:1.55rem; font-weight:600; color:var(--text); line-height:1.4; margin:0; padding:0; }
+    .pull-quote cite { display:block; font-family:var(--mono); font-size:0.62rem; color:var(--text-muted); letter-spacing:0.08em; margin-top:0.75rem; }
+
+    .eq-block { clear:both; font-family:var(--mono); font-size:0.9rem; background:var(--bg3); border:1px solid var(--border); padding:1.25rem 1.75rem 1.25rem calc(68px + 1.75rem); margin-bottom:2rem; overflow-x:auto; letter-spacing:0.04em; color:var(--accent2); }
+
+    .sticky { float:right; clear:right; width:200px; margin:0.5rem -1rem 2rem 2rem; background:#fef9c3; color:#1c1a00; padding:1rem; transform:rotate(2.5deg); box-shadow:3px 4px 12px rgba(0,0,0,0.25); font-family:'Caveat',cursive; font-size:1rem; line-height:1.5; z-index:3; position:relative; }
+
+    .clearfix::after { content:''; display:table; clear:both; }
+
+    .art-footer { clear:both; margin-top:5rem; padding-top:3rem; border-top:1px solid var(--border); display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+    .art-tag { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; padding:0.3rem 0.75rem; border:1px solid var(--border); color:var(--text-muted); }
+    .art-pdf-link { margin-left:auto; font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); text-decoration:none; border:1px solid var(--accent); padding:0.5rem 1.2rem; transition:all 0.2s; }
+    .art-pdf-link:hover { background:var(--accent); color:var(--bg); }
+
+    @media (max-width: 680px) {
+      .article-wrap { padding-left:1.25rem; padding-right:1.25rem; }
+      .scrap-right, .scrap-left { float:none; width:100%; margin:0 0 2rem; }
+      .journal-body::after { display:none; }
+      .journal-body p, .journal-body h2, .journal-body h3, .annotation, .pull-quote, .eq-block { padding-left:0; margin-left:0; }
+      .art-hero-img { width:100%; margin-left:0; }
+      .sticky { float:none; width:100%; margin:0 0 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="read-progress"><div id="read-progress-fill"></div></div>
+
+<nav>
+  <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research/">Research</a></li>
+    <li><a href="/cv/">About Me</a></li>
+    <li><a href="/blog/" class="active">Blog</a></li>
+    <li><a href="/resources/">Resources</a></li>
+    <li><a href="/open_board/">open_board</a></li>
+    <li><a href="/courses/">Courses</a></li>
+    <li><a href="/gallery/">Gallery</a></li>
+    <li><a href="/interests/">Interests</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
+  <button class="nav-hamburger" id="menuBtn">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="article-wrap">
+  <a href="/blog/" class="art-back">← Back to Blog</a>
+
+  <header class="art-header" style="margin-bottom:3.5rem;">
+    <div class="art-eyebrow">Pillars of Physics · Portrait · 2026</div>
+    <h1 class="art-title">Yoichiro Nambu:<br>Symmetry, Spontaneity,<br>and the Unity of Physics</h1>
+    <div class="art-meta">
+      <span>Samriddha Ganguly</span>
+      <span class="art-meta-sep">·</span>
+      <span>March 2026</span>
+      <span class="art-meta-sep">·</span>
+      <span>~22 min read</span>
+      <span class="art-meta-sep">·</span>
+      <span>Symmetry Breaking · Superconductivity · Standard Model</span>
+    </div>
+  </header>
+
+  <img src="/assets/nambu_cover.png" alt="Yoichiro Nambu" class="art-hero-img"
+       onerror="this.style.display='none'">
+  <p class="art-hero-caption">Yoichiro Nambu (1921–2015) — whose ideas on broken symmetry underpin both the BCS theory of superconductivity and the Higgs mechanism.</p>
+
+  <div class="journal-body">
+
+    <h2>A Physicist's Physicist</h2>
+
+    <div class="sticky">
+      Nambu won the Nobel in 2008, aged 87. He had done the work in 1960. Physics sometimes takes its time.
+    </div>
+
+    <p>
+      There is a category of physicist — rarer than it sounds — who manages to change not just what we know but how we think. Yoichiro Nambu belongs to this category. His contributions to theoretical physics are so deeply woven into the fabric of modern quantum field theory that it is now almost impossible to see them as additions; they feel like they were always there, like the axioms of a geometry.
+    </p>
+
+    <p>
+      Born in Tokyo in 1921, Nambu spent most of his career at the University of Chicago, where he became known among colleagues as someone of extraordinary depth and unusual quietness — a physicist who would disappear for long stretches and resurface with ideas that took the community years to fully absorb. He is best known for the concept of spontaneous symmetry breaking and for being one of the founders of string theory (a fact often forgotten in the excitement over his condensed-matter-inspired particle physics).
+    </p>
+
+    <div class="scrap-right">
+      <div class="scrap-polaroid">
+        <img src="/assets/nambu_cover.png" alt="Nambu portrait"
+             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Portrait: Yoichiro Nambu</div>'">
+        <div class="polaroid-label">Nambu at Chicago,<br>circa 1960s</div>
+      </div>
+    </div>
+
+    <p>
+      This essay is my attempt to explain why Nambu's central idea — spontaneous symmetry breaking — is so important, and why it represents one of the most striking examples of the unity of physics: the same mathematical structure governing both a superconductor in a laboratory and the Higgs boson at the LHC.
+    </p>
+
+    <!-- § 2 -->
+    <h2>What is a Symmetry?</h2>
+
+    <p>
+      Before we can talk about broken symmetries, we need to say what a symmetry is. In physics, a symmetry is a transformation you can perform on a system that leaves its laws unchanged. Rotate an isolated system: the physics is the same. Translate it in space: the physics is the same. These symmetries are connected, through Noether's theorem, to conserved quantities — momentum, energy, angular momentum.
+    </p>
+
+    <div class="pull-quote">
+      <p>"A symmetry of the laws is not the same as a symmetry of the state. This distinction is Nambu's great insight."</p>
+      <cite>— paraphrasing the essence of the 1960 paper</cite>
+    </div>
+
+    <p>
+      The laws governing a ferromagnet — the quantum Hamiltonian — are perfectly rotationally symmetric. There is no preferred direction built into the interactions between spins. And yet, below the Curie temperature, the magnet spontaneously picks a direction and magnetises along it. The ground state is not rotationally symmetric, even though the law is.
+    </p>
+
+    <div class="scrap-left">
+      <div class="scrap-photo">
+        <img src="/assets/cmp_cover.png" alt="Mexican hat potential"
+             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>The Mexican hat potential — the icon of SSB</div>'">
+      </div>
+      <span class="scrap-caption">The "sombrero" potential. Symmetric about the vertical axis, but the ball rolls to one side.</span>
+    </div>
+
+    <p>
+      This is what it means to spontaneously break a symmetry: the Hamiltonian (the law) has the symmetry; the ground state (the solution, the state of lowest energy) does not. The system "chooses" a direction, even though nothing in the fundamental law picks it out.
+    </p>
+
+    <!-- § 3 -->
+    <h2>Nambu-Goldstone: The Massless Ghosts</h2>
+
+    <span class="annotation" style="color:var(--accent2);">← One of the most beautiful theorems in all of physics</span>
+
+    <p>
+      When a continuous symmetry is spontaneously broken, something remarkable happens: a massless boson appears. This is the Nambu-Goldstone theorem, and it is one of the deepest results in quantum field theory.
+    </p>
+
+    <p>
+      The intuition is geometric. When the ground state spontaneously chooses one of many equivalent configurations — the ball in the Mexican hat rolls to one point on the circular rim — there are modes of oscillation that correspond to moving along the rim, from one equivalent ground state to another. These modes cost no energy in the long-wavelength limit. They are massless.
+    </p>
+
+    <div class="eq-block">
+      If G → H via SSB, then there are dim(G) − dim(H) massless Nambu-Goldstone bosons.
+      
+      Example: ferromagnet breaks SO(3) → SO(2), giving 2 − 1 = 1 magnon (spin wave).
+      Example: chiral SSB in QCD breaks SU(2)_L × SU(2)_R → SU(2)_V, giving 3 pions (≈ massless).
+    </div>
+
+    <p>
+      In a ferromagnet, the Nambu-Goldstone bosons are the spin waves — long-wavelength fluctuations of the magnetisation direction. In QCD, the approximate chiral symmetry is spontaneously broken, and the resulting Nambu-Goldstone bosons are the pions, the lightest hadrons. (They are not exactly massless because quark masses explicitly break the symmetry a little — hence "approximate".) This was Nambu's insight in his 1960 paper, building on the analogy with the BCS theory of superconductivity.
+    </p>
+
+    <!-- § 4 -->
+    <h2>The Higgs Mechanism: When the Ghost Gets a Mass</h2>
+
+    <div class="sticky" style="background:#dbeafe; color:#1e3a5f; transform:rotate(-3deg);">
+      The Higgs boson is not the Goldstone boson — it's what's left after the Goldstone boson is "eaten" by the gauge field.
+    </div>
+
+    <p>
+      Here is where physics becomes truly elegant. In a global symmetry (one that acts the same way everywhere in space), spontaneous breaking gives massless Goldstone bosons. But in a gauge symmetry — a local symmetry, one that can act differently at each point in space — something different happens.
+    </p>
+
+    <p>
+      The Goldstone boson gets "eaten" by the gauge field. The gauge boson, which was massless, acquires the Goldstone degree of freedom as its longitudinal polarisation — and becomes massive. This is the Higgs mechanism, worked out independently by Higgs, Brout-Englert, and Guralnik-Hagen-Kibble in 1964. But the underlying physics of spontaneous symmetry breaking, without which the mechanism makes no sense, came from Nambu.
+    </p>
+
+    <div class="scrap-center">
+      <div class="scrap-photo">
+        <img src="/assets/nambu_cover.png" alt="Higgs mechanism schematic"
+             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Higgs mechanism: gauge boson acquires mass via SSB</div>'">
+      </div>
+      <span class="scrap-caption">Schematic: the gauge field "eats" the Goldstone boson and becomes massive. The remaining physical scalar is the Higgs boson.</span>
+    </div>
+
+    <p>
+      The W and Z bosons of the weak force are massive — their masses are around 80 and 91 GeV respectively. This is why the weak force is short-ranged. The photon is massless, which is why electromagnetism is long-ranged. The Higgs mechanism, triggered by the spontaneous breaking of the electroweak symmetry SU(2)×U(1) down to U(1), explains this difference. It is the reason the world looks the way it does at the scales of atoms and below.
+    </p>
+
+    <!-- § 5 -->
+    <h2>The Condensed Matter Connection</h2>
+
+    <p>
+      What makes Nambu's story so remarkable — and so relevant to what I work on — is that he arrived at all of this by thinking about <em>superconductors</em>.
+    </p>
+
+    <p>
+      The BCS theory (Bardeen, Cooper, Schrieffer, 1957) had just explained superconductivity in terms of the condensation of Cooper pairs — bound states of electrons with opposite momenta and spins. Nambu noticed that the BCS ground state breaks the global U(1) symmetry of electromagnetism (the symmetry associated with conservation of electric charge). And he asked: what are the consequences of this symmetry breaking?
+    </p>
+
+    <div class="scrap-right">
+      <div class="scrap-photo" style="transform:rotate(-1.5deg);">
+        <img src="/assets/cmp_cover.png" alt="BCS gap"
+             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>BCS gap: the superconducting order parameter</div>'">
+      </div>
+      <span class="scrap-caption">The BCS gap Δ is the order parameter for superconductivity — the analog of the Higgs field.</span>
+    </div>
+
+    <p>
+      In a superconductor, the "Goldstone boson" of the broken U(1) symmetry would naively be a massless mode — a plasmon. But because the symmetry is a gauge symmetry (electromagnetism is local), the Goldstone boson is eaten, and the photon inside the superconductor becomes massive. This is the Meissner effect: magnetic fields are expelled from superconductors because the photon acquires a mass inside them, making electromagnetic fields decay exponentially. The London penetration depth is precisely the inverse of this mass.
+    </p>
+
+    <p>
+      Nambu saw this and said: the same thing must happen in particle physics. If the vacuum of nature spontaneously breaks a gauge symmetry, the corresponding gauge bosons will acquire masses. This is exactly what the Higgs mechanism later formalised. In this sense, every superconductor in the world is doing, in cold metal, what the Higgs field does in the vacuum of the universe.
+    </p>
+
+    <!-- § 6 -->
+    <h2>A Tribute</h2>
+
+    <p>
+      Nambu died in 2015, at 94. He had spent most of his life at Chicago, known for a certain gentle inscrutability — a physicist's physicist, in the best sense. The story I find most telling about him is that when he first wrote down what would become the Nambu-Goldstone theorem, he circulated it as a preprint and waited. The community took years to understand what he had done.
+    </p>
+
+    <span class="annotation" style="color:var(--accent); transform:rotate(1deg);">There's a lesson here about patience and depth.</span>
+
+    <p>
+      His Nobel lecture, delivered by video from Chicago in 2008, is quiet and careful and beautiful. He traces the thread from BCS to the Standard Model with the same directness with which he had followed it fifty years before, as a young man looking at superconductors and seeing, in them, the shape of the universe.
+    </p>
+
+    <p>
+      I find that story genuinely moving. It captures something important about the way physics actually works — not as a hierarchy of disciplines, with particle physics at the top and condensed matter somewhere below, but as a conversation across scales and communities, in which insights flow in unexpected directions and the most fundamental results often come from looking at the most "ordinary" systems.
+    </p>
+
+    <p>
+      If you want to read more, Nambu's original 1960 paper is accessible and beautifully written. His Nobel lecture is on the Nobel Prize website and is worth an hour of your time. And the connection between BCS and the Higgs mechanism is explained clearly in Steven Weinberg's textbooks — which are difficult but rewarding.
+    </p>
+
+  </div><!-- /journal-body -->
+
+  <div class="art-footer">
+    <span class="art-tag">Symmetry Breaking</span>
+    <span class="art-tag">Nambu</span>
+    <span class="art-tag">Superconductivity</span>
+    <span class="art-tag">Standard Model</span>
+    <span class="art-tag">History of Physics</span>
+    <a href="/assets/nambu.pdf" class="art-pdf-link" target="_blank">↓ PDF Version</a>
+  </div>
+
+</div><!-- /article-wrap -->
+
+<footer>
+  <div class="footer-inner">
+    <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
+    <ul class="footer-links">
+      <li><a href="/research/">Research</a></li>
+      <li><a href="/publications/">Publications</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') { document.body.classList.add('light'); themeBtn.textContent = 'DARK'; }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+  window.addEventListener('scroll', () => {
+    const el = document.documentElement;
+    const pct = el.scrollTop / (el.scrollHeight - el.clientHeight) * 100;
+    document.getElementById('read-progress-fill').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>
