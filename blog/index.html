@@ -4,11 +4,6 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Blog — Samriddha Ganguly</title>
-  <meta property="og:title" content="Samriddha Ganguly">
-  <meta property="og:description" content="Research in condensed matter, topology, and quantum systems.">
-  <meta property="og:url" content="https://samriddhaganguly.github.io/">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://samriddhaganguly.github.io/assets/preview.png">
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="stylesheet" href="/style.css"/>
@@ -44,7 +39,6 @@
       outline: none;
       cursor: pointer;
     }
-
     .blog-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -58,6 +52,8 @@
       display: flex;
       flex-direction: column;
       cursor: pointer;
+      text-decoration: none;
+      color: inherit;
     }
     .blog-card:hover { border-color: rgba(200,169,110,0.3); transform: translateY(-4px); }
     .blog-card-img {
@@ -132,17 +128,14 @@
       border: 1px solid var(--border);
       color: var(--text-dim);
     }
-
     @media (max-width: 600px) {
       .blog-search-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-  <script src="script.js"></script>
 <body>
 <nav>
   <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
-
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/research/">Research</a></li>
@@ -150,12 +143,12 @@
     <li><a href="/blog/" class="active">Blog</a></li>
     <li><a href="/resources/">Resources</a></li>
     <li><a href="/open_board/">open_board</a></li>
-   <li><a href="/courses/">Courses</a></li>
+    <li><a href="/courses/">Courses</a></li>
     <li><a href="/gallery/">Gallery</a></li>
     <li><a href="/interests/">Interests</a></li>
     <li><a href="/contact/">Contact</a></li>
   </ul>
-<button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
   <button class="nav-hamburger" id="menuBtn">
     <span></span><span></span><span></span>
   </button>
@@ -172,7 +165,6 @@
 
 <section class="section" style="background:var(--bg);">
   <div class="section-inner">
-
     <div class="blog-search-row">
       <input type="text" class="search-input" placeholder="Search articles..." id="blogSearch">
       <select class="filter-select" id="catFilter">
@@ -190,39 +182,37 @@
 
     <div class="blog-grid" id="blogGrid">
 
-      <div class="blog-card reveal" data-cat="intro" data-year="2026" data-title="Why Should I Care About Condensed Matter Physics">
-     <div class="blog-card-img">
-  <img src="/assets/cmp_cover.png" alt="Condensed Matter Cover">
-</div>
+      <!-- Card 1 -->
+      <a class="blog-card reveal" data-cat="intro" data-year="2026" data-title="Why Should I Care About Condensed Matter Physics" href="/blog/condensed-matter/">
+        <div class="blog-card-img">
+          <img src="/assets/cmp_cover.png" alt="Condensed Matter Cover" onerror="this.parentElement.innerHTML='<div class=\'blog-card-img-placeholder\'>Condensed Matter Physics</div>'">
+        </div>
         <div class="blog-card-body">
           <div class="bc-meta">Why should I care about X? · 2026</div>
           <div class="bc-title">Why Should I Care About Condensed Matter Physics?</div>
           <p class="bc-desc">An introduction to condensed matter physics, emergence, and topology. Why is the physics of "ordinary" matter so rich, strange, and important?</p>
           <div class="bc-footer">
-<a href="/assets/cmp.pdf" class="bc-read" target="_blank">
-  Read Article →
-</a>
+            <span class="bc-read">Read Article →</span>
             <span class="bc-category">Intro</span>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="blog-card reveal" data-cat="pillars" data-year="2026" data-title="Yoichiro Nambu Symmetry Spontaneity Unity">
-    <div class="blog-card-img">
-  <img src="/assets/nambu_cover.png" alt="Nambu Cover">
-</div>
+      <!-- Card 2 -->
+      <a class="blog-card reveal" data-cat="pillars" data-year="2026" data-title="Yoichiro Nambu Symmetry Spontaneity Unity" href="/blog/nambu/">
+        <div class="blog-card-img">
+          <img src="/assets/nambu_cover.png" alt="Nambu Cover" onerror="this.parentElement.innerHTML='<div class=\'blog-card-img-placeholder\'>Yoichiro Nambu</div>'">
+        </div>
         <div class="blog-card-body">
           <div class="bc-meta">Pillars of Physics · 2026</div>
           <div class="bc-title">Yoichiro Nambu: Symmetry, Spontaneity, and the Unity of Physics</div>
           <p class="bc-desc">Spontaneous symmetry breaking and its role in modern physics, from superconductivity to the Standard Model. A tribute to one of the deepest thinkers in physics.</p>
           <div class="bc-footer">
-<a href="/assets/nambu.pdf" class="bc-read" target="_blank">
-  Read Article →
-</a>
+            <span class="bc-read">Read Article →</span>
             <span class="bc-category">Pillars</span>
           </div>
         </div>
-      </div>
+      </a>
 
     </div>
   </div>
@@ -267,18 +257,15 @@
     });
   }, { threshold: 0.08 });
   reveals.forEach(r => obs.observe(r));
-  // Theme toggle
-const themeBtn = document.getElementById('themeBtn');
-const saved = localStorage.getItem('theme');
-if (saved === 'light') {
-  document.body.classList.add('light');
-  themeBtn.textContent = 'DARK';
-}
-themeBtn.addEventListener('click', () => {
-  const isLight = document.body.classList.toggle('light');
-  themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-});
+
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') { document.body.classList.add('light'); themeBtn.textContent = 'DARK'; }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
 </script>
 </body>
 </html>
