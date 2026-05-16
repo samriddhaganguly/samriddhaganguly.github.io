@@ -494,12 +494,19 @@
       <span class="art-meta-sep">·</span>
       <span>Condensed Matter · Topology · Emergence</span>
     </div>
-  </header>
-
-  <!-- Hero image — replace src with your actual asset -->
+<!-- Hero image -->
   <img src="/assets/cmp_cover.png" alt="Condensed Matter Physics" class="art-hero-img"
        onerror="this.style.display='none'">
   <p class="art-hero-caption">Figure 0 — The Fermi surface of copper, visualised. Ordinary matter, extraordinary structure.</p>
+
+  <!-- MathJax for proper LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 
   <!-- ═══════════════ ARTICLE BODY ═══════════════ -->
   <div class="journal-body">
@@ -508,145 +515,153 @@
     <h2>The Question Nobody Asks</h2>
 
     <div class="sticky">
-      ← The standard answer is "transistors". But that undersells it by about 10 orders of magnitude.
+      The standard answer is "transistors". But that undersells it by about 10 orders of magnitude.
     </div>
 
     <p>
-      There is a strange asymmetry in how physics is taught and spoken about publicly. Ask someone what the most exciting branch of physics is, and you will hear particle physics, cosmology, perhaps quantum gravity. Nobody ever says condensed matter. And yet condensed matter physics is, by almost any measure — number of practitioners, Nobel prizes, technological impact, sheer density of open problems — the largest and richest field in all of physics.
+      There is a strange asymmetry in how physics gets taught and talked about publicly. Ask someone which branch of physics is the most exciting, and you will almost always hear particle physics, cosmology, or quantum gravity. Nobody ever says condensed matter. And yet condensed matter physics is, by almost any concrete measure you care about, the largest and richest field in all of physics: more practitioners, more Nobel prizes per decade, greater technological impact, and a denser collection of genuinely open problems than any other subfield.
     </p>
 
     <p>
-      This essay is my attempt to answer a question I get occasionally from friends who study other things: <em>why do you care about stuff?</em> Not the universe, not the fundamental particles — just ordinary matter. Wood, water, copper, superconductors. Why is this worth a physicist's time?
+      This essay is my attempt to answer a question friends from other disciplines ask me occasionally: <em>why do you care about stuff?</em> Not the universe at large, not the elementary particles, just ordinary matter. Wood, water, copper, superconductors at four kelvin. Why is this worth a physicist's attention?
     </p>
 
     <div class="scrap-right">
       <div class="scrap-polaroid">
-        <img src="/assets/cmp_cover.png" alt="Lattice structure"
-             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Crystal lattice sketch</div>'">
-        <div class="polaroid-label">A crystal lattice — <br>10²³ atoms, one pattern</div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Cubic-face-centered.svg/399px-Cubic-face-centered.svg.png"
+             alt="FCC crystal lattice"
+             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>FCC crystal lattice</div>'">
+        <div class="polaroid-label">Face-centred cubic lattice:<br>10<sup>23</sup> atoms, one pattern</div>
       </div>
     </div>
 
     <p>
-      The short answer is emergence. The long answer is that condensed matter physics is where the most profound questions about what quantum mechanics actually <em>means</em> get answered — not in the lab of a particle physicist, but in a lump of metal cooled to a few millikelvin.
+      The short answer is emergence. The longer answer is that condensed matter physics is where the most profound questions about what quantum mechanics actually <em>means</em> get settled experimentally, not in a particle accelerator, but in a lump of metal cooled to a few millikelvin in a dilution refrigerator sitting in somebody's basement lab.
     </p>
 
     <p>
-      Let me try to explain what I mean, carefully, and without assuming you know anything beyond basic physics.
+      Let me try to explain what I mean carefully, without assuming anything beyond a first course in physics.
     </p>
 
     <!-- § 2 -->
     <h2>More is Different</h2>
 
     <p>
-      In 1972, Philip Anderson — one of the great condensed matter physicists of the twentieth century — published a short essay in <em>Science</em> with the title "More is Different." It is, in my opinion, one of the most important pieces of scientific writing of the last century, and it runs to about four pages.
+      In 1972, Philip Anderson, one of the great condensed matter physicists of the twentieth century, published a short essay in <em>Science</em> with the title "More is Different." It is, in my view, one of the most important pieces of scientific writing of the last hundred years, and it runs to about four pages. The argument is simple to state and surprisingly hard to fully absorb.
     </p>
 
     <div class="pull-quote">
       <p>"At each level of complexity, entirely new properties appear, and the understanding of the new behaviors requires research which I think is as fundamental in its nature as any other."</p>
-      <cite>— Philip W. Anderson, "More is Different" (1972)</cite>
+      <cite>Philip W. Anderson, "More is Different" (1972)</cite>
     </div>
 
     <p>
-      Anderson's point was this: the reductionist dream — the idea that if you know the laws governing the smallest constituents of matter, you can in principle deduce everything — is, in a very precise sense, false. Not because the laws break down. But because new laws <em>emerge</em>.
+      Anderson's point was this: the reductionist program, the idea that if you know the laws governing the smallest constituents of matter you can in principle deduce everything, is, in a very precise sense, wrong. Not because the laws break down at larger scales. But because genuinely new laws <em>emerge</em>, laws that are not deducible from those at the level below, even in principle, without invoking radically different concepts.
     </p>
 
     <div class="scrap-left">
       <div class="scrap-photo">
-        <img src="/assets/nambu_cover.png" alt="Emergence diagram"
-             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Emergence: hierarchy of scales</div>'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Atom_diagram.png/220px-Atom_diagram.png"
+             alt="Hierarchy of scales in matter"
+             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Hierarchy of scales</div>'">
       </div>
-      <span class="scrap-caption">Each rung of the ladder obeys its own rules. The rules at the bottom don't uniquely determine the rules at the top.</span>
+      <span class="scrap-caption">Each level of organisation obeys its own rules. Knowing the bottom level well does not give you the top level for free.</span>
     </div>
 
     <p>
-      Consider water. Each water molecule obeys quantum mechanics. But wetness — the property of being wet — is not a property of a single molecule. It doesn't even make sense to ask whether one molecule of H₂O is wet. Wetness is a collective, emergent property of roughly 10²³ molecules interacting together. The same goes for hardness, transparency, superconductivity, magnetism, and most of the properties of matter that matter for everyday life.
+      Consider water. Each water molecule obeys the Schrodinger equation. But wetness, the property of being wet, is not a property of a single molecule. It does not even make sense to ask whether one H<sub>2</sub>O molecule is wet. Wetness is a collective, emergent property of roughly 10<sup>23</sup> molecules interacting together. The same goes for hardness, transparency, superconductivity, magnetism, and essentially every property of matter that shows up in everyday life or in technology.
     </p>
 
     <p>
-      This is what condensed matter physics studies: not individual particles, but the vast collective behaviours that arise when quantum particles are assembled in enormous numbers.
+      Condensed matter physics is, at its core, the physics of emergence: not the study of individual particles, but of the vast collective behaviors that arise when quantum particles are assembled in enormous numbers and allowed to interact.
     </p>
 
     <!-- § 3 -->
     <h2>Topology and the Unexpected</h2>
 
-    <span class="annotation">← This is where it gets genuinely wild</span>
+    <span class="annotation">This is where things get genuinely surprising.</span>
 
     <p>
-      For most of the twentieth century, the classification of phases of matter — solid, liquid, gas, and various ordered phases like magnets or superconductors — was understood using a framework built by Lev Landau in the 1930s. The basic idea was spontaneous symmetry breaking: a magnet breaks the rotational symmetry of space by picking a preferred direction; a crystal breaks translational symmetry by arranging atoms on a lattice.
+      For most of the twentieth century, the classification of phases of matter, solid, liquid, gas, magnet, superconductor, and so on, was understood through a framework assembled by Lev Landau in the 1930s. The central concept was spontaneous symmetry breaking: a magnet breaks the rotational symmetry of space by picking a preferred direction; a crystal breaks translational symmetry by arranging atoms periodically. Each phase was characterised by an order parameter, a quantity that is zero in the disordered phase and nonzero in the ordered one.
     </p>
 
     <p>
-      In the 1980s, something happened that nobody expected. The discovery of the quantum Hall effect showed that matter could have phases that were fundamentally different from anything in Landau's scheme — phases distinguished not by any broken symmetry, but by a topological property of the quantum state of electrons.
+      In the 1980s, something happened that nobody had anticipated. The discovery of the quantum Hall effect revealed that matter could exist in phases that were entirely outside Landau's classification: phases distinguished not by any broken symmetry, not by any local order parameter, but by a global, topological property of the quantum state of the electrons.
+    </p>
+
+    <p>
+      The Hall conductance in these systems is quantised. The precise statement is:
     </p>
 
     <div class="eq-block">
-      σ_xy = ν · (e² / h),    ν ∈ ℤ   [integer quantum Hall]
-      σ_xy = ν · (e² / h),    ν ∈ ℚ   [fractional quantum Hall]
+      $$\sigma_{xy} = \nu \,\frac{e^2}{h}, \qquad \nu \in \mathbb{Z} \quad \text{(integer quantum Hall)}$$
+      $$\sigma_{xy} = \nu \,\frac{e^2}{h}, \qquad \nu \in \mathbb{Q} \quad \text{(fractional quantum Hall)}$$
     </div>
 
     <p>
-      The Hall conductance — the ratio of transverse current to applied voltage — was quantised with extraordinary precision. Not approximately quantised: quantised to one part in 10⁹. And the integer ν turned out to be a topological invariant of the electron wavefunctions: the Chern number, a quantity borrowed from pure mathematics.
+      The ratio of transverse current to applied voltage is quantised to one part in 10<sup>9</sup>, far more precisely than almost anything else measurable in a solid-state system. This precision is not accidental. The integer $\nu$ turns out to be the Chern number of the occupied electron bands, a topological invariant borrowed directly from differential geometry. It cannot change continuously; it can only jump by integers. And because it is topological, it is immune to disorder, impurities, and small perturbations.
     </p>
 
     <div class="scrap-center">
       <div class="scrap-photo">
-        <img src="/assets/cmp_cover.png" alt="Quantum Hall plateau"
-             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Quantum Hall plateau — σ_xy vs B</div>'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Quantum_Hall_effect.png/640px-Quantum_Hall_effect.png"
+             alt="Quantum Hall plateau measurement"
+             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Quantum Hall plateau: R_H vs B</div>'">
       </div>
-      <span class="scrap-caption">The iconic Hall resistance plateaus. Each flat step is a different topological phase.</span>
+      <span class="scrap-caption">The measured Hall resistance as a function of magnetic field. Each flat plateau corresponds to a different topological phase, labelled by an integer. (Wikimedia Commons, public domain)</span>
     </div>
 
     <p>
-      What does it mean for a phase of matter to be "topological"? Roughly: the global structure of the quantum state matters, not just the local arrangement of atoms. A topological insulator is insulating in its bulk but conducts perfectly on its surface — and this surface conductance is protected by topology: you cannot remove it without fundamentally changing the nature of the material. It is as robust as the difference between a donut and a sphere.
+      What does it mean physically for a phase of matter to be "topological"? The rough idea is this: the global structure of the quantum wavefunction across the whole material matters, not just what is happening locally at any one point. A topological insulator, for example, is insulating in its bulk but supports perfectly conducting states on its surface. Those surface states are protected by topology: they cannot be removed by any local perturbation that does not close the bulk gap. The protection is as robust as the mathematical difference between a sphere and a torus; you cannot deform one into the other without tearing.
     </p>
 
     <!-- § 4 -->
     <h2>Why Should You Care?</h2>
 
     <div class="sticky" style="background:#d1fae5; color:#064e3b; transform:rotate(-2deg);">
-      Practical note: topological qubits might actually be how we build fault-tolerant quantum computers.
+      Practical note: topological qubits may be one of the most realistic routes to fault-tolerant quantum computation.
     </div>
 
     <p>
-      You might think: this is all very beautiful, but why should someone who doesn't want to be a physicist care? Let me give three answers at different levels.
+      At this point, a reasonable person might ask: this is all beautiful, but why should someone who does not plan to be a physicist care? I want to give three answers at different levels, because I think the question deserves more than one kind of answer.
     </p>
 
     <p>
-      <strong>Technologically:</strong> Every device you own depends on condensed matter physics. The transistor, the laser, the LED, the MRI machine, the solar cell — all of these are products of our understanding of how quantum mechanics operates in solid matter. The field of topological matter, which is barely forty years old, is already pointing toward fault-tolerant quantum computers and dissipationless electronics.
+      <strong>Technologically.</strong> Every electronic device you own is a product of condensed matter physics. The transistor, the laser, the LED display, the MRI machine, the lithium-ion battery, the solar cell: all of these emerged from an understanding of how quantum mechanics operates in real materials. The study of topological phases, barely forty years old as a field, is already pointing toward dissipationless electronics, topological qubits, and new classes of sensors. The translation from fundamental insight to usable technology in condensed matter has historically been fast, often startlingly so.
     </p>
 
     <div class="scrap-right">
       <div class="scrap-photo" style="transform:rotate(-1.5deg);">
-        <img src="/assets/nambu_cover.png" alt="Applications"
-             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Applications: from lab to device</div>'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Replica_of_first_transistor.jpg/320px-Replica_of_first_transistor.jpg"
+             alt="First transistor replica"
+             onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Replica of the first transistor, Bell Labs 1947</div>'">
       </div>
-      <span class="scrap-caption">The path from "abstract topology" to real devices is shorter than you'd think.</span>
+      <span class="scrap-caption">Replica of the first transistor, Bell Labs, 1947. Pure condensed matter physics, applied. (Wikimedia Commons)</span>
     </div>
 
     <p>
-      <strong>Intellectually:</strong> Condensed matter physics is where most of the deep conceptual action in modern physics actually happens. Ideas like renormalization, effective field theory, spontaneous symmetry breaking, anomalies, and topological invariants were all developed or sharpened in the context of condensed matter, and many of them were later exported to particle physics and string theory — not the other way around.
+      <strong>Intellectually.</strong> Condensed matter is where most of the deep conceptual action in modern physics actually happens, even if particle physics gets most of the public attention. Renormalisation, effective field theory, spontaneous symmetry breaking, anomalies, topological invariants: these ideas were developed or substantially sharpened in the context of condensed matter systems, and many were later exported to high-energy physics, not imported from it. The theoretical tools used at CERN and the theoretical tools used to understand a superconductor share a common ancestry, and the traffic of ideas has frequently run from the lab bench to the accelerator rather than the other way around.
     </p>
 
     <p>
-      <strong>Philosophically:</strong> If you care about what the world is made of, condensed matter physics is the place to look for surprises. Quasiparticles — excitations that behave like particles with fractional electric charge, or with exotic exchange statistics — exist only in many-body systems. The fractional quantum Hall state harbours excitations with charge e/3. These are not particles in any elementary sense, but they are real, measurable, and profoundly strange. Matter is stranger than particles.
+      <strong>Philosophically.</strong> If you care about what the world is fundamentally made of, condensed matter is where the most surprising answers show up. Quasiparticles, collective excitations that behave like particles with fractional electric charge or non-Abelian exchange statistics, exist only in strongly correlated many-body systems. The fractional quantum Hall state supports excitations with charge $e/3$. These are not elementary particles in any standard sense, but they are physically real, experimentally measurable, and genuinely strange. The moral is that "what things are made of" is a more subtle question than it first appears, and matter has more to say on the subject than particles do.
     </p>
 
     <!-- § 5 -->
     <h2>A Personal Note</h2>
 
     <p>
-      I came to condensed matter somewhat by accident — as a second-year undergraduate, I found myself reading about topological insulators and couldn't stop. What drew me in was precisely the feeling that the field sits at an unusual intersection: rigorous mathematics (K-theory, differential geometry, algebraic topology), deep physical intuition about electrons and lattices, and direct connection to experiments you can do in a lab.
+      I came to condensed matter somewhat sideways. As a second-year undergraduate I started reading about topological insulators, initially because someone mentioned them in a talk, and found I could not stop. What pulled me in was the feeling that the field sits at an unusual intersection of things I find beautiful separately: the rigour of algebraic topology and K-theory, the physical intuition required to think about electrons in a lattice, and the directness of the connection to experiments you can actually run in a lab on a table.
     </p>
 
-    <span class="annotation" style="transform:rotate(1.5deg); color:var(--accent2);">The first time I computed a Chern number I genuinely felt like I'd discovered something. Even though it had been known for 40 years.</span>
+    <span class="annotation" style="transform:rotate(1.5deg); color:var(--accent2);">The first time I computed a Chern number I genuinely felt like I had found something. Even knowing it had been known for 40 years.</span>
 
     <p>
-      My own research touches on the decoherence of topological edge modes — asking how the beautiful, protected surface states of a topological material actually lose their coherence when coupled to the environment. It is, in some sense, a very practical question: if topological protection is the selling point, we need to understand exactly how robust it is. But it is also, I think, a window into something deep about the relationship between quantum mechanics, topology, and the thermal world.
+      My own current work is on the decoherence of topological edge modes. The question is: how do the protected surface states of a topological material actually lose their quantum coherence when the material is coupled to a thermal environment? It is a practical question in one sense, because topological protection is only useful if it survives long enough to be exploited. But it is also, I think, a window into something deeper about the relationship between topology, quantum mechanics, and the dissipative world we actually live in. The interplay between robustness and fragility in these systems turns out to be richer than the simple "topologically protected" slogan suggests.
     </p>
 
     <p>
-      If any of this has made you curious, I'd point you to Anderson's original essay (freely available), and to a beautiful set of lecture notes by Charles Kane, one of the founders of the field of topological insulators. The mathematics is not trivial, but the physical ideas are accessible, and the payoff is a genuinely new way of thinking about matter.
+      If this has made you curious and you want to go further, I would point you first to Anderson's original essay, which is freely available and still worth reading carefully. For the topology, Charles Kane's lecture notes from the Les Houches summer school are an excellent starting point; they assume some quantum mechanics but not much more. The mathematics is not trivial, but the physical ideas are accessible, and the payoff is a way of thinking about matter that feels, to me at least, genuinely new.
     </p>
 
   </div><!-- /journal-body -->
