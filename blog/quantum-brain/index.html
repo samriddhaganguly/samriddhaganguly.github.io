@@ -3,653 +3,1287 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-
   <title>The Quantum Brain — Samriddha Ganguly</title>
-
+  <meta property="og:title" content="The Quantum Brain — Samriddha Ganguly">
+  <meta property="og:description" content="Quantum Mechanics, Consciousness, and the Mind. Three radical frameworks: from Bohm's implicate order to Penrose's spacetime geometry to Pribram's holographic memory.">
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet"/>
-
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/style.css"/>
 
+  <!-- MathJax -->
   <script>
     window.MathJax = {
       tex: {
         inlineMath: [['$','$']],
-        displayMath: [['$$','$$']]
-      }
+        displayMath: [['$$','$$']],
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
     };
   </script>
-
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 
   <style>
-
-    :root{
-      --paper:#faf7f0;
-      --paper2:#f4f0e6;
-      --paper3:#ede8da;
-
-      --ink:#1c1a16;
-      --ink-faded:#5a5648;
-
-      --accent:#1c396e;
-      --accent2:#3464aa;
-
-      --rule:rgba(100,130,180,0.12);
-      --margin-line:rgba(180,60,60,0.15);
-
-      --tape:rgba(200,169,110,0.18);
-      --tape-dark:rgba(100,80,40,0.22);
-
-      --border:rgba(40,40,40,0.14);
-
-      --bg:#faf7f0;
-      --bg2:#f3efe5;
-      --bg3:#ece6d7;
-
-      --text:#1c1a16;
-      --text-muted:#67604f;
-      --text-dim:#8f8774;
-
-      --nav-h:70px;
-      --pad:2rem;
-
-      --mono:'DM Mono', monospace;
+    /* ── TOKENS (matching site palette) ── */
+    :root {
+      --rule:        rgba(100,130,180,0.12);
+      --margin-line: rgba(180,60,60,0.13);
+      --tape:        rgba(200,169,110,0.18);
+      --tape-dark:   rgba(100,80,40,0.22);
+      --dnd-blue:    #1c396e;
+      --dnd-light:   rgba(220,230,245,0.13);
+      --dnd-gold:    #b4913c;
     }
 
-    body{
-      background:var(--bg);
-      color:var(--text);
+    /* ── READING PROGRESS ── */
+    #read-progress { position:fixed; top:var(--nav-h); left:0; right:0; height:2px; background:var(--border); z-index:999; }
+    #read-progress-fill { height:100%; background:var(--accent); width:0%; transition:width 0.1s linear; }
+
+    /* ── ARTICLE WRAP ── */
+    .article-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 4rem) var(--pad) 6rem;
     }
 
-    #read-progress{
-      position:fixed;
-      top:var(--nav-h);
-      left:0;
-      right:0;
-      height:2px;
-      z-index:999;
-      background:var(--border);
+    /* ── BACK LINK ── */
+    .art-back {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.05s forwards;
+    }
+    .art-back:hover { color: var(--accent); }
+
+    /* ── TITLE PAGE AREA ── */
+    .art-titlepage {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 3.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .art-titlepage-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('/assets/Normal_axial_T2-weighted_MR_image_of_the_brain.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      filter: grayscale(100%);
+    }
+    .art-titlepage-brain {
+      display: block;
+      max-width: 55%;
+      margin: 2rem auto 0;
+      position: relative;
+      z-index: 1;
+      filter: sepia(10%) contrast(1.05);
+      opacity: 0.88;
+    }
+    .art-titlepage-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2.5rem 2rem 2rem;
+    }
+    .art-main-title {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .art-subtitle {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--accent2);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s forwards;
+    }
+    .art-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      padding: 0.75rem 0;
+      margin-bottom: 1.5rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.6s 0.55s forwards;
+    }
+    .art-meta-sep { color: var(--text-dim); }
+
+    /* ── READ-ALOUD BOX (DnD style) ── */
+    .read-aloud {
+      background: var(--dnd-light);
+      border: 1px solid var(--accent2);
+      border-left: 4px solid var(--accent2);
+      padding: 1rem 1.4rem;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.75;
+      margin: 2rem 0;
+      position: relative;
+      z-index: 1;
+    }
+    .read-aloud cite {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-top: 0.6rem;
+      font-style: normal;
     }
 
-    #read-progress-fill{
-      height:100%;
-      width:0%;
-      background:var(--accent);
+    /* ── JOURNAL BODY ── */
+    .journal-body { position: relative; }
+    .journal-body::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, var(--rule) 31px, var(--rule) 32px);
+      pointer-events: none; z-index: 0;
+    }
+    .journal-body::after {
+      content: '';
+      position: absolute; top:0; bottom:0; left:52px;
+      width:1px; background:var(--margin-line);
+      pointer-events:none; z-index:0;
+    }
+    .journal-body > * { position:relative; z-index:1; }
+
+    /* ── TYPOGRAPHY ── */
+    .journal-body p {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.02rem;
+      line-height: 2.0;
+      color: var(--text);
+      margin-bottom: 1.75rem;
+      padding-left: 68px;
+    }
+    .journal-body p strong { color: var(--text); font-weight: 500; }
+    .journal-body p em { color: var(--accent2); font-style: italic; }
+
+    /* Section headings */
+    .sec-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding-left: 68px;
+      margin-top: 3.5rem;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .sec-label::after { content:''; flex:1; height:1px; background:var(--dnd-gold); opacity:0.4; }
+
+    .journal-body h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 0.5rem 0 1.2rem;
+      padding-left: 68px;
+      line-height: 1.15;
+    }
+    .journal-body h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5rem 0 0.75rem;
+      padding-left: 68px;
     }
 
-    .article-wrap{
-      max-width:780px;
-      margin:0 auto;
-      padding:calc(var(--nav-h) + 4rem) var(--pad) 6rem;
+    /* Drop cap */
+    .dropcap::first-letter {
+      font-family: 'Caveat', cursive;
+      font-size: 4.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      float: left;
+      line-height: 0.75;
+      margin-right: 0.1rem;
+      margin-top: 0.15rem;
     }
 
-    .art-back{
-      font-family:var(--mono);
-      font-size:0.65rem;
-      color:var(--text-muted);
-      text-decoration:none;
-      letter-spacing:0.1em;
-      display:inline-flex;
-      gap:0.5rem;
-      margin-bottom:2rem;
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      clear: both;
+      margin: 2.5rem 0 2.5rem 68px;
+      padding: 1.25rem 1.75rem;
+      border-left: 3px solid var(--accent);
+      background: var(--bg2);
+    }
+    .pull-quote p {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+      margin: 0; padding: 0;
+    }
+    .pull-quote cite {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      margin-top: 0.75rem;
     }
 
-    .art-header{
-      margin-bottom:3rem;
+    /* ── ANNOTATION ── */
+    .annotation {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      color: var(--accent);
+      transform: rotate(-1.5deg);
+      display: inline-block;
+      margin: 0.25rem 0 0.5rem 68px;
+      position: relative;
+    }
+    .annotation::after { content:''; position:absolute; bottom:2px; left:0; right:0; height:1px; background:var(--accent); opacity:0.35; }
+
+    /* ── EQUATION BLOCK ── */
+    .eq-block {
+      clear: both;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      padding: 1.2rem 1.5rem 1.2rem calc(68px + 1rem);
+      margin: 0 0 2rem;
+      overflow-x: auto;
+      font-size: 1rem;
+    }
+    .eq-block .MJX-TEX { font-size: 1.05rem; }
+
+    /* ── COMMENT / SIDEBAR BOXES ── */
+    .dnd-comment {
+      clear: both;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      padding: 1rem 1.25rem 1rem;
+      margin: 0 0 2rem 68px;
+      position: relative;
+    }
+    .dnd-comment-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .dnd-comment p {
+      font-family: 'Lora', serif;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin: 0; padding: 0;
+    }
+    .dnd-comment ul {
+      font-family: 'Lora', serif;
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+      padding-left: 1.2rem;
+      margin: 0;
+    }
+    .dnd-comment ol {
+      font-family: 'Lora', serif;
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+      padding-left: 1.3rem;
+      margin: 0;
     }
 
-    .art-eyebrow{
-      font-family:var(--mono);
-      font-size:0.62rem;
-      color:var(--accent);
-      letter-spacing:0.22em;
-      text-transform:uppercase;
-      margin-bottom:1rem;
+    /* Floating sidebar (like DnD sidebar) */
+    .dnd-sidebar {
+      float: right;
+      clear: right;
+      width: 280px;
+      margin: 0.5rem -1rem 2rem 2rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent2);
+      position: relative;
+      z-index: 2;
+    }
+    .dnd-sidebar-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent2);
+      padding: 0.75rem 1rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .dnd-sidebar-body {
+      padding: 0.85rem 1rem;
+    }
+    .dnd-sidebar-body p {
+      font-family: 'Lora', serif;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin: 0; padding: 0;
+    }
+    .dnd-sidebar img {
+      display: block;
+      width: 100%;
+      filter: sepia(15%) contrast(1.05);
+      margin-bottom: 0.75rem;
     }
 
-    .art-title{
-      font-family:'Caveat', cursive;
-      font-size:clamp(2.8rem,7vw,5rem);
-      line-height:1.05;
-      margin-bottom:1rem;
-      color:var(--accent);
+    /* Sticky note */
+    .sticky {
+      float: right;
+      clear: right;
+      width: 200px;
+      margin: 0.5rem -1rem 2rem 2rem;
+      background: #fef9c3;
+      color: #1c1a00;
+      padding: 1rem;
+      transform: rotate(2.5deg);
+      box-shadow: 3px 4px 12px rgba(0,0,0,0.25);
+      font-family: 'Caveat', cursive;
+      font-size: 1rem;
+      line-height: 1.5;
+      z-index: 3;
+      position: relative;
     }
+    body.light .sticky { background: #fef08a; }
 
-    .art-meta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:1rem;
-      border-top:1px solid var(--border);
-      border-bottom:1px solid var(--border);
-      padding:0.8rem 0;
-      font-family:var(--mono);
-      font-size:0.65rem;
-      color:var(--text-muted);
-      margin-bottom:2rem;
+    /* ── SCRAPBOOK IMAGES ── */
+    .scrap-right { float:right; clear:right; width:280px; margin:0.5rem -1rem 2rem 2.5rem; position:relative; z-index:2; }
+    .scrap-left  { float:left;  clear:left;  width:255px; margin:0.5rem 2.5rem 2rem -0.5rem; position:relative; z-index:2; }
+    .scrap-center{ clear:both; width:68%; margin:0 auto 2.5rem; display:block; position:relative; z-index:2; }
+    .scrap-full  { clear:both; width:calc(100% + 2rem); margin-left:-1rem; margin-bottom:2.5rem; position:relative; z-index:2; }
+
+    .scrap-photo { display:block; width:100%; position:relative; }
+    .scrap-photo img { display:block; width:100%; height:auto; filter:sepia(12%) contrast(1.05); }
+
+    .scrap-polaroid { background:#fff; padding:8px 8px 32px; box-shadow:2px 4px 18px rgba(0,0,0,0.35); }
+    .scrap-polaroid img { display:block; width:100%; height:auto; filter:sepia(15%) contrast(1.05) saturate(0.88); }
+    .scrap-polaroid .polaroid-label { font-family:'Caveat',cursive; font-size:0.9rem; color:#333; text-align:center; padding-top:6px; line-height:1.25; }
+
+    .scrap-right .scrap-photo, .scrap-right .scrap-polaroid { transform:rotate(1.8deg); }
+    .scrap-left  .scrap-photo, .scrap-left  .scrap-polaroid { transform:rotate(-2.2deg); }
+
+    .scrap-photo::before, .scrap-polaroid::before {
+      content:''; position:absolute; top:-10px; left:50%;
+      transform:translateX(-50%) rotate(-1deg);
+      width:58px; height:20px;
+      background:var(--tape); border:1px solid var(--tape-dark);
+      z-index:3; border-radius:1px;
     }
+    .scrap-left .scrap-photo::before, .scrap-left .scrap-polaroid::before { transform:translateX(-50%) rotate(1.5deg); }
 
-    .art-hero-img{
-      width:calc(100% + 4rem);
-      margin-left:-2rem;
-      height:480px;
-      object-fit:cover;
-      display:block;
-      filter:sepia(10%) contrast(1.03);
+    .scrap-caption { font-family:'Caveat',cursive; font-size:0.9rem; color:var(--text-muted); text-align:center; margin-top:0.5rem; line-height:1.3; display:block; }
+
+    /* Figure with proper caption */
+    .fig-wrap { clear:both; margin:2rem 0; position:relative; z-index:1; }
+    .fig-wrap img { display:block; width:100%; height:auto; filter:sepia(10%) contrast(1.05); }
+    .fig-caption {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+      padding-left: 68px;
+      font-style: italic;
     }
+    .fig-caption strong { color: var(--text-muted); font-style: normal; }
 
-    .art-hero-caption{
-      text-align:center;
-      margin-top:0.6rem;
-      font-size:0.7rem;
-      color:var(--text-dim);
-      font-family:var(--mono);
-      margin-bottom:3rem;
+    /* ── TWO-COLUMN mini layout for a figure pair ── */
+    .fig-pair { display:grid; grid-template-columns:1fr 2fr; gap:0.75rem; clear:both; margin:2rem 0; }
+    .fig-pair img { display:block; width:100%; height:auto; filter:sepia(10%) contrast(1.05); }
+
+    /* ── LISTS ── */
+    .journal-body ul, .journal-body ol {
+      font-family: 'Lora', serif;
+      font-size: 0.98rem;
+      line-height: 1.85;
+      color: var(--text);
+      padding-left: calc(68px + 1.2rem);
+      margin-bottom: 1.75rem;
     }
+    .journal-body li { margin-bottom: 0.3rem; }
+    .journal-body li strong { color: var(--text); }
 
-    .journal-body{
-      position:relative;
+    /* ── COMPARISON TABLE ── */
+    .dnd-table-wrap {
+      clear: both;
+      margin: 2rem 0 2rem 68px;
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      overflow: hidden;
     }
-
-    .journal-body::before{
-      content:'';
-      position:absolute;
-      inset:0;
-      background-image:
-      repeating-linear-gradient(
-        to bottom,
-        transparent 0px,
-        transparent 31px,
-        var(--rule) 31px,
-        var(--rule) 32px
-      );
-      pointer-events:none;
+    .dnd-table-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg3);
     }
-
-    .journal-body::after{
-      content:'';
-      position:absolute;
-      top:0;
-      bottom:0;
-      left:52px;
-      width:1px;
-      background:var(--margin-line);
+    .dnd-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Lora', serif;
+      font-size: 0.85rem;
     }
-
-    .journal-body > *{
-      position:relative;
-      z-index:2;
+    .dnd-table th {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      background: var(--bg2);
     }
-
-    .journal-body p{
-      font-family:'Lora', serif;
-      font-size:1.05rem;
-      line-height:2;
-      margin-bottom:2rem;
-      padding-left:68px;
+    .dnd-table td {
+      padding: 0.7rem 1rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      line-height: 1.65;
+      vertical-align: top;
     }
+    .dnd-table td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; }
+    .dnd-table tr:last-child td { border-bottom: none; }
 
-    .journal-body h2{
-      font-family:'Caveat', cursive;
-      font-size:2.3rem;
-      color:var(--accent);
-      margin:3rem 0 1rem;
-      padding-left:68px;
+    /* ── BIBLIOGRAPHY ── */
+    .bibliography {
+      clear: both;
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border);
     }
-
-    .journal-body h3{
-      font-family:'Caveat', cursive;
-      font-size:1.6rem;
-      padding-left:68px;
-      margin-top:2rem;
+    .bib-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      padding-left: 68px;
     }
-
-    .pull-quote{
-      margin:2.5rem 0 2.5rem 68px;
-      border-left:3px solid var(--accent);
-      padding:1.5rem;
-      background:var(--bg2);
+    .bib-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 2rem;
+      padding-left: 68px;
     }
-
-    .pull-quote p{
-      padding:0;
-      margin:0;
-      font-family:'Caveat', cursive;
-      font-size:1.7rem;
-      line-height:1.4;
+    .bib-entry {
+      font-family: 'Lora', serif;
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
     }
-
-    .pull-quote cite{
-      display:block;
-      margin-top:1rem;
-      font-size:0.65rem;
-      font-family:var(--mono);
-      color:var(--text-muted);
+    .bib-entry .bib-key {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 0.15rem;
     }
+    .bib-entry a { color: var(--accent2); text-decoration: none; }
+    .bib-entry a:hover { text-decoration: underline; }
 
-    .scrap-right,
-    .scrap-left{
-      width:280px;
-      position:relative;
-      z-index:5;
+    /* ── ARTICLE FOOTER ── */
+    .art-footer {
+      clear: both;
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
     }
+    .art-tag { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; padding:0.3rem 0.75rem; border:1px solid var(--border); color:var(--text-muted); }
+    .art-pdf-link { margin-left:auto; font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); text-decoration:none; border:1px solid var(--accent); padding:0.5rem 1.2rem; transition:all 0.2s; }
+    .art-pdf-link:hover { background:var(--accent); color:var(--bg); }
 
-    .scrap-right{
-      float:right;
-      margin:0.5rem -1rem 2rem 2rem;
+    /* ── CLEARFIX ── */
+    .cf::after { content:''; display:table; clear:both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .article-wrap { padding-left:1.25rem; padding-right:1.25rem; }
+      .scrap-right, .scrap-left, .dnd-sidebar { float:none; width:100%; margin:0 0 2rem; }
+      .journal-body::after { display:none; }
+      .journal-body p, .journal-body h2, .journal-body h3,
+      .journal-body ul, .journal-body ol,
+      .annotation, .pull-quote, .eq-block,
+      .dnd-comment, .fig-caption, .sec-label,
+      .bib-grid, .bib-title, .dnd-table-wrap { padding-left:0; margin-left:0; }
+      .bib-grid { grid-template-columns:1fr; }
+      .fig-pair { grid-template-columns:1fr; }
+      .art-titlepage-brain { max-width:80%; }
+      .sticky { float:none; width:100%; margin:0 0 1.5rem; transform:none; }
+      .dnd-sidebar { width:100%; margin:0 0 1.5rem; }
     }
-
-    .scrap-left{
-      float:left;
-      margin:0.5rem 2rem 2rem -1rem;
-    }
-
-    .scrap-polaroid{
-      background:white;
-      padding:8px 8px 32px;
-      box-shadow:2px 4px 18px rgba(0,0,0,0.25);
-      transform:rotate(1.5deg);
-      position:relative;
-    }
-
-    .scrap-left .scrap-polaroid{
-      transform:rotate(-2deg);
-    }
-
-    .scrap-polaroid::before{
-      content:'';
-      position:absolute;
-      top:-10px;
-      left:50%;
-      transform:translateX(-50%);
-      width:60px;
-      height:22px;
-      background:var(--tape);
-      border:1px solid var(--tape-dark);
-    }
-
-    .scrap-polaroid img{
-      width:100%;
-      display:block;
-    }
-
-    .polaroid-label{
-      text-align:center;
-      padding-top:10px;
-      font-family:'Caveat', cursive;
-      font-size:1rem;
-      color:#333;
-    }
-
-    .eq-block{
-      margin:2rem 0 2rem 68px;
-      padding:1.5rem;
-      background:var(--bg3);
-      border:1px solid var(--border);
-      overflow-x:auto;
-      font-family:var(--mono);
-    }
-
-    .note-box{
-      margin:2rem 0 2rem 68px;
-      padding:1.5rem;
-      background:#e7eef9;
-      border-left:4px solid var(--accent);
-    }
-
-    .note-box h4{
-      margin-top:0;
-      color:var(--accent);
-      font-family:'Caveat', cursive;
-      font-size:1.5rem;
-    }
-
-    .note-box p{
-      padding-left:0;
-      margin-bottom:0;
-    }
-
-    .full-img{
-      width:100%;
-      margin:2rem 0;
-    }
-
-    .full-img img{
-      width:100%;
-      display:block;
-      border:8px solid white;
-      box-shadow:0 4px 18px rgba(0,0,0,0.2);
-    }
-
-    .caption{
-      text-align:center;
-      font-size:0.7rem;
-      margin-top:0.5rem;
-      color:var(--text-dim);
-      font-family:var(--mono);
-    }
-
-    .clearfix::after{
-      content:'';
-      display:table;
-      clear:both;
-    }
-
-    @media(max-width:680px){
-
-      .journal-body::after{
-        display:none;
-      }
-
-      .journal-body p,
-      .journal-body h2,
-      .journal-body h3,
-      .eq-block,
-      .pull-quote,
-      .note-box{
-        padding-left:0;
-        margin-left:0;
-      }
-
-      .scrap-right,
-      .scrap-left{
-        float:none;
-        width:100%;
-        margin:0 0 2rem;
-      }
-
-      .art-hero-img{
-        width:100%;
-        margin-left:0;
-      }
-    }
-
   </style>
 </head>
-
 <body>
 
-<div id="read-progress">
-  <div id="read-progress-fill"></div>
-</div>
+<div id="read-progress"><div id="read-progress-fill"></div></div>
 
 <nav>
   <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
-
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/research/">Research</a></li>
     <li><a href="/cv/">About Me</a></li>
     <li><a href="/blog/" class="active">Blog</a></li>
     <li><a href="/resources/">Resources</a></li>
+    <li><a href="/open_board/">open_board</a></li>
+    <li><a href="/courses/">Courses</a></li>
+    <li><a href="/gallery/">Gallery</a></li>
+    <li><a href="/interests/">Interests</a></li>
     <li><a href="/contact/">Contact</a></li>
   </ul>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
+  <button class="nav-hamburger" id="menuBtn"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="article-wrap">
-
   <a href="/blog/" class="art-back">← Back to Blog</a>
 
-  <header class="art-header">
-
-    <div class="art-eyebrow">
-      Quantum Consciousness · Essay · 2026
-    </div>
-
-    <h1 class="art-title">
-      The Quantum Brain
-    </h1>
-
-    <div class="art-meta">
-      <span>Samriddha Ganguly</span>
-      <span>·</span>
-      <span>Quantum Mechanics</span>
-      <span>·</span>
-      <span>Consciousness</span>
-      <span>·</span>
-      <span>Neuroscience</span>
-    </div>
-
-    <img
-      src="assets/brain-removebg-preview.png"
-      alt="Quantum Brain"
-      class="art-hero-img"
-    >
-
-    <div class="art-hero-caption">
-      Quantum Mechanics, Consciousness, and the Mind
-    </div>
-
-  </header>
-
-  <div class="journal-body">
-
-    <div class="pull-quote">
-      <p>
-        “Does the brain compute classically, or does the quantum world
-        reach into our very thoughts?”
-      </p>
-    </div>
-
-    <h2>Historical Background: Why the Quantum Mind?</h2>
-
-    <div class="scrap-right">
-      <div class="scrap-polaroid">
-        <img src="assets/HD.3A.019_(10556202544).jpg">
-        <div class="polaroid-label">
-          Eugene Wigner (1902–1995)
-        </div>
+  <!-- ══ TITLE PAGE ══ -->
+  <div class="art-titlepage reveal">
+    <div class="art-titlepage-bg"></div>
+    <img src="/assets/brain-removebg-preview.png" alt="Brain illustration" class="art-titlepage-brain"
+         onerror="this.style.display='none'">
+    <div class="art-titlepage-content">
+      <h1 class="art-main-title">The Quantum Brain</h1>
+      <p class="art-subtitle">Quantum Mechanics, Consciousness, and the Mind</p>
+      <div class="art-meta">
+        <span>Samriddha Ganguly</span>
+        <span class="art-meta-sep">·</span>
+        <span>2025</span>
+        <span class="art-meta-sep">·</span>
+        <span>~45 min read</span>
+        <span class="art-meta-sep">·</span>
+        <span>Consciousness &middot; Quantum Mind &middot; Neuroscience</span>
+      </div>
+      <div class="read-aloud">
+        Does the brain compute classically, or does the quantum world reach into our very thoughts? Three radical frameworks, from Bohm's implicate order to Penrose's spacetime geometry to Pribram's holographic memory, dare to ask whether consciousness itself is a quantum phenomenon.
       </div>
     </div>
-
-    <p>
-      The question of how the physical brain gives rise to subjective
-      experience has resisted every purely classical account.
-      As quantum mechanics matured through the twentieth century,
-      a remarkable possibility emerged:
-      perhaps consciousness itself is tied fundamentally to quantum reality.
-    </p>
-
-    <div class="note-box">
-      <h4>The Hard Problem</h4>
-
-      <p>
-        Why does neuronal activity produce experience?
-        Classical neuroscience explains processing —
-        but not subjective awareness itself.
-      </p>
-    </div>
-
-    <p>
-      Classical neuroscience models the brain as an electrochemical computer.
-      Neurons fire, synapses strengthen, information propagates.
-      Yet this picture leaves unanswered why there is
-      something it feels like to be conscious.
-    </p>
-
-    <h2>Bohm & Hiley</h2>
-
-    <div class="scrap-left">
-      <div class="scrap-polaroid">
-        <img src="assets/David_Bohm.jpg">
-        <div class="polaroid-label">
-          David Bohm (1917–1992)
-        </div>
-      </div>
-    </div>
-
-    <p>
-      David Bohm proposed that mind and matter emerge
-      from a deeper hidden level of reality:
-      the implicate order.
-    </p>
-
-    <div class="eq-block">
-      $$
-      \mathbf{v} = \frac{\nabla S}{m}
-      $$
-
-      $$
-      Q = -\frac{\hbar^2}{2m}\frac{\nabla^2R}{R}
-      $$
-    </div>
-
-    <p>
-      Bohm interpreted the quantum potential as active information —
-      not energy itself, but information guiding physical systems.
-    </p>
-
-    <div class="full-img">
-      <img src="assets/ExperimentCouder-Young.png">
-      <div class="caption">
-        Couder’s walking droplet experiment as a pilot-wave analogue.
-      </div>
-    </div>
-
-    <h2>Penrose & Hameroff: Orch-OR</h2>
-
-    <div class="scrap-right">
-      <div class="scrap-polaroid">
-        <img src="assets/960px-Roger_Penrose_at_Festival_della_Scienza_Oct_29_2011.jpg">
-        <div class="polaroid-label">
-          Roger Penrose
-        </div>
-      </div>
-    </div>
-
-    <p>
-      Penrose argued that consciousness cannot be algorithmic.
-      He connected Gödel’s incompleteness theorem
-      with quantum wavefunction collapse.
-    </p>
-
-    <div class="eq-block">
-      $$
-      \tau \sim \frac{\hbar}{E_G}
-      $$
-    </div>
-
-    <p>
-      In Orch-OR, microtubules inside neurons sustain quantum coherence
-      until gravitational self-energy triggers collapse.
-    </p>
-
-    <div class="full-img">
-      <img src="assets/Microtubules_in_the_leading_edge_of_a_cell.tif.jpg">
-      <div class="caption">
-        Microtubules inside a eukaryotic cell.
-      </div>
-    </div>
-
-    <div class="note-box">
-      <h4>Tegmark’s Criticism</h4>
-
-      <p>
-        Tegmark estimated decoherence times near
-        \(10^{-13}\) seconds —
-        enormously shorter than Orch-OR requires.
-      </p>
-    </div>
-
-    <h2>Pribram’s Holonomic Brain</h2>
-
-    <p>
-      Karl Pribram approached the problem from neuroscience upward.
-      He proposed that memory is holographically distributed,
-      not locally stored.
-    </p>
-
-    <div class="eq-block">
-      $$
-      \psi_{a,b}(x)=
-      \frac{1}{\sqrt{a}}
-      e^{-\pi((x-b)/a)^2}
-      e^{2\pi i f_0(x-b)}
-      $$
-    </div>
-
-    <div class="full-img">
-      <img src="assets/gabor_wavelet.pdf">
-      <div class="caption">
-        The Gabor wavelet — elementary unit of holonomic encoding.
-      </div>
-    </div>
-
-    <div class="full-img">
-      <img src="assets/UVMEkpktAC_2CemR4GwGYMZpv8asClf42lkJQV6AWgsjbPMVffoDPvsbrQ-e8sdXfmDGFd0S0NH5pKWcEkq60BP_5gUpLL9mA5ChgJE_MUbu3gI29Xwex5--0mcSg2BeCrcOK-SGTr7H0zCe70na7nIyUCil2lA7DkcxxDbPjWjqHHDGnZgRvT7TAUisKjKm.jpg">
-      <div class="caption">
-        Holographic interference patterns as distributed memory.
-      </div>
-    </div>
-
-    <p>
-      In Pribram’s theory,
-      the brain operates in a spectral domain,
-      reconstructing reality from distributed holographic transforms.
-    </p>
-
-    <div class="pull-quote">
-      <p>
-        “The brain is a hologram enfolded in a holographic universe.”
-      </p>
-
-      <cite>
-        Pribram & Bohm
-      </cite>
-    </div>
-
-    <h2>Quantum Biology</h2>
-
-    <div class="full-img">
-      <img src="assets/Fenna-Matthews-Olson_complex_protein_trimer_(PDB_cartoon_4bcl).png">
-      <div class="caption">
-        The Fenna–Matthews–Olson photosynthetic complex.
-      </div>
-    </div>
-
-    <p>
-      Experimental observations of long-lived coherence in biological systems
-      revived interest in quantum effects within living matter.
-    </p>
-
-    <h2>Conclusion</h2>
-
-    <p>
-      Whether the quantum mind ultimately survives experimental scrutiny
-      remains unknown.
-      Yet these theories continue to push both neuroscience and quantum physics
-      into profound conceptual territory.
-    </p>
-
-    <p>
-      The deepest question remains:
-      is consciousness merely computation,
-      or is it woven into the quantum structure of reality itself?
-    </p>
-
   </div>
 
-</div>
+  <!-- ══ ARTICLE BODY ══ -->
+  <div class="journal-body">
+
+    <!-- ══════════════════════════════════════
+         § 1  HISTORICAL BACKGROUND
+    ══════════════════════════════════════ -->
+    <div class="sec-label">§ 1</div>
+    <h2>Historical Background: Why the Quantum Mind?</h2>
+
+    <p class="dropcap">
+      The question of how the physical brain gives rise to subjective experience, the so-called <em>hard problem of consciousness</em>, has resisted every purely classical account. As quantum mechanics matured through the twentieth century, a remarkable idea emerged: perhaps the gap between matter and mind is bridged not by classical neuroscience alone but by the strange nonlocal, coherent, and measurement-sensitive character of quantum physics.
+    </p>
+
+    <p>
+      Classical neuroscience models the brain as an electrochemical computer. Neurons fire or remain silent; synapses strengthen or weaken; information propagates as spike trains through networks. Yet this picture, however successful for sensorimotor processing and memory consolidation, leaves entirely unexplained why there is <em>something it is like</em> to be a brain. The explanatory gap between neural correlates and subjective qualia seemed to demand a radically new framework.
+    </p>
+
+    <div class="dnd-comment reveal">
+      <div class="dnd-comment-title">The Hard Problem</div>
+      <p>Why does neuronal activity produce <em>experience</em>? A purely computational account explains <em>what</em> the brain does but not <em>what it feels like</em> from the inside. This question drives the quantum mind hypothesis.</p>
+    </div>
+
+    <p>
+      The earliest serious proposals appeared in the 1960s and 1970s. Physicist John von Neumann had already noted that quantum measurement requires a conscious observer to "collapse" the wave function, implying a fundamental link between mind and quantum formalism. Eugene Wigner extended this to argue that consciousness must be outside ordinary quantum mechanics. These ideas remained speculative, but they planted the seeds for what would become three major research programmes.
+    </p>
+
+    <div class="dnd-sidebar reveal">
+      <div class="dnd-sidebar-title">Eugene Wigner (1902–1995)</div>
+      <div class="dnd-sidebar-body">
+        <img src="/assets/HD.3A.019_(10556202544).jpg" alt="Eugene Wigner"
+             onerror="this.style.display='none'">
+        <p>Eugene Wigner was the first physicist to argue formally that consciousness plays a constitutive role in quantum measurement. His 1961 essay <em>Remarks on the Mind-Body Question</em> proposed that wave function collapse requires a conscious observer, making mind irreducible to matter. He was awarded the Nobel Prize in Physics in 1963.</p>
+      </div>
+    </div>
+
+    <h3>Why Quantum Mechanics Seems Relevant</h3>
+
+    <p>Several features of quantum mechanics make it attractive as a model for cognition:</p>
+
+    <ul>
+      <li><strong>Superposition:</strong> A quantum system exists in multiple states simultaneously until measured. Some theorists equate this with the brain's capacity to entertain multiple hypotheses at once.</li>
+      <li><strong>Entanglement:</strong> Spatially separated quantum systems share correlations with no classical analog. This suggests a mechanism for the <em>binding problem</em>: how disparate neural areas produce unified experience.</li>
+      <li><strong>Non-computability:</strong> If certain quantum processes are genuinely non-computable (a contested claim), they could explain why human understanding seems to exceed algorithmic machines.</li>
+      <li><strong>Decoherence timescale:</strong> The central objection is that the warm, wet brain decoheres quantum states in femtoseconds, far too fast for biological function. This remains the sharpest criticism of all quantum-mind theories.</li>
+    </ul>
+
+    <div class="read-aloud reveal">
+      Three giants tackled the quantum brain from radically different angles: Bohm and Hiley from the foundations of physics, Penrose and Hameroff from geometry and biology, and Pribram from the neuroscience of memory.
+    </div>
+
+    <!-- ══════════════════════════════════════
+         § 2  BOHM & HILEY
+    ══════════════════════════════════════ -->
+    <div class="sec-label">§ 2</div>
+    <h2>Bohm &amp; Hiley: The Implicate Order and the Quantum Mind</h2>
+
+    <p class="dropcap">
+      David Bohm (1917–1992) was one of the most original physicists of the twentieth century. Dissatisfied with the Copenhagen interpretation, he reformulated quantum mechanics in 1952 as a deterministic pilot-wave theory. In his later work, especially the 1980 book <em>Wholeness and the Implicate Order</em>, he proposed a far-reaching ontological framework that directly addressed consciousness.
+    </p>
+
+    <h3>The Implicate and Explicate Orders</h3>
+
+    <div class="dnd-sidebar reveal">
+      <div class="dnd-sidebar-title">David Bohm (1917–1992)</div>
+      <div class="dnd-sidebar-body">
+        <img src="/assets/David_Bohm.jpg" alt="David Bohm"
+             onerror="this.style.display='none'">
+        <p>David Bohm reformulated quantum mechanics as a deterministic pilot-wave theory in 1952, then extended it into a sweeping ontology of mind and matter through his concept of the implicate order. His collaboration with Basil Hiley lasted until his death and produced the algebraic foundations of quantum geometry.</p>
+      </div>
+    </div>
+
+    <p>
+      Bohm observed that both quantum mechanics and general relativity point toward a deeper, more fundamental level of reality. He called this level the <strong>implicate order</strong>: an undivided wholeness in which all things are enfolded together, much as the interference pattern on a holographic plate contains the entire image in every region. Our ordinary world, with its separate objects and local causes, is the <strong>explicate order</strong>, an unfolding from the deeper implicate level.
+    </p>
+
+    <p>
+      Mathematically, Bohm expressed the pilot-wave dynamics through a modified Schrodinger equation. A particle of mass $m$ has a real wave function $\psi = R e^{iS/\hbar}$ (polar decomposition). The guidance equation is
+    </p>
+
+    <div class="eq-block">
+      $$\mathbf{v} = \frac{\nabla S}{m}$$
+    </div>
+
+    <p>
+      and the particle is acted on not only by the classical potential $V$ but also by the <strong>quantum potential</strong>
+    </p>
+
+    <div class="eq-block">
+      $$Q = -\frac{\hbar^2}{2m}\frac{\nabla^2 R}{R} \tag{1}$$
+    </div>
+
+    <p>
+      This $Q$ encodes the entire configuration of the environment; it is nonlocal and acts instantaneously. For Bohm, $Q$ is not merely a mathematical artifact; it represents <em>active information</em>, a form of meaningful influence propagating through the implicate order.
+    </p>
+
+    <div class="dnd-comment reveal">
+      <div class="dnd-comment-title">Active Information</div>
+      <p>Bohm compared the quantum potential to a ship guided by radar. The radar signal carries <em>information</em> that directs the ship's motion without supplying the ship's energy. Similarly, $Q$ directs particles through the <em>form</em> of the wave, not its amplitude. This information-theoretic character is what links quantum potential to mind.</p>
+    </div>
+
+    <h3>Mind, Matter, and the Implicate Order</h3>
+
+    <p>
+      Bohm proposed that mind and matter are both <em>projections</em> of the implicate order into our explicate realm. Consciousness is not produced by matter; rather, both are complementary aspects of a deeper wholeness. At the implicate level there is no hard boundary between the mental and the physical.
+    </p>
+
+    <div class="fig-wrap reveal">
+      <img src="/assets/ExperimentCouder-Young.png" alt="Couder walking-droplet experiment"
+           onerror="this.style.background='var(--bg3)'; this.style.height='180px';">
+      <p class="fig-caption"><strong>Fig. 1 — Couder's walking-droplet experiment as a pilot-wave analog.</strong> A bouncing oil droplet is guided by the surface waves it generates, producing interference-like dynamics reminiscent of de Broglie–Bohm pilot-wave theory.</p>
+    </div>
+
+    <p>
+      This has direct consequences for the brain. Bohm suggested that the <em>soma-significant</em> and <em>signa-somatic</em> movements in the brain, the interaction between meaning and bodily process, operate through a kind of active information analogous to the quantum potential. Thought, then, is not merely electrochemical signal but a form of unfolding from the implicate order.
+    </p>
+
+    <p>
+      Basil Hiley, Bohm's longtime collaborator, pursued the mathematical foundations rigorously. Hiley developed an algebraic approach based on <strong>symplectic and orthogonal Clifford algebras</strong>, showing that the Bohm formulation emerges naturally from a non-commutative phase space. In this framework the quantum potential arises as
+    </p>
+
+    <div class="eq-block">
+      $$Q = \frac{1}{2m}\left\langle p^2 \right\rangle_W - \frac{1}{2m}\left(\frac{\partial S}{\partial x}\right)^2$$
+    </div>
+
+    <p>
+      where $\langle p^2 \rangle_W$ is a Wigner-function moment, making explicit that $Q$ captures quantum fluctuations above the classical guidance. Hiley extended these ideas to propose that the brain's quantum processes operate in an <em>implicate phase space</em> inaccessible to ordinary observation.
+    </p>
+
+    <h3>Collaboration with Pylkkanen</h3>
+
+    <p>
+      Philosopher Paavo Pylkkanen developed the Bohm-Hiley framework into a concrete model of cognition. Pylkkanen argued that the physical correlate of <em>logical thinking</em> is at the classically describable synaptic level, while the <em>basic thinking process</em>, raw experience, operates at the quantum-theoretically describable level. This bifurcation mirrors Descartes's mind-body distinction but dissolves it by making both aspects of one implicate reality.
+    </p>
+
+    <div class="pull-quote">
+      <p>"The implicate order provides a way of seeing that mind is not separate from matter but that the two are different aspects of one underlying reality."</p>
+      <cite>David Bohm, <em>Wholeness and the Implicate Order</em></cite>
+    </div>
+
+    <h3>Criticisms</h3>
+
+    <p>
+      The Bohm-Hiley framework is philosophically rich but faces several objections. Bohm never specified a testable neural mechanism through which the implicate order would manifest in brain function. The framework does not predict any deviation from standard quantum mechanics, making empirical discrimination difficult. Critics also point out that pilot-wave theory and standard quantum mechanics give identical observable predictions, so the implicate-order interpretation is not independently testable.
+    </p>
+
+    <!-- ══════════════════════════════════════
+         § 3  PENROSE & HAMEROFF
+    ══════════════════════════════════════ -->
+    <div class="sec-label">§ 3</div>
+    <h2>Penrose &amp; Hameroff: Orchestrated Objective Reduction (Orch-OR)</h2>
+
+    <p class="dropcap">
+      The most mathematically elaborated quantum-mind theory was constructed jointly by mathematician Roger Penrose and anaesthesiologist Stuart Hameroff in the early 1990s. It goes under the name <strong>Orchestrated Objective Reduction</strong>, or <strong>Orch-OR</strong>.
+    </p>
+
+    <h3>Penrose's Godelian Argument</h3>
+
+    <div class="dnd-sidebar reveal">
+      <div class="dnd-sidebar-title">Roger Penrose (b. 1931)</div>
+      <div class="dnd-sidebar-body">
+        <img src="/assets/960px-Roger_Penrose_at_Festival_della_Scienza_Oct_29_2011.jpg" alt="Roger Penrose"
+             onerror="this.style.display='none'">
+        <p>Roger Penrose is a mathematician and mathematical physicist whose work spans twistor theory, singularity theorems, and the geometry of tiling. His two books on consciousness, <em>The Emperor's New Mind</em> (1989) and <em>Shadows of the Mind</em> (1994), argue from Godel's theorem that human understanding is non-algorithmic and must involve new physics at the quantum gravity interface. He was awarded the Nobel Prize in Physics in 2020.</p>
+      </div>
+    </div>
+
+    <p>
+      Penrose's starting point is Godel's first incompleteness theorem, which states that any sufficiently powerful consistent formal system $F$ contains a statement $G_F$ that is true but unprovable within $F$. Penrose argued as follows:
+    </p>
+
+    <ol>
+      <li>Human mathematicians can recognise the truth of $G_F$.</li>
+      <li>No algorithm running on $F$ can recognise $G_F$'s truth from inside $F$.</li>
+      <li>Therefore human mathematical understanding is not algorithmic.</li>
+      <li>Since the only known source of non-algorithmicity in physics is quantum measurement (wave function collapse), consciousness must involve a non-algorithmic quantum process.</li>
+    </ol>
+
+    <div class="dnd-comment reveal">
+      <div class="dnd-comment-title">Godel and the Non-Computable Mind</div>
+      <p>Let $F$ be a formal system. By Godel, $G_F$ is true but $F \not\vdash G_F$. Penrose claims human insight <em>sees</em> $G_F$'s truth: hence the mind is not a formal system. Critics note this conflates the system with its metatheory.</p>
+    </div>
+
+    <h3>Objective Reduction (OR)</h3>
+
+    <p>
+      Standard quantum mechanics offers two dynamics: smooth unitary evolution (the Schrodinger equation), and discontinuous collapse upon measurement. Penrose was dissatisfied with both the randomness of Copenhagen collapse and the many-worlds avoidance of it. He proposed a third option: <strong>Objective Reduction</strong> (OR), a gravitationally induced collapse.
+    </p>
+
+    <p>
+      The key idea is that a quantum superposition of two mass distributions corresponds to two distinct spacetime geometries. These geometries diverge at a rate related to the gravitational self-energy $E_G$ of the superposition. Penrose proposed that the superposition is unstable and spontaneously reduces when the uncertainty in spacetime geometry reaches one Planck length $\ell_P = \sqrt{\hbar G / c^3} \approx 1.6 \times 10^{-35}\,\mathrm{m}$. The collapse timescale is
+    </p>
+
+    <div class="eq-block">
+      $$\tau \sim \frac{\hbar}{E_G} \tag{2}$$
+    </div>
+
+    <p>
+      where $E_G$ is the gravitational self-energy of the superposition, defined as the energy required to displace one mass distribution from the other:
+    </p>
+
+    <div class="eq-block">
+      $$E_G = \frac{G}{c^2} \iint \frac{\Delta\rho(\mathbf{r})\,\Delta\rho(\mathbf{r}')}{|\mathbf{r}-\mathbf{r}'|}\, d^3r\, d^3r', \qquad \Delta\rho(\mathbf{r}) = \rho(\mathbf{r})-\rho'(\mathbf{r})$$
+    </div>
+
+    <p>
+      This OR process is <em>non-random</em> and <em>non-computable</em> — it is influenced by the structure of spacetime itself, which Penrose links to Platonic mathematical truth. Consciousness, on this view, is the manifestation of OR events.
+    </p>
+
+    <h3>Hameroff's Microtubules</h3>
+
+    <div class="fig-wrap reveal">
+      <div class="fig-pair">
+        <img src="/assets/Screenshot 2026-05-19 063617.png" alt="Tubulin conformational states"
+             onerror="this.style.background='var(--bg3)'; this.style.minHeight='160px';">
+        <img src="/assets/Microtubules_in_the_leading_edge_of_a_cell.tif.jpg" alt="Microtubules fluorescence"
+             onerror="this.style.background='var(--bg3)'; this.style.minHeight='160px';">
+      </div>
+      <p class="fig-caption" style="padding-left:0;"><strong>Fig. 2 — Microtubules and tubulin conformational states.</strong> <em>Left:</em> $\alpha/\beta$-tubulin dimers with two proposed conformational states that Hameroff suggested could function as quantum-information units. <em>Right:</em> Fluorescence image of the microtubule cytoskeleton inside a eukaryotic cell. Microtubules form hollow cylindrical polymers composed of tubulin dimers and are central to Orch-OR models of quantum cognition.</p>
+    </div>
+
+    <p>
+      Penrose's OR needed a biological substrate. Hameroff proposed that <strong>microtubules</strong>, the protein polymers forming the cytoskeleton of neurons, are ideal candidates. Microtubules are hollow cylinders ($25\,\mathrm{nm}$ outer diameter) assembled from tubulin dimers, each with two conformational states ($\alpha$ and $\beta$) that can encode binary information.
+    </p>
+
+    <p>
+      Each tubulin dimer has hydrophobic pockets approximately $8\,\mathrm{nm}$ apart containing delocalized $\pi$-electrons. Hameroff argued these electrons are quantum coherent and can sustain superpositions long enough for biologically relevant OR events. The <em>orchestration</em> of OR by synaptic inputs and biochemical signaling is what makes the process <em>orchestrated</em>, giving the theory its name.
+    </p>
+
+    <p>The Orch-OR time estimate uses equation (2). For a microtubule with $N$ tubulin dimers each of mass $m_t \approx 110\,\mathrm{kDa}$ displaced by $d \approx 0.5\,\mathrm{nm}$:</p>
+
+    <div class="eq-block">
+      $$E_G \approx \frac{G (N m_t)^2}{d}, \qquad \tau \approx \frac{\hbar d}{G (N m_t)^2} \tag{3}$$
+    </div>
+
+    <p>
+      For $N \sim 10^7$ tubulins, $\tau \sim 25\,\mathrm{ms}$, conveniently matching the $\gamma$-band oscillation period associated with conscious binding.
+    </p>
+
+    <div class="dnd-comment reveal">
+      <div class="dnd-comment-title">Orch-OR in a Nutshell</div>
+      <ol>
+        <li>Tubulin dimers in microtubules enter quantum superposition.</li>
+        <li>Synaptic activity <em>orchestrates</em> which tubulins participate.</li>
+        <li>The superposition grows until gravitational self-energy $E_G$ reaches the Penrose threshold.</li>
+        <li>Objective Reduction collapses the state in a non-random, non-algorithmic manner.</li>
+        <li>This collapse event <em>is</em> a moment of conscious experience.</li>
+      </ol>
+    </div>
+
+    <h3>Experimental Evidence and Refutations</h3>
+
+    <div class="dnd-comment reveal">
+      <div class="dnd-comment-title">Tegmark's Decoherence Estimate</div>
+      <p>M. Tegmark (2000) computed the decoherence time for tubulin superpositions in the warm, aqueous brain. He obtained $\tau_{\text{deco}} \sim 10^{-13}\,\mathrm{s}$, thirteen orders of magnitude shorter than the $25\,\mathrm{ms}$ required by Orch-OR. This remains the most cited objection.</p>
+    </div>
+
+    <p>Despite the decoherence objection, some experimental observations have been claimed in support:</p>
+
+    <ul>
+      <li><strong>Bandyopadhyay (2013):</strong> Anirban Bandyopadhyay at NIMS Japan reported quantum vibrations in microtubules at megahertz and gigahertz frequencies, claimed to support Orch-OR.</li>
+      <li><strong>Anaesthetic action:</strong> Anaesthetics suppress consciousness; Hameroff notes they also disrupt hydrophobic pockets in tubulin. This correlation is suggestive but not conclusive.</li>
+      <li><strong>Tuszynski/Alberta (2022):</strong> Jack Tuszynski demonstrated that anaesthetics hasten the decay of delayed luminescence in microtubules, a result tentatively linked to superradiance, a quantum optical effect.</li>
+      <li><strong>Princeton experiment (2022):</strong> Scholes and Kalra used laser excitation to observe prolonged quantum excitation diffusion through tubulin networks, suppressed by anaesthesia.</li>
+    </ul>
+
+    <p>
+      However, specific structural predictions of Orch-OR have been directly falsified. Kikkawa et al. showed all <em>in vivo</em> microtubules have a B-lattice with a seam, contradicting Hameroff's predicted A-lattice arrangement. De Zeeuw et al. showed dendritic lamellar bodies are micrometres from gap junctions, ruling out Hameroff's proposed coherence pathway to synapses. Italian physicists (2022) found no evidence for gravity-related quantum collapse.
+    </p>
+
+    <div class="read-aloud reveal">
+      Orch-OR is the most mathematically explicit quantum-mind theory. Whether its audacious combination of Godel, gravity, and biology constitutes deep insight or category error remains one of the sharpest debates in the science of consciousness.
+    </div>
+
+    <!-- ══════════════════════════════════════
+         § 4  PRIBRAM
+    ══════════════════════════════════════ -->
+    <div class="sec-label">§ 4</div>
+    <h2>Pribram's Holonomic Brain Theory</h2>
+
+    <p class="dropcap">
+      Karl Pribram (1919–2015) approached the quantum brain from the opposite direction: not from physics downward but from neuroscience upward. A renowned neurosurgeon and psychologist, Pribram was struck by the extraordinary robustness of memory, the ability of brains to retain memories even after large regions are surgically removed, a phenomenon discovered by Karl Lashley in his seminal lesion experiments.
+    </p>
+
+    <h3>From Holography to the Brain</h3>
+
+    <p>
+      In 1947 Dennis Gabor invented holography: a method of recording not only the amplitude but also the phase of a light wave, creating an interference pattern on film that encodes the full three-dimensional scene. Crucially, every patch of the holographic plate contains information about the entire image — the information is distributed, not localised.
+    </p>
+
+    <div class="scrap-right reveal">
+      <div class="scrap-photo">
+        <img src="/assets/UVMEkpktAC_2CemR4GwGYMZpv8asClf42lkJQV6AWgsjbPMVffoDPvsbrQ-e8sdXfmDGFd0S0NH5pKWcEkq60BP_5gUpLL9mA5ChgJE_MUbu3gI29Xwex5--0mcSg2BeCrcOK-SGTr7H0zCe70na7nIyUCil2lA7DkcxxDbPjWjqHHDGnZgRvT7TAUisKjKm.jpg"
+             alt="Holographic interference pattern"
+             onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:160px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:Caveat,cursive;color:var(--text-dim)\'>Holographic plate</div>'">
+      </div>
+      <span class="scrap-caption">A holographic plate: every patch contains the whole scene. Pribram identified this distributed storage as the model for biological memory.</span>
+    </div>
+
+    <p>
+      Pribram recognized that Lashley's results demanded exactly this kind of distributed storage. Memory traces (<em>engrams</em>) do not reside in specific neural locations; they are spread across neural populations in a hologram-like fashion. By the early 1970s, Pribram had articulated the <strong>holonomic brain theory</strong>: the proposition that the brain encodes and retrieves information using holographic principles.
+    </p>
+
+    <p>The core mathematical object is the <strong>Gabor wavelet</strong>. Gabor showed that the elementary unit of information storage consistent with the quantum uncertainty principle is a two-dimensional Gabor function:</p>
+
+    <div class="eq-block">
+      $$\psi_{a,b}(x) = \frac{1}{\sqrt{a}}\, e^{-\pi\left(\frac{x-b}{a}\right)^2} e^{2\pi i f_0 (x-b)} \tag{4}$$
+    </div>
+
+    <p>
+      where $a$ is a scale (spatial frequency bandwidth), $b$ is a location, and $f_0$ is a carrier frequency. Gabor wavelets achieve the minimum product $\Delta x \cdot \Delta k = \frac{1}{4\pi}$, saturating the Heisenberg-like uncertainty relation in the joint space-frequency domain.
+    </p>
+
+    <div class="fig-wrap reveal">
+      <img src="/assets/gabor_wavelet.pdf" alt="Gabor wavelet diagram"
+           onerror="this.style.display='none'">
+      <p class="fig-caption"><strong>Fig. 3 — Gabor wavelet</strong> $\psi_{a,b}(x) = a^{-1/2} e^{-\pi((x-b)/a)^2} e^{2\pi i f_0(x-b)}$, the elementary unit of holonomic brain encoding. <em>Top:</em> Real part (blue) with Gaussian envelope (gold dashed). The wavelet achieves the minimum joint localisation $\Delta x \cdot \Delta k = 1/4\pi$, saturating the space-frequency uncertainty relation. <em>Bottom:</em> Imaginary part, phase-shifted by $\pi/2$.</p>
+    </div>
+
+    <p>
+      Pribram proposed that dendritic microprocesses in neural tissue implement exactly this transform. The brain, in his view, operates in the <strong>spectral domain</strong>: it stores the Fourier-like holographic transform of sensory input rather than a pixel-by-pixel map. Perception, memory, and even consciousness arise as the inverse transform, the reconstruction of the world from its holographic representation.
+    </p>
+
+    <h3>Quantum Field Theory in Dendritic Networks</h3>
+
+    <p>
+      The explicitly quantum step in Pribram's theory emerged from his analysis of the fine-fibred dendritic web. Dendrites branch into extremely thin filaments (<em>dendritic spines</em>) with diameters of order $0.1\,\mu\mathrm{m}$, far below the scale at which classical electrochemical propagation is reliable. Pribram proposed that information processing at this scale is governed by <strong>quantum field theory</strong> (QFT), specifically through the Ricciardi-Umezawa model of brain dynamics.
+    </p>
+
+    <p>
+      In the Ricciardi-Umezawa framework, the brain is treated as a quantum field. Memory storage corresponds to a phase transition: the field acquires a <strong>long-range order parameter</strong> $\phi$ through spontaneous symmetry breaking (SSB), much as a ferromagnet acquires magnetisation below the Curie temperature. The Lagrangian governing the cortical quantum field takes the form:
+    </p>
+
+    <div class="eq-block">
+      $$\mathcal{L} = \frac{1}{2}(\partial_\mu \phi)^2 - \frac{m^2}{2}\phi^2 - \frac{\lambda}{4!}\phi^4 \tag{5}$$
+    </div>
+
+    <p>
+      with the symmetry $\phi \to -\phi$ spontaneously broken when $m^2 &lt; 0$. The resulting <strong>Nambu-Goldstone boson</strong>, a massless mode with infinite correlation length, is interpreted by Umezawa as the carrier of cortical long-term memory, a quantum of memory dubbed the <em>corticon</em>.
+    </p>
+
+    <span class="annotation">The corticon: a quantum of memory. Beautiful, if true.</span>
+
+    <p>
+      Pribram's crucial addition was the identification of the dendritic microstructure as the physical seat of this QFT. Long-term memory, he argued, is encoded as a symmetry-broken vacuum of the dendritic quantum field, and retrieval is the resonant excitation of this vacuum by sensory inputs.
+    </p>
+
+    <h3>The Binding Problem</h3>
+
+    <p>
+      One of the most difficult problems in neuroscience is the <strong>binding problem</strong>: how the brain integrates information processed in anatomically separate cortical regions (V1 for orientation, V4 for color, MT for motion, etc.) into a single unified percept. Pribram argued that his holonomic model solves this problem.
+    </p>
+
+    <p>
+      In the holographic framework, binding is automatic: all features of a scene are encoded in the same holographic interference pattern. When the inverse transform reconstructs perception, features are bound by construction — they are all aspects of the same hologram. No explicit <em>binding signal</em> is needed because the spectral domain representation is inherently unified.
+    </p>
+
+    <div class="dnd-comment reveal">
+      <div class="dnd-comment-title">The Binding Problem Solved?</div>
+      <p>Classical neural models need a binding signal, often attributed to $\gamma$-band (40 Hz) synchrony, to unite separate cortical representations. Pribram's holonomic model dissolves the problem: features are stored together in the holographic transform from the outset. Whether the brain actually implements such a transform remains debated.</p>
+    </div>
+
+    <h3>Collaboration with Bohm</h3>
+
+    <p>
+      The deepest synthesis in quantum-mind theory occurred when Pribram and Bohm recognized the complementarity of their frameworks. Bohm's implicate order is, mathematically, a holographic order: the pilot wave $\psi$ enfolds all correlations globally, just as a hologram enfolds the entire scene. Pribram's brain processes information in the frequency domain, which corresponds to the Fourier-transformed (implicate) representation of the external world.
+    </p>
+
+    <p>
+      Their joint proposal was that the brain acts as a holographic lens decoding the holographic structure of physical reality: a lens transforming the implicate order into the explicate world of ordinary experience. Conscious perception is thus the intersection of two holographic processes, the implicate structure of the universe (Bohm) and the holographic processing of the brain (Pribram).
+    </p>
+
+    <div class="pull-quote">
+      <p>"The brain is a hologram enfolded in a holographic universe."</p>
+      <cite>Pribram &amp; Bohm, summarised in Talbot (1991)</cite>
+    </div>
+
+    <h3>Experimental Support</h3>
+
+    <p>Pribram's holonomic model has a richer experimental base than either Bohm-Hiley or Orch-OR:</p>
+
+    <ul>
+      <li><strong>Receptive field tuning:</strong> Single-unit recordings in visual cortex (Hubel &amp; Wiesel, and later DeValois et al.) revealed that cortical cells are tuned to spatial frequency bands, matching the Gabor-wavelet decomposition predicted by holonomic theory.</li>
+      <li><strong>Lesion tolerance:</strong> Lashley's original finding, that memory survives extensive cortical damage, is the foundational experimental motivation for distributed holographic storage.</li>
+      <li><strong>EEG phase coherence:</strong> Broad-band phase synchronization across cortical areas during memory retrieval is consistent with the global interference patterns of a holographic readout.</li>
+      <li><strong>Synaptic microstructure:</strong> Electron microscopy reveals dendritic spines with microfilament arrays in the $10$–$100\,\mathrm{nm}$ range, consistent with Pribram's proposed QFT substrate.</li>
+    </ul>
+
+    <p>
+      The spatial-frequency tuning of cortical neurons remains the most robust experimental finding, though it can also be explained by efficient coding principles without invoking QFT.
+    </p>
+
+    <!-- Comparison table -->
+    <div class="dnd-table-wrap reveal">
+      <div class="dnd-table-title">Comparing the Three Frameworks</div>
+      <table class="dnd-table">
+        <thead>
+          <tr><th>Theory</th><th>Core Claim</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bohm-Hiley</td>
+            <td>Mind and matter emerge from the implicate order; the quantum potential carries active information in the brain.</td>
+          </tr>
+          <tr>
+            <td>Orch-OR</td>
+            <td>Microtubule superpositions collapse via objective reduction; collapse events <em>are</em> moments of consciousness.</td>
+          </tr>
+          <tr>
+            <td>Pribram</td>
+            <td>Brain operates as holographic transform of the world; long-term memory is a QFT symmetry-broken vacuum.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         § 5  EXPERIMENTAL LANDSCAPE
+    ══════════════════════════════════════ -->
+    <div class="sec-label">§ 5</div>
+    <h2>Experimental Landscape</h2>
+
+    <p class="dropcap">
+      All three theories have inspired experimental programmes, with varying degrees of success.
+    </p>
+
+    <h3>Quantum Coherence in Biology</h3>
+
+    <p>
+      A landmark finding outside the brain is the observation of long-lived quantum coherence in photosynthetic complexes by Fleming et al. (2007). Oscillatory signals persisting for hundreds of femtoseconds in the Fenna-Matthews-Olson (FMO) complex suggested wavelike energy transfer. Although later reanalysis questioned whether the oscillations are vibrational rather than electronic, the result opened the door to the field of <strong>quantum biology</strong> and lent credibility to the idea that biological systems can sustain quantum effects at physiological temperatures.
+    </p>
+
+    <div class="fig-wrap reveal">
+      <img src="/assets/Fenna-Matthews-Olson_complex_protein_trimer_(PDB_cartoon_4bcl).png"
+           alt="FMO photosynthetic complex"
+           onerror="this.style.background='var(--bg3)'; this.style.height='200px';">
+      <p class="fig-caption"><strong>Fig. 4 — The Fenna-Matthews-Olson (FMO) photosynthetic complex.</strong> The FMO complex of green sulfur bacteria contains eight bacteriochlorophyll molecules (coloured) held in a protein scaffold. Fleming et al. (2007) observed oscillatory signals persisting for hundreds of femtoseconds, suggesting wavelike, quantum-coherent energy transfer between pigments.</p>
+    </div>
+
+    <h3>The Decoherence Problem</h3>
+
+    <p>
+      Tegmark's 2000 calculation remains the principal challenge to Orch-OR. He modelled a tubulin superposition as two ionic charge configurations separated by $1\,\mathrm{nm}$ in an aqueous environment, obtaining
+    </p>
+
+    <div class="eq-block">
+      $$\tau_\phi \sim \frac{\hbar}{\Delta E_{\text{env}}} \approx 10^{-13}\,\mathrm{s} \tag{6}$$
+    </div>
+
+    <p>
+      twelve to thirteen orders of magnitude shorter than the timescales needed for Orch-OR ($\sim 10$–$100\,\mathrm{ms}$). Hameroff and Penrose responded by arguing that microtubules may shield their interiors from thermal noise, but no mechanism has been demonstrated.
+    </p>
+
+    <h3>Quantum Vibrations and Anaesthesia</h3>
+
+    <p>A series of experiments has attempted to link quantum effects in microtubules to anaesthetic action:</p>
+
+    <ol>
+      <li>Bandyopadhyay (2013) reported electrical oscillations in single microtubules at megahertz frequencies, interpreted as quantum resonances.</li>
+      <li>Tuszynski (Alberta, 2022) showed that anaesthetics (xenon, isoflurane) accelerate the decay of delayed luminescence, the re-emission of trapped photons in microtubules, implicating quantum optical effects.</li>
+      <li>Scholes &amp; Kalra (Princeton, 2022) demonstrated anomalously long excitation diffusion through tubulin networks, suppressed by anaesthetics. They proposed superradiance as a possible mechanism.</li>
+    </ol>
+
+    <div class="sticky">
+      Oxford physicist Vlatko Vedral: "the connection with consciousness is a really long shot." Representative of mainstream physics opinion.
+    </div>
+
+    <h3>Evidence for Holonomic Memory</h3>
+
+    <p>Pribram's framework enjoys the best empirical footing among the three:</p>
+
+    <ul>
+      <li>DeValois et al. (1982) confirmed that cat and monkey cortical neurons are optimally tuned to spatial frequencies, matching the Gabor basis prediction.</li>
+      <li>Phase coding, the idea that information is carried in the phase rather than the rate of neural firing, is well-established and consistent with holographic storage.</li>
+      <li>Multielectrode recording in rodents during spatial navigation shows phase-amplitude coupling in hippocampal theta oscillations, consistent with a distributed, phase-encoded memory representation.</li>
+    </ul>
+
+    <p>
+      None of these findings, however, require quantum mechanics per se; they are equally consistent with classical wave mechanics in neural networks.
+    </p>
+
+    <!-- ══════════════════════════════════════
+         § 6  RECEPTION & CONTROVERSY
+    ══════════════════════════════════════ -->
+    <div class="sec-label">§ 6</div>
+    <h2>Scientific Reception and Controversy</h2>
+
+    <p class="dropcap">
+      The reception of quantum-mind theories in the broader scientific community has been overwhelmingly skeptical, though the field retains a committed minority of serious researchers.
+    </p>
+
+    <h3>Mainstream Neuroscience</h3>
+
+    <p>
+      The dominant view in computational neuroscience and cognitive science is that quantum effects play no functional role in neural computation. The brain is warm ($37^\circ\mathrm{C}$), wet (mostly water), and structurally disordered, conditions that suppress quantum coherence to timescales far too short to influence synaptic processes, which operate on millisecond timescales. Most neuroscientists regard the brain as a classical information processor and view quantum-mind proposals as motivated more by the desire to resolve the hard problem philosophically than by empirical necessity.
+    </p>
+
+    <h3>Philosophy of Mind</h3>
+
+    <p>
+      Philosophers have been more divided. David Chalmers, who coined the "hard problem," is sympathetic to the idea that consciousness may require new physics, but has not endorsed Orch-OR specifically. Patricia Churchland and Daniel Dennett, by contrast, argue that consciousness will ultimately be explained in wholly physical, classical terms, and that invoking quantum mechanics simply relocates the mystery without resolving it.
+    </p>
+
+    <p>
+      The Penrose-Godel argument has received particularly sharp criticism. Bringsjord and Xiao (2003) argued that the inference from Godel's theorem to the non-computability of human cognition commits a category error: human mathematicians make mistakes, have finite lifetimes, and cannot actually access the Godelian truth in the way Penrose claims. Turing, anticipating this argument, noted that a sufficiently complex machine might mimic unprovable insight by pure exhaustive search.
+    </p>
+
+    <h3>Physics Community</h3>
+
+    <p>
+      Among physicists, the Bohm-Hiley formalism is respectable but its application to consciousness is seen as speculative. Orch-OR's gravitational collapse mechanism is not mainstream; the leading approaches to quantum gravity (string theory, loop quantum gravity) do not predict any Penrose-type collapse on biological timescales.
+    </p>
+
+    <p>
+      A 2022 Italian experimental group failed to find any evidence for gravity-related quantum state collapse in well-controlled tabletop experiments using optomechanical oscillators, weakening the empirical case for objective reduction as a physical phenomenon at all.
+    </p>
+
+    <h3>The Quantum Biology Bridge</h3>
+
+    <p>
+      The discovery of quantum effects in photosynthesis, avian magnetoreception, and enzyme catalysis has provided an indirect boost to quantum-mind proposals. If evolution has harnessed quantum coherence in protein complexes for energy transfer, it is at least conceivable that similar effects occur in neural proteins. Most quantum biologists, however, sharply distinguish functional quantum effects in metabolism from the specific claims of Orch-OR or the Bohm-Hiley mind framework.
+    </p>
+
+    <div class="dnd-table-wrap reveal">
+      <div class="dnd-table-title">Key Objections Summarised</div>
+      <table class="dnd-table">
+        <thead>
+          <tr><th>Objection</th><th>Details</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Decoherence</td>
+            <td>Brain temperature causes quantum decoherence in $\sim 10^{-13}\,\mathrm{s}$, far too fast for any neural function.</td>
+          </tr>
+          <tr>
+            <td>Godel Gap</td>
+            <td>Penrose's inference from incompleteness to non-computability commits a category error.</td>
+          </tr>
+          <tr>
+            <td>No Mechanism</td>
+            <td>Bohm-Hiley gives no testable neural mechanism; the implicate order makes no unique predictions.</td>
+          </tr>
+          <tr>
+            <td>Classical Alternatives</td>
+            <td>All holonomic brain phenomena can be explained by classical wave mechanics without invoking QFT.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         § 7  CONCLUSION
+    ══════════════════════════════════════ -->
+    <div class="sec-label">§ 7</div>
+    <h2>Conclusion</h2>
+
+    <p class="dropcap">
+      The quantum brain remains one of the most fascinating and contested frontiers in science. Three schools of thought, Bohm and Hiley's implicate order, Penrose and Hameroff's orchestrated objective reduction, and Pribram's holonomic theory, each offer a genuinely novel perspective on the mind-body problem, and each pays a price for its audacity.
+    </p>
+
+    <p>
+      Bohm-Hiley is philosophically the most radical: it dissolves the mind-body boundary by situating both in a deeper implicate reality. But it pays the price of near-unfalsifiability and provides no concrete neural mechanism.
+    </p>
+
+    <p>
+      Orch-OR is the most mathematically specific: it links Penrose's gravitational threshold to Hameroff's microtubule biology and makes quantitative predictions about consciousness timescales. But its central empirical claim, that microtubule superpositions survive long enough for biological relevance, is contradicted by standard decoherence estimates, and specific structural predictions have been falsified.
+    </p>
+
+    <p>
+      Pribram's holonomic theory rests on the firmest experimental ground: the spatial-frequency tuning of cortical neurons is a robust finding, and distributed memory storage is neurally established. The quantum leap to QFT in the dendritic web, while stimulating, remains without direct experimental validation.
+    </p>
+
+    <p>
+      What all three share is a recognition that the hard problem of consciousness may not yield to a purely classical, computational description of the brain. Whether quantum mechanics is the missing ingredient or merely a sophisticated metaphor for the brain's complexity remains, for now, gloriously open.
+    </p>
+
+    <div class="read-aloud reveal">
+      The question is not whether the brain is quantum, but whether any physics we currently possess is adequate to the mystery of what it means to understand, to feel, and to be.
+    </div>
+
+    <!-- ══════════════════════════════════════
+         BIBLIOGRAPHY
+    ══════════════════════════════════════ -->
+    <div class="bibliography">
+      <div class="bib-title">References</div>
+      <div class="bib-grid">
+        <div class="bib-entry"><span class="bib-key">[Stapp 1993]</span>H. P. Stapp, <em>Mind, Matter and Quantum Mechanics</em>, Springer, Berlin (1993).</div>
+        <div class="bib-entry"><span class="bib-key">[Penrose 1989]</span>R. Penrose, <em>The Emperor's New Mind</em>, Oxford University Press (1989).</div>
+        <div class="bib-entry"><span class="bib-key">[Chalmers 1995]</span>D. J. Chalmers, Facing up to the problem of consciousness, <em>J. Consciousness Stud.</em> <strong>2</strong>, 200–219 (1995).</div>
+        <div class="bib-entry"><span class="bib-key">[von Neumann 1955]</span>J. von Neumann, <em>Mathematical Foundations of Quantum Mechanics</em>, Princeton University Press (1955).</div>
+        <div class="bib-entry"><span class="bib-key">[Wigner 1961]</span>E. P. Wigner, Remarks on the mind-body question, in <em>The Scientist Speculates</em>, Heinemann, London (1961).</div>
+        <div class="bib-entry"><span class="bib-key">[Tegmark 2000]</span>M. Tegmark, Importance of quantum decoherence in brain processes, <em>Phys. Rev. E</em> <strong>61</strong>, 4194–4206 (2000). <a href="https://doi.org/10.1103/PhysRevE.61.4194" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Bohm 1952]</span>D. Bohm, A suggested interpretation of the quantum theory in terms of hidden variables, <em>Phys. Rev.</em> <strong>85</strong>, 166–179 (1952). <a href="https://doi.org/10.1103/PhysRev.85.166" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Bohm 1980]</span>D. Bohm, <em>Wholeness and the Implicate Order</em>, Routledge, London (1980).</div>
+        <div class="bib-entry"><span class="bib-key">[Bohm & Hiley 1987]</span>D. Bohm and B. J. Hiley, An ontological basis for the quantum theory, <em>Phys. Rep.</em> <strong>144</strong>, 321–375 (1987). <a href="https://doi.org/10.1016/0370-1573(87)90024-X" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Hiley 2001]</span>B. J. Hiley, Non-commutative geometry, the Bohm interpretation and the mind-matter relationship, <em>Proc. CASYS 2000</em>, AIP (2001).</div>
+        <div class="bib-entry"><span class="bib-key">[Pylkkanen 2007]</span>P. Pylkkanen, <em>Mind, Matter and the Implicate Order</em>, Springer, Berlin (2007).</div>
+        <div class="bib-entry"><span class="bib-key">[Penrose 1994]</span>R. Penrose, <em>Shadows of the Mind</em>, Oxford University Press (1994).</div>
+        <div class="bib-entry"><span class="bib-key">[Hameroff & Penrose 1996]</span>S. Hameroff and R. Penrose, Orchestrated reduction of quantum coherence in brain microtubules, <em>Math. Comput. Simul.</em> <strong>40</strong>, 453–480 (1996). <a href="https://doi.org/10.1016/0378-4754(96)80476-9" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Godel 1931]</span>K. Godel, Uber formal unentscheidbare Satze der Principia Mathematica, <em>Monatsh. Math. Phys.</em> <strong>38</strong>, 173–198 (1931).</div>
+        <div class="bib-entry"><span class="bib-key">[Penrose 1996]</span>R. Penrose, On gravity's role in quantum state reduction, <em>Gen. Relativ. Gravit.</em> <strong>28</strong>, 581–600 (1996). <a href="https://doi.org/10.1007/BF02105068" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Hameroff 1987]</span>S. Hameroff, <em>Ultimate Computing: Biomolecular Consciousness and Nanotechnology</em>, North-Holland (1987).</div>
+        <div class="bib-entry"><span class="bib-key">[Hameroff & Penrose 2014]</span>S. Hameroff and R. Penrose, Consciousness in the universe: a review of the Orch-OR theory, <em>Phys. Life Rev.</em> <strong>11</strong>, 39–78 (2014). <a href="https://doi.org/10.1016/j.plrev.2013.08.002" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Donadi et al. 2021]</span>S. Donadi et al., Underground test of gravity-related wave function collapse, <em>Nat. Phys.</em> <strong>17</strong>, 74–78 (2021). <a href="https://doi.org/10.1038/s41567-020-1008-4" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Scholes & Kalra 2022]</span>A. P. Kalra et al., Electronic energy migration in microtubules, <em>ACS Central Science</em> <strong>9</strong>, 701–713 (2023).</div>
+        <div class="bib-entry"><span class="bib-key">[Lashley 1950]</span>K. S. Lashley, In search of the engram, <em>Symp. Soc. Exp. Biol.</em> <strong>4</strong>, 454–482 (1950).</div>
+        <div class="bib-entry"><span class="bib-key">[Gabor 1948]</span>D. Gabor, A new microscopic principle, <em>Nature</em> <strong>161</strong>, 777–778 (1948). <a href="https://doi.org/10.1038/161777a0" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Pribram 1971]</span>K. H. Pribram, <em>Languages of the Brain</em>, Prentice-Hall (1971).</div>
+        <div class="bib-entry"><span class="bib-key">[Pribram 1991]</span>K. H. Pribram, <em>Brain and Perception: Holonomy and Structure in Figural Processing</em>, Erlbaum (1991).</div>
+        <div class="bib-entry"><span class="bib-key">[Ricciardi & Umezawa 1967]</span>L. M. Ricciardi and H. Umezawa, Brain and physics of many-body problems, <em>Kybernetik</em> <strong>4</strong>, 44–48 (1967).</div>
+        <div class="bib-entry"><span class="bib-key">[Umezawa 1993]</span>H. Umezawa, <em>Advanced Field Theory: Micro, Macro, and Thermal Physics</em>, AIP (1993).</div>
+        <div class="bib-entry"><span class="bib-key">[DeValois 1982]</span>R. L. DeValois and K. K. DeValois, Spatial vision, <em>Annu. Rev. Psychol.</em> <strong>31</strong>, 309–341 (1980).</div>
+        <div class="bib-entry"><span class="bib-key">[Fleming et al. 2007]</span>G. S. Fleming et al., Evidence for wavelike energy transfer through quantum coherence in photosynthetic systems, <em>Nature</em> <strong>446</strong>, 782–786 (2007). <a href="https://doi.org/10.1038/nature05678" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Cao et al. 2020]</span>J. Cao et al., Quantum biology revisited, <em>Sci. Adv.</em> <strong>6</strong>, eaaz4888 (2020). <a href="https://doi.org/10.1126/sciadv.aaz4888" target="_blank">doi</a></div>
+        <div class="bib-entry"><span class="bib-key">[Dennett 1991]</span>D. C. Dennett, <em>Consciousness Explained</em>, Little Brown, Boston (1991).</div>
+        <div class="bib-entry"><span class="bib-key">[Talbot 1991]</span>M. Talbot, <em>The Holographic Universe</em>, Harper Collins, New York (1991).</div>
+      </div>
+    </div>
+
+  </div><!-- /journal-body -->
+
+  <div class="art-footer">
+    <span class="art-tag">Quantum Mind</span>
+    <span class="art-tag">Consciousness</span>
+    <span class="art-tag">Orch-OR</span>
+    <span class="art-tag">Holonomic Brain</span>
+    <span class="art-tag">Bohm-Hiley</span>
+    <span class="art-tag">Neuroscience</span>
+  </div>
+
+</div><!-- /article-wrap -->
+
+<footer>
+  <div class="footer-inner">
+    <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
+    <ul class="footer-links">
+      <li><a href="/research/">Research</a></li>
+      <li><a href="/publications/">Publications</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+    <span class="footer-copy">&copy; 2026 Samriddha Ganguly</span>
+  </div>
+</footer>
 
 <script>
+  // Mobile nav
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
 
-const progressFill = document.getElementById('read-progress-fill');
+  // Theme
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') { document.body.classList.add('light'); themeBtn.textContent = 'DARK'; }
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
 
-window.addEventListener('scroll', () => {
+  // Reading progress
+  window.addEventListener('scroll', () => {
+    const el = document.documentElement;
+    const pct = el.scrollTop / (el.scrollHeight - el.clientHeight) * 100;
+    document.getElementById('read-progress-fill').style.width = pct + '%';
+  });
 
-  const h = document.documentElement;
-  const scrolled = h.scrollTop;
-  const height = h.scrollHeight - h.clientHeight;
-
-  const progress = (scrolled / height) * 100;
-
-  progressFill.style.width = progress + '%';
-
-});
-
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
 </script>
-
 </body>
 </html>
