@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+
+  <title>The Quantum Brain — Samriddha Ganguly</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="/style.css"/>
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$']],
+        displayMath: [['$$','$$']]
+      }
+    };
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+
+    :root{
+      --paper:#faf7f0;
+      --paper2:#f4f0e6;
+      --paper3:#ede8da;
+
+      --ink:#1c1a16;
+      --ink-faded:#5a5648;
+
+      --accent:#1c396e;
+      --accent2:#3464aa;
+
+      --rule:rgba(100,130,180,0.12);
+      --margin-line:rgba(180,60,60,0.15);
+
+      --tape:rgba(200,169,110,0.18);
+      --tape-dark:rgba(100,80,40,0.22);
+
+      --border:rgba(40,40,40,0.14);
+
+      --bg:#faf7f0;
+      --bg2:#f3efe5;
+      --bg3:#ece6d7;
+
+      --text:#1c1a16;
+      --text-muted:#67604f;
+      --text-dim:#8f8774;
+
+      --nav-h:70px;
+      --pad:2rem;
+
+      --mono:'DM Mono', monospace;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    #read-progress{
+      position:fixed;
+      top:var(--nav-h);
+      left:0;
+      right:0;
+      height:2px;
+      z-index:999;
+      background:var(--border);
+    }
+
+    #read-progress-fill{
+      height:100%;
+      width:0%;
+      background:var(--accent);
+    }
+
+    .article-wrap{
+      max-width:780px;
+      margin:0 auto;
+      padding:calc(var(--nav-h) + 4rem) var(--pad) 6rem;
+    }
+
+    .art-back{
+      font-family:var(--mono);
+      font-size:0.65rem;
+      color:var(--text-muted);
+      text-decoration:none;
+      letter-spacing:0.1em;
+      display:inline-flex;
+      gap:0.5rem;
+      margin-bottom:2rem;
+    }
+
+    .art-header{
+      margin-bottom:3rem;
+    }
+
+    .art-eyebrow{
+      font-family:var(--mono);
+      font-size:0.62rem;
+      color:var(--accent);
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      margin-bottom:1rem;
+    }
+
+    .art-title{
+      font-family:'Caveat', cursive;
+      font-size:clamp(2.8rem,7vw,5rem);
+      line-height:1.05;
+      margin-bottom:1rem;
+      color:var(--accent);
+    }
+
+    .art-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      padding:0.8rem 0;
+      font-family:var(--mono);
+      font-size:0.65rem;
+      color:var(--text-muted);
+      margin-bottom:2rem;
+    }
+
+    .art-hero-img{
+      width:calc(100% + 4rem);
+      margin-left:-2rem;
+      height:480px;
+      object-fit:cover;
+      display:block;
+      filter:sepia(10%) contrast(1.03);
+    }
+
+    .art-hero-caption{
+      text-align:center;
+      margin-top:0.6rem;
+      font-size:0.7rem;
+      color:var(--text-dim);
+      font-family:var(--mono);
+      margin-bottom:3rem;
+    }
+
+    .journal-body{
+      position:relative;
+    }
+
+    .journal-body::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background-image:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 31px,
+        var(--rule) 31px,
+        var(--rule) 32px
+      );
+      pointer-events:none;
+    }
+
+    .journal-body::after{
+      content:'';
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:52px;
+      width:1px;
+      background:var(--margin-line);
+    }
+
+    .journal-body > *{
+      position:relative;
+      z-index:2;
+    }
+
+    .journal-body p{
+      font-family:'Lora', serif;
+      font-size:1.05rem;
+      line-height:2;
+      margin-bottom:2rem;
+      padding-left:68px;
+    }
+
+    .journal-body h2{
+      font-family:'Caveat', cursive;
+      font-size:2.3rem;
+      color:var(--accent);
+      margin:3rem 0 1rem;
+      padding-left:68px;
+    }
+
+    .journal-body h3{
+      font-family:'Caveat', cursive;
+      font-size:1.6rem;
+      padding-left:68px;
+      margin-top:2rem;
+    }
+
+    .pull-quote{
+      margin:2.5rem 0 2.5rem 68px;
+      border-left:3px solid var(--accent);
+      padding:1.5rem;
+      background:var(--bg2);
+    }
+
+    .pull-quote p{
+      padding:0;
+      margin:0;
+      font-family:'Caveat', cursive;
+      font-size:1.7rem;
+      line-height:1.4;
+    }
+
+    .pull-quote cite{
+      display:block;
+      margin-top:1rem;
+      font-size:0.65rem;
+      font-family:var(--mono);
+      color:var(--text-muted);
+    }
+
+    .scrap-right,
+    .scrap-left{
+      width:280px;
+      position:relative;
+      z-index:5;
+    }
+
+    .scrap-right{
+      float:right;
+      margin:0.5rem -1rem 2rem 2rem;
+    }
+
+    .scrap-left{
+      float:left;
+      margin:0.5rem 2rem 2rem -1rem;
+    }
+
+    .scrap-polaroid{
+      background:white;
+      padding:8px 8px 32px;
+      box-shadow:2px 4px 18px rgba(0,0,0,0.25);
+      transform:rotate(1.5deg);
+      position:relative;
+    }
+
+    .scrap-left .scrap-polaroid{
+      transform:rotate(-2deg);
+    }
+
+    .scrap-polaroid::before{
+      content:'';
+      position:absolute;
+      top:-10px;
+      left:50%;
+      transform:translateX(-50%);
+      width:60px;
+      height:22px;
+      background:var(--tape);
+      border:1px solid var(--tape-dark);
+    }
+
+    .scrap-polaroid img{
+      width:100%;
+      display:block;
+    }
+
+    .polaroid-label{
+      text-align:center;
+      padding-top:10px;
+      font-family:'Caveat', cursive;
+      font-size:1rem;
+      color:#333;
+    }
+
+    .eq-block{
+      margin:2rem 0 2rem 68px;
+      padding:1.5rem;
+      background:var(--bg3);
+      border:1px solid var(--border);
+      overflow-x:auto;
+      font-family:var(--mono);
+    }
+
+    .note-box{
+      margin:2rem 0 2rem 68px;
+      padding:1.5rem;
+      background:#e7eef9;
+      border-left:4px solid var(--accent);
+    }
+
+    .note-box h4{
+      margin-top:0;
+      color:var(--accent);
+      font-family:'Caveat', cursive;
+      font-size:1.5rem;
+    }
+
+    .note-box p{
+      padding-left:0;
+      margin-bottom:0;
+    }
+
+    .full-img{
+      width:100%;
+      margin:2rem 0;
+    }
+
+    .full-img img{
+      width:100%;
+      display:block;
+      border:8px solid white;
+      box-shadow:0 4px 18px rgba(0,0,0,0.2);
+    }
+
+    .caption{
+      text-align:center;
+      font-size:0.7rem;
+      margin-top:0.5rem;
+      color:var(--text-dim);
+      font-family:var(--mono);
+    }
+
+    .clearfix::after{
+      content:'';
+      display:table;
+      clear:both;
+    }
+
+    @media(max-width:680px){
+
+      .journal-body::after{
+        display:none;
+      }
+
+      .journal-body p,
+      .journal-body h2,
+      .journal-body h3,
+      .eq-block,
+      .pull-quote,
+      .note-box{
+        padding-left:0;
+        margin-left:0;
+      }
+
+      .scrap-right,
+      .scrap-left{
+        float:none;
+        width:100%;
+        margin:0 0 2rem;
+      }
+
+      .art-hero-img{
+        width:100%;
+        margin-left:0;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div id="read-progress">
+  <div id="read-progress-fill"></div>
+</div>
+
+<nav>
+  <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
+
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research/">Research</a></li>
+    <li><a href="/cv/">About Me</a></li>
+    <li><a href="/blog/" class="active">Blog</a></li>
+    <li><a href="/resources/">Resources</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="article-wrap">
+
+  <a href="/blog/" class="art-back">← Back to Blog</a>
+
+  <header class="art-header">
+
+    <div class="art-eyebrow">
+      Quantum Consciousness · Essay · 2026
+    </div>
+
+    <h1 class="art-title">
+      The Quantum Brain
+    </h1>
+
+    <div class="art-meta">
+      <span>Samriddha Ganguly</span>
+      <span>·</span>
+      <span>Quantum Mechanics</span>
+      <span>·</span>
+      <span>Consciousness</span>
+      <span>·</span>
+      <span>Neuroscience</span>
+    </div>
+
+    <img
+      src="assets/brain-removebg-preview.png"
+      alt="Quantum Brain"
+      class="art-hero-img"
+    >
+
+    <div class="art-hero-caption">
+      Quantum Mechanics, Consciousness, and the Mind
+    </div>
+
+  </header>
+
+  <div class="journal-body">
+
+    <div class="pull-quote">
+      <p>
+        “Does the brain compute classically, or does the quantum world
+        reach into our very thoughts?”
+      </p>
+    </div>
+
+    <h2>Historical Background: Why the Quantum Mind?</h2>
+
+    <div class="scrap-right">
+      <div class="scrap-polaroid">
+        <img src="assets/HD.3A.019_(10556202544).jpg">
+        <div class="polaroid-label">
+          Eugene Wigner (1902–1995)
+        </div>
+      </div>
+    </div>
+
+    <p>
+      The question of how the physical brain gives rise to subjective
+      experience has resisted every purely classical account.
+      As quantum mechanics matured through the twentieth century,
+      a remarkable possibility emerged:
+      perhaps consciousness itself is tied fundamentally to quantum reality.
+    </p>
+
+    <div class="note-box">
+      <h4>The Hard Problem</h4>
+
+      <p>
+        Why does neuronal activity produce experience?
+        Classical neuroscience explains processing —
+        but not subjective awareness itself.
+      </p>
+    </div>
+
+    <p>
+      Classical neuroscience models the brain as an electrochemical computer.
+      Neurons fire, synapses strengthen, information propagates.
+      Yet this picture leaves unanswered why there is
+      something it feels like to be conscious.
+    </p>
+
+    <h2>Bohm & Hiley</h2>
+
+    <div class="scrap-left">
+      <div class="scrap-polaroid">
+        <img src="assets/David_Bohm.jpg">
+        <div class="polaroid-label">
+          David Bohm (1917–1992)
+        </div>
+      </div>
+    </div>
+
+    <p>
+      David Bohm proposed that mind and matter emerge
+      from a deeper hidden level of reality:
+      the implicate order.
+    </p>
+
+    <div class="eq-block">
+      $$
+      \mathbf{v} = \frac{\nabla S}{m}
+      $$
+
+      $$
+      Q = -\frac{\hbar^2}{2m}\frac{\nabla^2R}{R}
+      $$
+    </div>
+
+    <p>
+      Bohm interpreted the quantum potential as active information —
+      not energy itself, but information guiding physical systems.
+    </p>
+
+    <div class="full-img">
+      <img src="assets/ExperimentCouder-Young.png">
+      <div class="caption">
+        Couder’s walking droplet experiment as a pilot-wave analogue.
+      </div>
+    </div>
+
+    <h2>Penrose & Hameroff: Orch-OR</h2>
+
+    <div class="scrap-right">
+      <div class="scrap-polaroid">
+        <img src="assets/960px-Roger_Penrose_at_Festival_della_Scienza_Oct_29_2011.jpg">
+        <div class="polaroid-label">
+          Roger Penrose
+        </div>
+      </div>
+    </div>
+
+    <p>
+      Penrose argued that consciousness cannot be algorithmic.
+      He connected Gödel’s incompleteness theorem
+      with quantum wavefunction collapse.
+    </p>
+
+    <div class="eq-block">
+      $$
+      \tau \sim \frac{\hbar}{E_G}
+      $$
+    </div>
+
+    <p>
+      In Orch-OR, microtubules inside neurons sustain quantum coherence
+      until gravitational self-energy triggers collapse.
+    </p>
+
+    <div class="full-img">
+      <img src="assets/Microtubules_in_the_leading_edge_of_a_cell.tif.jpg">
+      <div class="caption">
+        Microtubules inside a eukaryotic cell.
+      </div>
+    </div>
+
+    <div class="note-box">
+      <h4>Tegmark’s Criticism</h4>
+
+      <p>
+        Tegmark estimated decoherence times near
+        \(10^{-13}\) seconds —
+        enormously shorter than Orch-OR requires.
+      </p>
+    </div>
+
+    <h2>Pribram’s Holonomic Brain</h2>
+
+    <p>
+      Karl Pribram approached the problem from neuroscience upward.
+      He proposed that memory is holographically distributed,
+      not locally stored.
+    </p>
+
+    <div class="eq-block">
+      $$
+      \psi_{a,b}(x)=
+      \frac{1}{\sqrt{a}}
+      e^{-\pi((x-b)/a)^2}
+      e^{2\pi i f_0(x-b)}
+      $$
+    </div>
+
+    <div class="full-img">
+      <img src="assets/gabor_wavelet.pdf">
+      <div class="caption">
+        The Gabor wavelet — elementary unit of holonomic encoding.
+      </div>
+    </div>
+
+    <div class="full-img">
+      <img src="assets/UVMEkpktAC_2CemR4GwGYMZpv8asClf42lkJQV6AWgsjbPMVffoDPvsbrQ-e8sdXfmDGFd0S0NH5pKWcEkq60BP_5gUpLL9mA5ChgJE_MUbu3gI29Xwex5--0mcSg2BeCrcOK-SGTr7H0zCe70na7nIyUCil2lA7DkcxxDbPjWjqHHDGnZgRvT7TAUisKjKm.jpg">
+      <div class="caption">
+        Holographic interference patterns as distributed memory.
+      </div>
+    </div>
+
+    <p>
+      In Pribram’s theory,
+      the brain operates in a spectral domain,
+      reconstructing reality from distributed holographic transforms.
+    </p>
+
+    <div class="pull-quote">
+      <p>
+        “The brain is a hologram enfolded in a holographic universe.”
+      </p>
+
+      <cite>
+        Pribram & Bohm
+      </cite>
+    </div>
+
+    <h2>Quantum Biology</h2>
+
+    <div class="full-img">
+      <img src="assets/Fenna-Matthews-Olson_complex_protein_trimer_(PDB_cartoon_4bcl).png">
+      <div class="caption">
+        The Fenna–Matthews–Olson photosynthetic complex.
+      </div>
+    </div>
+
+    <p>
+      Experimental observations of long-lived coherence in biological systems
+      revived interest in quantum effects within living matter.
+    </p>
+
+    <h2>Conclusion</h2>
+
+    <p>
+      Whether the quantum mind ultimately survives experimental scrutiny
+      remains unknown.
+      Yet these theories continue to push both neuroscience and quantum physics
+      into profound conceptual territory.
+    </p>
+
+    <p>
+      The deepest question remains:
+      is consciousness merely computation,
+      or is it woven into the quantum structure of reality itself?
+    </p>
+
+  </div>
+
+</div>
+
+<script>
+
+const progressFill = document.getElementById('read-progress-fill');
+
+window.addEventListener('scroll', () => {
+
+  const h = document.documentElement;
+  const scrolled = h.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+
+  const progress = (scrolled / height) * 100;
+
+  progressFill.style.width = progress + '%';
+
+});
+
+</script>
+
+</body>
+</html>
