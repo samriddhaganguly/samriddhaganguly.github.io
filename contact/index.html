@@ -1,233 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Contact — Samriddha Ganguly</title>
-  <meta property="og:title" content="Samriddha Ganguly">
-  <meta property="og:description" content="Research in condensed matter, topology, and quantum systems.">
-  <meta property="og:url" content="https://samriddhaganguly.github.io/">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://samriddhaganguly.github.io/assets/preview.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link rel="stylesheet" href="/style.css"/>
-
-  <style>
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-      gap: 1px;
-      background: var(--border);
-      margin-bottom: 4rem;
-    }
-
-    .contact-card {
-      background: var(--bg2);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      transition: all 0.25s;
-      text-decoration: none;
-      color: inherit;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact-card:hover {
-      background: var(--bg3);
-      transform: translateY(-4px);
-    }
-
-    .contact-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(to right, var(--accent), transparent);
-      transform: scaleX(0);
-      transition: transform 0.4s;
-    }
-
-    .contact-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    /* 🔥 NEW: ICON STYLE */
-    .contact-icon {
-      width: 20px;
-      height: 20px;
-      margin-bottom: 0.8rem;
-      color: var(--accent);
-      opacity: 0.8;
-    }
-
-    .contact-label {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      color: var(--accent);
-      text-transform: uppercase;
-    }
-
-    .contact-value {
-      font-family: var(--serif);
-      font-size: 1.2rem;
-      line-height: 1.4;
-    }
-
-    .contact-desc {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .contact-section-title {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Samriddha Ganguly</title>
+  <meta name="description" content="Notes, expositions, and articles on physics and culture." />
+  <link rel="stylesheet" href="/style.css" />
 </head>
-<script src="script.js"></script>
 <body>
-
-<nav>
-  <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
-
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/research/">Research</a></li>
-    <li><a href="/cv/">About Me</a></li>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="/resources/">Resources</a></li>
-    <li><a href="/open_board/">open_board</a></li>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="brand">S<span class="dot">.</span>Ganguly</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/research/">Research</a></li>
+        <li><a href="/cv/">About Me</a></li>
+        <li><a href="/blog/" class="active">Blog</a></li>
+        <li><a href="/resources/">Resources</a></li>
+        <li><a href="/open_board/">open_board</a></li>
         <li><a href="/courses/">Courses</a></li>
-    <li><a href="/gallery/">Gallery</a></li>
-    <li><a href="/interests/">Interests</a></li>
-    <li><a href="/contact/" class="active">Contact</a></li>
-  </ul>
-<button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
-  <button class="nav-hamburger" id="menuBtn">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<header class="page-header">
-  <div class="page-header-inner">
-    <div class="page-eyebrow">Get In Touch</div>
-    <h1 class="page-title">Contact <em>Me</em></h1>
-    <p class="page-subtitle">
-      For collaborations, research discussions, or general enquiries.
-    </p>
-  </div>
-</header>
-
-<section class="section">
-  <div class="section-inner">
-
-    <div class="contact-section-title">Direct Contact</div>
-
-    <div class="contact-grid">
-
-      <!-- EMAIL -->
-      <a href="mailto:samriddha22@iiserb.ac.in" class="contact-card">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 4h16v16H4z"/>
-            <path d="M4 4l8 9 8-9"/>
-          </svg>
-        </div>
-        <div class="contact-label">Email</div>
-        <div class="contact-value">samriddha22@iiserb.ac.in</div>
-        <div class="contact-desc">Primary academic contact.</div>
-      </a>
-
-      <!-- GITHUB -->
-      <a href="https://github.com/samriddhaganguly" class="contact-card" target="_blank">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844a9.59 9.59 0 012.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-          </svg>
-        </div>
-        <div class="contact-label">GitHub</div>
-        <div class="contact-value">samriddhaganguly</div>
-        <div class="contact-desc">Code & simulations.</div>
-      </a>
-
-      <!-- LINKEDIN -->
-      <a href="https://www.linkedin.com/in/samriddha-ganguly-3360bb16a/" class="contact-card" target="_blank">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/>
-          </svg>
-        </div>
-        <div class="contact-label">LinkedIn</div>
-        <div class="contact-value">Profile</div>
-        <div class="contact-desc">Academic network.</div>
-      </a>
-
-      <!-- SCHOLAR -->
-      <a href="https://scholar.google.com/citations?user=A7Ec0RYAAAAJ&hl=en" class="contact-card" target="_blank">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 100 14 7 7 0 000-14z"/>
-          </svg>
-        </div>
-        <div class="contact-label">Google Scholar</div>
-        <div class="contact-value">Publications</div>
-        <div class="contact-desc">Citations & papers.</div>
-      </a>
-
+        <li><a href="/gallery/">Gallery</a></li>
+        <li><a href="/interests/">Interests</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">Light</button>
+      <button class="nav-menu" id="menuBtn" aria-label="Open menu"><span></span></button>
     </div>
+  </nav>
 
-  </div>
-</section>
-<footer>
-  <div class="footer-inner">
-    <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
-    <ul class="footer-links">
-      <li><a href="/research/">Research</a></li>
-      <li><a href="/publications/">Publications</a></li>
-      <li><a href="/contact/">Contact</a></li>
-    </ul>
-    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
-  </div>
-</footer>
+  <header class="page-header">
+    <div class="page-header-inner page-header-copy">
+      <div class="section-kicker">Notes, expositions & articles</div>
+      <h1 class="page-title">My <em>Blog</em></h1>
+      <p class="page-subtitle">A collection of notes, expositions, and articles on physics and occasionally non-physics, written when time allows between assignments.</p>
+    </div>
+  </header>
 
-<script>
-  // Mobile nav
-  document.getElementById('menuBtn').addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.toggle('open');
-  });
+  <main class="section">
+    <div class="section-inner">
+      <div class="filter-row reveal">
+        <button class="active">All</button>
+        <button>Intro</button>
+        <button>Pillars</button>
+        <button>Quantum</button>
+      </div>
+      <div class="card-grid reveal">
+        <a class="blog-card" href="/blog/condensed-matter/">
+          <img src="/assets/cmp_cover.png" alt="Condensed Matter Physics" />
+          <div class="blog-body">
+            <div class="blog-meta">Why should I care about X? · 2026</div>
+            <h3>Why Should I Care About Condensed Matter Physics?</h3>
+            <p>An introduction to condensed matter physics, emergence, and topology.</p>
+          </div>
+        </a>
+        <a class="blog-card" href="/blog/nambu/">
+          <img src="/assets/nambu_cover.png" alt="Yoichiro Nambu" />
+          <div class="blog-body">
+            <div class="blog-meta">Pillars of physics · 2026</div>
+            <h3>Yoichiro Nambu: Symmetry, Spontaneity, and the Unity of Physics</h3>
+            <p>Spontaneous symmetry breaking and its role in modern physics.</p>
+          </div>
+        </a>
+        <a class="blog-card" href="/blog/quantum-brain/">
+          <img src="/assets/quantumbraincover.png" alt="The Quantum Brain" />
+          <div class="blog-body">
+            <div class="blog-meta">Quantum consciousness · 2026</div>
+            <h3>The Quantum Brain: Quantum Mechanics, Consciousness, and the Mind</h3>
+            <p>From Bohm to Penrose, a broad view of radical theories linking quantum mechanics and cognition.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </main>
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 60);
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(r => observer.observe(r));
-  // Theme toggle
-const themeBtn = document.getElementById('themeBtn');
-const saved = localStorage.getItem('theme');
-if (saved === 'light') {
-  document.body.classList.add('light');
-  themeBtn.textContent = 'DARK';
-}
-themeBtn.addEventListener('click', () => {
-  const isLight = document.body.classList.toggle('light');
-  themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-});
-</script>
+  <footer class="footer">
+    <div class="footer-inner">
+      <a href="/" class="brand">S<span class="dot">.</span>Ganguly</a>
+      <ul class="footer-links">
+        <li><a href="/research/">Research</a></li>
+        <li><a href="/publications/">Publications</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Samriddha Ganguly</div>
+    </div>
+  </footer>
+
+  <script src="/script.js"></script>
 </body>
 </html>
+"},{
