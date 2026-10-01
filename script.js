@@ -1,38 +1,42 @@
-const menuBtn = document.getElementById('menuBtn');
-const navLinks = document.querySelector('.nav-links');
-const themeBtn = document.getElementById('themeBtn');
+(() => {
+  const themeBtn = document.getElementById('themeBtn');
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.querySelector('.nav-links');
 
-if (menuBtn && navLinks) {
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-  });
-}
+  function setTheme(theme) {
+    const light = theme === 'light';
+    document.body.classList.toggle('light', light);
+    if (themeBtn) themeBtn.textContent = light ? 'Dark' : 'Light';
+    localStorage.setItem('theme', light ? 'light' : 'dark');
+  }
 
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'light') {
-  document.body.classList.add('light');
-  if (themeBtn) themeBtn.textContent = 'Dark';
-}
+  setTheme(localStorage.getItem('theme') === 'light' ? 'light' : 'dark');
 
-if (themeBtn) {
-  themeBtn.addEventListener('click', () => {
-    const isLight = document.body.classList.toggle('light');
-    themeBtn.textContent = isLight ? 'Dark' : 'Light';
-    localStorage.setItem('theme', isLight ? 'light' : 'dark');
-  });
-}
-
-const revealEls = document.querySelectorAll('.reveal');
-if ('IntersectionObserver' in window) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      setTheme(document.body.classList.contains('light') ? 'dark' : 'light');
     });
-  }, { threshold: 0.12 });
-  revealEls.forEach(el => observer.observe(el));
-} else {
-  revealEls.forEach(el => el.classList.add('visible'));
-}
+  }
+
+  if (menuBtn && navLinks) {
+    menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  }
+
+  const reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add('visible'));
+  }
+})();
