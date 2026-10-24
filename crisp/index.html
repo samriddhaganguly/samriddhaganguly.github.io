@@ -6,7 +6,7 @@
     <title>Samriddha Ganguly | Physics + AI</title>
     <meta
       name="description"
-      content="Samriddha Ganguly — research in condensed matter, topology, and quantum systems."
+      content="Samriddha Ganguly — condensed matter researcher, physicist, and builder."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,14 +37,8 @@
         --sans: "DM Sans", sans-serif;
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
       body {
         margin: 0;
         min-height: 100vh;
@@ -68,10 +62,7 @@
         pointer-events: none;
       }
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
+      a { color: inherit; text-decoration: none; }
 
       .page-shell {
         position: relative;
@@ -96,7 +87,7 @@
 
       .nav {
         position: relative;
-        z-index: 20;
+        z-index: 30;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -110,9 +101,8 @@
         gap: 10px;
         font-family: var(--mono);
         font-size: 0.72rem;
-        letter-spacing: 0.2em;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--ink);
       }
 
       .brand-mark {
@@ -156,299 +146,59 @@
         grid-template-columns: 1.15fr 1fr 1.15fr;
         align-items: center;
         gap: 18px;
-        min-height: calc(100vh - 90px);
+        min-height: calc(100vh - 100px);
         padding: 12px 30px 30px;
       }
 
       .scene {
         position: relative;
-        height: 680px;
+        height: 700px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      .doodle {
-        position: absolute;
-        pointer-events: none;
+      .scene svg {
+        width: min(100%, 420px);
+        height: auto;
+        display: block;
+        overflow: visible;
       }
 
-      .torus-wrap {
-        position: absolute;
-        left: 12%;
-        top: 12%;
-        width: 345px;
-        height: 345px;
-        transform: rotateX(65deg) rotateZ(-14deg);
-      }
-
-      .torus {
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12), rgba(255,255,255,0.02) 54%, transparent 54.5%);
-        filter: drop-shadow(0 24px 18px rgba(30, 52, 72, 0.16));
-      }
-
-      .torus::before,
-      .torus::after {
-        content: "";
-        position: absolute;
-        inset: 18px;
-        border-radius: 50%;
-        border: 18px solid rgba(35, 49, 66, 0.92);
-        box-shadow:
-          inset 0 0 0 8px rgba(255,255,255,0.18),
-          inset 0 0 18px rgba(0,0,0,0.12),
-          0 0 0 3px rgba(17,17,17,0.08);
-      }
-
-      .torus::after {
-        inset: 72px;
-        border-width: 14px;
-        background: rgba(255,255,255,0.12);
-        transform: rotate(18deg);
-      }
-
-      .torus-ring {
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        border: 2px solid rgba(17, 17, 17, 0.18);
-        transform: rotate(-12deg);
-      }
-
-      .torus-ring.r2 {
-        inset: 44px;
-        border-color: rgba(17, 17, 17, 0.1);
-      }
-
-      .torus-ring.r3 {
-        inset: 82px;
-      }
-
-      .torus-dotted {
-        position: absolute;
-        width: 150px;
-        height: 150px;
-        border: 2px dashed rgba(17,17,17,0.18);
-        border-radius: 50%;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%) rotate(16deg);
-      }
+      .left-scene { transform: translateY(8px); }
+      .right-scene { transform: translateY(14px); }
 
       .label {
         position: absolute;
         font-family: var(--serif);
-        font-size: clamp(1.45rem, 1.9vw, 2rem);
+        font-size: clamp(1.5rem, 1.8vw, 2.1rem);
         line-height: 1;
         color: rgba(23, 24, 29, 0.78);
         transform: rotate(-8deg);
       }
 
       .label.torus-tag {
-        left: 24%;
-        top: 18%;
+        left: 18%;
+        top: 20%;
       }
 
       .label.bloch-tag {
-        right: 14%;
-        top: 14%;
+        right: 12%;
+        top: 15%;
         transform: rotate(8deg);
       }
 
       .label.helmet-tag {
-        left: 12%;
-        bottom: 9%;
+        left: 8%;
+        bottom: 10%;
         transform: rotate(-10deg);
       }
 
       .label.note-tag {
-        right: 16%;
-        bottom: 14%;
+        right: 12%;
+        bottom: 12%;
         transform: rotate(8deg);
       }
-
-      .bloch-wrap {
-        position: absolute;
-        right: 16%;
-        top: 11%;
-        width: 280px;
-        height: 280px;
-      }
-
-      .bloch {
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        background: radial-gradient(circle at 35% 28%, rgba(255,255,255,0.9), rgba(255,255,255,0.26) 24%, rgba(255,255,255,0.1) 40%, rgba(17,17,17,0.08) 100%);
-        border: 3px solid rgba(17, 17, 17, 0.78);
-        box-shadow: inset -22px -16px 30px rgba(17, 17, 17, 0.12), inset 14px 16px 22px rgba(255,255,255,0.52);
-        transform: rotateX(70deg);
-      }
-
-      .bloch::before,
-      .bloch::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-      }
-
-      .bloch::before {
-        background: linear-gradient(90deg, rgba(17,17,17,0.14), rgba(17,17,17,0.04) 40%, rgba(255,255,255,0.32));
-        clip-path: ellipse(48% 50% at 50% 50%);
-      }
-
-      .bloch::after {
-        inset: 18px;
-        border: 2px solid rgba(17,17,17,0.17);
-        transform: rotate(18deg);
-      }
-
-      .equator {
-        position: absolute;
-        width: 190px;
-        height: 190px;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%) rotateX(75deg);
-        border-radius: 50%;
-        border: 2px solid rgba(17, 17, 17, 0.8);
-      }
-
-      .meridian {
-        position: absolute;
-        width: 150px;
-        height: 150px;
-        left: 50%;
-        top: 50%;
-        border-radius: 50%;
-        border: 2px solid rgba(17, 17, 17, 0.34);
-        transform: translate(-50%, -50%) rotateY(62deg);
-      }
-
-      .meridian.two {
-        transform: translate(-50%, -50%) rotateY(-62deg);
-      }
-
-      .dot {
-        position: absolute;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: rgba(17,17,17,0.8);
-        box-shadow: 0 0 0 5px rgba(255,255,255,0.4);
-      }
-
-      .dot.one { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-      .dot.two { right: 24%; top: 36%; }
-      .dot.three { left: 24%; bottom: 36%; }
-
-      .helmet-wrap {
-        position: absolute;
-        right: 18%;
-        bottom: 7%;
-        width: 280px;
-        height: 220px;
-        transform: rotate(-8deg);
-      }
-
-      .helmet {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(32,39,48,0.96), rgba(12,15,18,0.96));
-        border-radius: 48% 48% 44% 44% / 42% 42% 58% 58%;
-        border: 3px solid rgba(17, 17, 17, 0.88);
-        box-shadow: inset 0 -18px 18px rgba(255,255,255,0.06), inset 0 16px 24px rgba(255,255,255,0.05);
-      }
-
-      .helmet::before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 18px;
-        width: 138px;
-        height: 82px;
-        transform: translateX(-50%);
-        border-radius: 50% 50% 42% 42% / 52% 52% 46% 46%;
-        background: linear-gradient(180deg, rgba(50,65,82,0.8), rgba(15,20,26,0.8));
-        border: 2px solid rgba(17, 17, 17, 0.8);
-      }
-
-      .helmet::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        bottom: 30px;
-        width: 160px;
-        height: 50px;
-        transform: translateX(-50%);
-        border-radius: 40% 40% 42% 42% / 55% 55% 40% 40%;
-        border: 3px solid rgba(17, 17, 17, 0.9);
-        background: linear-gradient(180deg, rgba(12,15,18,0.9), rgba(54,72,90,0.82));
-      }
-
-      .visor {
-        position: absolute;
-        left: 50%;
-        top: 54px;
-        width: 160px;
-        height: 46px;
-        transform: translateX(-50%);
-        border-radius: 999px;
-        background: linear-gradient(180deg, rgba(27, 34, 41, 0.94), rgba(8, 15, 20, 0.94));
-        border: 3px solid rgba(17,17,17,0.85);
-        overflow: hidden;
-      }
-
-      .visor::before,
-      .visor::after {
-        content: "";
-        position: absolute;
-        top: 10px;
-        width: 54px;
-        height: 16px;
-        border-radius: 18px;
-        background: rgba(17,17,17,0.82);
-      }
-
-      .visor::before { left: 18px; }
-      .visor::after { right: 18px; }
-
-      .helmet-band {
-        position: absolute;
-        left: 50%;
-        bottom: 56px;
-        width: 180px;
-        height: 22px;
-        transform: translateX(-50%);
-        border-radius: 999px;
-        border: 3px solid rgba(17,17,17,0.9);
-        background: linear-gradient(180deg, rgba(24, 29, 35, 0.9), rgba(50, 59, 67, 0.9));
-      }
-
-      .helmet-side {
-        position: absolute;
-        top: 72px;
-        width: 26px;
-        height: 95px;
-        background: linear-gradient(180deg, rgba(32,39,48,0.96), rgba(15,18,22,1));
-        border: 3px solid rgba(17,17,17,0.9);
-      }
-
-      .helmet-side.left { left: 18px; transform: rotate(12deg); border-radius: 18px 14px 30px 20px; }
-      .helmet-side.right { right: 18px; transform: rotate(-12deg); border-radius: 14px 18px 20px 30px; }
-
-      .scribble {
-        position: absolute;
-        border: 2px solid rgba(17, 17, 17, 0.18);
-        border-color: rgba(17, 17, 17, 0.22) transparent transparent transparent;
-        border-radius: 50%;
-      }
-
-      .scribble.s1 { width: 120px; height: 40px; left: 12%; top: 24%; transform: rotate(-15deg); }
-      .scribble.s2 { width: 140px; height: 42px; right: 10%; top: 34%; transform: rotate(12deg); }
-      .scribble.s3 { width: 120px; height: 40px; left: 18%; bottom: 18%; transform: rotate(10deg); }
-      .scribble.s4 { width: 110px; height: 38px; right: 18%; bottom: 17%; transform: rotate(-12deg); }
 
       .center {
         position: relative;
@@ -573,6 +323,18 @@
         box-shadow: 0 12px 20px rgba(17, 17, 17, 0.06);
       }
 
+      .scribble {
+        position: absolute;
+        border: 2px solid rgba(17, 17, 17, 0.18);
+        border-color: rgba(17, 17, 17, 0.22) transparent transparent transparent;
+        border-radius: 50%;
+      }
+
+      .scribble.s1 { width: 120px; height: 40px; left: 12%; top: 24%; transform: rotate(-15deg); }
+      .scribble.s2 { width: 140px; height: 42px; right: 10%; top: 34%; transform: rotate(12deg); }
+      .scribble.s3 { width: 120px; height: 40px; left: 18%; bottom: 18%; transform: rotate(10deg); }
+      .scribble.s4 { width: 110px; height: 38px; right: 18%; bottom: 17%; transform: rotate(-12deg); }
+
       @media (max-width: 1180px) {
         .hero {
           grid-template-columns: 1fr;
@@ -610,30 +372,7 @@
           height: 330px;
         }
 
-        .torus-wrap {
-          left: 4%;
-          top: 12%;
-          width: 220px;
-          height: 220px;
-        }
-
-        .bloch-wrap {
-          right: 6%;
-          top: 14%;
-          width: 180px;
-          height: 180px;
-        }
-
-        .helmet-wrap {
-          right: 8%;
-          bottom: 4%;
-          width: 180px;
-          height: 140px;
-        }
-
-        .label {
-          display: none;
-        }
+        .label { display: none; }
       }
     </style>
   </head>
@@ -653,14 +392,37 @@
       </nav>
 
       <main class="hero">
-        <div class="scene" aria-hidden="true">
-          <div class="doodle torus-wrap">
-            <div class="torus"></div>
-            <div class="torus-ring r2"></div>
-            <div class="torus-ring r3"></div>
-            <div class="torus-dotted"></div>
-          </div>
+        <div class="scene left-scene" aria-hidden="true">
+          <svg viewBox="0 0 420 420" role="img" aria-label="Torus illustration">
+            <defs>
+              <linearGradient id="torusGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+                <stop offset="0%" stop-color="#2d2a2a" />
+                <stop offset="35%" stop-color="#111111" />
+                <stop offset="65%" stop-color="#3d3a39" />
+                <stop offset="100%" stop-color="#1a1a1a" />
+              </linearGradient>
+            </defs>
 
+            <ellipse cx="212" cy="218" rx="136" ry="100" fill="none" stroke="rgba(17,17,17,0.72)" stroke-width="4" transform="rotate(-18 212 218)"/>
+            <ellipse cx="212" cy="218" rx="134" ry="96" fill="none" stroke="rgba(17,17,17,0.28)" stroke-width="2" transform="rotate(-18 212 218)"/>
+            <ellipse cx="212" cy="218" rx="120" ry="86" fill="none" stroke="rgba(17,17,17,0.26)" stroke-width="2" transform="rotate(-18 212 218)"/>
+
+            <path d="M115 222c22-56 84-92 154-82 47 7 86 36 103 73-25 57-85 96-161 91-52-4-92-36-96-82z"
+                  fill="url(#torusGrad)" opacity="0.96"/>
+
+            <path d="M125 223c18-46 70-75 131-70 54 4 98 37 112 78-21 48-70 79-133 76-57-2-95-34-110-84z"
+                  fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3"/>
+
+            <ellipse cx="212" cy="218" rx="40" ry="128" fill="none" stroke="rgba(17,17,17,0.72)" stroke-width="5" transform="rotate(72 212 218)"/>
+            <ellipse cx="212" cy="218" rx="28" ry="110" fill="none" stroke="rgba(17,17,17,0.35)" stroke-width="2" transform="rotate(72 212 218)"/>
+
+            <g fill="none" stroke="rgba(17,17,17,0.5)" stroke-width="2" stroke-dasharray="4 8">
+              <ellipse cx="212" cy="218" rx="158" ry="85" transform="rotate(-18 212 218)"/>
+              <ellipse cx="212" cy="218" rx="82" ry="118" transform="rotate(64 212 218)"/>
+            </g>
+
+            <circle cx="212" cy="218" r="10" fill="rgba(17,17,17,0.8)"/>
+          </svg>
           <div class="label torus-tag">torus</div>
           <div class="scribble s1"></div>
         </div>
@@ -694,24 +456,53 @@
           </div>
         </div>
 
-        <div class="scene" aria-hidden="true">
-          <div class="doodle bloch-wrap">
-            <div class="bloch"></div>
-            <div class="equator"></div>
-            <div class="meridian"></div>
-            <div class="meridian two"></div>
-            <div class="dot one"></div>
-            <div class="dot two"></div>
-            <div class="dot three"></div>
-          </div>
+        <div class="scene right-scene" aria-hidden="true">
+          <svg viewBox="0 0 420 420" role="img" aria-label="Vader-inspired helmet illustration">
+            <defs>
+              <linearGradient id="helmetMetal" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#1f252d"/>
+                <stop offset="25%" stop-color="#0d1115"/>
+                <stop offset="52%" stop-color="#2d353d"/>
+                <stop offset="70%" stop-color="#151c20"/>
+                <stop offset="100%" stop-color="#06090d"/>
+              </linearGradient>
+              <linearGradient id="visorDark" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%" stop-color="#242d35"/>
+                <stop offset="30%" stop-color="#0a0f14"/>
+                <stop offset="100%" stop-color="#1c242c"/>
+              </linearGradient>
+            </defs>
 
-          <div class="doodle helmet-wrap">
-            <div class="helmet"></div>
-            <div class="visor"></div>
-            <div class="helmet-band"></div>
-            <div class="helmet-side left"></div>
-            <div class="helmet-side right"></div>
-          </div>
+            <g transform="translate(10 0)">
+              <path d="M108 128c13-38 30-58 72-71 45-14 120-5 156 33 29 31 37 59 42 83-20 42-60 79-104 96-32 12-71 16-102 5-54-18-92-62-91-117 0-10 9-18 27-29z"
+                    fill="url(#helmetMetal)" stroke="#111111" stroke-width="4" stroke-linejoin="round"/>
+
+              <path d="M148 118c21-20 50-31 75-32 39-2 75 16 100 36-8 14-18 24-31 33-21 14-42 20-69 20-24 0-45-7-66-23-14-10-21-18-28-34z"
+                    fill="rgba(255,255,255,0.05)" stroke="rgba(17,17,17,0.35)" stroke-width="2"/>
+
+              <path d="M115 247c25-14 46-20 67-22 38-4 66-1 94 9 20 7 38 18 55 32 7 7 10 19 7 30-20 18-41 25-72 28-42 4-87 2-117-14-17-10-31-25-34-38-2-9 4-20 0-25z"
+                    fill="#0a0f14" stroke="#111111" stroke-width="4"/>
+
+              <path d="M157 169l42 31 42-31 29 23c-6 18-26 32-49 35-17 2-31 0-45-6-21-9-33-26-34-43z"
+                    fill="url(#visorDark)" stroke="#0c1014" stroke-width="4"/>
+
+              <path d="M160 142h95c11 0 20 9 20 20v14c0 11-9 20-20 20h-95c-11 0-20-9-20-20v-14c0-11 9-20 20-20z"
+                    fill="rgba(20,25,31,0.9)" stroke="#101418" stroke-width="4"/>
+
+              <path d="M170 116l-20 35 37 15 27-13-44-37zM256 116l20 35-37 15-27-13 44-37z" fill="rgba(18,23,28,0.85)" stroke="#111111" stroke-width="4"/>
+
+              <path d="M208 96c14 0 27 11 27 24l-1 25h-52v-25c0-13 13-24 26-24z"
+                    fill="#0d1116" stroke="#111111" stroke-width="4"/>
+
+              <path d="M120 203l-24 39 22 39 26-18 18-38-22-22z" fill="#0d1116" stroke="#111111" stroke-width="4"/>
+              <path d="M302 203l24 39-22 39-26-18-18-38 22-22z" fill="#0d1116" stroke="#111111" stroke-width="4"/>
+
+              <path d="M140 266h143l-18 36H162l-22-36z" fill="#0d1116" stroke="#111111" stroke-width="4"/>
+
+              <path d="M171 179c17 11 35 16 56 16 21 0 38-5 56-16" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="3" stroke-linecap="round"/>
+              <path d="M192 203h42" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3" stroke-linecap="round"/>
+            </g>
+          </svg>
 
           <div class="label bloch-tag">bloch</div>
           <div class="label helmet-tag">helmet</div>
