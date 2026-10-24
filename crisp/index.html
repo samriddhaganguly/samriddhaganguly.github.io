@@ -3,959 +3,828 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CRISP — Product Landing Page</title>
+    <title>Samriddha Ganguly | Condensed Matter Physics</title>
     <meta
       name="description"
-      content="CRISP helps teams turn messy ideas into polished experiences with clarity, speed, and focus."
+      content="Samriddha Ganguly — BS-MS Physics student working on topology, quantum matter, and condensed matter physics."
     />
     <style>
       :root {
-        --bg: #f4f1ea;
-        --panel: #fffdf9;
-        --panel-strong: #f9f5ef;
-        --ink: #161616;
-        --muted: #5f5d59;
-        --line: rgba(22, 22, 22, 0.1);
-        --brand: #d97e4b;
-        --brand-deep: #bb6231;
-        --brand-soft: rgba(217, 126, 75, 0.12);
-        --shadow: 0 24px 60px rgba(17, 17, 17, 0.08);
-        --radius: 24px;
+        --paper: #f3f1ee;
+        --paper-2: #ece8e3;
+        --ink: #111111;
+        --muted: #525252;
+        --line: rgba(20, 26, 34, 0.18);
+        --blue-1: #c9e8ff;
+        --blue-2: #a9d4f3;
+        --blue-3: #5fb5f0;
+        --blue-4: #1d5f9e;
+        --gold: #d9b57a;
+        --gold-2: #f6d59d;
+        --rose: #f3c9d0;
+        --mint: #d9f1db;
+        --lavender: #d9d0ff;
+        --shadow: 0 22px 45px rgba(12, 30, 52, 0.15);
       }
 
       * { box-sizing: border-box; }
 
-      html {
-        scroll-behavior: smooth;
-      }
+      html { scroll-behavior: smooth; }
 
       body {
         margin: 0;
+        min-height: 100vh;
         font-family: Inter, "Segoe UI", sans-serif;
-        background: var(--bg);
         color: var(--ink);
-        line-height: 1.6;
+        background:
+          radial-gradient(circle at 12% 12%, rgba(255,255,255,0.75), transparent 24%),
+          radial-gradient(circle at 80% 10%, rgba(255,255,255,0.62), transparent 20%),
+          linear-gradient(180deg, #b9dff7 0%, #dfeefb 20%, #dfeefb 100%);
       }
 
-      img {
-        max-width: 100%;
-        display: block;
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(20, 20, 20, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(20, 20, 20, 0.03) 1px, transparent 1px),
+          radial-gradient(circle at 30% 50%, rgba(255,255,255,0.35), transparent 38%);
+        background-size: 26px 26px, 26px 26px, 100% 100%;
       }
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
+      a { color: inherit; text-decoration: none; }
+      img { max-width: 100%; display: block; }
 
-      .container {
-        width: min(1180px, calc(100% - 32px));
-        margin: 0 auto;
+      .page-shell {
+        width: min(1440px, calc(100% - 40px));
+        margin: 24px auto 0;
+        background: rgba(244, 240, 235, 0.75);
+        border: 1px solid rgba(25, 31, 38, 0.16);
+        border-radius: 28px;
+        box-shadow: 0 18px 40px rgba(17, 27, 39, 0.12);
+        overflow: hidden;
+        backdrop-filter: blur(8px);
+        position: relative;
       }
 
       .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        backdrop-filter: blur(12px);
-        background: rgba(244, 241, 234, 0.85);
-        border-bottom: 1px solid var(--line);
-      }
-
-      .nav {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 78px;
+        gap: 1rem;
+        min-height: 64px;
+        padding: 0 18px 0 14px;
+        background: rgba(19, 25, 31, 0.94);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
       }
 
-      .brand {
-        display: inline-flex;
+      .browser-controls {
+        display: flex;
         align-items: center;
         gap: 0.7rem;
-        font-weight: 800;
-        letter-spacing: 0.13em;
-        text-transform: uppercase;
-        font-size: 0.8rem;
+        min-width: 180px;
       }
 
-      .brand-mark {
-        width: 28px;
-        height: 28px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, var(--brand), #f1c28a);
+      .browser-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .browser-dot.red { background: #ff5f57; }
+      .browser-dot.yellow { background: #ffbd2f; }
+      .browser-dot.green { background: #28c840; }
+
+      .address-bar {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 999px;
+        padding: 0.55rem 1rem;
+        color: rgba(255,255,255,0.8);
+        font-size: 0.82rem;
+      }
+
+      .padlock {
+        width: 12px;
+        height: 12px;
+        border-radius: 4px;
+        border: 1.5px solid rgba(255,255,255,0.8);
         position: relative;
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
       }
-
-      .brand-mark::before {
+      .padlock::before {
         content: "";
         position: absolute;
-        inset: 7px;
-        border-radius: 4px;
-        background: rgba(255,255,255,0.68);
+        width: 6px;
+        height: 6px;
+        border: 1.5px solid rgba(255,255,255,0.8);
+        border-bottom: none;
+        border-radius: 6px 6px 0 0;
+        left: 50%;
+        top: -7px;
+        transform: translateX(-50%);
       }
 
-      .nav-links {
+      .nav-strip {
         display: flex;
-        align-items: center;
-        gap: 2rem;
-        color: var(--muted);
-        font-size: 0.82rem;
-      }
-
-      .nav-links a {
-        transition: color 0.2s ease;
-      }
-
-      .nav-links a:hover {
-        color: var(--ink);
-      }
-
-      .nav-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
         justify-content: center;
+        padding: 0.75rem 1rem;
+        background: rgba(15, 21, 28, 0.95);
+        border-top: 1px solid rgba(255,255,255,0.06);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .nav-pill {
+        font-size: 0.72rem;
+        color: rgba(255,255,255,0.85);
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
         border-radius: 999px;
-        border: 1px solid transparent;
-        padding: 0.9rem 1.4rem;
-        font-weight: 700;
-        font-size: 0.82rem;
-        letter-spacing: 0.02em;
-        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        cursor: pointer;
-      }
-
-      .btn:hover {
-        transform: translateY(-1px);
-      }
-
-      .btn-primary {
-        background: var(--ink);
-        color: white;
-        box-shadow: 0 12px 24px rgba(22, 22, 22, 0.12);
-      }
-
-      .btn-secondary {
-        background: rgba(255,255,255,0.5);
-        color: var(--ink);
-        border-color: var(--line);
-      }
-
-      .hero {
-        padding: 72px 0 48px;
-      }
-
-      .hero-grid {
-        display: grid;
-        grid-template-columns: 1.1fr 0.9fr;
-        align-items: center;
-        gap: 3rem;
-      }
-
-      .eyebrow {
+        padding: 0.45rem 0.7rem;
         display: inline-flex;
         align-items: center;
-        gap: 0.7rem;
-        padding: 0.55rem 0.9rem;
-        border-radius: 999px;
-        border: 1px solid var(--line);
-        background: rgba(255,255,255,0.4);
-        color: var(--muted);
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
+        gap: 0.45rem;
       }
 
-      .eyebrow::before {
-        content: "";
+      .nav-pill .dot {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: var(--brand);
-        box-shadow: 0 0 0 6px rgba(217, 126, 75, 0.1);
-      }
-
-      h1 {
-        margin: 1.3rem 0 1rem;
-        font-size: clamp(3.2rem, 6vw, 6rem);
-        line-height: 0.96;
-        letter-spacing: -0.06em;
-        font-weight: 800;
-      }
-
-      h1 .accent {
-        color: var(--brand);
-      }
-
-      .subhead {
-        max-width: 620px;
-        font-size: 1.12rem;
-        color: var(--muted);
-        margin-bottom: 2rem;
-      }
-
-      .cta-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 2.2rem;
-      }
-
-      .trust {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 1.5rem;
-        color: var(--muted);
-        font-size: 0.8rem;
-      }
-
-      .trust .avatars {
-        display: flex;
-        align-items: center;
-        margin-right: 0.5rem;
-      }
-
-      .avatars span {
-        width: 32px;
-        height: 32px;
-        background: linear-gradient(135deg, #e9d7c5, #d18d5b);
-        border: 2px solid var(--bg);
-        border-radius: 50%;
-        margin-left: -8px;
         display: inline-block;
       }
+      .nav-pill.red .dot { background: #ff6b57; }
+      .nav-pill.blue .dot { background: #5ab2ff; }
+      .nav-pill.green .dot { background: #41d67a; }
+      .nav-pill.gold .dot { background: #f0c368; }
+      .nav-pill.purple .dot { background: #a77af3; }
 
-      .avatars span:first-child {
-        margin-left: 0;
-      }
-
-      .hero-visual {
+      .stage {
         position: relative;
+        min-height: 820px;
+        padding: 34px 24px 24px;
       }
 
-      .panel {
-        background: rgba(255,255,255,0.54);
-        border: 1px solid rgba(22, 22, 22, 0.08);
-        box-shadow: var(--shadow);
-        border-radius: var(--radius);
-      }
-
-      .mock-window {
-        position: relative;
-        padding: 1.1rem;
-      }
-
-      .mock-shell {
-        border-radius: 18px;
-        overflow: hidden;
-        background: linear-gradient(180deg, #f9f7f3, #f1ece4);
-        border: 1px solid rgba(22,22,22,0.08);
-      }
-
-      .mock-top {
-        display: flex;
-        gap: 0.5rem;
-        padding: 0.9rem 1rem;
-        background: rgba(255,255,255,0.5);
-        border-bottom: 1px solid rgba(22,22,22,0.08);
-      }
-
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-      }
-
-      .dot.red { background: #eb7d74; }
-      .dot.yellow { background: #f5c76e; }
-      .dot.green { background: #7ecf9a; }
-
-      .mock-body {
-        padding: 1.1rem;
-      }
-
-      .stat-row {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.8rem;
-        margin-bottom: 1rem;
-      }
-
-      .mini-stat {
-        padding: 0.9rem 0.8rem;
-        border-radius: 14px;
-        background: white;
-        border: 1px solid rgba(22,22,22,0.05);
-      }
-
-      .mini-stat span {
-        display: block;
-        font-size: 0.68rem;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--muted);
-      }
-
-      .mini-stat strong {
-        display: block;
-        margin-top: 0.25rem;
-        font-size: 1.5rem;
-        letter-spacing: -0.05em;
-      }
-
-      .chart-panel {
-        background: white;
-        border-radius: 18px;
-        border: 1px solid rgba(22,22,22,0.05);
-        overflow: hidden;
-      }
-
-      .chart-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.9rem 1rem;
-        border-bottom: 1px solid rgba(22,22,22,0.05);
-      }
-
-      .chart-header strong {
-        font-size: 0.8rem;
-      }
-
-      .pill {
-        border-radius: 999px;
-        background: var(--brand-soft);
-        color: var(--brand-deep);
-        padding: 0.38rem 0.7rem;
-        font-size: 0.68rem;
-        font-weight: 700;
-      }
-
-      .bars {
-        display: flex;
-        align-items: end;
-        gap: 0.7rem;
-        height: 120px;
-        padding: 1rem 1rem 1.1rem;
-      }
-
-      .bars span {
-        display: block;
-        flex: 1;
-        border-radius: 10px 10px 0 0;
-        background: linear-gradient(180deg, #f4c495 0%, var(--brand) 100%);
-      }
-
-      .bars span:nth-child(1) { height: 35%; }
-      .bars span:nth-child(2) { height: 58%; }
-      .bars span:nth-child(3) { height: 72%; }
-      .bars span:nth-child(4) { height: 90%; }
-      .bars span:nth-child(5) { height: 63%; }
-      .bars span:nth-child(6) { height: 100%; }
-
-      .floating-card {
+      .lattice-bg {
         position: absolute;
-        right: -18px;
-        bottom: 24px;
-        width: 170px;
-        padding: 1rem;
-        background: rgba(255,255,255,0.92);
-        border: 1px solid rgba(22,22,22,0.08);
-        border-radius: 18px;
-        box-shadow: 0 18px 34px rgba(17,17,17,0.08);
+        inset: 0;
+        opacity: 0.9;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 15% 15%, rgba(255,255,255,0.7), transparent 18%),
+          radial-gradient(circle at 82% 24%, rgba(255,255,255,0.5), transparent 16%),
+          linear-gradient(rgba(17,50,90,0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(17,50,90,0.05) 1px, transparent 1px);
+        background-size: auto, auto, 24px 24px, 24px 24px;
       }
 
-      .floating-card .label {
-        color: var(--muted);
-        font-size: 0.7rem;
+      .band-pattern {
+        position: absolute;
+        inset: 10% 18% auto auto;
+        width: 240px;
+        height: 240px;
+        opacity: 0.85;
+        background:
+          repeating-linear-gradient(
+            180deg,
+            rgba(33, 111, 203, 0.08) 0,
+            rgba(33, 111, 203, 0.08) 2px,
+            transparent 2px,
+            transparent 14px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            rgba(33, 111, 203, 0.08) 0,
+            rgba(33, 111, 203, 0.08) 2px,
+            transparent 2px,
+            transparent 14px
+          );
+        border: 1px solid rgba(20,44,74,0.12);
+        border-radius: 24px;
+        transform: rotate(8deg);
+      }
+
+      .band-pattern::before,
+      .band-pattern::after {
+        content: "";
+        position: absolute;
+        inset: 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(29,95,158,0.25);
+      }
+
+      .band-pattern::before {
+        background: linear-gradient(180deg, transparent 0 14%, rgba(29,95,158,0.18) 14% 16%, transparent 16% 34%, rgba(29,95,158,0.12) 34% 36%, transparent 36% 100%);
+      }
+
+      .floating { position: absolute; z-index: 1; }
+
+      .note-card {
+        background: rgba(255,255,255,0.54);
+        border: 1px solid rgba(13, 17, 21, 0.12);
+        box-shadow: var(--shadow);
+        border-radius: 18px;
+      }
+
+      .card-left {
+        left: 5%;
+        top: 36%;
+        width: 140px;
+        height: 140px;
+        transform: rotate(-9deg);
+      }
+
+      .card-right {
+        right: 7%;
+        top: 18%;
+        width: 160px;
+        min-height: 170px;
+        transform: rotate(7deg);
+      }
+
+      .tiny-tag {
+        position: absolute;
+        left: 16px;
+        top: 12px;
+        font-size: 0.58rem;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-      }
-
-      .floating-card strong {
-        display: block;
-        margin-top: 0.5rem;
-        font-size: 1.7rem;
-        letter-spacing: -0.06em;
-      }
-
-      .floating-card small {
-        display: block;
-        margin-top: 0.35rem;
         color: var(--muted);
       }
 
-      section {
-        padding: 28px 0 64px;
-      }
-
-      .section-head {
+      .card-mini {
+        position: absolute;
+        left: 15px;
+        right: 15px;
+        top: 35px;
+        bottom: 15px;
+        background: #f7f4f0;
+        border: 1px solid rgba(17,17,17,0.1);
+        border-radius: 12px;
+        padding: 0.7rem 0.6rem;
         display: flex;
-        justify-content: space-between;
-        align-items: end;
-        gap: 1rem;
-        margin-bottom: 2rem;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: "Courier New", monospace;
+        font-size: 0.72rem;
+        color: var(--ink);
       }
 
-      .section-kicker {
-        font-size: 0.75rem;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--brand-deep);
-        font-weight: 800;
+      .mini-grid {
+        width: 88%;
+        height: 72%;
+        border-radius: 10px;
+        background:
+          linear-gradient(90deg, rgba(29,95,158,0.12) 1px, transparent 1px),
+          linear-gradient(rgba(29,95,158,0.12) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(29,95,158,0.18), rgba(29,95,158,0.04));
+        background-size: 16px 16px, 16px 16px, 100% 100%;
+        position: relative;
       }
 
-      h2 {
-        margin: 0.45rem 0 0;
-        font-size: clamp(2.3rem, 5vw, 3.5rem);
-        letter-spacing: -0.06em;
-        line-height: 1;
+      .mini-grid::before,
+      .mini-grid::after {
+        content: "";
+        position: absolute;
+        inset: 20% 25%;
+        border: 2px solid rgba(29,95,158,0.52);
+        border-radius: 10px;
+        transform: rotate(18deg);
       }
 
-      .features-grid {
+      .mini-grid::after {
+        inset: 28% 33%;
+        border-color: rgba(217,181,122,0.85);
+      }
+
+      .card-paper {
+        position: absolute;
+        left: 32%;
+        top: 12%;
+        width: 150px;
+        height: 150px;
+        background: rgba(255,255,255,0.5);
+        border: 1px solid rgba(20,20,20,0.12);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        transform: rotate(-10deg);
+        z-index: 1;
+      }
+
+      .card-paper:nth-child(2) { left: 23%; top: 18%; transform: rotate(7deg); }
+
+      .card-photo {
+        position: absolute;
+        left: 70%;
+        bottom: 14%;
+        width: 210px;
+        height: 165px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(210,228,245,0.8));
+        border: 1px solid rgba(17,17,17,0.1);
+        border-radius: 14px;
+        transform: rotate(9deg);
+        box-shadow: var(--shadow);
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .photo-sky {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(144,200,230,0.25), rgba(255,255,255,0.2)),
+          linear-gradient(180deg, rgba(220, 236, 255, 0.8), rgba(160, 170, 180, 0.4));
+      }
+
+      .photo-sky::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, transparent 0 58%, rgba(64,88,120,0.2) 58% 100%),
+          radial-gradient(circle at 30% 24%, rgba(255,255,255,0.6), transparent 20%);
+      }
+
+      .photo-sky::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(120deg, transparent 0 42%, rgba(18,42,70,0.13) 42% 44%, transparent 44% 100%),
+          repeating-linear-gradient(90deg, rgba(20, 30, 45, 0.12) 0, rgba(20, 30, 45, 0.12) 2px, transparent 2px, transparent 12px);
+        mix-blend-mode: multiply;
+      }
+
+      .stack {
+        position: relative;
+        z-index: 2;
+        width: min(1060px, 100%);
+        margin: 0 auto;
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1.35rem;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 1rem;
       }
 
-      .feature {
-        padding: 1.6rem;
-        background: rgba(255,255,255,0.45);
-        border: 1px solid var(--line);
-        border-radius: 22px;
+      .left-scribble, .right-scribble {
+        font-size: 1.1rem;
+        color: rgba(17,17,17,0.6);
+        font-family: "Comic Sans MS", cursive;
       }
 
-      .feature-icon {
-        width: 52px;
-        height: 52px;
+      .left-scribble {
+        justify-self: end;
+        margin-right: 1rem;
+      }
+
+      .main-panel {
+        background: rgba(244, 240, 235, 0.75);
+        border: 3px solid rgba(17,17,17,0.8);
+        border-radius: 18px;
+        box-shadow: 0 8px 0 rgba(17,17,17,0.15);
+        padding: 20px 22px 18px;
+        text-align: center;
+        position: relative;
+      }
+
+      .main-panel::before,
+      .main-panel::after {
+        content: "";
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        border: 2px solid rgba(17,17,17,0.6);
+        border-radius: 6px;
+        background: rgba(255,255,255,0.2);
+      }
+
+      .main-panel::before {
+        left: 18px;
+        top: 18px;
+        border-right: none;
+        border-bottom: none;
+      }
+
+      .main-panel::after {
+        right: 18px;
+        bottom: 18px;
+        border-left: none;
+        border-top: none;
+      }
+
+      .mood-strip {
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 14px;
-        background: linear-gradient(135deg, rgba(217,126,75,0.14), rgba(217,126,75,0.06));
-        color: var(--brand-deep);
-        font-size: 1.4rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-      }
-
-      .feature h3 {
-        margin: 0 0 0.7rem;
-        font-size: 1.25rem;
-        letter-spacing: -0.04em;
-      }
-
-      .feature p {
-        margin: 0;
-        color: var(--muted);
-      }
-
-      .metrics {
-        padding: 1.3rem 0 0;
-      }
-
-      .metric-row {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 1rem;
-      }
-
-      .metric {
-        padding: 1.5rem 1.2rem;
-        border-radius: 20px;
-        border: 1px solid var(--line);
-        background: rgba(255,255,255,0.38);
-      }
-
-      .metric strong {
-        display: block;
-        font-size: clamp(2rem, 4vw, 3rem);
-        letter-spacing: -0.06em;
-      }
-
-      .metric span {
-        display: block;
-        color: var(--muted);
-        font-size: 0.82rem;
-        margin-top: 0.25rem;
-      }
-
-      .showcase {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 1.5rem;
-        align-items: stretch;
-        margin-top: 2rem;
-      }
-
-      .testimonial,
-      .note {
-        padding: 1.6rem;
-        background: rgba(255,255,255,0.45);
-        border: 1px solid var(--line);
-        border-radius: 24px;
-      }
-
-      .quote {
-        font-size: clamp(1.3rem, 2vw, 2rem);
-        line-height: 1.2;
-        letter-spacing: -0.05em;
-      }
-
-      .person {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        margin-top: 1.2rem;
-      }
-
-      .avatar {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #f0d4b5, #d57d4f);
-      }
-
-      .person small {
-        display: block;
-        color: var(--muted);
-      }
-
-      .pricing {
-        padding-top: 2rem;
-      }
-
-      .pricing-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1.2rem;
-        margin-top: 2rem;
-      }
-
-      .plan {
-        padding: 1.8rem 1.5rem;
-        background: rgba(255,255,255,0.42);
-        border: 1px solid var(--line);
-        border-radius: 24px;
-      }
-
-      .plan.featured {
-        background: #1b1a17;
-        color: white;
-        border-color: rgba(255,255,255,0.06);
-        transform: translateY(-8px);
-      }
-
-      .plan .tag {
-        display: inline-block;
-        padding: 0.38rem 0.7rem;
-        border-radius: 999px;
-        font-size: 0.68rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.12);
-      }
-
-      .plan h3 {
-        margin: 1rem 0 0.3rem;
-        font-size: 1.5rem;
-        letter-spacing: -0.04em;
-      }
-
-      .price {
-        display: flex;
-        align-items: end;
-        gap: 0.4rem;
-        margin: 1rem 0;
-      }
-
-      .price strong {
-        font-size: 2.8rem;
-        letter-spacing: -0.07em;
-      }
-
-      .price span {
-        color: var(--muted);
-      }
-
-      .plan.featured .price span,
-      .plan.featured li,
-      .plan.featured .tag {
-        color: rgba(255,255,255,0.8);
-      }
-
-      .plan ul {
-        list-style: none;
-        margin: 1.2rem 0 1.5rem;
-        padding: 0;
-        display: grid;
-        gap: 0.7rem;
-      }
-
-      .plan li::before {
-        content: "✓";
-        color: var(--brand);
-        margin-right: 0.5rem;
-      }
-
-      .plan.featured li::before {
-        color: #f9d8a7;
-      }
-
-      .cta-band {
-        margin-top: 2rem;
-        padding: 2rem 1.5rem;
-        border-radius: 28px;
-        border: 1px solid rgba(22,22,22,0.08);
-        background: linear-gradient(135deg, rgba(217,126,75,0.12), rgba(255,255,255,0.8));
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .cta-band h3 {
-        margin: 0;
-        font-size: clamp(1.8rem, 3vw, 2.6rem);
-        letter-spacing: -0.06em;
-      }
-
-      .footer {
-        padding: 1.5rem 0 3.5rem;
-        color: var(--muted);
         font-size: 0.8rem;
+        color: var(--muted);
+        margin-bottom: 0.9rem;
+        font-family: "Courier New", monospace;
       }
 
-      .footer-inner {
+      .mood-strip .symbol {
+        font-size: 1.4rem;
+      }
+
+      .headline {
+        margin: 0;
+        font-weight: 900;
+        letter-spacing: -0.08em;
+        font-size: clamp(3rem, 5vw, 6.8rem);
+        line-height: 0.95;
+      }
+
+      .headline span {
+        display: block;
+      }
+
+      .subtitle {
+        margin-top: 1.2rem;
+        font-size: clamp(1rem, 1.4vw, 1.65rem);
+        color: rgba(17,17,17,0.78);
+        letter-spacing: -0.02em;
+      }
+
+      .line {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        font-size: 0.8rem;
+        margin-top: 1.2rem;
+        color: var(--muted);
+      }
+
+      .line .chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 126px;
+        padding: 0.35rem 0.7rem;
+        border: 1px solid rgba(17,17,17,0.24);
+        border-radius: 999px;
+        font-family: "Courier New", monospace;
+        background: rgba(255,255,255,0.2);
+      }
+
+      .cta-row {
+        margin-top: 1.75rem;
+        display: flex;
+        justify-content: center;
         gap: 1rem;
-        border-top: 1px solid var(--line);
-        padding-top: 1.2rem;
+        flex-wrap: wrap;
       }
 
-      @media (max-width: 980px) {
-        .hero-grid,
-        .showcase,
-        .features-grid,
-        .pricing-grid,
-        .metric-row {
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 175px;
+        height: 56px;
+        border-radius: 999px;
+        padding: 0.9rem 1.3rem;
+        border: 2px solid rgba(17,17,17,0.2);
+        font-weight: 700;
+        font-size: 1.02rem;
+        background: rgba(255,255,255,0.18);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 18px rgba(17,17,17,0.08);
+      }
+
+      .button.primary {
+        background: rgba(28,124,197,0.12);
+        border-color: rgba(28,72,123,0.55);
+      }
+
+      .button.secondary {
+        background: rgba(255,255,255,0.18);
+      }
+
+      .bio-note {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+        margin-top: 1.2rem;
+        font-size: 1rem;
+        color: var(--muted);
+      }
+
+      .tag-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.3rem 0.7rem;
+        border: 1px solid rgba(28,72,123,0.28);
+        border-radius: 999px;
+        background: rgba(28,124,197,0.08);
+        color: var(--blue-4);
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .stamp {
+        position: absolute;
+        right: 14%;
+        top: 12%;
+        width: 160px;
+        height: 180px;
+        background: rgba(255,255,255,0.46);
+        border: 1px solid rgba(17,17,17,0.12);
+        box-shadow: var(--shadow);
+        transform: rotate(8deg);
+        border-radius: 14px;
+        padding: 0.7rem 0.8rem;
+        z-index: 2;
+      }
+
+      .stamp-header {
+        font-size: 0.56rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .stamp-title {
+        display: flex;
+        gap: 0.3rem;
+        align-items: end;
+        margin-top: 0.6rem;
+        font-weight: 800;
+        font-size: clamp(1.7rem, 2vw, 2.5rem);
+        letter-spacing: -0.08em;
+        margin-bottom: 0.6rem;
+      }
+
+      .stamp-title .small {
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .stamp-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 0.35rem;
+        margin-top: 0.6rem;
+        font-size: 0.56rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .stamp-box {
+        padding: 0.38rem 0.28rem;
+        border: 1px solid rgba(17,17,17,0.12);
+        text-align: center;
+        color: var(--muted);
+      }
+
+      .stamp-box:nth-child(1),
+      .stamp-box:nth-child(3) { background: rgba(219, 173, 101, 0.2); }
+      .stamp-box:nth-child(2),
+      .stamp-box:nth-child(4) { background: rgba(105, 150, 204, 0.18); }
+
+      .icon-orb {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        position: absolute;
+        left: 8%;
+        bottom: 5%;
+        border: 3px solid rgba(17,17,17,0.18);
+        background:
+          radial-gradient(circle at 50% 50%, rgba(246,213,157,0.68) 0 18%, transparent 18.5%),
+          radial-gradient(circle at 50% 50%, transparent 0 32%, rgba(17,17,17,0.6) 32.4% 33.5%, transparent 33.6%),
+          radial-gradient(circle at center, rgba(255,255,255,0.2), rgba(21, 103, 155, 0.18));
+        box-shadow: inset 0 0 0 10px rgba(255,255,255,0.2);
+      }
+
+      .icon-orb::before,
+      .icon-orb::after {
+        content: "";
+        position: absolute;
+        inset: 16px;
+        border-radius: 50%;
+        border: 2px solid rgba(17,17,17,0.35);
+      }
+
+      .icon-orb::after {
+        inset: 38px;
+        border-width: 1px;
+      }
+
+      .microscope {
+        position: absolute;
+        right: 9%;
+        bottom: 5%;
+        width: 200px;
+        height: 150px;
+        border-radius: 18px;
+        transform: rotate(8deg);
+        z-index: 2;
+      }
+
+      .microscope .stand {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 8px;
+        height: 90px;
+        transform: translateX(-50%);
+        background: rgba(17,17,17,0.75);
+        border-radius: 5px;
+      }
+
+      .microscope .arm {
+        position: absolute;
+        left: 50%;
+        bottom: 78px;
+        width: 110px;
+        height: 8px;
+        transform: translateX(-50%);
+        background: rgba(17,17,17,0.8);
+        border-radius: 999px;
+      }
+
+      .microscope .lens {
+        position: absolute;
+        right: 18px;
+        bottom: 42px;
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        border: 5px solid rgba(17,17,17,0.8);
+        background: rgba(255,255,255,0.25);
+      }
+
+      .microscope .lens::before {
+        content: "";
+        position: absolute;
+        inset: 12px;
+        border-radius: 50%;
+        background: rgba(33, 124, 211, 0.12);
+      }
+
+      @media (max-width: 1100px) {
+        .stage { min-height: 700px; }
+        .stack {
           grid-template-columns: 1fr;
+          gap: 1.2rem;
         }
-
-        .nav-links {
-          display: none;
-        }
-
-        .section-head,
-        .cta-band,
-        .footer-inner {
-          flex-direction: column;
-          align-items: flex-start;
-        }
+        .left-scribble, .right-scribble { display: none; }
+        .stamp { right: 6%; top: 2%; }
+        .microscope { right: 2%; bottom: 2%; }
+        .card-left { left: 2%; top: 18%; }
+        .card-right { right: 2%; top: 12%; }
       }
 
-      @media (max-width: 620px) {
-        h1 {
-          font-size: 3rem;
-        }
-
-        .nav {
-          min-height: 68px;
-        }
-
-        .cta-row {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .btn {
-          width: 100%;
-        }
-
-        .floating-card {
-          position: static;
-          width: 100%;
-          margin-top: 1rem;
-        }
+      @media (max-width: 800px) {
+        .page-shell { width: min(100% - 18px, 100%); margin-top: 12px; }
+        .topbar { flex-wrap: wrap; padding: 10px 12px; }
+        .browser-controls { width: 100%; }
+        .nav-strip { justify-content: flex-start; }
+        .stage { padding: 28px 16px 16px; }
+        .main-panel { padding: 18px 14px; }
+        .headline { font-size: clamp(2.5rem, 11vw, 4rem); }
+        .subtitle { font-size: 1.02rem; }
+        .cta-row { flex-direction: column; }
+        .button { width: 100%; }
+        .stamp { position: static; margin: 1rem auto 0; transform: rotate(0deg); }
+        .card-left, .card-right, .card-photo { display: none; }
+        .microscope { display: none; }
+        .icon-orb { left: 10%; bottom: 16%; width: 90px; height: 90px; }
       }
     </style>
   </head>
   <body>
-    <header class="topbar">
-      <div class="container nav">
-        <a href="/" class="brand" aria-label="CRISP home">
-          <span class="brand-mark" aria-hidden="true"></span>
-          <span>CRISP</span>
-        </a>
+    <div class="page-shell">
+      <div class="topbar">
+        <div class="browser-controls" aria-label="Browser controls">
+          <span class="browser-dot red"></span>
+          <span class="browser-dot yellow"></span>
+          <span class="browser-dot green"></span>
+        </div>
 
-        <nav class="nav-links" aria-label="Main navigation">
-          <a href="#product">Product</a>
-          <a href="#features">Features</a>
-          <a href="#proof">Proof</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#about">About</a>
-        </nav>
-
-        <div class="nav-actions">
-          <a href="#pricing" class="btn btn-secondary">Log in</a>
-          <a href="#pricing" class="btn btn-primary">Get started</a>
+        <div class="address-bar" aria-label="Address bar">
+          <span class="padlock" aria-hidden="true"></span>
+          <span>https://www.samriddhaganguly.github.io/profile</span>
         </div>
       </div>
-    </header>
 
-    <main>
-      <section class="hero">
-        <div class="container hero-grid">
-          <div>
-            <div class="eyebrow">Built for clarity</div>
-            <h1>
-              Make every idea<br />
-              feel <span class="accent">crisp.</span>
+      <div class="nav-strip" aria-label="Quick links">
+        <a class="nav-pill red" href="/"><span class="dot"></span>Home</a>
+        <a class="nav-pill blue" href="/research/"><span class="dot"></span>Research</a>
+        <a class="nav-pill green" href="/cv/"><span class="dot"></span>CV</a>
+        <a class="nav-pill gold" href="/publications/"><span class="dot"></span>Publications</a>
+        <a class="nav-pill purple" href="/blog/"><span class="dot"></span>Blog</a>
+        <a class="nav-pill blue" href="/resources/"><span class="dot"></span>Resources</a>
+        <a class="nav-pill gold" href="/gallery/"><span class="dot"></span>Gallery</a>
+        <a class="nav-pill purple" href="/contact/"><span class="dot"></span>Contact</a>
+      </div>
+
+      <main class="stage">
+        <div class="lattice-bg" aria-hidden="true"></div>
+        <div class="band-pattern" aria-hidden="true"></div>
+
+        <div class="floating note-card card-left" aria-hidden="true">
+          <span class="tiny-tag">Quantum</span>
+          <div class="card-mini">
+            <div class="mini-grid"></div>
+          </div>
+        </div>
+
+        <div class="floating note-card card-right" aria-hidden="true">
+          <span class="tiny-tag">Topology</span>
+          <div class="card-mini" style="padding-top: 1rem;">
+            <div class="mini-grid" style="height: 56%; width: 70%;"></div>
+            <div style="font-size: 0.66rem; margin-top: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);">Band structure</div>
+          </div>
+        </div>
+
+        <div class="card-paper" aria-hidden="true"></div>
+        <div class="card-paper" aria-hidden="true" style="left: 29%; top: 10%; transform: rotate(12deg);"></div>
+
+        <div class="card-photo" aria-hidden="true">
+          <div class="photo-sky"></div>
+        </div>
+
+        <div class="stamp" aria-hidden="true">
+          <div class="stamp-header">Research</div>
+          <div class="stamp-title">
+            <span>Condensed</span>
+            <span class="small">Matter</span>
+          </div>
+          <div class="stamp-grid">
+            <div class="stamp-box">Topology</div>
+            <div class="stamp-box">Supercon</div>
+            <div class="stamp-box">Magnon</div>
+            <div class="stamp-box">Qubits</div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <div class="left-scribble">(~_~)</div>
+
+          <section class="main-panel" aria-label="Personal landing page for Samriddha Ganguly">
+            <div class="mood-strip">
+              <span class="symbol">#</span>
+              <span>topology</span>
+              <span class="symbol">·</span>
+              <span>quantum matter</span>
+              <span class="symbol">·</span>
+              <span>physics</span>
+            </div>
+
+            <h1 class="headline">
+              <span>hello! I’m</span>
+              <span>Samriddha</span>
             </h1>
-            <p class="subhead">
-              CRISP gives teams a cleaner way to plan, launch, and refine products — from first concept to final polish.
-              Faster decisions, sharper execution, and less chaos.
-            </p>
+
+            <div class="subtitle">
+              I study condensed matter physics, topology, and quantum systems — with a focus on superconductivity, geometry, and emergent phases.
+            </div>
+
+            <div class="line">
+              <span class="chip">BS-MS Physics</span>
+              <span>at</span>
+              <span class="chip">IISER Bhopal</span>
+            </div>
 
             <div class="cta-row">
-              <a href="#pricing" class="btn btn-primary">Start free</a>
-              <a href="#product" class="btn btn-secondary">Watch demo</a>
+              <a class="button primary" href="/research/">See my research</a>
+              <a class="button secondary" href="mailto:samriddha22@iiserb.ac.in">Email me</a>
             </div>
 
-            <div class="trust">
-              <div class="avatars" aria-label="Customer avatars">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <span>Trusted by 2,400+ product teams</span>
+            <div class="bio-note">
+              <span>currently working on</span>
+              <span class="tag-pill">Topology</span>
+              <span class="tag-pill">Quantum materials</span>
+              <span class="tag-pill">Open systems</span>
             </div>
-          </div>
+          </section>
 
-          <div class="hero-visual" aria-label="Product dashboard preview">
-            <div class="panel mock-window">
-              <div class="mock-shell">
-                <div class="mock-top">
-                  <span class="dot red"></span>
-                  <span class="dot yellow"></span>
-                  <span class="dot green"></span>
-                </div>
-
-                <div class="mock-body">
-                  <div class="stat-row">
-                    <div class="mini-stat">
-                      <span>Launch</span>
-                      <strong>4.8x</strong>
-                    </div>
-                    <div class="mini-stat">
-                      <span>Growth</span>
-                      <strong>82%</strong>
-                    </div>
-                    <div class="mini-stat">
-                      <span>Focus</span>
-                      <strong>94%</strong>
-                    </div>
-                  </div>
-
-                  <div class="chart-panel">
-                    <div class="chart-header">
-                      <strong>Performance</strong>
-                      <span class="pill">+27.4%</span>
-                    </div>
-                    <div class="bars" aria-hidden="true">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="floating-card">
-              <div class="label">This month</div>
-              <strong>1.2k</strong>
-              <small>new workflows shipped</small>
-            </div>
-          </div>
+          <div class="right-scribble">(^_^) /</div>
         </div>
-      </section>
 
-      <section id="features">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <div class="section-kicker">Why teams choose CRISP</div>
-              <h2>Everything you need to move fast.</h2>
-            </div>
-          </div>
+        <div class="icon-orb" aria-hidden="true"></div>
 
-          <div class="features-grid">
-            <article class="feature">
-              <div class="feature-icon">✦</div>
-              <h3>Strategic clarity</h3>
-              <p>
-                Turn scattered notes, ideas, and requests into a single source of truth your whole team can act on.
-              </p>
-            </article>
-
-            <article class="feature">
-              <div class="feature-icon">◎</div>
-              <h3>Faster execution</h3>
-              <p>
-                Give teams a tidy workflow for decisions, prioritization, approvals, and shipping without bottlenecks.
-              </p>
-            </article>
-
-            <article class="feature">
-              <div class="feature-icon">↗</div>
-              <h3>Better outcomes</h3>
-              <p>
-                Make feedback loops visible, keep momentum high, and turn creative energy into measurable progress.
-              </p>
-            </article>
-          </div>
-
-          <div class="metrics" id="proof">
-            <div class="metric-row">
-              <div class="metric">
-                <strong>3.2x</strong>
-                <span>faster planning cycles</span>
-              </div>
-              <div class="metric">
-                <strong>47%</strong>
-                <span>less time in meetings</span>
-              </div>
-              <div class="metric">
-                <strong>91%</strong>
-                <span>team alignment score</span>
-              </div>
-              <div class="metric">
-                <strong>24/7</strong>
-                <span>clear visibility</span>
-              </div>
-            </div>
-          </div>
+        <div class="microscope" aria-hidden="true">
+          <div class="stand"></div>
+          <div class="arm"></div>
+          <div class="lens"></div>
         </div>
-      </section>
-
-      <section id="product">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <div class="section-kicker">Built for momentum</div>
-              <h2>From messy brainstorming to polished execution.</h2>
-            </div>
-          </div>
-
-          <div class="showcase">
-            <div class="testimonial">
-              <p class="quote">
-                “CRISP helped us replace friction with focus. We now move from brief to launch in a fraction of the time.”
-              </p>
-              <div class="person">
-                <span class="avatar" aria-hidden="true"></span>
-                <div>
-                  <strong>Amelia Hart</strong>
-                  <small>VP of Product, Northstar Studio</small>
-                </div>
-              </div>
-            </div>
-
-            <div class="note">
-              <div class="section-kicker">Workflow</div>
-              <h3 style="margin-top: 0.8rem; font-size: 2rem; letter-spacing: -0.05em;">Simple inputs. Sharp delivery.</h3>
-              <p style="margin: 0.9rem 0 0; color: var(--muted);">
-                Capture ideas, align priorities, assign ownership, and keep momentum visible across every decision.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="pricing" class="pricing">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <div class="section-kicker">Pricing</div>
-              <h2>Simple plans, tangible value.</h2>
-            </div>
-          </div>
-
-          <div class="pricing-grid">
-            <article class="plan">
-              <span class="tag">Starter</span>
-              <h3>Solo</h3>
-              <div class="price">
-                <strong>$19</strong>
-                <span>/mo</span>
-              </div>
-              <ul>
-                <li>Unlimited ideas</li>
-                <li>Simple planning boards</li>
-                <li>1 workspace</li>
-              </ul>
-              <a href="#" class="btn btn-secondary">Get started</a>
-            </article>
-
-            <article class="plan featured">
-              <span class="tag">Popular</span>
-              <h3>Growth</h3>
-              <div class="price">
-                <strong>$49</strong>
-                <span>/mo</span>
-              </div>
-              <ul>
-                <li>Everything in Solo</li>
-                <li>Shared workspaces</li>
-                <li>Advanced analytics</li>
-              </ul>
-              <a href="#" class="btn btn-primary" style="background: white; color: var(--ink);">Start free</a>
-            </article>
-
-            <article class="plan">
-              <span class="tag">Scale</span>
-              <h3>Team</h3>
-              <div class="price">
-                <strong>$99</strong>
-                <span>/mo</span>
-              </div>
-              <ul>
-                <li>Unlimited projects</li>
-                <li>Custom workflows</li>
-                <li>Priority support</li>
-              </ul>
-              <a href="#" class="btn btn-secondary">Talk to sales</a>
-            </article>
-          </div>
-
-          <div class="cta-band" id="about">
-            <h3>Ready to give your ideas more focus?</h3>
-            <a href="#" class="btn btn-primary">Book a demo</a>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="container footer-inner">
-        <div>© 2026 CRISP</div>
-        <div>Product clarity for teams that want to move clearly.</div>
-      </div>
-    </footer>
+      </main>
+    </div>
   </body>
 </html>
