@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRISP — Product Landing Page</title>
+    <meta
+      name="description"
+      content="CRISP helps teams turn messy ideas into polished experiences with clarity, speed, and focus."
+    />
+    <style>
+      :root {
+        --bg: #f4f1ea;
+        --panel: #fffdf9;
+        --panel-strong: #f9f5ef;
+        --ink: #161616;
+        --muted: #5f5d59;
+        --line: rgba(22, 22, 22, 0.1);
+        --brand: #d97e4b;
+        --brand-deep: #bb6231;
+        --brand-soft: rgba(217, 126, 75, 0.12);
+        --shadow: 0 24px 60px rgba(17, 17, 17, 0.08);
+        --radius: 24px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(12px);
+        background: rgba(244, 241, 234, 0.85);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 78px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+      }
+
+      .brand-mark {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--brand), #f1c28a);
+        position: relative;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+      }
+
+      .brand-mark::before {
+        content: "";
+        position: absolute;
+        inset: 7px;
+        border-radius: 4px;
+        background: rgba(255,255,255,0.68);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .nav-links a {
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--ink);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        padding: 0.9rem 1.4rem;
+        font-weight: 700;
+        font-size: 0.82rem;
+        letter-spacing: 0.02em;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: var(--ink);
+        color: white;
+        box-shadow: 0 12px 24px rgba(22, 22, 22, 0.12);
+      }
+
+      .btn-secondary {
+        background: rgba(255,255,255,0.5);
+        color: var(--ink);
+        border-color: var(--line);
+      }
+
+      .hero {
+        padding: 72px 0 48px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+        gap: 3rem;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 0.55rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.4);
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brand);
+        box-shadow: 0 0 0 6px rgba(217, 126, 75, 0.1);
+      }
+
+      h1 {
+        margin: 1.3rem 0 1rem;
+        font-size: clamp(3.2rem, 6vw, 6rem);
+        line-height: 0.96;
+        letter-spacing: -0.06em;
+        font-weight: 800;
+      }
+
+      h1 .accent {
+        color: var(--brand);
+      }
+
+      .subhead {
+        max-width: 620px;
+        font-size: 1.12rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2.2rem;
+      }
+
+      .trust {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1.5rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .trust .avatars {
+        display: flex;
+        align-items: center;
+        margin-right: 0.5rem;
+      }
+
+      .avatars span {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #e9d7c5, #d18d5b);
+        border: 2px solid var(--bg);
+        border-radius: 50%;
+        margin-left: -8px;
+        display: inline-block;
+      }
+
+      .avatars span:first-child {
+        margin-left: 0;
+      }
+
+      .hero-visual {
+        position: relative;
+      }
+
+      .panel {
+        background: rgba(255,255,255,0.54);
+        border: 1px solid rgba(22, 22, 22, 0.08);
+        box-shadow: var(--shadow);
+        border-radius: var(--radius);
+      }
+
+      .mock-window {
+        position: relative;
+        padding: 1.1rem;
+      }
+
+      .mock-shell {
+        border-radius: 18px;
+        overflow: hidden;
+        background: linear-gradient(180deg, #f9f7f3, #f1ece4);
+        border: 1px solid rgba(22,22,22,0.08);
+      }
+
+      .mock-top {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.9rem 1rem;
+        background: rgba(255,255,255,0.5);
+        border-bottom: 1px solid rgba(22,22,22,0.08);
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .dot.red { background: #eb7d74; }
+      .dot.yellow { background: #f5c76e; }
+      .dot.green { background: #7ecf9a; }
+
+      .mock-body {
+        padding: 1.1rem;
+      }
+
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .mini-stat {
+        padding: 0.9rem 0.8rem;
+        border-radius: 14px;
+        background: white;
+        border: 1px solid rgba(22,22,22,0.05);
+      }
+
+      .mini-stat span {
+        display: block;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+
+      .mini-stat strong {
+        display: block;
+        margin-top: 0.25rem;
+        font-size: 1.5rem;
+        letter-spacing: -0.05em;
+      }
+
+      .chart-panel {
+        background: white;
+        border-radius: 18px;
+        border: 1px solid rgba(22,22,22,0.05);
+        overflow: hidden;
+      }
+
+      .chart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.9rem 1rem;
+        border-bottom: 1px solid rgba(22,22,22,0.05);
+      }
+
+      .chart-header strong {
+        font-size: 0.8rem;
+      }
+
+      .pill {
+        border-radius: 999px;
+        background: var(--brand-soft);
+        color: var(--brand-deep);
+        padding: 0.38rem 0.7rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+      }
+
+      .bars {
+        display: flex;
+        align-items: end;
+        gap: 0.7rem;
+        height: 120px;
+        padding: 1rem 1rem 1.1rem;
+      }
+
+      .bars span {
+        display: block;
+        flex: 1;
+        border-radius: 10px 10px 0 0;
+        background: linear-gradient(180deg, #f4c495 0%, var(--brand) 100%);
+      }
+
+      .bars span:nth-child(1) { height: 35%; }
+      .bars span:nth-child(2) { height: 58%; }
+      .bars span:nth-child(3) { height: 72%; }
+      .bars span:nth-child(4) { height: 90%; }
+      .bars span:nth-child(5) { height: 63%; }
+      .bars span:nth-child(6) { height: 100%; }
+
+      .floating-card {
+        position: absolute;
+        right: -18px;
+        bottom: 24px;
+        width: 170px;
+        padding: 1rem;
+        background: rgba(255,255,255,0.92);
+        border: 1px solid rgba(22,22,22,0.08);
+        border-radius: 18px;
+        box-shadow: 0 18px 34px rgba(17,17,17,0.08);
+      }
+
+      .floating-card .label {
+        color: var(--muted);
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .floating-card strong {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 1.7rem;
+        letter-spacing: -0.06em;
+      }
+
+      .floating-card small {
+        display: block;
+        margin-top: 0.35rem;
+        color: var(--muted);
+      }
+
+      section {
+        padding: 28px 0 64px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .section-kicker {
+        font-size: 0.75rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--brand-deep);
+        font-weight: 800;
+      }
+
+      h2 {
+        margin: 0.45rem 0 0;
+        font-size: clamp(2.3rem, 5vw, 3.5rem);
+        letter-spacing: -0.06em;
+        line-height: 1;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.35rem;
+      }
+
+      .feature {
+        padding: 1.6rem;
+        background: rgba(255,255,255,0.45);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+      }
+
+      .feature-icon {
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(217,126,75,0.14), rgba(217,126,75,0.06));
+        color: var(--brand-deep);
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+
+      .feature h3 {
+        margin: 0 0 0.7rem;
+        font-size: 1.25rem;
+        letter-spacing: -0.04em;
+      }
+
+      .feature p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .metrics {
+        padding: 1.3rem 0 0;
+      }
+
+      .metric-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .metric {
+        padding: 1.5rem 1.2rem;
+        border-radius: 20px;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.38);
+      }
+
+      .metric strong {
+        display: block;
+        font-size: clamp(2rem, 4vw, 3rem);
+        letter-spacing: -0.06em;
+      }
+
+      .metric span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin-top: 0.25rem;
+      }
+
+      .showcase {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 1.5rem;
+        align-items: stretch;
+        margin-top: 2rem;
+      }
+
+      .testimonial,
+      .note {
+        padding: 1.6rem;
+        background: rgba(255,255,255,0.45);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+      }
+
+      .quote {
+        font-size: clamp(1.3rem, 2vw, 2rem);
+        line-height: 1.2;
+        letter-spacing: -0.05em;
+      }
+
+      .person {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-top: 1.2rem;
+      }
+
+      .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f0d4b5, #d57d4f);
+      }
+
+      .person small {
+        display: block;
+        color: var(--muted);
+      }
+
+      .pricing {
+        padding-top: 2rem;
+      }
+
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.2rem;
+        margin-top: 2rem;
+      }
+
+      .plan {
+        padding: 1.8rem 1.5rem;
+        background: rgba(255,255,255,0.42);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+      }
+
+      .plan.featured {
+        background: #1b1a17;
+        color: white;
+        border-color: rgba(255,255,255,0.06);
+        transform: translateY(-8px);
+      }
+
+      .plan .tag {
+        display: inline-block;
+        padding: 0.38rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+      }
+
+      .plan h3 {
+        margin: 1rem 0 0.3rem;
+        font-size: 1.5rem;
+        letter-spacing: -0.04em;
+      }
+
+      .price {
+        display: flex;
+        align-items: end;
+        gap: 0.4rem;
+        margin: 1rem 0;
+      }
+
+      .price strong {
+        font-size: 2.8rem;
+        letter-spacing: -0.07em;
+      }
+
+      .price span {
+        color: var(--muted);
+      }
+
+      .plan.featured .price span,
+      .plan.featured li,
+      .plan.featured .tag {
+        color: rgba(255,255,255,0.8);
+      }
+
+      .plan ul {
+        list-style: none;
+        margin: 1.2rem 0 1.5rem;
+        padding: 0;
+        display: grid;
+        gap: 0.7rem;
+      }
+
+      .plan li::before {
+        content: "✓";
+        color: var(--brand);
+        margin-right: 0.5rem;
+      }
+
+      .plan.featured li::before {
+        color: #f9d8a7;
+      }
+
+      .cta-band {
+        margin-top: 2rem;
+        padding: 2rem 1.5rem;
+        border-radius: 28px;
+        border: 1px solid rgba(22,22,22,0.08);
+        background: linear-gradient(135deg, rgba(217,126,75,0.12), rgba(255,255,255,0.8));
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .cta-band h3 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        letter-spacing: -0.06em;
+      }
+
+      .footer {
+        padding: 1.5rem 0 3.5rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        border-top: 1px solid var(--line);
+        padding-top: 1.2rem;
+      }
+
+      @media (max-width: 980px) {
+        .hero-grid,
+        .showcase,
+        .features-grid,
+        .pricing-grid,
+        .metric-row {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .section-head,
+        .cta-band,
+        .footer-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 620px) {
+        h1 {
+          font-size: 3rem;
+        }
+
+        .nav {
+          min-height: 68px;
+        }
+
+        .cta-row {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .floating-card {
+          position: static;
+          width: 100%;
+          margin-top: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <a href="/" class="brand" aria-label="CRISP home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>CRISP</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="#product">Product</a>
+          <a href="#features">Features</a>
+          <a href="#proof">Proof</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#about">About</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a href="#pricing" class="btn btn-secondary">Log in</a>
+          <a href="#pricing" class="btn btn-primary">Get started</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="eyebrow">Built for clarity</div>
+            <h1>
+              Make every idea<br />
+              feel <span class="accent">crisp.</span>
+            </h1>
+            <p class="subhead">
+              CRISP gives teams a cleaner way to plan, launch, and refine products — from first concept to final polish.
+              Faster decisions, sharper execution, and less chaos.
+            </p>
+
+            <div class="cta-row">
+              <a href="#pricing" class="btn btn-primary">Start free</a>
+              <a href="#product" class="btn btn-secondary">Watch demo</a>
+            </div>
+
+            <div class="trust">
+              <div class="avatars" aria-label="Customer avatars">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span>Trusted by 2,400+ product teams</span>
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-label="Product dashboard preview">
+            <div class="panel mock-window">
+              <div class="mock-shell">
+                <div class="mock-top">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+                </div>
+
+                <div class="mock-body">
+                  <div class="stat-row">
+                    <div class="mini-stat">
+                      <span>Launch</span>
+                      <strong>4.8x</strong>
+                    </div>
+                    <div class="mini-stat">
+                      <span>Growth</span>
+                      <strong>82%</strong>
+                    </div>
+                    <div class="mini-stat">
+                      <span>Focus</span>
+                      <strong>94%</strong>
+                    </div>
+                  </div>
+
+                  <div class="chart-panel">
+                    <div class="chart-header">
+                      <strong>Performance</strong>
+                      <span class="pill">+27.4%</span>
+                    </div>
+                    <div class="bars" aria-hidden="true">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="floating-card">
+              <div class="label">This month</div>
+              <strong>1.2k</strong>
+              <small>new workflows shipped</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Why teams choose CRISP</div>
+              <h2>Everything you need to move fast.</h2>
+            </div>
+          </div>
+
+          <div class="features-grid">
+            <article class="feature">
+              <div class="feature-icon">✦</div>
+              <h3>Strategic clarity</h3>
+              <p>
+                Turn scattered notes, ideas, and requests into a single source of truth your whole team can act on.
+              </p>
+            </article>
+
+            <article class="feature">
+              <div class="feature-icon">◎</div>
+              <h3>Faster execution</h3>
+              <p>
+                Give teams a tidy workflow for decisions, prioritization, approvals, and shipping without bottlenecks.
+              </p>
+            </article>
+
+            <article class="feature">
+              <div class="feature-icon">↗</div>
+              <h3>Better outcomes</h3>
+              <p>
+                Make feedback loops visible, keep momentum high, and turn creative energy into measurable progress.
+              </p>
+            </article>
+          </div>
+
+          <div class="metrics" id="proof">
+            <div class="metric-row">
+              <div class="metric">
+                <strong>3.2x</strong>
+                <span>faster planning cycles</span>
+              </div>
+              <div class="metric">
+                <strong>47%</strong>
+                <span>less time in meetings</span>
+              </div>
+              <div class="metric">
+                <strong>91%</strong>
+                <span>team alignment score</span>
+              </div>
+              <div class="metric">
+                <strong>24/7</strong>
+                <span>clear visibility</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="product">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Built for momentum</div>
+              <h2>From messy brainstorming to polished execution.</h2>
+            </div>
+          </div>
+
+          <div class="showcase">
+            <div class="testimonial">
+              <p class="quote">
+                “CRISP helped us replace friction with focus. We now move from brief to launch in a fraction of the time.”
+              </p>
+              <div class="person">
+                <span class="avatar" aria-hidden="true"></span>
+                <div>
+                  <strong>Amelia Hart</strong>
+                  <small>VP of Product, Northstar Studio</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="note">
+              <div class="section-kicker">Workflow</div>
+              <h3 style="margin-top: 0.8rem; font-size: 2rem; letter-spacing: -0.05em;">Simple inputs. Sharp delivery.</h3>
+              <p style="margin: 0.9rem 0 0; color: var(--muted);">
+                Capture ideas, align priorities, assign ownership, and keep momentum visible across every decision.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" class="pricing">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Pricing</div>
+              <h2>Simple plans, tangible value.</h2>
+            </div>
+          </div>
+
+          <div class="pricing-grid">
+            <article class="plan">
+              <span class="tag">Starter</span>
+              <h3>Solo</h3>
+              <div class="price">
+                <strong>$19</strong>
+                <span>/mo</span>
+              </div>
+              <ul>
+                <li>Unlimited ideas</li>
+                <li>Simple planning boards</li>
+                <li>1 workspace</li>
+              </ul>
+              <a href="#" class="btn btn-secondary">Get started</a>
+            </article>
+
+            <article class="plan featured">
+              <span class="tag">Popular</span>
+              <h3>Growth</h3>
+              <div class="price">
+                <strong>$49</strong>
+                <span>/mo</span>
+              </div>
+              <ul>
+                <li>Everything in Solo</li>
+                <li>Shared workspaces</li>
+                <li>Advanced analytics</li>
+              </ul>
+              <a href="#" class="btn btn-primary" style="background: white; color: var(--ink);">Start free</a>
+            </article>
+
+            <article class="plan">
+              <span class="tag">Scale</span>
+              <h3>Team</h3>
+              <div class="price">
+                <strong>$99</strong>
+                <span>/mo</span>
+              </div>
+              <ul>
+                <li>Unlimited projects</li>
+                <li>Custom workflows</li>
+                <li>Priority support</li>
+              </ul>
+              <a href="#" class="btn btn-secondary">Talk to sales</a>
+            </article>
+          </div>
+
+          <div class="cta-band" id="about">
+            <h3>Ready to give your ideas more focus?</h3>
+            <a href="#" class="btn btn-primary">Book a demo</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>© 2026 CRISP</div>
+        <div>Product clarity for teams that want to move clearly.</div>
+      </div>
+    </footer>
+  </body>
+</html>
