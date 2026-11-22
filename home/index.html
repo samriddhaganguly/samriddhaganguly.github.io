@@ -1011,12 +1011,14 @@
 
       // Identical Studio Lighting in Both Scenes for Seamless Reparenting
       function addStudioLights(targetScene) {
-        const hemi = new THREE.HemisphereLight(0xffffff, 0x223355, 0.95);
-        const key = new THREE.DirectionalLight(0xffffff, 0.85);
-        key.position.set(12, 18, 14);
-        const rim = new THREE.DirectionalLight(THEMES[currentThemeKey].primaryHex, 0.65);
-        rim.position.set(-14, 6, -12);
-        targetScene.add(hemi, key, rim);
+        const hemi = new THREE.HemisphereLight(0xf4f8ff, 0x162238, 1.05);
+        const key = new THREE.DirectionalLight(0xffffff, 1.0);
+        key.position.set(11, 18, 15);
+        const fill = new THREE.DirectionalLight(0xb8cfff, 0.42);
+        fill.position.set(-12, -8, 10);
+        const rim = new THREE.DirectionalLight(THEMES[currentThemeKey].primaryHex, 0.85);
+        rim.position.set(-13, 8, -14);
+        targetScene.add(hemi, key, fill, rim);
         return rim;
       }
 
@@ -1044,11 +1046,13 @@
         return mat;
       }
 
-      function makeGlassMat(role = 'primary', opacity = 0.15) {
-        const mat = new THREE.MeshStandardMaterial({
+      function makeGlassMat(role = 'primary', opacity = 0.2) {
+        const mat = new THREE.MeshPhysicalMaterial({
           color: getRoleColor(role),
-          roughness: 0.34,
-          metalness: 0.18,
+          roughness: 0.18,
+          metalness: 0.12,
+          clearcoat: 0.85,
+          clearcoatRoughness: 0.14,
           transparent: true,
           opacity,
           side: THREE.DoubleSide,
@@ -1058,11 +1062,13 @@
         return mat;
       }
 
-      function makeSolidMat(role = 'primary', opacity = 0.92) {
-        const mat = new THREE.MeshStandardMaterial({
+      function makeSolidMat(role = 'primary', opacity = 0.95) {
+        const mat = new THREE.MeshPhysicalMaterial({
           color: getRoleColor(role),
-          roughness: 0.28,
-          metalness: 0.42,
+          roughness: 0.22,
+          metalness: 0.55,
+          clearcoat: 0.7,
+          clearcoatRoughness: 0.18,
           transparent: opacity < 1,
           opacity
         });
@@ -1070,13 +1076,31 @@
         return mat;
       }
 
-      function makeCircleLoop(radius, segments = 64, role = 'primary', opacity = 0.72) {
+      function makeCircleLoop(radius, segments = 96, role = 'primary', opacity = 0.78) {
         const pts = [];
         for (let i = 0; i <= segments; i++) {
           const a = (i / segments) * Math.PI * 2;
           pts.push(new THREE.Vector3(Math.cos(a) * radius, 0, Math.sin(a) * radius));
         }
         return new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), makeLineMat(role, opacity));
+      }
+
+      // Smooth 3D cylindrical tube ring (true solid geometry instead of 1px WebGL hairline)
+      function makeTubeRing(radius, tubeRadius = 0.014, radialSegs = 12, tubularSegs = 96, role = 'primary', opacity = 0.88) {
+        const geo = new THREE.TorusGeometry(radius, tubeRadius, radialSegs, tubularSegs);
+        geo.rotateX(Math.PI / 2);
+        return new THREE.Mesh(geo, makeSolidMat(role, opacity));
+      }
+
+      // Smooth 3D cylinder strut connecting point A to point B
+      function makeStrut(pA, pB, radius = 0.013, role = 'secondary', opacity = 0.65) {
+        const dir = new THREE.Vector3().subVectors(pB, pA);
+        const len = dir.length();
+        const geo = new THREE.CylinderGeometry(radius, radius, len, 10, 1);
+        const mesh = new THREE.Mesh(geo, makeSolidMat(role, opacity));
+        mesh.position.copy(pA).addScaledVector(dir, 0.5);
+        mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+        return mesh;
       }
 
       /* -----------------------------------------------------------------------
@@ -1134,23 +1158,28 @@
       bgScene.add(particleField);
 
       /* -----------------------------------------------------------------------
-         6. CENTRAL GIMBAL CORE (BG SCENE)
+         6. CENTRAL GIMBAL CORE (BG SCENE: MACHINED ASTROLABE)
          ----------------------------------------------------------------------- */
       const coreGroup = new THREE.Group();
       coreGroup.position.set(0, 0.45, 0);
       bgScene.add(coreGroup);
 
-      const coreOctGeo = new THREE.OctahedronGeometry(0.68, 0);
-      const coreOctFill = new THREE.Mesh(coreOctGeo, makeGlassMat('primary', 0.18));
-      const coreOctEdges = new THREE.LineSegments(new THREE.EdgesGeometry(coreOctGeo), makeLineMat('primary', 0.85));
-      coreGroup.add(coreOctFill, coreOctEdges);
+      // Inner luminous pearl sphere + faceted crystal cage
+      const corePearl = new THREE.Mesh(new THREE.SphereGeometry(0.34, 32, 32), makeSolidMat('accent', 0.96));
+      const coreOctGeo = new THREE.OctahedronGeometry(0.74, 0);
+      const coreOctFill = new THREE.Mesh(coreOctGeo, makeGlassMat('primary', 0.22));
+      const coreOctEdges = new THREE.LineSegments(new THREE.EdgesGeometry(coreOctGeo), makeLineMat('primary', 0.9));
+      coreGroup.add(corePearl, coreOctFill, coreOctEdges);
 
-      const gRing1 = new THREE.Mesh(new THREE.TorusGeometry(1.42, 0.015, 12, 96), makeSolidMat('primary', 0.8));
+      // Three machined metallic gimbal rings with pivot pins
+      const gRing1 = new THREE.Mesh(new THREE.TorusGeometry(1.38, 0.02, 14, 112), makeSolidMat('primary', 0.88));
       gRing1.rotation.x = Math.PI / 2.4;
-      const gRing2 = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.012, 12, 96), makeSolidMat('secondary', 0.7));
+
+      const gRing2 = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.016, 14, 112), makeSolidMat('secondary', 0.78));
       gRing2.rotation.y = Math.PI / 3;
       gRing2.rotation.x = -Math.PI / 4;
-      const gRing3 = makeCircleLoop(2.08, 84, 'primary', 0.34);
+
+      const gRing3 = new THREE.Mesh(new THREE.TorusGeometry(2.04, 0.012, 12, 112), makeSolidMat('primary', 0.52));
       gRing3.rotation.z = Math.PI / 6;
 
       coreGroup.add(gRing1, gRing2, gRing3);
@@ -1177,48 +1206,75 @@
         const parts = [];
 
         if (index === 0) {
-          // 01 PROFILE: Smooth Torus-Knot + parametric spine + orbital hoops
-          const knotMesh = new THREE.Mesh(new THREE.TorusKnotGeometry(0.62, 0.14, 140, 20), makeGlassMat('primary', 0.28));
+          // 01 PROFILE: High-resolution Sculpted Torus-Knot + Solid Tubular Spine + Machined Gyro Hoops
+          const knotGeo = new THREE.TorusKnotGeometry(0.62, 0.145, 220, 32, 2, 3);
+          const knotMesh = new THREE.Mesh(knotGeo, makeGlassMat('primary', 0.34));
           parts.push(registerPart(container, knotMesh, { hover: [0, 0.08, 0] }));
 
-          const spinePts = [];
-          for (let i = 0; i <= 180; i++) {
-            const t = (i / 180) * Math.PI * 2;
-            const r = 0.62 * (0.5 * (2 + Math.cos(3 * t)));
-            spinePts.push(new THREE.Vector3(r * Math.cos(2 * t), 0.62 * 0.5 * Math.sin(3 * t), r * Math.sin(2 * t)));
+          // Smooth 3D tubular core filament tracing the (2,3) torus knot curve
+          class KnotCurve extends THREE.Curve {
+            getPoint(t) {
+              const a = t * Math.PI * 2;
+              const r = 0.62 * 0.5 * (2 + Math.cos(3 * a));
+              return new THREE.Vector3(r * Math.cos(2 * a), 0.62 * 0.5 * Math.sin(3 * a), r * Math.sin(2 * a));
+            }
           }
-          parts.push(registerPart(container, new THREE.Line(new THREE.BufferGeometry().setFromPoints(spinePts), makeLineMat('primary', 0.9)), { hover: [0, 0.08, 0], explode: [0, 0, 0.35] }));
+          const spineTube = new THREE.Mesh(
+            new THREE.TubeGeometry(new KnotCurve(), 180, 0.022, 12, true),
+            makeSolidMat('accent', 0.96)
+          );
+          parts.push(registerPart(container, spineTube, { hover: [0, 0.08, 0], explode: [0, 0, 0.32] }));
 
-          const hoop1 = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.015, 12, 84), makeSolidMat('secondary', 0.78));
-          hoop1.rotation.x = Math.PI / 2.25;
-          parts.push(registerPart(container, hoop1, { hover: [0, 0.18, 0], focus: [0, 0.12, 0], explode: [0, 0.68, 0.15] }));
+          // Primary tilted gyroscopic ring with two opposing satellite nodes
+          const hoop1Group = new THREE.Group();
+          hoop1Group.rotation.x = Math.PI / 2.25;
+          hoop1Group.add(new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.02, 14, 112), makeSolidMat('secondary', 0.88)));
+          const satGeo = new THREE.SphereGeometry(0.068, 20, 20);
+          const satA = new THREE.Mesh(satGeo, makeSolidMat('primary', 0.98));
+          satA.position.set(1.16, 0, 0);
+          const satB = new THREE.Mesh(satGeo, makeSolidMat('primary', 0.98));
+          satB.position.set(-1.16, 0, 0);
+          hoop1Group.add(satA, satB);
+          parts.push(registerPart(container, hoop1Group, { hover: [0, 0.18, 0], focus: [0, 0.12, 0], explode: [0, 0.66, 0.14] }));
 
-          const hoop2 = makeCircleLoop(1.36, 72, 'accent', 0.62);
+          // Secondary counter-tilted tubular ring
+          const hoop2 = new THREE.Mesh(new THREE.TorusGeometry(1.36, 0.014, 12, 112), makeSolidMat('primary', 0.68));
           hoop2.rotation.set(-Math.PI / 3, Math.PI / 4, 0);
-          parts.push(registerPart(container, hoop2, { hover: [0, -0.16, 0], focus: [0, -0.12, 0], explode: [0, -0.68, -0.15] }));
+          parts.push(registerPart(container, hoop2, { hover: [0, -0.16, 0], focus: [0, -0.12, 0], explode: [0, -0.66, -0.14] }));
 
         } else if (index === 1) {
-          // 02 RESEARCH: Layered van der Waals Hexagonal Heterostructure
+          // 02 RESEARCH: Precision van der Waals Layered Hexagonal Crystal Heterostructure
           const layerYs = [-0.62, 0, 0.62];
           layerYs.forEach((ly, li) => {
             const layerGroup = new THREE.Group();
             layerGroup.position.y = ly;
             const role = li === 1 ? 'secondary' : 'primary';
 
-            const hexGeo = new THREE.CylinderGeometry(1.0, 1.0, 0.045, 6, 1);
-            layerGroup.add(new THREE.Mesh(hexGeo, makeGlassMat(role, 0.18)));
-            layerGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(hexGeo), makeLineMat(role, 0.88)));
-            layerGroup.add(makeCircleLoop(0.5, 6, role, 0.45));
+            // Translucent crystalline hexagonal slab + crisp edge frame + perimeter tubular rail
+            const hexGeo = new THREE.CylinderGeometry(0.98, 0.98, 0.048, 6, 1);
+            layerGroup.add(new THREE.Mesh(hexGeo, makeGlassMat(role, 0.24)));
+            layerGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(hexGeo), makeLineMat(role, 0.9)));
 
-            const atomGeo = new THREE.SphereGeometry(0.07, 16, 16);
-            const atomMat = makeSolidMat(li === 1 ? 'accent' : 'primary', 0.95);
-            layerGroup.add(new THREE.Mesh(atomGeo, atomMat));
+            // Inner honeycomb hexagon + radial bond struts from center atom to vertices
+            const innerHex = makeCircleLoop(0.48, 6, role, 0.55);
+            innerHex.rotation.y = Math.PI / 6;
+            layerGroup.add(innerHex);
+
+            const atomGeo = new THREE.SphereGeometry(0.082, 24, 24);
+            const atomMat = makeSolidMat(li === 1 ? 'accent' : 'primary', 0.98);
+            const centerAtom = new THREE.Mesh(new THREE.SphereGeometry(0.095, 24, 24), atomMat);
+            layerGroup.add(centerAtom);
 
             for (let v = 0; v < 6; v++) {
               const a = (v / 6) * Math.PI * 2 + Math.PI / 6;
+              const vx = Math.cos(a) * 0.98;
+              const vz = Math.sin(a) * 0.98;
               const atom = new THREE.Mesh(atomGeo, atomMat);
-              atom.position.set(Math.cos(a) * 0.98, 0, Math.sin(a) * 0.98);
+              atom.position.set(vx, 0, vz);
               layerGroup.add(atom);
+
+              // Subtle in-plane covalent bond strut
+              layerGroup.add(makeStrut(new THREE.Vector3(0, 0, 0), new THREE.Vector3(vx, 0, vz), 0.011, role, 0.52));
             }
 
             const dir = li - 1;
@@ -1229,118 +1285,168 @@
             }));
           });
 
-          const pillarPts = [];
+          // Smooth 3D cylindrical interlayer van der Waals coupling struts
           for (let v = 0; v < 6; v++) {
             const a = (v / 6) * Math.PI * 2 + Math.PI / 6;
-            pillarPts.push(new THREE.Vector3(Math.cos(a) * 0.98, -0.62, Math.sin(a) * 0.98));
-            pillarPts.push(new THREE.Vector3(Math.cos(a) * 0.98, 0.62, Math.sin(a) * 0.98));
+            const vx = Math.cos(a) * 0.98;
+            const vz = Math.sin(a) * 0.98;
+            parts.push(registerPart(container, makeStrut(
+              new THREE.Vector3(vx, -0.62, vz),
+              new THREE.Vector3(vx, 0.62, vz),
+              0.012,
+              'secondary',
+              0.45
+            )));
           }
-          parts.push(registerPart(container, new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pillarPts), makeLineMat('secondary', 0.38))));
 
         } else if (index === 2) {
-          // 03 PUBLICATIONS: Parametric Dirac Dispersion Cones (Zero Triangulation)
+          // 03 PUBLICATIONS: Precision Topological Dirac Dispersion Cones (True Tubular Contours + Struts)
           const buildDiracHalf = (sign, role) => {
             const halfGroup = new THREE.Group();
             const maxH = 0.96;
             const maxR = 0.84;
 
-            const veil = new THREE.Mesh(new THREE.ConeGeometry(maxR, maxH, 48, 1, true), makeGlassMat(role, 0.13));
+            // Smooth double-sided translucent dispersion surface
+            const veil = new THREE.Mesh(new THREE.ConeGeometry(maxR, maxH, 72, 1, true), makeGlassMat(role, 0.16));
             if (sign > 0) veil.rotation.x = Math.PI;
             veil.position.y = sign * (maxH * 0.5);
             halfGroup.add(veil);
 
-            [0.2, 0.4, 0.6, 0.8, 1.0].forEach((f, fi) => {
-              const ring = makeCircleLoop(maxR * f, 64, role, fi === 4 ? 0.9 : 0.5);
+            // Solid tubular iso-energy contour rings at 4 quantized levels
+            [0.28, 0.52, 0.76, 1.0].forEach((f, fi) => {
+              const tubeR = fi === 3 ? 0.018 : 0.011;
+              const ring = makeTubeRing(maxR * f, tubeR, 12, 96, role, fi === 3 ? 0.92 : 0.65);
               ring.position.y = sign * (maxH * f);
               halfGroup.add(ring);
             });
 
-            const radPts = [];
+            // 8 smooth 3D cylindrical dispersion rays from Dirac apex to outer rim
             for (let m = 0; m < 8; m++) {
               const a = (m / 8) * Math.PI * 2;
-              radPts.push(new THREE.Vector3(0, 0, 0));
-              radPts.push(new THREE.Vector3(Math.cos(a) * maxR, sign * maxH, Math.sin(a) * maxR));
+              halfGroup.add(makeStrut(
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(Math.cos(a) * maxR, sign * maxH, Math.sin(a) * maxR),
+                0.01,
+                role,
+                0.55
+              ));
             }
-            halfGroup.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(radPts), makeLineMat(role, 0.52)));
             return halfGroup;
           };
 
           parts.push(registerPart(container, buildDiracHalf(1, 'primary'), { hover: [0, 0.14, 0], focus: [0, 0.14, 0], explode: [0, 0.52, 0] }));
           parts.push(registerPart(container, buildDiracHalf(-1, 'secondary'), { hover: [0, -0.14, 0], focus: [0, -0.14, 0], explode: [0, -0.52, 0] }));
 
-          parts.push(registerPart(container, new THREE.Mesh(new THREE.SphereGeometry(0.105, 20, 20), makeSolidMat('accent', 0.96))));
+          // Central Dirac Weyl/Dirac Nodal Pearl + Halo Ring
+          const apex = new THREE.Mesh(new THREE.SphereGeometry(0.115, 28, 28), makeSolidMat('accent', 0.98));
+          parts.push(registerPart(container, apex));
 
-          const fermiRing = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.014, 12, 84), makeSolidMat('primary', 0.7));
+          const fermiRing = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.017, 14, 112), makeSolidMat('primary', 0.82));
           fermiRing.rotation.x = Math.PI / 2;
           parts.push(registerPart(container, fermiRing, { explode: [0, 0, 0.45] }));
 
         } else if (index === 3) {
-          // 04 ARCHIVE: Brillouin-Zone Dodecahedron + Constellation Nodes
+          // 04 ARCHIVE: Faceted Brillouin-Zone Polyhedron + Solid Tubular Struts & Orbital Nodes
           const dodecaGeo = new THREE.DodecahedronGeometry(0.84, 0);
           const hullGroup = new THREE.Group();
-          hullGroup.add(new THREE.Mesh(dodecaGeo, makeGlassMat('primary', 0.14)));
-          hullGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(dodecaGeo), makeLineMat('primary', 0.82)));
+          hullGroup.add(new THREE.Mesh(dodecaGeo, makeGlassMat('primary', 0.2)));
+          hullGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(dodecaGeo), makeLineMat('primary', 0.88)));
+
+          // Inner core octahedron for layered architectural depth
+          const innerGeo = new THREE.OctahedronGeometry(0.36, 0);
+          hullGroup.add(new THREE.Mesh(innerGeo, makeSolidMat('secondary', 0.72)));
           parts.push(registerPart(container, hullGroup));
 
           const coords = [
             [0.94, 0.56, 0.42], [-0.94, 0.5, 0.48], [0.36, -0.84, 0.66],
             [-0.44, -0.7, -0.74], [0.68, 0.4, -0.78], [-0.72, 0.72, -0.36]
           ];
-          const spokePts = [];
-          const nodeGeo = new THREE.SphereGeometry(0.098, 16, 16);
+          const nodeGeo = new THREE.SphereGeometry(0.105, 24, 24);
+          const ringGeo = new THREE.TorusGeometry(0.155, 0.011, 10, 48);
+
           coords.forEach((c, ni) => {
-            const node = new THREE.Mesh(nodeGeo, makeSolidMat(ni % 2 === 0 ? 'primary' : 'secondary', 0.95));
-            node.position.set(...c);
+            const nodeGroup = new THREE.Group();
+            nodeGroup.position.set(...c);
+            const role = ni % 2 === 0 ? 'primary' : 'secondary';
+            nodeGroup.add(new THREE.Mesh(nodeGeo, makeSolidMat(role, 0.98)));
+            const collar = new THREE.Mesh(ringGeo, makeSolidMat('accent', 0.75));
+            collar.lookAt(0, 0, 0);
+            nodeGroup.add(collar);
+
             const dir = new THREE.Vector3(...c).normalize();
-            parts.push(registerPart(container, node, {
+            parts.push(registerPart(container, nodeGroup, {
               hover: dir.clone().multiplyScalar(0.2).toArray(),
               focus: dir.clone().multiplyScalar(0.28).toArray(),
               explode: dir.clone().multiplyScalar(0.72).toArray()
             }));
-            spokePts.push(new THREE.Vector3(0, 0, 0), new THREE.Vector3(...c));
+
+            // Solid cylindrical radial spoke from origin to satellite node
+            parts.push(registerPart(container, makeStrut(
+              new THREE.Vector3(0, 0, 0),
+              new THREE.Vector3(...c),
+              0.012,
+              'secondary',
+              0.5
+            )));
           });
-          parts.push(registerPart(container, new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(spokePts), makeLineMat('secondary', 0.4))));
 
         } else {
-          // 05 CONTACT: Parametric Globe + Bhopal-to-Grenoble Geodesic Arc
+          // 05 CONTACT: High-Craft Geodesic Armillary Globe + Tubular Bhopal-to-Grenoble Signal Arc
           const globeGroup = new THREE.Group();
           const R = 0.88;
-          globeGroup.add(new THREE.Mesh(new THREE.SphereGeometry(R * 0.97, 32, 24), makeGlassMat('primary', 0.12)));
+          globeGroup.add(new THREE.Mesh(new THREE.SphereGeometry(R * 0.96, 48, 36), makeGlassMat('primary', 0.16)));
 
+          // Smooth tubular latitude rings
           [-0.58, -0.29, 0, 0.29, 0.58].forEach((latY, li) => {
             const rLat = Math.sqrt(Math.max(0.01, R * R - latY * latY));
-            const latLoop = makeCircleLoop(rLat, 64, li === 2 ? 'primary' : 'secondary', li === 2 ? 0.68 : 0.35);
-            latLoop.position.y = latY;
-            globeGroup.add(latLoop);
+            const isEq = li === 2;
+            const latTube = makeTubeRing(rLat, isEq ? 0.015 : 0.009, 10, 96, isEq ? 'primary' : 'secondary', isEq ? 0.82 : 0.45);
+            latTube.position.y = latY;
+            globeGroup.add(latTube);
           });
 
+          // Smooth tubular longitude meridians
           for (let m = 0; m < 6; m++) {
-            const mer = makeCircleLoop(R, 64, 'primary', 0.38);
-            mer.rotation.z = Math.PI / 2;
+            const mer = new THREE.Mesh(
+              new THREE.TorusGeometry(R, 0.009, 10, 96),
+              makeSolidMat('primary', 0.46)
+            );
             mer.rotation.y = (m / 6) * Math.PI;
             globeGroup.add(mer);
           }
           parts.push(registerPart(container, globeGroup));
 
-          const eqOrbit = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.012, 12, 84), makeSolidMat('secondary', 0.6));
+          // Outer orbital ring
+          const eqOrbit = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.015, 12, 112), makeSolidMat('secondary', 0.72));
           eqOrbit.rotation.x = Math.PI / 2.25;
           parts.push(registerPart(container, eqOrbit, { hover: [0, 0.15, 0], explode: [0, 0.62, 0] }));
 
+          // Solid 3D Tubular Geodesic Arc linking Bhopal & Grenoble
           const pBhopal = new THREE.Vector3(0.44, 0.35, 0.68);
           const pGrenoble = new THREE.Vector3(-0.34, 0.62, 0.52);
           const midArc = new THREE.Vector3(0.06, 1.24, 0.96);
           signalCurveRef = new THREE.QuadraticBezierCurve3(pBhopal, midArc, pGrenoble);
-          parts.push(registerPart(container, new THREE.Line(new THREE.BufferGeometry().setFromPoints(signalCurveRef.getPoints(48)), makeLineMat('accent', 0.95)), { hover: [0, 0.12, 0.1], explode: [0, 0.42, 0.36] }));
+          const arcTube = new THREE.Mesh(
+            new THREE.TubeGeometry(signalCurveRef, 64, 0.016, 12, false),
+            makeSolidMat('accent', 0.96)
+          );
+          parts.push(registerPart(container, arcTube, { hover: [0, 0.12, 0.1], explode: [0, 0.42, 0.36] }));
 
-          const m1 = new THREE.Mesh(new THREE.SphereGeometry(0.082, 16, 16), makeSolidMat('primary', 0.96));
-          m1.position.copy(pBhopal);
-          parts.push(registerPart(container, m1, { explode: [0.32, 0.22, 0.42] }));
+          // City Beacons with miniature base collars
+          const makeBeacon = (pos, role, explodeVec) => {
+            const bGroup = new THREE.Group();
+            bGroup.position.copy(pos);
+            bGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.088, 24, 24), makeSolidMat(role, 0.98)));
+            const halo = new THREE.Mesh(new THREE.TorusGeometry(0.135, 0.01, 10, 48), makeSolidMat('accent', 0.8));
+            halo.lookAt(pos.clone().multiplyScalar(2));
+            bGroup.add(halo);
+            parts.push(registerPart(container, bGroup, { explode: explodeVec }));
+          };
 
-          const m2 = new THREE.Mesh(new THREE.SphereGeometry(0.082, 16, 16), makeSolidMat('secondary', 0.96));
-          m2.position.copy(pGrenoble);
-          parts.push(registerPart(container, m2, { explode: [-0.32, 0.38, 0.32] }));
+          makeBeacon(pBhopal, 'primary', [0.32, 0.22, 0.42]);
+          makeBeacon(pGrenoble, 'secondary', [-0.32, 0.38, 0.32]);
 
-          signalPulseObj = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 12), makeSolidMat('accent', 1.0));
+          signalPulseObj = new THREE.Mesh(new THREE.SphereGeometry(0.056, 18, 18), makeSolidMat('accent', 1.0));
           container.add(signalPulseObj);
         }
 
