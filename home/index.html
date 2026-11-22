@@ -992,7 +992,7 @@
       const fgScene = new THREE.Scene();
 
       const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 140);
-      camera.position.set(0, 7.6, 18.8);
+      camera.position.set(0, 8.8, 17.0);
 
       const dpr = Math.min(window.devicePixelRatio, 2);
 
@@ -1004,6 +1004,9 @@
       const fgRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
       fgRenderer.setPixelRatio(dpr);
       fgRenderer.setSize(window.innerWidth, window.innerHeight);
+      fgRenderer.setClearColor(0x000000, 0);
+      fgRenderer.clear();
+      fgContainer.style.visibility = 'hidden';
       fgContainer.appendChild(fgRenderer.domElement);
 
       // Identical Studio Lighting in Both Scenes for Seamless Reparenting
@@ -1097,7 +1100,7 @@
       bgScene.add(pedestalGroup);
 
       const calibRings = [];
-      [2.1, 4.2, 7.0, 9.6].forEach((r, idx) => {
+      [1.9, 3.6, 5.8, 7.6].forEach((r, idx) => {
         pedestalGroup.add(makeCircleLoop(r, 96, idx === 2 ? 'primary' : 'secondary', idx === 2 ? 0.4 : 0.2));
 
         const arcGeo = new THREE.RingGeometry(r + 0.12, r + 0.16, 64, 1, 0, Math.PI * 0.85);
@@ -1155,7 +1158,7 @@
       /* -----------------------------------------------------------------------
          7. 5 ARCHITECTURAL 3D SCULPTURES (CLEAN PARAMETRIC & EDGES GEOMETRY)
          ----------------------------------------------------------------------- */
-      const ORBIT_RADIUS = 7.0;
+      const ORBIT_RADIUS = 5.8;
       const moduleObjects = [];
       const raycastTargets = [];
       let signalPulseObj = null;
@@ -1438,17 +1441,18 @@
       let focusedIndex = -1;
       let fgIsolatedIndex = -1;
       let fgRestoreTimer = null;
+      let fgNeedsFlush = false;
       let isExploded = false;
 
       let orbitTheta = 0.28;
-      let orbitPhi = 0.4;
+      let orbitPhi = 0.46;
       let targetOrbitTheta = 0.28;
-      let targetOrbitPhi = 0.4;
+      let targetOrbitPhi = 0.46;
 
       const currentCamPos = camera.position.clone();
       const targetCamPos = camera.position.clone();
-      const currentLookAt = new THREE.Vector3(0, 0.3, 0);
-      const targetLookAt = new THREE.Vector3(0, 0.3, 0);
+      const currentLookAt = new THREE.Vector3(0, -0.82, 0);
+      const targetLookAt = new THREE.Vector3(0, -0.82, 0);
 
       let isPointerDown = false;
       let pointerMoved = false;
@@ -1497,21 +1501,21 @@
           curr.beam.visible = false;
           fgScene.add(curr.root);
           fgIsolatedIndex = idx;
+          fgNeedsFlush = false;
+          fgContainer.style.visibility = 'visible';
           focusBlurVeil.classList.add('active');
         } else {
           focusBlurVeil.classList.remove('active');
-          // Keep sharp during the blur fade-out, then return cleanly to bgScene
-          const toReturn = fgIsolatedIndex;
-          fgRestoreTimer = setTimeout(() => {
-            if (focusedIndex === -1 && toReturn !== -1) {
-              const m = moduleObjects[toReturn];
-              m.floorRing.visible = true;
-              m.beam.visible = true;
-              bgScene.add(m.root);
-              fgIsolatedIndex = -1;
-              fgRenderer.clear();
-            }
-          }, 360);
+          // Return immediately to bgScene and flush fg canvas in the next animation frame
+          if (fgIsolatedIndex !== -1) {
+            const m = moduleObjects[fgIsolatedIndex];
+            m.floorRing.visible = true;
+            m.beam.visible = true;
+            bgScene.add(m.root);
+            fgIsolatedIndex = -1;
+          }
+          fgNeedsFlush = true;
+          fgContainer.style.visibility = 'hidden';
         }
       }
 
@@ -1695,7 +1699,7 @@
 
           if (focusedIndex === -1) {
             targetOrbitTheta -= dx * 0.0058;
-            targetOrbitPhi = Math.max(0.22, Math.min(1.0, targetOrbitPhi + dy * 0.004));
+            targetOrbitPhi = Math.max(0.28, Math.min(0.95, targetOrbitPhi + dy * 0.004));
           } else {
             const mod = moduleObjects[focusedIndex];
             mod.pivot.rotation.y += dx * 0.0105;
@@ -1964,13 +1968,15 @@
           orbitPhi = damp(orbitPhi, targetOrbitPhi, 5.5, dt);
 
           const aspect = window.innerWidth / window.innerHeight;
-          const r = window.innerWidth < 768 ? (aspect < 0.65 ? 25.5 : 22.5) : 18.8;
+          const isSmall = window.innerWidth < 768;
+          const r = isSmall ? (aspect < 0.65 ? 24.5 : 21.5) : 18.6;
           targetCamPos.set(
             Math.sin(orbitTheta) * Math.cos(orbitPhi) * r,
-            Math.sin(orbitPhi) * r + 1.15,
+            Math.sin(orbitPhi) * r + 0.65,
             Math.cos(orbitTheta) * Math.cos(orbitPhi) * r
           );
-          targetLookAt.set(0, 0.25, 0);
+          // Lowering lookAt.y lifts the entire 3D orbit cleanly into the center, well above the bottom dock
+          targetLookAt.set(0, isSmall ? -0.95 : -0.82, 0);
         }
 
         const camLerp = 1 - Math.exp(-5.4 * dt);
@@ -1983,9 +1989,14 @@
         // Pass 1: Render background scene
         bgRenderer.render(bgScene, camera);
 
-        // Pass 2: Render isolated sharp foreground sculpture above the blur veil
+        // Pass 2: Render isolated sharp foreground sculpture above the blur veil, or flush empty canvas
         if (fgIsolatedIndex !== -1) {
           fgRenderer.render(fgScene, camera);
+        } else if (fgNeedsFlush) {
+          fgRenderer.setClearColor(0x000000, 0);
+          fgRenderer.clear(true, true, true);
+          fgRenderer.render(fgScene, camera);
+          fgNeedsFlush = false;
         }
 
         updateOverlays();
