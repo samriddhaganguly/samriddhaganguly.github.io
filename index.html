@@ -1,1169 +1,2130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="google-site-verification" content="C_Im14mGfPaQwH1G1sTvueh9C_huqQwkSxNMBVBDMaA" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Samriddha Ganguly</title>
-  <meta property="og:title" content="Samriddha Ganguly">
-  <meta property="og:description" content="Research in condensed matter, topology, and quantum systems.">
-  <meta property="og:url" content="https://samriddhaganguly.github.io/">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://samriddhaganguly.github.io/assets/preview.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Samriddha Ganguly | Quantum Condensed Matter Physics</title>
+  <meta name="description" content="Samriddha Ganguly, BS-MS Physics at IISER Bhopal and CEA Grenoble. Research in unconventional superconductivity, topology, and quantum materials." />
+  <meta property="og:title" content="Samriddha Ganguly" />
+  <meta property="og:description" content="Research in condensed matter, topology, and quantum systems." />
+  <meta property="og:url" content="https://samriddhaganguly.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://samriddhaganguly.github.io/assets/preview.png" />
+
+  <!-- Editorial Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Three.js r128 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
   <style>
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: var(--nav-h) var(--pad) 0;
-      position: relative;
-      overflow: hidden;
+    /* =========================================================================
+       MINIMALIST ARCHITECTURAL PALETTE
+       Dark Mode = Midnight Slate & Soft Sapphire (True Analogue of Light Mode)
+       Light Mode = Warm Alabaster & Fountain-Pen Sapphire
+       ========================================================================= */
+    :root {
+      --bg: #0c1017;
+      --bg-surface: rgba(16, 21, 31, 0.78);
+      --bg-surface-strong: rgba(17, 23, 34, 0.92);
+      --bg-card: rgba(25, 33, 48, 0.62);
+      --blur-tint: rgba(12, 16, 23, 0.56);
+      --accent: #7aa2f7;
+      --accent-rgb: 122, 162, 247;
+      --accent2: #8fa6bf;
+      --accent2-rgb: 143, 166, 191;
+      --text: #eceff4;
+      --text-muted: #9aa5b6;
+      --text-dim: #6b7688;
+      --border: rgba(122, 162, 247, 0.2);
+      --border-hover: rgba(122, 162, 247, 0.5);
+      --border-subtle: rgba(236, 239, 244, 0.08);
+      --shadow-panel: 0 24px 60px -14px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(122, 162, 247, 0.12);
+      --shadow-pill: 0 10px 28px -8px rgba(0, 0, 0, 0.45);
+      --vignette-edge: rgba(7, 10, 15, 0.74);
     }
-    .hero-inner {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 5rem;
-      align-items: center;
+
+    [data-theme="light"] {
+      --bg: #f6f4ef;
+      --bg-surface: rgba(252, 251, 248, 0.82);
+      --bg-surface-strong: rgba(253, 252, 250, 0.94);
+      --bg-card: rgba(242, 239, 232, 0.76);
+      --blur-tint: rgba(246, 244, 239, 0.52);
+      --accent: #2b4ea8;
+      --accent-rgb: 43, 78, 168;
+      --accent2: #4a728c;
+      --accent2-rgb: 74, 114, 140;
+      --text: #181715;
+      --text-muted: #524e48;
+      --text-dim: #7d776e;
+      --border: rgba(43, 78, 168, 0.18);
+      --border-hover: rgba(43, 78, 168, 0.48);
+      --border-subtle: rgba(24, 23, 21, 0.08);
+      --shadow-panel: 0 24px 56px -14px rgba(24, 28, 42, 0.14), 0 0 0 1px rgba(43, 78, 168, 0.1);
+      --shadow-pill: 0 8px 24px -6px rgba(24, 28, 42, 0.1);
+      --vignette-edge: rgba(226, 221, 212, 0.66);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
       width: 100%;
-    }
-    .hero-eyebrow {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--accent);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.15s forwards;
-    }
-    .hero-eyebrow::before {
-      content: '';
-      width: 28px; height: 1px;
-      background: var(--accent);
-    }
-    .hero-name {
-      font-family: var(--serif);
-      font-size: clamp(3.2rem, 6.5vw, 5.8rem);
-      font-weight: 300;
-      line-height: 1.0;
-      margin-bottom: 1.2rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.3s forwards;
-    }
-    .hero-name em {
-      font-style: italic;
-      color: var(--accent);
-      display: block;
-    }
-    .hero-degree {
-      font-family: var(--serif);
-      font-size: clamp(1rem, 2vw, 1.35rem);
-      font-weight: 300;
-      color: var(--text-muted);
-      margin-bottom: 0.6rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.45s forwards;
-    }
-    .hero-inst {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--accent2);
-      letter-spacing: 0.08em;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.55s forwards;
-    }
-    .hero-bio {
-      font-size: 0.93rem;
-      color: var(--text-muted);
-      line-height: 1.9;
-      max-width: 560px;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.65s forwards;
-    }
-    .hero-ctas {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.8s forwards;
-    }
-    .hero-socials {
-      display: flex;
-      gap: 1.25rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.95s forwards;
-    }
-    .hero-socials a {
-      width: 36px; height: 36px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: all 0.25s;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-    }
-    .hero-socials a:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-3px);
-    }
-    /* Photo */
-    .hero-photo-wrap {
-      position: relative;
-      opacity: 0;
-      animation: fadeIn 1.2s 0.5s forwards;
-    }
-    .hero-photo-frame {
-      width: 320px;
-      height: 400px;
-      position: relative;
-      margin-left: auto;
-    }
-    .hero-photo-frame::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      background: linear-gradient(135deg, var(--accent) 0%, transparent 50%, var(--accent2) 100%);
-      z-index: 0;
-    }
-    .hero-photo-placeholder {
-      position: relative;
-      z-index: 1;
-      width: calc(100% - 2px);
-      height: calc(100% - 2px);
-      margin: 1px;
-      background: var(--bg3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      color: var(--text-dim);
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-    }
-    .hero-photo-frame img {
-      position: relative;
-      z-index: 1;
-      width: calc(100% - 2px);
-      height: calc(100% - 2px);
-      margin: 1px;
-      object-fit: cover;
-      object-position: top center;
-      display: block;
-    }
-    .hero-deco {
-      position: absolute;
-      top: -20px; right: -20px;
-      width: 80px; height: 80px;
-      border: 1px solid var(--accent);
-      opacity: 0.2;
-    }
-    .hero-coords {
-      position: absolute;
-      bottom: -28px; left: 0;
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      color: var(--text-dim);
-      letter-spacing: 0.1em;
-    }
-    /* Scroll hint */
-    .scroll-hint {
-      position: absolute;
-      bottom: 36px; left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-dim);
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      animation: fadeIn 1.5s 1.8s both;
-    }
-    .scroll-line {
-      width: 1px; height: 38px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollPulse 2s infinite;
-    }
-
-    /* ── RESEARCH FOCUS CARDS ── */
-    #research-focus { background: var(--bg2); }
-    .focus-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1px;
-      background: var(--border);
-    }
-    .focus-card {
-      background: var(--bg2);
-      padding: 2.5rem 2rem;
-      transition: background 0.3s;
-      position: relative;
+      height: 100%;
+      height: 100dvh;
       overflow: hidden;
-    }
-    .focus-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 0; height: 2px;
-      background: var(--accent);
-      transition: width 0.5s;
-    }
-    .focus-card:hover { background: var(--bg3); }
-    .focus-card:hover::before { width: 100%; }
-    .fc-icon { font-size: 1.8rem; margin-bottom: 1.25rem; display: block; }
-    .fc-num {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      color: var(--text-dim);
-      letter-spacing: 0.15em;
-      margin-bottom: 0.8rem;
-    }
-    .fc-title {
-      font-family: var(--serif);
-      font-size: 1.2rem;
-      font-weight: 400;
-      margin-bottom: 0.75rem;
-      line-height: 1.3;
-    }
-    .fc-desc {
-      font-size: 0.83rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-    }
-
-    /* ── NEWS ── */
-    #news-section { background: var(--bg); }
-    .news-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-    .news-list { display: flex; flex-direction: column; }
-    .news-item {
-      display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 1.5rem;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .news-date {
-      font-family: var(--mono);
-      font-size: 0.63rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      padding-top: 2px;
-    }
-    .news-text {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-    .news-text a { color: var(--accent2); text-decoration: none; }
-    .news-text a:hover { text-decoration: underline; }
-
-    /* Quick links panel */
-    .quick-links { display: flex; flex-direction: column; gap: 1rem; }
-    .ql-item {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      padding: 1.25rem 1.5rem;
-      border: 1px solid var(--border);
-      text-decoration: none;
-      transition: all 0.25s;
-      background: var(--bg2);
-    }
-    .ql-item:hover { border-color: rgba(200,169,110,0.3); background: var(--bg3); transform: translateX(4px); }
-    .ql-icon {
-      font-family: var(--mono);
-      font-size: 1.1rem;
-      color: var(--accent);
-      flex-shrink: 0;
-    }
-    .ql-info { flex: 1; }
-    .ql-label {
-      font-family: var(--mono);
-      font-size: 0.63rem;
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    .ql-title {
-      font-family: var(--serif);
-      font-size: 1rem;
+      background-color: var(--bg);
       color: var(--text);
-    }
-    .ql-arrow {
-      font-family: var(--mono);
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      transition: color 0.2s;
-    }
-    .ql-item:hover .ql-arrow { color: var(--accent); }
-
-    /* ── PUBLICATIONS SNIPPET ── */
-    #pub-snippet { background: var(--bg2); }
-    .pub-item-home {
-      display: grid;
-      grid-template-columns: 70px 1fr;
-      gap: 1.5rem;
-      padding: 1.75rem 0;
-      border-bottom: 1px solid var(--border);
-      transition: all 0.2s;
-    }
-    .pub-item-home:first-child { border-top: 1px solid var(--border); }
-    .pub-item-home:hover { padding-left: 0.5rem; }
-    .pub-yr {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--accent);
-      padding-top: 4px;
-    }
-    .pub-ti {
-      font-family: var(--serif);
-      font-size: 1.05rem;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       font-weight: 400;
-      line-height: 1.4;
-      margin-bottom: 0.35rem;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+      transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
     }
-    .pub-au {
-      font-size: 0.8rem;
+
+    .font-serif-ed { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .font-mono-ed { font-family: 'DM Mono', monospace; }
+    .font-sans-ed { font-family: 'DM Sans', sans-serif; }
+
+    /* =========================================================================
+       DUAL-LAYER 3D STAGE WITH OPTICAL BACKGROUND BLUR ISOLATION
+       ========================================================================= */
+    #webgl-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .atmosphere-vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(var(--accent-rgb), 0.045) 0%, transparent 52%),
+        radial-gradient(circle at 50% 50%, transparent 58%, var(--vignette-edge) 100%);
+      transition: background 0.45s ease;
+    }
+
+    /* Full Background Blur Veil: sits ABOVE background 3D scene and BELOW focused 3D sculpture */
+    #focus-blur-veil {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background: var(--blur-tint);
+      backdrop-filter: blur(18px) saturate(110%);
+      -webkit-backdrop-filter: blur(18px) saturate(110%);
+      opacity: 0;
+      transition: opacity 0.48s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s ease;
+    }
+    #focus-blur-veil.active {
+      opacity: 1;
+    }
+
+    /* Foreground Isolated 3D Canvas (renders ONLY the selected structure sharply above the blur) */
+    #webgl-fg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    /* Unified Pointer Interaction Layer */
+    #interaction-stage {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 8;
+      cursor: grab;
+      touch-action: none;
+    }
+    #interaction-stage:active { cursor: grabbing; }
+
+    /* SVG Leader Lines */
+    #tether-svg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 14;
+      pointer-events: none;
+    }
+
+    /* =========================================================================
+       FLUID GLASS SURFACES & TACTILE BUTTONS
+       ========================================================================= */
+    .glass-surface {
+      background: var(--bg-surface);
+      backdrop-filter: blur(22px) saturate(130%);
+      -webkit-backdrop-filter: blur(22px) saturate(130%);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-pill);
+      transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .glass-panel {
+      background: var(--bg-surface-strong);
+      backdrop-filter: blur(26px) saturate(135%);
+      -webkit-backdrop-filter: blur(26px) saturate(135%);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-panel);
+      transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .ui-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: transparent;
+      border: 1px solid transparent;
       color: var(--text-muted);
-      margin-bottom: 0.25rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition:
+        color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .pub-au strong { color: var(--accent); font-weight: 500; }
-    .pub-ve {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--accent2);
+    .ui-btn:hover {
+      color: var(--text);
+      background: rgba(var(--accent-rgb), 0.1);
+      border-color: var(--border);
     }
-    .pub-badges-row {
-      display: flex;
+    .ui-btn:active {
+      transform: scale(0.95);
+    }
+    .ui-btn.is-active {
+      color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.14);
+      border-color: var(--border-hover);
+      box-shadow: 0 2px 12px rgba(var(--accent-rgb), 0.12);
+    }
+
+    .ui-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       gap: 0.4rem;
-      flex-wrap: wrap;
-      margin-top: 0.5rem;
+      background: var(--bg-surface);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 9999px;
+      box-shadow: var(--shadow-pill);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .badge {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.08em;
-      padding: 0.2rem 0.55rem;
-      border: 1px solid;
+    .ui-pill:hover {
+      color: var(--text);
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+    .ui-pill:active {
+      transform: scale(0.95);
+    }
+    .ui-pill.is-active {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.14);
+    }
+
+    .card-link {
+      display: block;
       text-decoration: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      transition:
+        border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .badge-gold { border-color: var(--accent); color: var(--accent); }
-    .badge-blue { border-color: var(--accent2); color: var(--accent2); }
-    .badge-purple { border-color: var(--accent3); color: var(--accent3); }
-
-    @media (max-width: 900px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-photo-wrap { display: none; }
-      .news-grid { grid-template-columns: 1fr; }
+    .card-link:hover {
+      border-color: var(--border-hover);
+      background: rgba(var(--accent-rgb), 0.08);
+      transform: translateY(-1px);
+    }
+    .card-link:active {
+      transform: scale(0.985);
     }
 
+    /* =========================================================================
+       3D PROJECTED NODE TAGS & HOVER CALLOUT
+       ========================================================================= */
+    .projected-tag {
+      position: fixed;
+      z-index: 15;
+      transform: translate(-50%, -100%);
+      pointer-events: auto;
+      cursor: pointer;
+      padding: 5px 11px;
+      border-radius: 9999px;
+      background: var(--bg-surface);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-pill);
+      transition:
+        opacity 0.26s ease,
+        transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+      white-space: nowrap;
+    }
+    .projected-tag.is-hovered {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.14);
+      transform: translate(-50%, -118%) scale(1.06);
+    }
 
+    #hover-callout {
+      position: fixed;
+      z-index: 16;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(14px, -50%) scale(0.96);
+      transition: opacity 0.2s ease, transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #hover-callout.visible {
+      opacity: 1;
+      transform: translate(20px, -50%) scale(1);
+    }
 
-/* ── COURSES WIDGET (home) ── */
-  .cw-widget {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    overflow: hidden;
-    position: relative;
-  }
-  .cw-widget::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 2px;
-    background: linear-gradient(to right, var(--accent3), transparent);
-  }
-  .cw-top {
-    padding: 1.4rem 1.75rem 1rem;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .cw-label {
-    font-family: var(--mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent3);
-    margin-bottom: 0.35rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .cw-label::before {
-    content: '';
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--accent3);
-    animation: cwPulse 1.8s ease-in-out infinite;
-  }
-  @keyframes cwPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.3; transform: scale(0.7); }
-  }
-  .cw-sem-title {
-    font-family: var(--serif);
-    font-size: 1.05rem;
-    font-weight: 400;
-  }
-  .cw-sem-title em { color: var(--accent3); font-style: italic; }
-  .cw-cpi-box {
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .cw-cpi-val {
-    font-family: var(--serif);
-    font-size: 2rem;
-    font-weight: 300;
-    color: var(--accent);
-    line-height: 1;
-  }
-  .cw-cpi-label {
-    font-family: var(--mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.1em;
-    color: var(--text-dim);
-    margin-top: 0.2rem;
-    text-transform: uppercase;
-  }
-  .cw-divider {
-    height: 1px;
-    background: var(--border);
-    margin: 0 1.75rem;
-  }
-  .cw-course-list {
-    padding: 0.4rem 0;
-  }
-  .cw-row {
-    display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.65rem 1.75rem;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
-    cursor: default;
-  }
-  .cw-row:last-child { border-bottom: none; }
-  .cw-row:hover { background: var(--bg3); }
-  .cw-code {
-    font-family: var(--mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.07em;
-    color: var(--accent3);
-    min-width: 52px;
-  }
-  .cw-name {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    line-height: 1.3;
-  }
-  .cw-credits {
-    font-family: var(--mono);
-    font-size: 0.55rem;
-    color: var(--text-dim);
-    letter-spacing: 0.06em;
-    white-space: nowrap;
-  }
-  .cw-grade-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .cw-grade-dot.grade-O  { background: var(--accent); }
-  .cw-grade-dot.grade-A  { background: var(--accent2); }
-  .cw-grade-dot.grade-Bp { background: #7a9ec8; }
-  .cw-grade-dot.grade-B  { background: #7a9ec8; opacity: 0.7; }
-  .cw-grade-dot.grade-IP { background: var(--accent3); animation: cwPulse 1.8s infinite; }
-  .cw-footer-row {
-    padding: 0.9rem 1.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--bg3);
-    border-top: 1px solid var(--border);
-  }
-  .cw-progress-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    flex: 1;
-    margin-right: 2rem;
-  }
-  .cw-progress-label {
-    font-family: var(--mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.1em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    display: flex;
-    justify-content: space-between;
-  }
-  .cw-progress-bar {
-    height: 2px;
-    background: var(--border);
-    position: relative;
-    overflow: hidden;
-  }
-  .cw-progress-fill {
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    background: linear-gradient(to right, var(--accent3), var(--accent));
-    width: 80%; /* 8 of 10 semesters */
-    transition: width 1s ease;
-  }
+    /* =========================================================================
+       FLOATING TITLE OVERLAY (NO HEADER BAR)
+       ========================================================================= */
+    #title-block {
+      transition: opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1), transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #title-block.compact {
+      opacity: 0.72;
+      transform: scale(0.94);
+      transform-origin: top left;
+    }
+    @media (max-width: 1023px) {
+      #title-block.compact {
+        opacity: 0;
+        transform: translateY(-8px);
+        pointer-events: none;
+      }
+    }
 
+    /* =========================================================================
+       DETAIL INSPECTION PANEL (SIDE CARD ON DESKTOP, NATIVE BOTTOM SHEET ON MOBILE)
+       ========================================================================= */
+    #detail-wrap {
+      position: fixed;
+      z-index: 22;
+      pointer-events: none;
+    }
 
+    #detail-panel {
+      pointer-events: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(30px) scale(0.97);
+      transition:
+        transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0.3s ease;
+      user-select: text;
+    }
+    #detail-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+    }
 
+    /* Native Mobile Bottom Sheet Layout */
+    @media (max-width: 1023px) {
+      #detail-wrap {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        padding: 0;
+      }
+      #detail-panel {
+        border-radius: 22px 22px 0 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        max-height: 50dvh;
+        transform: translateY(100%);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      #detail-panel.open {
+        transform: translateY(0);
+      }
+    }
 
+    /* Bottom Dock smoothly hides on mobile when inspecting so sheet has full room */
+    #bottom-dock-wrap {
+      transition: opacity 0.3s ease, transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @media (max-width: 1023px) {
+      #bottom-dock-wrap.mobile-hidden {
+        opacity: 0;
+        transform: translate(-50%, 24px);
+        pointer-events: none;
+      }
+    }
 
+    /* Tab Content Cross-fade */
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .tab-animate {
+      animation: tabFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
+    /* Scrollbars */
+    .ed-scroll {
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ed-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+    .ed-scroll::-webkit-scrollbar-track { background: transparent; }
+    .ed-scroll::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), 0.36); border-radius: 99px; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-
-
-
-
-
-
-
-
-
-    
-
-/* Reading Widget */
-.reading-widget-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-}
- 
-/* Mini animated book card */
-.rw-book-card {
-  display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
-  padding: 1.5rem;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  position: relative;
-  overflow: hidden;
-}
-.rw-book-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(to right, var(--accent), transparent);
-}
- 
-/* Mini 3D book */
-.rw-book-3d {
-  width: 68px;
-  height: 90px;
-  flex-shrink: 0;
-  perspective: 400px;
-}
-.rw-book-inner {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(145deg, #1a2a4a, #0d1628);
-  border-radius: 1px 4px 4px 1px;
-  border: 1px solid rgba(200,169,110,0.2);
-  box-shadow: -4px 4px 12px rgba(0,0,0,0.5), inset -2px 0 5px rgba(0,0,0,0.4);
-  transform: rotateY(-18deg);
-  animation: rw-float 4s ease-in-out infinite;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 0.5rem 0.4rem;
-}
-@keyframes rw-float {
-  0%, 100% { transform: rotateY(-18deg) translateY(0); }
-  50% { transform: rotateY(-18deg) translateY(-4px); }
-}
-.rw-book-title {
-  font-family: var(--serif);
-  font-size: 0.5rem;
-  color: var(--accent);
-  text-align: center;
-  line-height: 1.3;
-}
-.rw-book-deco {
-  width: 28px; height: 1px;
-  background: linear-gradient(to right, transparent, rgba(200,169,110,0.5), transparent);
-}
-.rw-book-author {
-  font-family: var(--mono);
-  font-size: 0.4rem;
-  color: rgba(200,169,110,0.45);
-  text-align: center;
-  letter-spacing: 0.06em;
-}
- 
-.rw-book-info { flex: 1; }
-.rw-book-name {
-  font-family: var(--serif);
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.3;
-  margin-bottom: 0.15rem;
-}
-.rw-book-by {
-  font-size: 0.75rem;
-  color: var(--accent2);
-  margin-bottom: 0.6rem;
-}
-.rw-book-note {
-  font-size: 0.76rem;
-  color: var(--text-muted);
-  font-style: italic;
-  line-height: 1.65;
-  margin-bottom: 0.85rem;
-}
-.rw-prog-wrap { display: flex; align-items: center; gap: 0.65rem; }
-.rw-prog-bar {
-  flex: 1;
-  height: 2px;
-  background: var(--border);
-  position: relative;
-  overflow: hidden;
-}
-.rw-prog-fill {
-  height: 100%;
-  background: linear-gradient(to right, var(--accent), var(--accent2));
-  width: var(--prog);
-  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
-}
-.rw-prog-label {
-  font-family: var(--mono);
-  font-size: 0.58rem;
-  color: var(--text-dim);
-  letter-spacing: 0.08em;
-}
- 
-/* Paper list */
-.rw-paper-list { display: flex; flex-direction: column; gap: 0; }
-.rw-paper-item {
-  display: grid;
-  grid-template-columns: 10px 1fr auto;
-  gap: 0.85rem;
-  align-items: center;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--border);
-  transition: transform 0.2s;
-}
-.rw-paper-item:hover { transform: translateX(4px); }
-.rw-paper-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.rw-dot-reading { background: var(--accent2); animation: pulse-dot 2s infinite; }
-.rw-dot-queue { background: var(--text-dim); }
-@keyframes pulse-dot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.4); opacity: 0.6; }
-}
-.rw-paper-title {
-  font-family: var(--serif);
-  font-size: 0.88rem;
-  font-weight: 400;
-  line-height: 1.35;
-}
-.rw-paper-author {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  color: var(--text-dim);
-  letter-spacing: 0.06em;
-  margin-top: 0.1rem;
-}
-.rw-paper-status {
-  font-family: var(--mono);
-  font-size: 0.55rem;
-  letter-spacing: 0.1em;
-  padding: 0.15rem 0.5rem;
-  border: 1px solid;
-  white-space: nowrap;
-}
-.rw-status-reading { color: var(--accent2); border-color: rgba(123,158,168,0.3); }
-.rw-status-queue { color: var(--text-dim); border-color: var(--border); }
- 
-@media (max-width: 768px) {
-  .reading-widget-grid { grid-template-columns: 1fr; gap: 3rem; }
-}
-
-
-
-
-
-
-
-
-
-
-    
+    .text-accent { color: var(--accent); }
+    .text-accent2 { color: var(--accent2); }
+    .text-main { color: var(--text); }
+    .text-muted { color: var(--text-muted); }
+    .text-dim { color: var(--text-dim); }
+    .border-soft { border-color: var(--border-subtle); }
+    .border-accent { border-color: var(--border); }
+    .bg-card { background: var(--bg-card); }
   </style>
 </head>
-  <script src="script.js"></script>
   <script src="/site-extras.js" defer></script>
 <body>
+  <!-- Layer 1: Background 3D Stage (floor, core, non-focused structures) -->
+  <div id="webgl-bg" aria-hidden="true"></div>
 
-<!-- NAV -->
-<nav>
-  <a href="/" class="nav-logo">S<span>.</span>Ganguly</a>
+  <!-- Layer 2: Subtle Vignette -->
+  <div class="atmosphere-vignette"></div>
 
-  <ul class="nav-links">
-    <li><a href="/"  class="active">Home</a></li>
-    <li><a href="/research/">Research</a></li>
-    <li><a href="/cv/">About Me</a></li>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="/resources/">Resources</a></li>
-    <li><a href="/open_board/">open_board</a></li>
-    <li><a href="/courses/">Courses</a></li>
-    <li><a href="/gallery/">Gallery</a></li>
-    <li><a href="/interests/">Interests</a></li>
-    <li><a href="/contact/">Contact</a></li>
-  </ul>
-<button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">LIGHT</button>
-  <button class="nav-hamburger" id="menuBtn">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
+  <!-- Layer 3: Optical Background Blur Veil (activates when inspecting a structure) -->
+  <div id="focus-blur-veil" aria-hidden="true"></div>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="bg-blob" style="width:700px;height:700px;background:radial-gradient(circle,rgba(200,169,110,0.055) 0%,transparent 70%);top:5%;right:-150px;"></div>
-  <div class="bg-blob" style="width:400px;height:400px;background:radial-gradient(circle,rgba(123,158,168,0.05) 0%,transparent 70%);bottom:5%;left:-80px;"></div>
+  <!-- Layer 4: Foreground Isolated 3D Stage (renders ONLY the focused structure sharply) -->
+  <div id="webgl-fg" aria-hidden="true"></div>
 
-  <div class="hero-inner">
-    <div class="hero-text">
-      <div class="hero-eyebrow">Quantum Condensed Matter Physics</div>
-      <h1 class="hero-name">
-        Samriddha<em>Ganguly</em>
+  <!-- Layer 5: Unified Touch / Pointer Interaction Surface -->
+  <div id="interaction-stage" aria-label="Interactive 3D Physics Observatory"></div>
+
+  <!-- Layer 6: Architectural Hairline Leader Lines -->
+  <svg id="tether-svg" aria-hidden="true">
+    <polyline id="hover-tether-line" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3" opacity="0" />
+    <circle id="hover-tether-dot" r="2.8" fill="var(--accent)" opacity="0" />
+
+    <polyline id="detail-tether-line" fill="none" stroke="var(--accent)" stroke-width="1.1" opacity="0" />
+    <circle id="detail-tether-dot" r="3.5" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5" opacity="0" />
+  </svg>
+
+  <!-- 3D Projected Floating Labels (Overview Mode) -->
+  <div id="projected-labels-layer"></div>
+
+  <!-- Desktop Hover Summary Callout -->
+  <div id="hover-callout" class="glass-panel rounded-xl px-4 py-3 max-w-[245px]">
+    <div class="font-mono-ed text-[10px] tracking-[0.16em] text-accent" id="hc-code">01 / PROFILE</div>
+    <div class="font-serif-ed text-lg font-medium text-main mt-0.5 leading-tight" id="hc-title">Samriddha Ganguly</div>
+    <div class="font-sans-ed text-xs text-muted mt-1 leading-snug" id="hc-desc">BS-MS Physics at IISER Bhopal and CEA Grenoble.</div>
+    <div class="font-mono-ed text-[9px] text-dim mt-2 uppercase tracking-widest">Click to inspect</div>
+  </div>
+
+  <!-- =========================================================================
+       MINIMAL FLOATING TITLE (TOP-LEFT, NO HEADER BAR)
+       ========================================================================= -->
+  <div id="title-block" class="fixed top-4 left-4 sm:top-7 sm:left-8 z-30 pointer-events-none" style="padding-top: env(safe-area-inset-top, 0px);">
+    <div class="pointer-events-auto">
+      <div class="font-mono-ed text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-accent flex items-center gap-2">
+        <span class="w-4 h-px bg-[var(--accent)]"></span>
+        Quantum Condensed Matter
+      </div>
+      <h1 class="font-serif-ed text-2xl sm:text-4xl font-normal tracking-tight text-main leading-none mt-1">
+        Samriddha <em class="italic text-accent font-normal">Ganguly</em>
       </h1>
-      <p class="hero-degree">BS–MS Physics Student</p>
-      <p class="hero-inst">IISER Bhopal &nbsp;·&nbsp; 2022–2027 (Expected) &nbsp;·&nbsp; CGPA 3.8/4.0</p>
-      <p class="hero-bio">
-        Working at the intersection of topology, geometry, and quantum matter.
-        My research focuses on unconventional superconductivity, proximitized pairing in heterostructures, quantum magnetism, and engineered quantum materials, combining analytical and numerical methods toward experimentally relevant predictions.
+      <p class="font-mono-ed text-[10px] sm:text-[11px] text-accent2 tracking-wider mt-1.5">
+        IISER Bhopal &middot; CEA Grenoble
       </p>
-      <div class="hero-ctas">
-        <a href="/research/" class="btn-primary">View Research →</a>
-        <a href="/cv/" class="btn-outline">Curriculum Vitae</a>
-      </div>
-      <div class="hero-socials">
-        <a href="mailto:samriddha22@iiserb.ac.in" title="Email">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 4h16v16H4z" stroke-linejoin="round"/><path d="M4 4l8 9 8-9"/></svg>
-        </a>
-        <a href="https://github.com/samriddhaganguly" target="_blank" title="GitHub">
-          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844a9.59 9.59 0 012.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-        </a>
-        <a href="https://scholar.google.com/citations?user=A7Ec0RYAAAAJ&hl=en" target="_blank" title="Google Scholar">
-          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 100 14 7 7 0 000-14z"/></svg>
-        </a>
-        <a href="https://www.linkedin.com/in/samriddha-ganguly-3360bb16a/" target="_blank" title="LinkedIn">
-          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        </a>
-      </div>
-    </div>
-
-    <div class="hero-photo-wrap">
-      <div class="hero-photo-frame">
-        <div class="hero-deco"></div>
-        <img src="assets/photo.jpg" alt="Samriddha Ganguly"/>
-      </div>
-      <div class="hero-coords">23.2599° N, 77.4126° E — Bhopal, India</div>
     </div>
   </div>
 
-</section>
+  <!-- =========================================================================
+       MINIMAL FLOATING CONTROLS (TOP-RIGHT)
+       ========================================================================= -->
+  <div class="fixed top-4 right-4 sm:top-7 sm:right-8 z-30 flex items-center gap-2" style="padding-top: env(safe-area-inset-top, 0px);">
+    <button id="audio-btn" type="button" aria-label="Toggle subtle sound effects" class="ui-pill px-3 py-1.5 sm:px-3.5 sm:py-2 font-mono-ed text-[10px] tracking-[0.14em] uppercase">
+      <span id="audio-dot" class="w-1.5 h-1.5 rounded-full bg-[var(--text-dim)] transition-colors"></span>
+      <span class="hidden sm:inline">SFX</span>
+      <span id="audio-label">OFF</span>
+    </button>
 
-<!-- RESEARCH FOCUS -->
-<section id="research-focus" class="section">
-  <div class="section-inner">
-    <div class="section-label">Research Areas</div>
-    <h2 class="section-heading">What I Work <em>On</em></h2>
-    <div class="focus-grid">
-      <div class="focus-card reveal">
-        <span class="fc-num">01</span>
-        <span class="fc-icon">⬡</span>
-        <h3 class="fc-title">Non trivial topology and quantum geometry in materials</h3>
-        <p class="fc-desc">I work to find materials with interesting non trivial band structures that can have a topological or quantum geometric origin of various exotic states of superconducting and other phenomena.</p>
-      </div>
-      <div class="focus-card reveal">
-        <span class="fc-num">02</span>
-        <span class="fc-icon">◉</span>
-        <h3 class="fc-title">Unconventional Superconductivity and Hybrid Superconductor Heterostructures</h3>
-        <p class="fc-desc">Unconventional superconducting phases, Majorana zero modes, and the interplay of topology with magnetism and spin-orbit coupling in one- and two-dimensional systems.  Proximity effects in hybrid systems spanning superconductors coupled to ferromagnets, semiconductors, and other correlated materials: encompassing both engineered and naturally occurring heterostructures. </p>
-      </div>
-<div class="focus-card reveal">
-  <span class="fc-num">03</span>
-  <span class="fc-icon">⇅</span>
-  <h3 class="fc-title">Open Quantum Systems</h3>
-  <p class="fc-desc">
-   I like to explore problems where the environment (the "bath") has non-trivial coupling to a quantum system and study different properties of such systems like Decoherence in different coupling regimes. I recently worked on Floquet driven dissipative systems.
-  </p>
-</div>
-      <div class="focus-card reveal">
-        <span class="fc-num">04</span>
-        <span class="fc-icon">∿</span>
-        <h3 class="fc-title">Computational & Data-Driven Physics</h3>
-        <p class="fc-desc">I am well versed in exact diagonalization and Monte Carlo methods. I am learning about Machine learning approaches for phase identification and experimental data analysis. I always look to find computational methods which can make our life easier.</p>
-      </div>
-    </div>
-    <div style="margin-top:2.5rem;">
-      <a href="/research/" class="btn-outline">Full Research Overview →</a>
-    </div>
-  </div>
-</section>
-
-<!-- NEWS + QUICK LINKS -->
-<section id="news-section" class="section">
-  <div class="section-inner">
-    <div class="news-grid">
-      <div>
-        <div class="section-label">Updates</div>
-        <h2 class="section-heading">Recent <em>News</em></h2>
-        <div class="news-list">
-          <div class="news-item reveal">
-            <span class="news-date">May 2026</span>
-            <span class="news-text"> Research under Prof. Ravi Prakash Singh and Prof. Julia Meyer and Prof. Manuel Houzet at CEA Grenoble about superconducting heterostructures, more precisely on layered superconducting systems with potential for triplet correlations and unconventional states. </span>
-          </div>
-          <div class="news-item reveal">
-            <span class="news-date">Feb 2026</span>
-            <span class="news-text"> Research with Dr. Nirmal Ganguli on Floquet-induced topological phase transitions. Ongoing work on submission of a paper on the same.</span>
-          </div>
-          <div class="news-item reveal">
-            <span class="news-date">Feb 2026</span>
-            <span class="news-text">Paper published in <em>Journal of Physics: Condensed Matter</em> — <a href="https://doi.org/10.1088/1361-648X/ae44df" target="_blank">Decoherence of chiral magnon edge modes</a>.</span>
-          </div>
-          <div class="news-item reveal">
-            <span class="news-date">Dec 2025</span>
-            <span class="news-text">A poster presentation at <a href="https://sites.google.com/view/qmec-2025/home">QMEC 2025</a> on topological magnon nodal lines in layered antiferromagnets. Poster was also accepted at 12th National Conference on Material Science, IIST Trivandrum.</span>
-          </div>
-          <div class="news-item reveal">
-            <span class="news-date">Nov 2026</span>
-            <span class="news-text">Paper published in IEEE Sensors Letters on <a href="https://ieeexplore.ieee.org/document/11271140">deep learning for pipeline leak detection</a>.</span>
-          </div>
-          <div class="news-item reveal">
-            <span class="news-date">Oct 2025</span>
-            <span class="news-text">Completed Research Internship with Dr. Nirmal Ganguli, IISER Bhopal on fundamentals of Topological Band Theory. Will continue my work on Topological Magnons.</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="section-label">Quick Access</div>
-        <h2 class="section-heading">Explore <em>Portfolio</em></h2>
-        <div class="quick-links">
-          <a href="/publications/" class="ql-item reveal">
-            <span class="ql-icon">◈</span>
-            <div class="ql-info">
-              <div class="ql-label">Publications</div>
-              <div class="ql-title">2 peer-reviewed papers</div>
-            </div>
-            <span class="ql-arrow">→</span>
-          </a>
-          <a href="/resources/" class="ql-item">
-  <div class="ql-icon">∂</div>
-  <div class="ql-info">
-    <div class="ql-label">Library</div>
-    <div class="ql-title">Physics Resources</div>
-  </div>
-  <div class="ql-arrow">→</div>
-</a>
-          <a href="/blog/" class="ql-item reveal">
-            <span class="ql-icon">✦</span>
-            <div class="ql-info">
-              <div class="ql-label">Blog</div>
-              <div class="ql-title">Interesting stuff to me which I write for you guys</div>
-            </div>
-            <span class="ql-arrow">→</span>
-          </a>
-          <a href="/gallery/" class="ql-item reveal">
-            <span class="ql-icon">◻</span>
-            <div class="ql-info">
-              <div class="ql-label">Gallery</div>
-              <div class="ql-title">Stuff from academic visits and life</div>
-            </div>
-            <span class="ql-arrow">→</span>
-          </a>
-          <a href="/cv/" class="ql-item reveal">
-            <span class="ql-icon">⊟</span>
-            <div class="ql-info">
-              <div class="ql-label">Curriculum Vitae</div>
-              <div class="ql-title">Full academic record</div>
-            </div>
-            <span class="ql-arrow">→</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PUBLICATIONS SNIPPET -->
-<section id="pub-snippet" class="section">
-  <div class="section-inner">
-    <div class="section-label">Selected Publications</div>
-    <h2 class="section-heading">Recent <em>Work</em></h2>
-
-    <div class="pub-item-home reveal">
-      <div class="pub-yr">2026</div>
-      <div>
-        <div class="pub-ti">Decoherence of chiral magnon edge modes in a topological bosonic Chern insulator</div>
-        <div class="pub-au"><strong>Samriddha Ganguly</strong></div>
-        <div class="pub-ve">Journal of Physics: Condensed Matter, 38, 075801 (2026) — Focus Issue on Topological Physics</div>
-        <div class="pub-badges-row">
-          <a class="badge badge-gold" href="https://doi.org/10.1088/1361-648X/ae44df" target="_blank">DOI</a>
-          <span class="badge badge-purple">Focus Issue</span>
-          <span class="badge badge-blue">Condensed Matter</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="pub-item-home reveal">
-      <div class="pub-yr">2025</div>
-      <div>
-        <div class="pub-ti">A Data-Driven Approach to Leak Identification and Severity Analysis in Pipelines Using Acoustic Sensing and Deep Learning</div>
-        <div class="pub-au">Mayukh Biswas; Aditya Narayan; Debaudh Ghosh; <strong>Samriddha Ganguly</strong>; Raj Rakshit; Chirabrata Bhaumik</div>
-        <div class="pub-ve">IEEE Sensors Letters, 10(1) (2025)</div>
-        <div class="pub-badges-row">
-          <a class="badge badge-gold" href="https://doi.org/10.1109/LSENS.2025.3638602" target="_blank">DOI</a>
-          <span class="badge badge-blue">IEEE</span>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:2rem;">
-      <a href="/publications/" class="btn-outline">All Publications →</a>
-    </div>
-  </div>
-</section>
-<section id="reading-widget" class="section" style="background: var(--bg2);">
-  <div class="section-inner">
-    <div class="reading-widget-grid">
- 
-      <!-- NON-ACADEMIC -->
-      <div class="rw-col reveal">
-        <div class="section-label">Currently Reading</div>
-        <h2 class="section-heading" style="margin-bottom:1.5rem;">On the <em>Shelf</em></h2>
- 
-        <!-- Animated mini book card -->
-        <div class="rw-book-card">
-          <div class="rw-book-3d">
-            <div class="rw-book-inner">
-              <div class="rw-book-title">The Master<br>&amp; Margarita</div>
-              <div class="rw-book-deco"></div>
-              <div class="rw-book-author">Bulgakov</div>
-            </div>
-          </div>
-          <div class="rw-book-info">
-            <div class="rw-book-name">The Master and Margarita</div>
-            <div class="rw-book-by">Mikhail Bulgakov</div>
-            <div class="rw-book-note">"The Devil visits Soviet Moscow. Chaos and beauty."</div>
-            <div class="rw-prog-wrap">
-              <div class="rw-prog-bar">
-                <div class="rw-prog-fill" style="--prog:10%;"></div>
-              </div>
-              <span class="rw-prog-label">10%</span>
-            </div>
-          </div>
-        </div>
- 
-        <a href="/reading/" class="btn-outline" style="margin-top:1.5rem;font-size:0.65rem;">Full Bookshelf →</a>
-      </div>
- 
-      <!-- ACADEMIC -->
-      <div class="rw-col reveal">
-        <div class="section-label">Academic Stack</div>
-        <h2 class="section-heading" style="margin-bottom:1.5rem;">On the <em>Desk</em></h2>
- 
-<div class="rw-paper-list">
-  <div class="rw-paper-item">
-    <div class="rw-paper-dot rw-dot-reading"></div>
-    <div>
-      <div class="rw-paper-title">Bogoliubov Quasiparticles in Superconducting Qubits</div>
-      <div class="rw-paper-author">Glazman, Catelani · SciPost Physics Lecture Notes 2021</div>
-    </div>
-    <span class="rw-paper-status rw-status-reading">Reading</span>
+    <button id="theme-btn" type="button" aria-label="Switch Light or Dark Theme" class="ui-pill px-3 py-1.5 sm:px-3.5 sm:py-2 font-mono-ed text-[10px] tracking-[0.14em] uppercase">
+      <span id="theme-label">LIGHT</span>
+    </button>
   </div>
 
-  <div class="rw-paper-item">
-    <div class="rw-paper-dot rw-dot-reading"></div>
-    <div>
-      <div class="rw-paper-title">Nonequilibrium physics of brain dynamics</div>
-      <div class="rw-paper-author">Nartallo-Kaluarachchi et al. · Physics Reports 2026</div>
-    </div>
-    <span class="rw-paper-status rw-status-reading">Reading</span>
+  <!-- Mobile Top-Left Back Pill (Appears only on mobile when inspecting a structure) -->
+  <button id="mobile-back-btn" type="button" class="lg:hidden fixed top-4 left-4 z-30 hidden ui-pill px-3 py-1.5 font-mono-ed text-[10px] tracking-[0.14em] uppercase" style="margin-top: env(safe-area-inset-top, 0px);">
+    &larr; Overview
+  </button>
+
+  <!-- Subtle Hint (Desktop Overview Only) -->
+  <div id="overview-hint" class="hidden lg:block fixed bottom-[4.8rem] left-1/2 -translate-x-1/2 z-20 pointer-events-none font-mono-ed text-[10px] tracking-[0.18em] uppercase text-dim transition-opacity duration-300">
+    Drag to Orbit &middot; Select a Structure &middot; Scroll or Use Arrows
   </div>
 
-  <div class="rw-paper-item">
-    <div class="rw-paper-dot rw-dot-queue"></div>
-    <div>
-      <div class="rw-paper-title">Quantum Cognition</div>
-      <div class="rw-paper-author">Pothos, Busemeyer · Annual Review of Psychology 2022</div>
-    </div>
-    <span class="rw-paper-status rw-status-queue">Queue</span>
-  </div>
+  <!-- Desktop Prev / Next Floating Arrows (Hidden on Mobile; Mobile uses sheet header controls) -->
+  <button id="nav-prev" type="button" aria-label="Previous Section" class="hidden fixed left-6 top-1/2 -translate-y-1/2 z-25 ui-pill w-10 h-10 font-mono-ed text-sm">
+    &larr;
+  </button>
+  <button id="nav-next" type="button" aria-label="Next Section" class="hidden fixed right-6 top-1/2 -translate-y-1/2 z-25 ui-pill w-10 h-10 font-mono-ed text-sm">
+    &rarr;
+  </button>
 
-  <div class="rw-paper-item">
-    <div class="rw-paper-dot rw-dot-queue"></div>
-    <div>
-      <div class="rw-paper-title">Dynamical Systems in Neuroscience</div>
-      <div class="rw-paper-author">Eugene M. Izhikevich · Textbook 2007</div>
-    </div>
-    <span class="rw-paper-status rw-status-queue">Queue</span>
-  </div>
-</div>
- 
-        <a href="/reading/#academic" class="btn-outline" style="margin-top:1.5rem;font-size:0.65rem;">Full Reading Stack →</a>
+  <!-- =========================================================================
+       DETAIL INSPECTION PANEL (SIDE CARD ON DESKTOP, BOTTOM SHEET ON MOBILE)
+       ========================================================================= -->
+  <div id="detail-wrap" class="lg:right-16 lg:top-20 lg:bottom-24 lg:w-[415px] xl:w-[448px] flex items-end lg:items-center justify-center">
+    <section id="detail-panel" class="glass-panel relative w-full lg:max-h-[78dvh] lg:rounded-2xl flex flex-col overflow-hidden" aria-live="polite">
+      <!-- Subtle Mobile Sheet Handle -->
+      <div class="lg:hidden w-full flex justify-center pt-2.5 pb-1 shrink-0">
+        <span class="w-9 h-1 rounded-full" style="background: var(--border-hover);"></span>
       </div>
- 
-    </div>
-  </div>
-</section>
- <section class="section" style="padding-top:0;" id="courses-widget">
-  <div class="section-inner">
-    <div class="section-label">Academic Record</div>
-    <h2 class="section-heading">Current <em>Coursework</em></h2>
- 
-    <div class="cw-widget reveal">
-      <!-- Header -->
-      <div class="cw-top">
-        <div>
-          <div class="cw-label">Live · 2025–2026 Semester I</div>
-          <div class="cw-sem-title">Semester <em>VIII</em> · BS-MS Physics</div>
+
+      <!-- Panel Header -->
+      <div class="px-4 sm:px-5 py-3 sm:py-4 border-b border-soft flex items-center justify-between gap-2 shrink-0">
+        <div class="min-w-0">
+          <div class="font-mono-ed text-[10px] tracking-[0.18em] uppercase text-accent" id="dp-code">01 / PROFILE</div>
+          <h2 class="font-serif-ed text-xl sm:text-2xl font-medium text-main truncate leading-tight mt-0.5" id="dp-title">Samriddha Ganguly</h2>
         </div>
-  
-      </div>
- 
-      <div class="cw-divider"></div>
- 
-      <!-- Current courses list -->
-      <div class="cw-course-list">
-        <div class="cw-row">
-          <span class="cw-code">PHY402o</span>
-          <span class="cw-name">Atomic and Molecular Physics</span>
-          <span class="cw-credits">4 cr</span>
-        </div>
-        <div class="cw-row">
-          <span class="cw-code">PHY404</span>
-          <span class="cw-name">Nuclear and Particle Physics</span>
-          <span class="cw-credits">3 cr</span>
-        </div>
-        <div class="cw-row">
-          <span class="cw-code">PHY406</span>
-          <span class="cw-name">Nuclear Laboratory</span>
-          <span class="cw-credits">4 cr</span>
-        </div>
-        <div class="cw-row">
-          <span class="cw-code">PHY620</span>
-          <span class="cw-name">Magnetism and Superconductivity</span>
-          <span class="cw-credits">4 cr</span>
-        </div>
-        <div class="cw-row">
-          <span class="cw-code">PHY644</span>
-          <span class="cw-name">Group Theory for Physicists</span>
-          <span class="cw-credits">4 cr</span>
-        </div>
-        <div class="cw-row">
-          <span class="cw-code">ECS676</span>
-          <span class="cw-name">Digital Circuits and Systems</span>
-          <span class="cw-credits">4 cr</span>
+
+        <div class="flex items-center gap-1.5 shrink-0">
+          <!-- Mobile Inline Prev/Next Steppers -->
+          <button id="m-prev-btn" type="button" aria-label="Previous Section" class="lg:hidden ui-btn w-8 h-8 font-mono-ed text-xs border border-soft">&larr;</button>
+          <button id="m-next-btn" type="button" aria-label="Next Section" class="lg:hidden ui-btn w-8 h-8 font-mono-ed text-xs border border-soft">&rarr;</button>
+
+          <button id="explode-btn" type="button" class="ui-btn px-2.5 sm:px-3 py-1.5 font-mono-ed text-[10px] tracking-[0.12em] uppercase border border-accent">
+            Explode
+          </button>
+          <button id="close-detail-btn" type="button" aria-label="Close panel" class="hidden lg:inline-flex ui-btn w-8 h-8 font-mono-ed text-xs border border-soft">
+            &times;
+          </button>
         </div>
       </div>
- 
-      <!-- Progress footer -->
-      <div class="cw-footer-row">
-        <div class="cw-progress-wrap">
-          <div class="cw-progress-label">
-            <span>Programme Progress</span>
-            <span>Sem 8 of 10 · 147 credits</span>
-          </div>
-          <div class="cw-progress-bar">
-            <div class="cw-progress-fill"></div>
-          </div>
-        </div>
-        <a href="/courses/" class="btn-outline" style="font-size:0.63rem;padding:0.6rem 1.2rem;white-space:nowrap;">
-          Full Course Record →
+
+      <!-- Sub-Option Tabs -->
+      <div id="dp-tabs" class="px-4 sm:px-5 py-2 border-b border-soft flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Scrollable Body -->
+      <div id="dp-body" class="ed-scroll p-4 sm:p-5 overflow-y-auto space-y-3 text-[13px] sm:text-[13.5px] leading-relaxed flex-1 text-main">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Footer with Direct Full-Page Link -->
+      <div class="px-4 sm:px-5 py-2.5 border-t border-soft flex items-center justify-between gap-2 font-mono-ed text-[10px] tracking-wider shrink-0">
+        <span class="text-dim truncate" id="dp-telemetry">DRAG MODEL TO ROTATE</span>
+        <a id="dp-full-link" href="/cv/" class="text-accent hover:underline no-underline uppercase tracking-[0.14em] shrink-0">
+          Full Page &rarr;
         </a>
       </div>
+    </section>
+  </div>
+
+  <!-- =========================================================================
+       FLUID FLOATING BOTTOM DOCK (RESPONSIVE FOR MOBILE & DESKTOP)
+       ========================================================================= -->
+  <nav id="bottom-dock-wrap" aria-label="Observatory Sections" class="fixed bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-30 w-[calc(100vw-1.25rem)] sm:w-auto max-w-3xl" style="padding-bottom: env(safe-area-inset-bottom, 0px);">
+    <div class="glass-surface rounded-full p-1 sm:p-1.5 flex items-center justify-between sm:justify-center gap-0.5 sm:gap-1 overflow-x-auto no-scrollbar">
+      <button id="dock-overview" type="button" class="ui-btn is-active px-2.5 sm:px-4 py-2 font-mono-ed text-[10px] sm:text-[11px] tracking-[0.1em] uppercase shrink-0">
+        <span class="hidden sm:inline">Overview</span>
+        <span class="sm:hidden">All</span>
+      </button>
+      <div class="w-px h-4 shrink-0" style="background: var(--border);"></div>
+      <div id="dock-nodes" class="flex items-center justify-between sm:justify-start gap-0.5 sm:gap-1 flex-1 sm:flex-initial">
+        <!-- 5 Module Pills populated by JS -->
+      </div>
     </div>
- 
-  </div>
-</section>
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <a href="/" class="footer-logo">S<span>.</span>Ganguly</a>
-    <ul class="footer-links">
-      <li><a href="/research/">Research</a></li>
-      <li><a href="/publications/">Publications</a></li>
-      <li><a href="/contact/">Contact</a></li>
-    </ul>
-    <span class="footer-copy">© 2026 Samriddha Ganguly</span>
-  </div>
-</footer>
+  </nav>
 
-<script>
-  // Mobile nav
-  document.getElementById('menuBtn').addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.toggle('open');
-  });
+  <!-- =========================================================================
+       DUAL-STAGE THREE.JS ENGINE & FLUID INTERACTION CONTROLLER
+       ========================================================================= -->
+  <script>
+    (function () {
+      'use strict';
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 60);
-        observer.unobserve(e.target);
+      /* -----------------------------------------------------------------------
+         1. MINIMALIST DUAL-THEME PALETTES (MIDNIGHT SLATE-SAPPHIRE / ALABASTER-SAPPHIRE)
+         ----------------------------------------------------------------------- */
+      const THEMES = {
+        dark: {
+          label: 'LIGHT',
+          primaryHex: 0x7aa2f7,   // Soft Luminous Sapphire (Dark Analogue of #2b4ea8)
+          secondaryHex: 0x8fa6bf, // Cool Silver-Slate (Dark Analogue of #4a728c)
+          accentHex: 0xc2d0e6,    // Mist Platinum Highlight
+          gridHex: 0x4c5d7a,
+          bgHex: 0x0c1017,
+          gridOpacity: 0.14,
+          particleOpacity: 0.45
+        },
+        light: {
+          label: 'DARK',
+          primaryHex: 0x2b4ea8,   // Fountain-Pen Sapphire
+          secondaryHex: 0x4a728c, // Slate Blue-Grey
+          accentHex: 0x1d3575,    // Deep Ink Indigo
+          gridHex: 0x8b99ad,
+          bgHex: 0xf6f4ef,
+          gridOpacity: 0.16,
+          particleOpacity: 0.4
+        }
+      };
+
+      let currentThemeKey = localStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', currentThemeKey);
+
+      /* -----------------------------------------------------------------------
+         2. SUBTLE HARMONIC WEB AUDIO (OFF BY DEFAULT)
+         ----------------------------------------------------------------------- */
+      const SoundFX = {
+        ctx: null,
+        enabled: false,
+        unlocked: false,
+
+        unlock() {
+          if (!this.ctx) {
+            try {
+              const AC = window.AudioContext || window.webkitAudioContext;
+              if (AC) this.ctx = new AC();
+            } catch (e) { this.enabled = false; return; }
+          }
+          if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+          this.unlocked = true;
+        },
+
+        chime(freq = 520, endFreq = null, duration = 0.09, gain = 0.016) {
+          if (!this.enabled || !this.unlocked || !this.ctx) return;
+          try {
+            const t = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const g = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, t);
+            if (endFreq !== null) osc.frequency.exponentialRampToValueAtTime(Math.max(80, endFreq), t + duration);
+            g.gain.setValueAtTime(0.0001, t);
+            g.gain.exponentialRampToValueAtTime(gain, t + 0.012);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+            osc.connect(g);
+            g.connect(this.ctx.destination);
+            osc.start(t);
+            osc.stop(t + duration + 0.02);
+          } catch (e) {}
+        },
+
+        hover() { this.chime(660, 740, 0.055, 0.011); },
+        select() {
+          this.chime(440, 554, 0.1, 0.016);
+          setTimeout(() => this.chime(659, 659, 0.09, 0.012), 55);
+        },
+        tab() { this.chime(587, 659, 0.065, 0.012); },
+        glide() { this.chime(340, 440, 0.14, 0.014); }
+      };
+
+      /* -----------------------------------------------------------------------
+         3. PORTFOLIO MODULES (CONNECTED TO REAL SITE ROUTES)
+         ----------------------------------------------------------------------- */
+      const MODULES = [
+        {
+          id: 'profile',
+          code: '01',
+          name: 'Profile',
+          panelTitle: 'Samriddha Ganguly',
+          shortDesc: 'BS-MS Physics at IISER Bhopal and CEA Grenoble. Quantum condensed matter.',
+          telemetry: 'IISER BHOPAL · CEA GRENOBLE',
+          fullUrl: '/cv/',
+          fullLabel: 'Full CV',
+          tabs: [
+            {
+              label: 'Overview',
+              html: `
+                <div class="flex items-start gap-3.5">
+                  <img src="assets/photo.jpg" alt="Samriddha Ganguly" onerror="this.style.display='none'" class="w-14 h-18 sm:w-16 sm:h-20 object-cover object-top rounded-lg border border-accent shrink-0" />
+                  <p class="text-main">
+                    Final-year BS-MS Physics student at <strong class="text-accent font-medium">IISER Bhopal</strong> (2022-2027, CGPA 3.8/4.0, CPI 9.50/10), working at the intersection of topology, quantum geometry, and unconventional superconductivity.
+                  </p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 font-mono-ed text-[11px]">
+                  <div class="p-2.5 rounded-lg bg-card border border-soft">
+                    <div class="text-[9px] text-dim uppercase tracking-wider">Institution</div>
+                    <div class="text-main mt-0.5">IISER Bhopal</div>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-card border border-soft">
+                    <div class="text-[9px] text-dim uppercase tracking-wider">Collaboration</div>
+                    <div class="text-main mt-0.5">CEA Grenoble</div>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-card border border-soft">
+                    <div class="text-[9px] text-dim uppercase tracking-wider">Standing</div>
+                    <div class="text-accent mt-0.5">9.50 / 10 CPI</div>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-card border border-soft">
+                    <div class="text-[9px] text-dim uppercase tracking-wider">CV Document</div>
+                    <a href="/assets/Samriddha_Ganguly_CV.pdf" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline no-underline mt-0.5 block">Download PDF &rarr;</a>
+                  </div>
+                </div>
+              `
+            },
+            {
+              label: 'News',
+              html: `
+                <div class="space-y-2 text-[12.5px]">
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="font-mono-ed text-[10px] text-accent">MAY 2026</div>
+                    <p class="text-muted mt-1">Research with Prof. Ravi Prakash Singh, Prof. Julia Meyer, and Prof. Manuel Houzet at CEA Grenoble on layered superconducting heterostructures and triplet correlations.</p>
+                  </div>
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="font-mono-ed text-[10px] text-accent">FEB 2026</div>
+                    <p class="text-muted mt-1">Paper published in <em class="text-main">J. Phys.: Condens. Matter</em> on decoherence of chiral magnon edge modes; Floquet topology work with Dr. Nirmal Ganguli.</p>
+                  </div>
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="font-mono-ed text-[10px] text-accent">DEC 2025</div>
+                    <p class="text-muted mt-1">Poster presentation at QMEC 2025 on topological magnon nodal lines in layered antiferromagnets.</p>
+                  </div>
+                </div>
+              `
+            },
+            {
+              label: 'Toolkit',
+              html: `
+                <div class="space-y-3">
+                  <div>
+                    <div class="font-mono-ed text-[10px] text-accent uppercase tracking-widest mb-1.5">Experimental</div>
+                    <div class="flex flex-wrap gap-1.5">
+                      ${['CVT Growth', 'SQUID / MPMS3', 'PPMS', 'AFM', 'XRD Rietveld', 'Raman'].map(s => `<span class="px-2.5 py-1 rounded-full bg-card border border-soft text-[11.5px] text-main">${s}</span>`).join('')}
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-mono-ed text-[10px] text-accent uppercase tracking-widest mb-1.5">Theory &amp; Compute</div>
+                    <div class="flex flex-wrap gap-1.5">
+                      ${['Eilenberger-Usadel', 'Lawrence-Doniach', 'Exact Diag.', 'Monte Carlo', 'Python / QuTiP', 'Mathematica', 'SystemVerilog'].map(s => `<span class="px-2.5 py-1 rounded-full bg-card border border-soft text-[11.5px] text-main">${s}</span>`).join('')}
+                    </div>
+                  </div>
+                </div>
+              `
+            }
+          ]
+        },
+        {
+          id: 'research',
+          code: '02',
+          name: 'Research',
+          panelTitle: 'Research Program',
+          shortDesc: 'Layered superconductors, band topology, open quantum systems, and numerics.',
+          telemetry: '4Hb-TaS2 · (PbS)1.13TaS2',
+          fullUrl: '/research/',
+          fullLabel: 'Research Page',
+          tabs: [
+            {
+              label: 'Superconductivity',
+              html: `
+                <div class="space-y-2.5">
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="font-mono-ed text-[10px] text-accent">MISFIT HETEROSTRUCTURE</div>
+                    <div class="font-serif-ed text-lg font-medium text-main mt-0.5">(PbS)<sub>1.13</sub>TaS<sub>2</sub></div>
+                    <p class="text-xs text-muted mt-1">Charge transfer, anisotropic upper critical fields, and weak interlayer Josephson coupling between PbS and TaS<sub>2</sub> sheets.</p>
+                  </div>
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="font-mono-ed text-[10px] text-accent">CHIRAL MULTILAYER TMD</div>
+                    <div class="font-serif-ed text-lg font-medium text-main mt-0.5">4Hb-TaS<sub>2</sub> &amp; Multilayer Models</div>
+                    <p class="text-xs text-muted mt-1">Intertwined charge density waves, triplet correlations, Lawrence-Doniach modeling, and nonequilibrium stimulated superconductivity.</p>
+                  </div>
+                </div>
+              `
+            },
+            {
+              label: 'Topology',
+              html: `
+                <div class="space-y-2.5">
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="font-mono-ed text-[10px] text-accent">QUANTUM GEOMETRY</div>
+                    <div class="font-serif-ed text-lg font-medium text-main mt-0.5">Dirac Nodal-Line Magnons</div>
+                    <p class="text-xs text-muted mt-1">Symmetry-protected nodal-line magnon crossings and nontrivial topological band structures in layered quantum magnets.</p>
+                  </div>
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="font-mono-ed text-[10px] text-accent">OPEN QUANTUM SYSTEMS</div>
+                    <div class="font-serif-ed text-lg font-medium text-main mt-0.5">Floquet &amp; Dissipative Regimes</div>
+                    <p class="text-xs text-muted mt-1">Environmental bath coupling, decoherence of chiral edge modes, and Floquet-induced topological phase transitions.</p>
+                  </div>
+                </div>
+              `
+            },
+            {
+              label: 'Numerics',
+              html: `
+                <div class="p-3.5 rounded-lg bg-card border border-soft">
+                  <div class="font-mono-ed text-[10px] text-accent">COMPUTATIONAL PHYSICS</div>
+                  <div class="font-serif-ed text-lg font-medium text-main mt-0.5">Data-Driven &amp; Many-Body Methods</div>
+                  <p class="text-xs text-muted mt-1.5">Exact diagonalization, Monte Carlo sampling, quasiclassical Green's function solvers, and machine learning for phase identification.</p>
+                </div>
+              `
+            }
+          ]
+        },
+        {
+          id: 'publications',
+          code: '03',
+          name: 'Publications',
+          panelTitle: 'Selected Publications',
+          shortDesc: 'Peer-reviewed articles in J. Phys.: Condens. Matter and IEEE Sensors Letters.',
+          telemetry: '2 PEER-REVIEWED ARTICLES',
+          fullUrl: '/publications/',
+          fullLabel: 'All Publications',
+          tabs: [
+            {
+              label: 'JPCM (2026)',
+              html: `
+                <div class="p-3.5 rounded-lg bg-card border border-soft space-y-2">
+                  <div class="flex items-center justify-between font-mono-ed text-[10px] text-accent">
+                    <span>J. PHYS.: CONDENS. MATTER 38, 075801</span>
+                    <span>2026</span>
+                  </div>
+                  <h3 class="font-serif-ed text-lg sm:text-xl font-medium text-main leading-snug">
+                    Decoherence of chiral magnon edge modes in a topological bosonic Chern insulator
+                  </h3>
+                  <div class="text-xs text-muted"><strong class="text-main font-medium">Samriddha Ganguly</strong></div>
+                  <p class="text-xs text-muted">Focus Issue on Topological Physics. Studies environmental decoherence and robustness of chiral magnon edge transport.</p>
+                  <div class="pt-1">
+                    <a href="https://doi.org/10.1088/1361-648X/ae44df" target="_blank" rel="noopener noreferrer" class="ui-btn is-active px-3 py-1 font-mono-ed text-[10px] tracking-wider uppercase no-underline">
+                      DOI: 10.1088/1361-648X/ae44df &rarr;
+                    </a>
+                  </div>
+                </div>
+              `
+            },
+            {
+              label: 'IEEE (2025)',
+              html: `
+                <div class="p-3.5 rounded-lg bg-card border border-soft space-y-2">
+                  <div class="flex items-center justify-between font-mono-ed text-[10px] text-accent">
+                    <span>IEEE SENSORS LETTERS, 10(1)</span>
+                    <span>2025</span>
+                  </div>
+                  <h3 class="font-serif-ed text-lg sm:text-xl font-medium text-main leading-snug">
+                    A Data-Driven Approach to Leak Identification and Severity Analysis in Pipelines Using Acoustic Sensing and Deep Learning
+                  </h3>
+                  <div class="text-xs text-muted">M. Biswas, A. Narayan, D. Ghosh, <strong class="text-main font-medium">S. Ganguly</strong>, R. Rakshit, C. Bhaumik</div>
+                  <div class="pt-1">
+                    <a href="https://doi.org/10.1109/LSENS.2025.3638602" target="_blank" rel="noopener noreferrer" class="ui-btn is-active px-3 py-1 font-mono-ed text-[10px] tracking-wider uppercase no-underline">
+                      DOI: 10.1109/LSENS.2025.3638602 &rarr;
+                    </a>
+                  </div>
+                </div>
+              `
+            }
+          ]
+        },
+        {
+          id: 'archive',
+          code: '04',
+          name: 'Archive',
+          panelTitle: 'Initiatives & Archive',
+          shortDesc: 'open_board talks, essays, physics library, courses, and simulations.',
+          telemetry: 'PORTFOLIO DIRECTORY',
+          fullUrl: '/resources/',
+          fullLabel: 'Physics Library',
+          tabs: [
+            {
+              label: 'Academic',
+              html: `
+                <div class="space-y-2">
+                  <a href="/open_board/" class="card-link p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-serif-ed text-base font-medium text-main">open_board</span>
+                      <span class="font-mono-ed text-[10px] text-accent">SEMINARS &rarr;</span>
+                    </div>
+                    <p class="text-xs text-muted mt-0.5">Peer-to-peer student talk series and archive at IISER Bhopal.</p>
+                  </a>
+                  <a href="/resources/" class="card-link p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-serif-ed text-base font-medium text-main">Physics Resources</span>
+                      <span class="font-mono-ed text-[10px] text-accent">LIBRARY &rarr;</span>
+                    </div>
+                    <p class="text-xs text-muted mt-0.5">Curated notes, reference guides, and study material.</p>
+                  </a>
+                  <a href="/courses/" class="card-link p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-serif-ed text-base font-medium text-main">Coursework</span>
+                      <span class="font-mono-ed text-[10px] text-accent">SYLLABI &rarr;</span>
+                    </div>
+                    <p class="text-xs text-muted mt-0.5">Graduate and undergraduate physics and mathematics courses.</p>
+                  </a>
+                </div>
+              `
+            },
+            {
+              label: 'Writing & Media',
+              html: `
+                <div class="grid grid-cols-2 gap-2">
+                  <a href="/blog/" class="card-link p-3">
+                    <div class="font-mono-ed text-[9px] text-accent">ESSAYS</div>
+                    <div class="font-serif-ed text-base font-medium text-main mt-0.5">Blog &rarr;</div>
+                    <p class="text-[11px] text-muted mt-0.5">Condensed matter &amp; Nambu formalism.</p>
+                  </a>
+                  <a href="/simulations.html" class="card-link p-3">
+                    <div class="font-mono-ed text-[9px] text-accent">MODELS</div>
+                    <div class="font-serif-ed text-base font-medium text-main mt-0.5">Simulations &rarr;</div>
+                    <p class="text-[11px] text-muted mt-0.5">Interactive browser visualizers.</p>
+                  </a>
+                  <a href="/gallery/" class="card-link p-3">
+                    <div class="font-mono-ed text-[9px] text-accent">PHOTOS</div>
+                    <div class="font-serif-ed text-base font-medium text-main mt-0.5">Gallery &rarr;</div>
+                    <p class="text-[11px] text-muted mt-0.5">Visits, talks, and campus life.</p>
+                  </a>
+                  <a href="/reading/" class="card-link p-3">
+                    <div class="font-mono-ed text-[9px] text-accent">SHELF</div>
+                    <div class="font-serif-ed text-base font-medium text-main mt-0.5">Reading &rarr;</div>
+                    <p class="text-[11px] text-muted mt-0.5">Literature and interests.</p>
+                  </a>
+                </div>
+              `
+            }
+          ]
+        },
+        {
+          id: 'contact',
+          code: '05',
+          name: 'Contact',
+          panelTitle: 'Correspondence',
+          shortDesc: 'Email, Google Scholar, GitHub, LinkedIn, and institutional coordinates.',
+          telemetry: 'BHOPAL <-> GRENOBLE',
+          fullUrl: '/contact/',
+          fullLabel: 'Contact Page',
+          tabs: [
+            {
+              label: 'Channels',
+              html: `
+                <p class="text-xs text-muted">Open to discussions on PhD positions in condensed matter physics, collaborations, and invited talks.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a href="mailto:samriddha22@iiserb.ac.in" class="card-link p-3">
+                    <div class="font-mono-ed text-[9px] text-accent">EMAIL</div>
+                    <div class="font-mono-ed text-[11px] text-main mt-1 truncate">samriddha22@iiserb.ac.in</div>
+                  </a>
+                  <a href="https://scholar.google.com/citations?user=A7Ec0RYAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="card-link p-3">
+                    <div class="font-mono-ed text-[9px] text-accent">GOOGLE SCHOLAR</div>
+                    <div class="font-serif-ed text-base font-medium text-main mt-0.5">Citations &rarr;</div>
+                  </a>
+                  <a href="https://github.com/samriddhaganguly" target="_blank" rel="noopener noreferrer" class="card-link p-3">
+                    <div class="font-mono-ed text-[9px] text-accent">GITHUB</div>
+                    <div class="font-mono-ed text-[11px] text-main mt-1">@samriddhaganguly</div>
+                  </a>
+                  <a href="https://www.linkedin.com/in/samriddha-ganguly-3360bb16a/" target="_blank" rel="noopener noreferrer" class="card-link p-3">
+                    <div class="font-mono-ed text-[9px] text-accent">LINKEDIN</div>
+                    <div class="font-serif-ed text-base font-medium text-main mt-0.5">Profile &rarr;</div>
+                  </a>
+                </div>
+              `
+            },
+            {
+              label: 'Coordinates',
+              html: `
+                <div class="grid grid-cols-2 gap-2 font-mono-ed text-[11px]">
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="text-[9px] text-dim uppercase">Bhopal, India</div>
+                    <div class="text-main mt-1">IISER Bhopal</div>
+                    <div class="text-accent text-[10px] mt-1">23.26&deg; N, 77.41&deg; E</div>
+                  </div>
+                  <div class="p-3 rounded-lg bg-card border border-soft">
+                    <div class="text-[9px] text-dim uppercase">Grenoble, France</div>
+                    <div class="text-main mt-1">CEA Grenoble</div>
+                    <div class="text-accent text-[10px] mt-1">45.19&deg; N, 5.72&deg; E</div>
+                  </div>
+                </div>
+                <div class="pt-1">
+                  <a href="/assets/Samriddha_Ganguly_CV.pdf" target="_blank" rel="noopener noreferrer" class="ui-btn is-active px-3.5 py-1.5 font-mono-ed text-[10px] tracking-widest uppercase no-underline">
+                    Download Full CV (PDF) &rarr;
+                  </a>
+                </div>
+              `
+            }
+          ]
+        }
+      ];
+
+      /* -----------------------------------------------------------------------
+         4. DUAL THREE.JS SCENES (BACKGROUND + SHARP ISOLATED FOREGROUND)
+         ----------------------------------------------------------------------- */
+      const bgContainer = document.getElementById('webgl-bg');
+      const fgContainer = document.getElementById('webgl-fg');
+      const interactionStage = document.getElementById('interaction-stage');
+      const focusBlurVeil = document.getElementById('focus-blur-veil');
+
+      const bgScene = new THREE.Scene();
+      bgScene.fog = new THREE.FogExp2(THEMES[currentThemeKey].bgHex, 0.019);
+
+      const fgScene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 140);
+      camera.position.set(0, 8.8, 17.0);
+
+      const dpr = Math.min(window.devicePixelRatio, 2);
+
+      const bgRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      bgRenderer.setPixelRatio(dpr);
+      bgRenderer.setSize(window.innerWidth, window.innerHeight);
+      bgContainer.appendChild(bgRenderer.domElement);
+
+      const fgRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      fgRenderer.setPixelRatio(dpr);
+      fgRenderer.setSize(window.innerWidth, window.innerHeight);
+      fgRenderer.setClearColor(0x000000, 0);
+      fgRenderer.clear();
+      fgContainer.style.visibility = 'hidden';
+      fgContainer.appendChild(fgRenderer.domElement);
+
+      // Identical Studio Lighting in Both Scenes for Seamless Reparenting
+      function addStudioLights(targetScene) {
+        const hemi = new THREE.HemisphereLight(0xf4f8ff, 0x162238, 1.05);
+        const key = new THREE.DirectionalLight(0xffffff, 1.0);
+        key.position.set(11, 18, 15);
+        const fill = new THREE.DirectionalLight(0xb8cfff, 0.42);
+        fill.position.set(-12, -8, 10);
+        const rim = new THREE.DirectionalLight(THEMES[currentThemeKey].primaryHex, 0.85);
+        rim.position.set(-13, 8, -14);
+        targetScene.add(hemi, key, fill, rim);
+        return rim;
       }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(r => observer.observe(r));
-  // Theme toggle
-const themeBtn = document.getElementById('themeBtn');
-const saved = localStorage.getItem('theme');
-if (saved === 'light') {
-  document.body.classList.add('light');
-  themeBtn.textContent = 'DARK';
-}
-themeBtn.addEventListener('click', () => {
-  const isLight = document.body.classList.toggle('light');
-  themeBtn.textContent = isLight ? 'DARK' : 'LIGHT';
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-});
-</script>
+
+      const bgRimLight = addStudioLights(bgScene);
+      const fgRimLight = addStudioLights(fgScene);
+
+      // Material Registry for live Light/Dark switching
+      const materialRegistry = [];
+
+      function getRoleColor(role, theme = THEMES[currentThemeKey]) {
+        if (role === 'primary') return theme.primaryHex;
+        if (role === 'secondary') return theme.secondaryHex;
+        if (role === 'accent') return theme.accentHex;
+        return theme.gridHex;
+      }
+
+      function makeLineMat(role = 'primary', opacity = 0.72) {
+        const mat = new THREE.LineBasicMaterial({
+          color: getRoleColor(role),
+          transparent: true,
+          opacity,
+          depthWrite: false
+        });
+        materialRegistry.push({ mat, role, kind: 'line' });
+        return mat;
+      }
+
+      function makeGlassMat(role = 'primary', opacity = 0.2) {
+        const mat = new THREE.MeshPhysicalMaterial({
+          color: getRoleColor(role),
+          roughness: 0.18,
+          metalness: 0.12,
+          clearcoat: 0.85,
+          clearcoatRoughness: 0.14,
+          transparent: true,
+          opacity,
+          side: THREE.DoubleSide,
+          depthWrite: false
+        });
+        materialRegistry.push({ mat, role, kind: 'glass' });
+        return mat;
+      }
+
+      function makeSolidMat(role = 'primary', opacity = 0.95) {
+        const mat = new THREE.MeshPhysicalMaterial({
+          color: getRoleColor(role),
+          roughness: 0.22,
+          metalness: 0.55,
+          clearcoat: 0.7,
+          clearcoatRoughness: 0.18,
+          transparent: opacity < 1,
+          opacity
+        });
+        materialRegistry.push({ mat, role, kind: 'solid' });
+        return mat;
+      }
+
+      function makeCircleLoop(radius, segments = 96, role = 'primary', opacity = 0.78) {
+        const pts = [];
+        for (let i = 0; i <= segments; i++) {
+          const a = (i / segments) * Math.PI * 2;
+          pts.push(new THREE.Vector3(Math.cos(a) * radius, 0, Math.sin(a) * radius));
+        }
+        return new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), makeLineMat(role, opacity));
+      }
+
+      // Smooth 3D cylindrical tube ring (true solid geometry instead of 1px WebGL hairline)
+      function makeTubeRing(radius, tubeRadius = 0.014, radialSegs = 12, tubularSegs = 96, role = 'primary', opacity = 0.88) {
+        const geo = new THREE.TorusGeometry(radius, tubeRadius, radialSegs, tubularSegs);
+        geo.rotateX(Math.PI / 2);
+        return new THREE.Mesh(geo, makeSolidMat(role, opacity));
+      }
+
+      // Smooth 3D cylinder strut connecting point A to point B
+      function makeStrut(pA, pB, radius = 0.013, role = 'secondary', opacity = 0.65) {
+        const dir = new THREE.Vector3().subVectors(pB, pA);
+        const len = dir.length();
+        const geo = new THREE.CylinderGeometry(radius, radius, len, 10, 1);
+        const mesh = new THREE.Mesh(geo, makeSolidMat(role, opacity));
+        mesh.position.copy(pA).addScaledVector(dir, 0.5);
+        mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+        return mesh;
+      }
+
+      /* -----------------------------------------------------------------------
+         5. ARCHITECTURAL FLOOR GRID, ASTROLABE RINGS & PARTICLES (BG SCENE)
+         ----------------------------------------------------------------------- */
+      const floorY = -2.5;
+
+      const gridPts = [];
+      const gridHalf = 22;
+      for (let i = -gridHalf; i <= gridHalf; i += 2.75) {
+        gridPts.push(new THREE.Vector3(-gridHalf, floorY, i), new THREE.Vector3(gridHalf, floorY, i));
+        gridPts.push(new THREE.Vector3(i, floorY, -gridHalf), new THREE.Vector3(i, floorY, gridHalf));
+      }
+      bgScene.add(new THREE.LineSegments(
+        new THREE.BufferGeometry().setFromPoints(gridPts),
+        makeLineMat('grid', THEMES[currentThemeKey].gridOpacity)
+      ));
+
+      const pedestalGroup = new THREE.Group();
+      pedestalGroup.position.y = floorY + 0.02;
+      bgScene.add(pedestalGroup);
+
+      const calibRings = [];
+      [1.9, 3.6, 5.8, 7.6].forEach((r, idx) => {
+        pedestalGroup.add(makeCircleLoop(r, 96, idx === 2 ? 'primary' : 'secondary', idx === 2 ? 0.4 : 0.2));
+
+        const arcGeo = new THREE.RingGeometry(r + 0.12, r + 0.16, 64, 1, 0, Math.PI * 0.85);
+        arcGeo.rotateX(-Math.PI / 2);
+        const arc = new THREE.Mesh(arcGeo, makeGlassMat(idx % 2 === 0 ? 'primary' : 'secondary', 0.2));
+        arc.userData.speed = (idx % 2 === 0 ? 0.09 : -0.07) * (idx + 1) * 0.35;
+        pedestalGroup.add(arc);
+        calibRings.push(arc);
+      });
+
+      const particleCount = window.innerWidth < 768 ? 120 : 220;
+      const pPos = new Float32Array(particleCount * 3);
+      for (let i = 0; i < particleCount; i++) {
+        const rad = 2.8 + Math.random() * 17;
+        const ang = Math.random() * Math.PI * 2;
+        pPos[i * 3] = Math.cos(ang) * rad;
+        pPos[i * 3 + 1] = floorY + 0.6 + Math.random() * 9.2;
+        pPos[i * 3 + 2] = Math.sin(ang) * rad;
+      }
+      const particleGeo = new THREE.BufferGeometry();
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+      const particleMat = new THREE.PointsMaterial({
+        color: THEMES[currentThemeKey].primaryHex,
+        size: 0.058,
+        transparent: true,
+        opacity: THEMES[currentThemeKey].particleOpacity,
+        depthWrite: false
+      });
+      materialRegistry.push({ mat: particleMat, role: 'primary', kind: 'points' });
+      const particleField = new THREE.Points(particleGeo, particleMat);
+      bgScene.add(particleField);
+
+      /* -----------------------------------------------------------------------
+         6. CENTRAL GIMBAL CORE (BG SCENE: MACHINED ASTROLABE)
+         ----------------------------------------------------------------------- */
+      const coreGroup = new THREE.Group();
+      coreGroup.position.set(0, 0.45, 0);
+      bgScene.add(coreGroup);
+
+      // Inner luminous pearl sphere + faceted crystal cage
+      const corePearl = new THREE.Mesh(new THREE.SphereGeometry(0.34, 32, 32), makeSolidMat('accent', 0.96));
+      const coreOctGeo = new THREE.OctahedronGeometry(0.74, 0);
+      const coreOctFill = new THREE.Mesh(coreOctGeo, makeGlassMat('primary', 0.22));
+      const coreOctEdges = new THREE.LineSegments(new THREE.EdgesGeometry(coreOctGeo), makeLineMat('primary', 0.9));
+      coreGroup.add(corePearl, coreOctFill, coreOctEdges);
+
+      // Three machined metallic gimbal rings with pivot pins
+      const gRing1 = new THREE.Mesh(new THREE.TorusGeometry(1.38, 0.02, 14, 112), makeSolidMat('primary', 0.88));
+      gRing1.rotation.x = Math.PI / 2.4;
+
+      const gRing2 = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.016, 14, 112), makeSolidMat('secondary', 0.78));
+      gRing2.rotation.y = Math.PI / 3;
+      gRing2.rotation.x = -Math.PI / 4;
+
+      const gRing3 = new THREE.Mesh(new THREE.TorusGeometry(2.04, 0.012, 12, 112), makeSolidMat('primary', 0.52));
+      gRing3.rotation.z = Math.PI / 6;
+
+      coreGroup.add(gRing1, gRing2, gRing3);
+
+      /* -----------------------------------------------------------------------
+         7. 5 ARCHITECTURAL 3D SCULPTURES (CLEAN PARAMETRIC & EDGES GEOMETRY)
+         ----------------------------------------------------------------------- */
+      const ORBIT_RADIUS = 5.8;
+      const moduleObjects = [];
+      const raycastTargets = [];
+      let signalPulseObj = null;
+      let signalCurveRef = null;
+
+      function registerPart(parent, obj, { hover = [0, 0, 0], focus = [0, 0, 0], explode = [0, 0, 0] } = {}) {
+        obj.userData.basePos = obj.position.clone();
+        obj.userData.hoverOffset = new THREE.Vector3(...hover);
+        obj.userData.focusOffset = new THREE.Vector3(...focus);
+        obj.userData.explodeOffset = new THREE.Vector3(...explode);
+        parent.add(obj);
+        return obj;
+      }
+
+      function createSculpture(index, container) {
+        const parts = [];
+
+        if (index === 0) {
+          // 01 PROFILE: High-resolution Sculpted Torus-Knot + Solid Tubular Spine + Machined Gyro Hoops
+          const knotGeo = new THREE.TorusKnotGeometry(0.62, 0.145, 220, 32, 2, 3);
+          const knotMesh = new THREE.Mesh(knotGeo, makeGlassMat('primary', 0.34));
+          parts.push(registerPart(container, knotMesh, { hover: [0, 0.08, 0] }));
+
+          // Smooth 3D tubular core filament tracing the (2,3) torus knot curve
+          class KnotCurve extends THREE.Curve {
+            getPoint(t) {
+              const a = t * Math.PI * 2;
+              const r = 0.62 * 0.5 * (2 + Math.cos(3 * a));
+              return new THREE.Vector3(r * Math.cos(2 * a), 0.62 * 0.5 * Math.sin(3 * a), r * Math.sin(2 * a));
+            }
+          }
+          const spineTube = new THREE.Mesh(
+            new THREE.TubeGeometry(new KnotCurve(), 180, 0.022, 12, true),
+            makeSolidMat('accent', 0.96)
+          );
+          parts.push(registerPart(container, spineTube, { hover: [0, 0.08, 0], explode: [0, 0, 0.32] }));
+
+          // Primary tilted gyroscopic ring with two opposing satellite nodes
+          const hoop1Group = new THREE.Group();
+          hoop1Group.rotation.x = Math.PI / 2.25;
+          hoop1Group.add(new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.02, 14, 112), makeSolidMat('secondary', 0.88)));
+          const satGeo = new THREE.SphereGeometry(0.068, 20, 20);
+          const satA = new THREE.Mesh(satGeo, makeSolidMat('primary', 0.98));
+          satA.position.set(1.16, 0, 0);
+          const satB = new THREE.Mesh(satGeo, makeSolidMat('primary', 0.98));
+          satB.position.set(-1.16, 0, 0);
+          hoop1Group.add(satA, satB);
+          parts.push(registerPart(container, hoop1Group, { hover: [0, 0.18, 0], focus: [0, 0.12, 0], explode: [0, 0.66, 0.14] }));
+
+          // Secondary counter-tilted tubular ring
+          const hoop2 = new THREE.Mesh(new THREE.TorusGeometry(1.36, 0.014, 12, 112), makeSolidMat('primary', 0.68));
+          hoop2.rotation.set(-Math.PI / 3, Math.PI / 4, 0);
+          parts.push(registerPart(container, hoop2, { hover: [0, -0.16, 0], focus: [0, -0.12, 0], explode: [0, -0.66, -0.14] }));
+
+        } else if (index === 1) {
+          // 02 RESEARCH: Precision van der Waals Layered Hexagonal Crystal Heterostructure
+          const layerYs = [-0.62, 0, 0.62];
+          layerYs.forEach((ly, li) => {
+            const layerGroup = new THREE.Group();
+            layerGroup.position.y = ly;
+            const role = li === 1 ? 'secondary' : 'primary';
+
+            // Translucent crystalline hexagonal slab + crisp edge frame + perimeter tubular rail
+            const hexGeo = new THREE.CylinderGeometry(0.98, 0.98, 0.048, 6, 1);
+            layerGroup.add(new THREE.Mesh(hexGeo, makeGlassMat(role, 0.24)));
+            layerGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(hexGeo), makeLineMat(role, 0.9)));
+
+            // Inner honeycomb hexagon + radial bond struts from center atom to vertices
+            const innerHex = makeCircleLoop(0.48, 6, role, 0.55);
+            innerHex.rotation.y = Math.PI / 6;
+            layerGroup.add(innerHex);
+
+            const atomGeo = new THREE.SphereGeometry(0.082, 24, 24);
+            const atomMat = makeSolidMat(li === 1 ? 'accent' : 'primary', 0.98);
+            const centerAtom = new THREE.Mesh(new THREE.SphereGeometry(0.095, 24, 24), atomMat);
+            layerGroup.add(centerAtom);
+
+            for (let v = 0; v < 6; v++) {
+              const a = (v / 6) * Math.PI * 2 + Math.PI / 6;
+              const vx = Math.cos(a) * 0.98;
+              const vz = Math.sin(a) * 0.98;
+              const atom = new THREE.Mesh(atomGeo, atomMat);
+              atom.position.set(vx, 0, vz);
+              layerGroup.add(atom);
+
+              // Subtle in-plane covalent bond strut
+              layerGroup.add(makeStrut(new THREE.Vector3(0, 0, 0), new THREE.Vector3(vx, 0, vz), 0.011, role, 0.52));
+            }
+
+            const dir = li - 1;
+            parts.push(registerPart(container, layerGroup, {
+              hover: [0, dir * 0.2, 0],
+              focus: [0, dir * 0.26, 0],
+              explode: [0, dir * 0.82, 0]
+            }));
+          });
+
+          // Smooth 3D cylindrical interlayer van der Waals coupling struts
+          for (let v = 0; v < 6; v++) {
+            const a = (v / 6) * Math.PI * 2 + Math.PI / 6;
+            const vx = Math.cos(a) * 0.98;
+            const vz = Math.sin(a) * 0.98;
+            parts.push(registerPart(container, makeStrut(
+              new THREE.Vector3(vx, -0.62, vz),
+              new THREE.Vector3(vx, 0.62, vz),
+              0.012,
+              'secondary',
+              0.45
+            )));
+          }
+
+        } else if (index === 2) {
+          // 03 PUBLICATIONS: Precision Topological Dirac Dispersion Cones (True Tubular Contours + Struts)
+          const buildDiracHalf = (sign, role) => {
+            const halfGroup = new THREE.Group();
+            const maxH = 0.96;
+            const maxR = 0.84;
+
+            // Smooth double-sided translucent dispersion surface
+            const veil = new THREE.Mesh(new THREE.ConeGeometry(maxR, maxH, 72, 1, true), makeGlassMat(role, 0.16));
+            if (sign > 0) veil.rotation.x = Math.PI;
+            veil.position.y = sign * (maxH * 0.5);
+            halfGroup.add(veil);
+
+            // Solid tubular iso-energy contour rings at 4 quantized levels
+            [0.28, 0.52, 0.76, 1.0].forEach((f, fi) => {
+              const tubeR = fi === 3 ? 0.018 : 0.011;
+              const ring = makeTubeRing(maxR * f, tubeR, 12, 96, role, fi === 3 ? 0.92 : 0.65);
+              ring.position.y = sign * (maxH * f);
+              halfGroup.add(ring);
+            });
+
+            // 8 smooth 3D cylindrical dispersion rays from Dirac apex to outer rim
+            for (let m = 0; m < 8; m++) {
+              const a = (m / 8) * Math.PI * 2;
+              halfGroup.add(makeStrut(
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(Math.cos(a) * maxR, sign * maxH, Math.sin(a) * maxR),
+                0.01,
+                role,
+                0.55
+              ));
+            }
+            return halfGroup;
+          };
+
+          parts.push(registerPart(container, buildDiracHalf(1, 'primary'), { hover: [0, 0.14, 0], focus: [0, 0.14, 0], explode: [0, 0.52, 0] }));
+          parts.push(registerPart(container, buildDiracHalf(-1, 'secondary'), { hover: [0, -0.14, 0], focus: [0, -0.14, 0], explode: [0, -0.52, 0] }));
+
+          // Central Dirac Weyl/Dirac Nodal Pearl + Halo Ring
+          const apex = new THREE.Mesh(new THREE.SphereGeometry(0.115, 28, 28), makeSolidMat('accent', 0.98));
+          parts.push(registerPart(container, apex));
+
+          const fermiRing = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.017, 14, 112), makeSolidMat('primary', 0.82));
+          fermiRing.rotation.x = Math.PI / 2;
+          parts.push(registerPart(container, fermiRing, { explode: [0, 0, 0.45] }));
+
+        } else if (index === 3) {
+          // 04 ARCHIVE: Faceted Brillouin-Zone Polyhedron + Solid Tubular Struts & Orbital Nodes
+          const dodecaGeo = new THREE.DodecahedronGeometry(0.84, 0);
+          const hullGroup = new THREE.Group();
+          hullGroup.add(new THREE.Mesh(dodecaGeo, makeGlassMat('primary', 0.2)));
+          hullGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(dodecaGeo), makeLineMat('primary', 0.88)));
+
+          // Inner core octahedron for layered architectural depth
+          const innerGeo = new THREE.OctahedronGeometry(0.36, 0);
+          hullGroup.add(new THREE.Mesh(innerGeo, makeSolidMat('secondary', 0.72)));
+          parts.push(registerPart(container, hullGroup));
+
+          const coords = [
+            [0.94, 0.56, 0.42], [-0.94, 0.5, 0.48], [0.36, -0.84, 0.66],
+            [-0.44, -0.7, -0.74], [0.68, 0.4, -0.78], [-0.72, 0.72, -0.36]
+          ];
+          const nodeGeo = new THREE.SphereGeometry(0.105, 24, 24);
+          const ringGeo = new THREE.TorusGeometry(0.155, 0.011, 10, 48);
+
+          coords.forEach((c, ni) => {
+            const nodeGroup = new THREE.Group();
+            nodeGroup.position.set(...c);
+            const role = ni % 2 === 0 ? 'primary' : 'secondary';
+            nodeGroup.add(new THREE.Mesh(nodeGeo, makeSolidMat(role, 0.98)));
+            const collar = new THREE.Mesh(ringGeo, makeSolidMat('accent', 0.75));
+            collar.lookAt(0, 0, 0);
+            nodeGroup.add(collar);
+
+            const dir = new THREE.Vector3(...c).normalize();
+            parts.push(registerPart(container, nodeGroup, {
+              hover: dir.clone().multiplyScalar(0.2).toArray(),
+              focus: dir.clone().multiplyScalar(0.28).toArray(),
+              explode: dir.clone().multiplyScalar(0.72).toArray()
+            }));
+
+            // Solid cylindrical radial spoke from origin to satellite node
+            parts.push(registerPart(container, makeStrut(
+              new THREE.Vector3(0, 0, 0),
+              new THREE.Vector3(...c),
+              0.012,
+              'secondary',
+              0.5
+            )));
+          });
+
+        } else {
+          // 05 CONTACT: High-Craft Geodesic Armillary Globe + Tubular Bhopal-to-Grenoble Signal Arc
+          const globeGroup = new THREE.Group();
+          const R = 0.88;
+          globeGroup.add(new THREE.Mesh(new THREE.SphereGeometry(R * 0.96, 48, 36), makeGlassMat('primary', 0.16)));
+
+          // Smooth tubular latitude rings
+          [-0.58, -0.29, 0, 0.29, 0.58].forEach((latY, li) => {
+            const rLat = Math.sqrt(Math.max(0.01, R * R - latY * latY));
+            const isEq = li === 2;
+            const latTube = makeTubeRing(rLat, isEq ? 0.015 : 0.009, 10, 96, isEq ? 'primary' : 'secondary', isEq ? 0.82 : 0.45);
+            latTube.position.y = latY;
+            globeGroup.add(latTube);
+          });
+
+          // Smooth tubular longitude meridians
+          for (let m = 0; m < 6; m++) {
+            const mer = new THREE.Mesh(
+              new THREE.TorusGeometry(R, 0.009, 10, 96),
+              makeSolidMat('primary', 0.46)
+            );
+            mer.rotation.y = (m / 6) * Math.PI;
+            globeGroup.add(mer);
+          }
+          parts.push(registerPart(container, globeGroup));
+
+          // Outer orbital ring
+          const eqOrbit = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.015, 12, 112), makeSolidMat('secondary', 0.72));
+          eqOrbit.rotation.x = Math.PI / 2.25;
+          parts.push(registerPart(container, eqOrbit, { hover: [0, 0.15, 0], explode: [0, 0.62, 0] }));
+
+          // Solid 3D Tubular Geodesic Arc linking Bhopal & Grenoble
+          const pBhopal = new THREE.Vector3(0.44, 0.35, 0.68);
+          const pGrenoble = new THREE.Vector3(-0.34, 0.62, 0.52);
+          const midArc = new THREE.Vector3(0.06, 1.24, 0.96);
+          signalCurveRef = new THREE.QuadraticBezierCurve3(pBhopal, midArc, pGrenoble);
+          const arcTube = new THREE.Mesh(
+            new THREE.TubeGeometry(signalCurveRef, 64, 0.016, 12, false),
+            makeSolidMat('accent', 0.96)
+          );
+          parts.push(registerPart(container, arcTube, { hover: [0, 0.12, 0.1], explode: [0, 0.42, 0.36] }));
+
+          // City Beacons with miniature base collars
+          const makeBeacon = (pos, role, explodeVec) => {
+            const bGroup = new THREE.Group();
+            bGroup.position.copy(pos);
+            bGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.088, 24, 24), makeSolidMat(role, 0.98)));
+            const halo = new THREE.Mesh(new THREE.TorusGeometry(0.135, 0.01, 10, 48), makeSolidMat('accent', 0.8));
+            halo.lookAt(pos.clone().multiplyScalar(2));
+            bGroup.add(halo);
+            parts.push(registerPart(container, bGroup, { explode: explodeVec }));
+          };
+
+          makeBeacon(pBhopal, 'primary', [0.32, 0.22, 0.42]);
+          makeBeacon(pGrenoble, 'secondary', [-0.32, 0.38, 0.32]);
+
+          signalPulseObj = new THREE.Mesh(new THREE.SphereGeometry(0.056, 18, 18), makeSolidMat('accent', 1.0));
+          container.add(signalPulseObj);
+        }
+
+        return parts;
+      }
+
+      MODULES.forEach((mod, idx) => {
+        const angle = (idx / MODULES.length) * Math.PI * 2 - Math.PI / 2;
+        const x = Math.cos(angle) * ORBIT_RADIUS;
+        const z = Math.sin(angle) * ORBIT_RADIUS;
+
+        const root = new THREE.Group();
+        root.position.set(x, 0, z);
+        bgScene.add(root);
+
+        const floorRing = makeCircleLoop(0.95, 56, 'primary', 0.3);
+        floorRing.position.y = floorY + 0.04;
+        root.add(floorRing);
+
+        const beamMat = makeGlassMat('primary', 0.04);
+        const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.44, 3.25, 32, 1, true), beamMat);
+        beam.position.y = floorY + 1.68;
+        root.add(beam);
+
+        const haloMat = makeLineMat('primary', 0.0);
+        const halo = makeCircleLoop(1.22, 64, 'primary', 0.0);
+        halo.material = haloMat;
+        halo.position.y = 0.2;
+        root.add(halo);
+
+        const pivot = new THREE.Group();
+        pivot.position.y = 0.48;
+        root.add(pivot);
+
+        const parts = createSculpture(idx, pivot);
+
+        const hitMesh = new THREE.Mesh(
+          new THREE.SphereGeometry(1.55, 12, 12),
+          new THREE.MeshBasicMaterial({ visible: false })
+        );
+        hitMesh.userData.moduleIndex = idx;
+        pivot.add(hitMesh);
+        raycastTargets.push(hitMesh);
+
+        moduleObjects.push({
+          index: idx,
+          data: mod,
+          root,
+          pivot,
+          floorRing,
+          beam,
+          beamMat,
+          halo,
+          haloMat,
+          parts,
+          hoverAmount: 0,
+          focusAmount: 0,
+          explodeAmount: 0,
+          subSpinTarget: 0
+        });
+      });
+
+      /* -----------------------------------------------------------------------
+         8. PROJECTED LABELS & RESPONSIVE DOCK
+         ----------------------------------------------------------------------- */
+      const projectedLabelsLayer = document.getElementById('projected-labels-layer');
+      const dockNodesEl = document.getElementById('dock-nodes');
+      const projectedLabelEls = [];
+      const dockBtnEls = [];
+
+      MODULES.forEach((mod, idx) => {
+        const tag = document.createElement('button');
+        tag.type = 'button';
+        tag.className = 'projected-tag text-left';
+        tag.innerHTML = `<span class="font-mono-ed text-[10px] text-accent mr-1.5">mod.code</span><spanclass="font-serif-edtext-[13px]font-mediumtracking-widetext-main">{mod.name}</span>`;
+        tag.addEventListener('mouseenter', () => setHovered(idx));
+        tag.addEventListener('mouseleave', () => setHovered(-1));
+        tag.addEventListener('click', () => focusModule(idx));
+        projectedLabelsLayer.appendChild(tag);
+        projectedLabelEls.push(tag);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ui-btn px-2.5 sm:px-3.5 py-2 font-mono-ed text-[10px] sm:text-[11px] tracking-[0.08em] uppercase shrink-0 flex-1 sm:flex-initial';
+        btn.innerHTML = `<span class="text-accent sm:mr-1">mod.code</span><spanclass="hiddensm:inline">{mod.name}</span>`;
+        btn.setAttribute('aria-label', `${mod.code} ${mod.name}`);
+        btn.addEventListener('mouseenter', () => setHovered(idx));
+        btn.addEventListener('mouseleave', () => setHovered(-1));
+        btn.addEventListener('click', () => focusModule(idx));
+        dockNodesEl.appendChild(btn);
+        dockBtnEls.push(btn);
+      });
+
+      /* -----------------------------------------------------------------------
+         9. FOREGROUND ISOLATION & NON-BLOCKING CAMERA FRAMING
+         ----------------------------------------------------------------------- */
+      let hoveredIndex = -1;
+      let focusedIndex = -1;
+      let fgIsolatedIndex = -1;
+      let fgRestoreTimer = null;
+      let fgNeedsFlush = false;
+      let isExploded = false;
+
+      let orbitTheta = 0.28;
+      let orbitPhi = 0.46;
+      let targetOrbitTheta = 0.28;
+      let targetOrbitPhi = 0.46;
+
+      const currentCamPos = camera.position.clone();
+      const targetCamPos = camera.position.clone();
+      const currentLookAt = new THREE.Vector3(0, -0.82, 0);
+      const targetLookAt = new THREE.Vector3(0, -0.82, 0);
+
+      let isPointerDown = false;
+      let pointerMoved = false;
+      let lastPointerX = 0;
+      let lastPointerY = 0;
+
+      const raycaster = new THREE.Raycaster();
+      const mouseNDC = new THREE.Vector2(-9, -9);
+
+      const titleBlock = document.getElementById('title-block');
+      const mobileBackBtn = document.getElementById('mobile-back-btn');
+      const bottomDockWrap = document.getElementById('bottom-dock-wrap');
+      const overviewHint = document.getElementById('overview-hint');
+      const dockOverviewBtn = document.getElementById('dock-overview');
+      const navPrevBtn = document.getElementById('nav-prev');
+      const navNextBtn = document.getElementById('nav-next');
+      const mPrevBtn = document.getElementById('m-prev-btn');
+      const mNextBtn = document.getElementById('m-next-btn');
+      const detailPanel = document.getElementById('detail-panel');
+      const dpCode = document.getElementById('dp-code');
+      const dpTitle = document.getElementById('dp-title');
+      const dpTabs = document.getElementById('dp-tabs');
+      const dpBody = document.getElementById('dp-body');
+      const dpTelemetry = document.getElementById('dp-telemetry');
+      const dpFullLink = document.getElementById('dp-full-link');
+      const explodeBtn = document.getElementById('explode-btn');
+
+      // Isolate the selected structure into fgScene so bgScene blurs cleanly behind it
+      function isolateInForeground(idx) {
+        if (fgRestoreTimer) {
+          clearTimeout(fgRestoreTimer);
+          fgRestoreTimer = null;
+        }
+        // Return any previously isolated module back to bgScene
+        if (fgIsolatedIndex !== -1 && fgIsolatedIndex !== idx) {
+          const prev = moduleObjects[fgIsolatedIndex];
+          prev.floorRing.visible = true;
+          prev.beam.visible = true;
+          bgScene.add(prev.root);
+          fgIsolatedIndex = -1;
+        }
+        if (idx !== -1) {
+          const curr = moduleObjects[idx];
+          // Hide floor ring & beam during isolated inspection for a pure museum-object float
+          curr.floorRing.visible = false;
+          curr.beam.visible = false;
+          fgScene.add(curr.root);
+          fgIsolatedIndex = idx;
+          fgNeedsFlush = false;
+          fgContainer.style.visibility = 'visible';
+          focusBlurVeil.classList.add('active');
+        } else {
+          focusBlurVeil.classList.remove('active');
+          // Return immediately to bgScene and flush fg canvas in the next animation frame
+          if (fgIsolatedIndex !== -1) {
+            const m = moduleObjects[fgIsolatedIndex];
+            m.floorRing.visible = true;
+            m.beam.visible = true;
+            bgScene.add(m.root);
+            fgIsolatedIndex = -1;
+          }
+          fgNeedsFlush = true;
+          fgContainer.style.visibility = 'hidden';
+        }
+      }
+
+      function setHovered(idx) {
+        if (hoveredIndex === idx) return;
+        hoveredIndex = idx;
+        if (idx !== -1 && idx !== focusedIndex) SoundFX.hover();
+        interactionStage.style.cursor = idx !== -1 ? 'pointer' : (isPointerDown ? 'grabbing' : 'grab');
+        projectedLabelEls.forEach((el, i) => el.classList.toggle('is-hovered', i === idx));
+      }
+
+      function computeFocusCamera(idx) {
+        const pos = moduleObjects[idx].root.position;
+        const outward = new THREE.Vector3(pos.x, 0, pos.z).normalize();
+        const isDesktop = window.innerWidth >= 1024;
+        const aspect = window.innerWidth / window.innerHeight;
+
+        // Portrait mobile needs slightly more distance so sculpture fits cleanly in upper 48%
+        const dist = isDesktop ? 7.4 : (aspect < 0.65 ? 9.6 : 8.2);
+        const camY = isDesktop ? 1.5 : 1.75;
+        const camPos = pos.clone()
+          .add(outward.clone().multiplyScalar(dist))
+          .add(new THREE.Vector3(0, camY, 0));
+
+        const forward = pos.clone().sub(camPos).normalize();
+        const camRight = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
+
+        const lookAt = pos.clone();
+        if (isDesktop) {
+          const rightShift = window.innerWidth >= 1280 ? 1.65 : 1.42;
+          lookAt.y += 0.62;
+          lookAt.add(camRight.multiplyScalar(rightShift));
+        } else {
+          // Shift lookAt downward -> centers sculpture cleanly in upper half above the bottom sheet
+          lookAt.y -= (aspect < 0.65 ? 1.25 : 0.95);
+        }
+
+        targetCamPos.copy(camPos);
+        targetLookAt.copy(lookAt);
+      }
+
+      function renderDetailPanel(idx, tabIdx = 0) {
+        const mod = MODULES[idx];
+        dpCode.textContent = `${mod.code} / ${mod.name.toUpperCase()}`;
+        dpTitle.textContent = mod.panelTitle;
+        dpTelemetry.textContent = mod.telemetry;
+        dpFullLink.href = mod.fullUrl;
+        dpFullLink.innerHTML = `${mod.fullLabel} &rarr;`;
+
+        dpTabs.innerHTML = '';
+        mod.tabs.forEach((t, ti) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `ui-btn px-3 py-1 font-mono-ed text-[10px] tracking-[0.12em] uppercase shrink-0 ${ti === tabIdx ? 'is-active' : ''}`;
+          btn.textContent = t.label;
+          btn.addEventListener('click', () => {
+            SoundFX.tab();
+            moduleObjects[idx].subSpinTarget += Math.PI * 0.45;
+            renderDetailPanel(idx, ti);
+          });
+          dpTabs.appendChild(btn);
+        });
+
+        dpBody.innerHTML = `<div class="tab-animate space-y-3">${mod.tabs[tabIdx].html}</div>`;
+      }
+
+      function syncDesktopArrows() {
+        const showDesktop = focusedIndex !== -1 && window.innerWidth >= 1024;
+        navPrevBtn.classList.toggle('hidden', !showDesktop);
+        navNextBtn.classList.toggle('hidden', !showDesktop);
+      }
+
+      function focusModule(idx) {
+        if (idx < 0 || idx >= MODULES.length) return;
+        const wasFocused = focusedIndex !== -1;
+        focusedIndex = idx;
+        isExploded = false;
+        explodeBtn.classList.remove('is-active');
+        explodeBtn.textContent = 'Explode';
+
+        isolateInForeground(idx);
+        computeFocusCamera(idx);
+        renderDetailPanel(idx, 0);
+
+        detailPanel.classList.add('open');
+        titleBlock.classList.add('compact');
+        bottomDockWrap.classList.add('mobile-hidden');
+        mobileBackBtn.classList.remove('hidden');
+        if (overviewHint) overviewHint.style.opacity = '0';
+        syncDesktopArrows();
+
+        dockOverviewBtn.classList.remove('is-active');
+        dockBtnEls.forEach((b, i) => b.classList.toggle('is-active', i === idx));
+
+        if (wasFocused) SoundFX.glide();
+        else SoundFX.select();
+      }
+
+      function returnToOverview() {
+        if (focusedIndex === -1) return;
+        focusedIndex = -1;
+        isExploded = false;
+        explodeBtn.classList.remove('is-active');
+        explodeBtn.textContent = 'Explode';
+
+        isolateInForeground(-1);
+
+        detailPanel.classList.remove('open');
+        titleBlock.classList.remove('compact');
+        bottomDockWrap.classList.remove('mobile-hidden');
+        mobileBackBtn.classList.add('hidden');
+        if (overviewHint) overviewHint.style.opacity = '1';
+        syncDesktopArrows();
+
+        dockOverviewBtn.classList.add('is-active');
+        dockBtnEls.forEach(b => b.classList.remove('is-active'));
+        SoundFX.glide();
+      }
+
+      function cycleModule(step) {
+        if (focusedIndex === -1) {
+          focusModule(step > 0 ? 0 : MODULES.length - 1);
+        } else {
+          focusModule((focusedIndex + step + MODULES.length) % MODULES.length);
+        }
+      }
+
+      dockOverviewBtn.addEventListener('click', returnToOverview);
+      mobileBackBtn.addEventListener('click', returnToOverview);
+      document.getElementById('close-detail-btn').addEventListener('click', returnToOverview);
+      navPrevBtn.addEventListener('click', () => cycleModule(-1));
+      navNextBtn.addEventListener('click', () => cycleModule(1));
+      mPrevBtn.addEventListener('click', () => cycleModule(-1));
+      mNextBtn.addEventListener('click', () => cycleModule(1));
+
+      explodeBtn.addEventListener('click', () => {
+        if (focusedIndex === -1) return;
+        isExploded = !isExploded;
+        explodeBtn.classList.toggle('is-active', isExploded);
+        explodeBtn.textContent = isExploded ? 'Assemble' : 'Explode';
+        SoundFX.tab();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'Escape') returnToOverview();
+        if (e.key === 'ArrowRight') cycleModule(1);
+        if (e.key === 'ArrowLeft') cycleModule(-1);
+      });
+
+      let wheelCooldown = 0;
+      window.addEventListener('wheel', (e) => {
+        if (e.target.closest('#detail-panel')) return;
+        const now = performance.now();
+        if (now - wheelCooldown < 460) return;
+        if (Math.abs(e.deltaY) > 24) {
+          wheelCooldown = now;
+          cycleModule(e.deltaY > 0 ? 1 : -1);
+        }
+      }, { passive: true });
+
+      // Pointer / Touch Drag & Tap on Unified Interaction Layer
+      interactionStage.addEventListener('pointerdown', (e) => {
+        isPointerDown = true;
+        pointerMoved = false;
+        lastPointerX = e.clientX;
+        lastPointerY = e.clientY;
+        interactionStage.setPointerCapture(e.pointerId);
+      });
+
+      interactionStage.addEventListener('pointermove', (e) => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        mouseNDC.x = (e.clientX / w) * 2 - 1;
+        mouseNDC.y = -(e.clientY / h) * 2 + 1;
+
+        if (isPointerDown) {
+          const dx = e.clientX - lastPointerX;
+          const dy = e.clientY - lastPointerY;
+          if (Math.abs(dx) > 4 || Math.abs(dy) > 4) pointerMoved = true;
+
+          if (focusedIndex === -1) {
+            targetOrbitTheta -= dx * 0.0058;
+            targetOrbitPhi = Math.max(0.28, Math.min(0.95, targetOrbitPhi + dy * 0.004));
+          } else {
+            const mod = moduleObjects[focusedIndex];
+            mod.pivot.rotation.y += dx * 0.0105;
+            mod.pivot.rotation.x = Math.max(-0.8, Math.min(0.8, mod.pivot.rotation.x + dy * 0.0075));
+          }
+          lastPointerX = e.clientX;
+          lastPointerY = e.clientY;
+        } else if (w >= 768 && focusedIndex === -1) {
+          raycaster.setFromCamera(mouseNDC, camera);
+          const hits = raycaster.intersectObjects(raycastTargets, false);
+          setHovered(hits.length > 0 ? hits[0].object.userData.moduleIndex : -1);
+        }
+      });
+
+      interactionStage.addEventListener('pointerup', (e) => {
+        if (isPointerDown && !pointerMoved) {
+          mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+          mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+          raycaster.setFromCamera(mouseNDC, camera);
+          const hits = raycaster.intersectObjects(raycastTargets, false);
+          if (hits.length > 0) {
+            focusModule(hits[0].object.userData.moduleIndex);
+          } else if (focusedIndex !== -1 && window.innerWidth >= 1024) {
+            // Clicking empty blurred background on desktop returns gently to overview
+            returnToOverview();
+          }
+        }
+        isPointerDown = false;
+      });
+
+      interactionStage.addEventListener('pointercancel', () => {
+        isPointerDown = false;
+      });
+
+      /* -----------------------------------------------------------------------
+         10. LIVE THEME & AUDIO CONTROLS
+         ----------------------------------------------------------------------- */
+      const themeBtn = document.getElementById('theme-btn');
+      const themeLabel = document.getElementById('theme-label');
+      const audioBtn = document.getElementById('audio-btn');
+      const audioLabel = document.getElementById('audio-label');
+      const audioDot = document.getElementById('audio-dot');
+
+      function applyTheme(key) {
+        currentThemeKey = key;
+        const t = THEMES[key];
+        document.documentElement.setAttribute('data-theme', key);
+        localStorage.setItem('theme', key);
+        themeLabel.textContent = t.label;
+
+        bgScene.fog.color.setHex(t.bgHex);
+        bgRimLight.color.setHex(t.primaryHex);
+        fgRimLight.color.setHex(t.primaryHex);
+
+        materialRegistry.forEach(entry => {
+          entry.mat.color.setHex(getRoleColor(entry.role, t));
+          if (entry.role === 'grid') entry.mat.opacity = t.gridOpacity;
+          else if (entry.kind === 'points') entry.mat.opacity = t.particleOpacity;
+          entry.mat.needsUpdate = true;
+        });
+      }
+
+      themeLabel.textContent = THEMES[currentThemeKey].label;
+      themeBtn.addEventListener('click', () => {
+        applyTheme(currentThemeKey === 'dark' ? 'light' : 'dark');
+        SoundFX.tab();
+      });
+
+      audioBtn.addEventListener('click', () => {
+        SoundFX.enabled = !SoundFX.enabled;
+        audioLabel.textContent = SoundFX.enabled ? 'ON' : 'OFF';
+        audioBtn.classList.toggle('is-active', SoundFX.enabled);
+        audioDot.style.backgroundColor = SoundFX.enabled ? 'var(--accent)' : 'var(--text-dim)';
+        if (SoundFX.enabled) {
+          SoundFX.unlock();
+          SoundFX.tab();
+        }
+      });
+
+      /* -----------------------------------------------------------------------
+         11. 3D-TO-SCREEN PROJECTION & ARCHITECTURAL LEADER LINES
+         ----------------------------------------------------------------------- */
+      const hoverCalloutEl = document.getElementById('hover-callout');
+      const hcCode = document.getElementById('hc-code');
+      const hcTitle = document.getElementById('hc-title');
+      const hcDesc = document.getElementById('hc-desc');
+
+      const hoverTetherLine = document.getElementById('hover-tether-line');
+      const hoverTetherDot = document.getElementById('hover-tether-dot');
+      const detailTetherLine = document.getElementById('detail-tether-line');
+      const detailTetherDot = document.getElementById('detail-tether-dot');
+
+      const projVec = new THREE.Vector3();
+
+      function projectToScreen(worldPos) {
+        projVec.copy(worldPos).project(camera);
+        return {
+          x: (projVec.x * 0.5 + 0.5) * window.innerWidth,
+          y: (-projVec.y * 0.5 + 0.5) * window.innerHeight,
+          visible: projVec.z < 1
+        };
+      }
+
+      function updateOverlays() {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        moduleObjects.forEach((modObj, i) => {
+          const el = projectedLabelEls[i];
+          // Hide floating tags during inspection mode (and keep mobile overview clean)
+          if (focusedIndex !== -1) {
+            el.style.opacity = '0';
+            el.style.pointerEvents = 'none';
+            return;
+          }
+          const labelWorld = modObj.pivot.getWorldPosition(new THREE.Vector3());
+          labelWorld.y += 1.56;
+          const pt = projectToScreen(labelWorld);
+          const safeTop = w < 768 ? 112 : 76;
+          const safeBottom = h - 78;
+
+          if (pt.visible && pt.x > 24 && pt.x < w - 24 && pt.y > safeTop && pt.y < safeBottom) {
+            el.style.left = `${pt.x.toFixed(1)}px`;
+            el.style.top = `${pt.y.toFixed(1)}px`;
+            el.style.opacity = hoveredIndex === -1 || hoveredIndex === i ? '1' : '0.4';
+            el.style.pointerEvents = 'auto';
+          } else {
+            el.style.opacity = '0';
+            el.style.pointerEvents = 'none';
+          }
+        });
+
+        // Desktop Overview Hover Callout
+        if (focusedIndex === -1 && hoveredIndex !== -1 && w >= 768) {
+          const modObj = moduleObjects[hoveredIndex];
+          const anchor = projectToScreen(modObj.pivot.getWorldPosition(new THREE.Vector3()));
+          const side = anchor.x > w * 0.62 ? -1 : 1;
+          const cardX = anchor.x + side * 56;
+          const cardY = Math.max(110, Math.min(h - 135, anchor.y - 20));
+
+          hcCode.textContent = `${modObj.data.code} / ${modObj.data.name.toUpperCase()}`;
+          hcTitle.textContent = modObj.data.panelTitle;
+          hcDesc.textContent = modObj.data.shortDesc;
+
+          hoverCalloutEl.style.left = side > 0 ? `cardXpx`:`{cardX - 245}px`;
+          hoverCalloutEl.style.top = `${cardY}px`;
+          hoverCalloutEl.classList.add('visible');
+
+          const elbowX = anchor.x + side * 30;
+          hoverTetherLine.setAttribute('points', `anchor.x,{anchor.y} elbowX,{cardY} side>0?cardX+14:cardX-14,{cardY}`);
+          hoverTetherLine.setAttribute('opacity', '0.62');
+          hoverTetherDot.setAttribute('cx', anchor.x);
+          hoverTetherDot.setAttribute('cy', anchor.y);
+          hoverTetherDot.setAttribute('opacity', '0.9');
+        } else {
+          hoverCalloutEl.classList.remove('visible');
+          hoverTetherLine.setAttribute('opacity', '0');
+          hoverTetherDot.setAttribute('opacity', '0');
+        }
+
+        // Desktop Inspection Architectural Leader Line
+        if (focusedIndex !== -1 && w >= 1024) {
+          const modObj = moduleObjects[focusedIndex];
+          const anchor = projectToScreen(modObj.pivot.getWorldPosition(new THREE.Vector3()));
+          const panelRect = detailPanel.getBoundingClientRect();
+          const startX = anchor.x + 88;
+          const targetX = panelRect.left;
+          const targetY = panelRect.top + 54;
+
+          if (targetX - startX > 36) {
+            const midX = startX + (targetX - startX) * 0.45;
+            detailTetherLine.setAttribute('points', `startX,{anchor.y} midX,{anchor.y} midX+20,{targetY} targetX,{targetY}`);
+            detailTetherLine.setAttribute('opacity', '0.55');
+            detailTetherDot.setAttribute('cx', startX);
+            detailTetherDot.setAttribute('cy', anchor.y);
+            detailTetherDot.setAttribute('opacity', '0.9');
+          } else {
+            detailTetherLine.setAttribute('opacity', '0');
+            detailTetherDot.setAttribute('opacity', '0');
+          }
+        } else {
+          detailTetherLine.setAttribute('opacity', '0');
+          detailTetherDot.setAttribute('opacity', '0');
+        }
+      }
+
+      /* -----------------------------------------------------------------------
+         12. FLUID FRAME-RATE-INDEPENDENT RENDER LOOP (DUAL PASS)
+         ----------------------------------------------------------------------- */
+      const clock = new THREE.Clock();
+
+      function damp(current, target, lambda, dt) {
+        return current + (target - current) * (1 - Math.exp(-lambda * dt));
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const dt = Math.min(clock.getDelta(), 0.05);
+        const t = clock.elapsedTime;
+
+        calibRings.forEach(r => {
+          if (r.userData.speed) r.rotation.z += r.userData.speed * dt;
+        });
+        particleField.rotation.y += 0.015 * dt;
+
+        coreOctFill.rotation.y += 0.2 * dt;
+        coreOctEdges.rotation.y = coreOctFill.rotation.y;
+        gRing1.rotation.z += 0.22 * dt;
+        gRing2.rotation.z -= 0.16 * dt;
+        gRing3.rotation.y += 0.12 * dt;
+        coreGroup.position.y = 0.45 + Math.sin(t * 1.1) * 0.08;
+
+        if (signalPulseObj && signalCurveRef) {
+          signalPulseObj.position.copy(signalCurveRef.getPoint((t * 0.32) % 1));
+        }
+
+        const partDamp = 1 - Math.exp(-7.5 * dt);
+
+        moduleObjects.forEach((m, idx) => {
+          const isHovered = hoveredIndex === idx;
+          const isFocused = focusedIndex === idx;
+          const isReceded = focusedIndex !== -1 && !isFocused;
+
+          m.hoverAmount = damp(m.hoverAmount, isHovered ? 1 : 0, 8, dt);
+          m.focusAmount = damp(m.focusAmount, isFocused ? 1 : 0, 7, dt);
+          m.explodeAmount = damp(m.explodeAmount, (isFocused && isExploded) ? 1 : 0, 6.5, dt);
+
+          const baseFloat = 0.48 + Math.sin(t * 1.15 + idx * 1.25) * 0.075;
+          const targetY = baseFloat + m.hoverAmount * 0.34 + m.focusAmount * 0.28 - (isReceded ? 0.3 : 0);
+          m.pivot.position.y = damp(m.pivot.position.y, targetY, 8, dt);
+
+          const targetScale = (isReceded ? 0.72 : 1.0) + m.hoverAmount * 0.14 + m.focusAmount * 0.16;
+          m.pivot.scale.setScalar(damp(m.pivot.scale.x, targetScale, 8, dt));
+
+          const spinRate = 0.18 + m.hoverAmount * 0.46 + m.focusAmount * 0.12;
+          if (!isPointerDown || !isFocused) {
+            m.pivot.rotation.y += spinRate * dt;
+            if (!isFocused) m.pivot.rotation.x = damp(m.pivot.rotation.x, 0, 5, dt);
+          }
+          if (m.subSpinTarget > 0.005) {
+            const step = m.subSpinTarget * (1 - Math.exp(-8 * dt));
+            m.pivot.rotation.y += step;
+            m.subSpinTarget -= step;
+          }
+
+          const baseBeam = currentThemeKey === 'dark' ? 0.04 : 0.03;
+          const targetBeamOp = isReceded ? 0.01 : (baseBeam + m.hoverAmount * 0.065);
+          m.beamMat.opacity = damp(m.beamMat.opacity, targetBeamOp, 8, dt);
+
+          const haloActive = Math.max(m.hoverAmount, m.focusAmount);
+          m.haloMat.opacity = haloActive * 0.5;
+          m.halo.scale.setScalar(1 + haloActive * 0.24);
+
+          m.parts.forEach(part => {
+            const dest = part.userData.basePos.clone()
+              .addScaledVector(part.userData.hoverOffset, m.hoverAmount)
+              .addScaledVector(part.userData.focusOffset, m.focusAmount)
+              .addScaledVector(part.userData.explodeOffset, m.explodeAmount);
+            part.position.lerp(dest, partDamp);
+          });
+        });
+
+        if (focusedIndex === -1) {
+          if (!isPointerDown) targetOrbitTheta += 0.028 * dt;
+          orbitTheta = damp(orbitTheta, targetOrbitTheta, 5.5, dt);
+          orbitPhi = damp(orbitPhi, targetOrbitPhi, 5.5, dt);
+
+          const aspect = window.innerWidth / window.innerHeight;
+          const isSmall = window.innerWidth < 768;
+          const r = isSmall ? (aspect < 0.65 ? 24.5 : 21.5) : 18.6;
+          targetCamPos.set(
+            Math.sin(orbitTheta) * Math.cos(orbitPhi) * r,
+            Math.sin(orbitPhi) * r + 0.65,
+            Math.cos(orbitTheta) * Math.cos(orbitPhi) * r
+          );
+          // Lowering lookAt.y lifts the entire 3D orbit cleanly into the center, well above the bottom dock
+          targetLookAt.set(0, isSmall ? -0.95 : -0.82, 0);
+        }
+
+        const camLerp = 1 - Math.exp(-5.4 * dt);
+        const lookLerp = 1 - Math.exp(-6.2 * dt);
+        currentCamPos.lerp(targetCamPos, camLerp);
+        currentLookAt.lerp(targetLookAt, lookLerp);
+        camera.position.copy(currentCamPos);
+        camera.lookAt(currentLookAt);
+
+        // Pass 1: Render background scene
+        bgRenderer.render(bgScene, camera);
+
+        // Pass 2: Render isolated sharp foreground sculpture above the blur veil, or flush empty canvas
+        if (fgIsolatedIndex !== -1) {
+          fgRenderer.render(fgScene, camera);
+        } else if (fgNeedsFlush) {
+          fgRenderer.setClearColor(0x000000, 0);
+          fgRenderer.clear(true, true, true);
+          fgRenderer.render(fgScene, camera);
+          fgNeedsFlush = false;
+        }
+
+        updateOverlays();
+      }
+
+      window.addEventListener('resize', () => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        bgRenderer.setSize(w, h);
+        fgRenderer.setSize(w, h);
+        syncDesktopArrows();
+        if (focusedIndex !== -1) computeFocusCamera(focusedIndex);
+      });
+
+      window.onload = function () {
+        animate();
+      };
+    })();
+  </script>
 </body>
 </html>
+
