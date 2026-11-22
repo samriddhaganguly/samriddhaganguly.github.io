@@ -6,18 +6,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
 /* ── TOKENS ── */
+/* ── DARK MODE (MIDNIGHT SLATE & SOFT SAPPHIRE) ── */
 :root {
-  --bg:         #04080f;   /* near-black navy */
-  --bg2:        #070d1a;   /* cards */
-  --bg3:        #0a1120;   /* section contrast */
-  --surface:    #0d1628;   /* surfaces */
-  --border:     rgba(100,140,200,0.09);  /* blue-tinted border */
-  --accent:     #c8a96e;   /* gold — unchanged */
-  --accent2:    #7b9ea8;   /* steel blue — unchanged */
-  --accent3:    #a07bb5;   /* violet — unchanged */
-  --text:       #e8e4dc;   /* unchanged */
-  --text-muted: #7a7f90;   /* very slightly blue-shifted */
-  --text-dim:   #3a3f52;   /* blue-shifted dim */
+  --bg:         #0c1017;   /* midnight slate */
+  --bg2:        #10151f;   /* cards */
+  --bg3:        #151c29;   /* section contrast */
+  --surface:    #192130;   /* elevated surfaces */
+  --border:     rgba(122, 162, 247, 0.16);
+  --accent:     #7aa2f7;   /* soft sapphire */
+  --accent2:    #8fa6bf;   /* cool silver-slate */
+  --accent3:    #a3b8e8;   /* mist periwinkle */
+  --text:       #eceff4;   /* crisp alabaster-white */
+  --text-muted: #9aa5b6;
+  --text-dim:   #6b7688;
   --serif: 'Cormorant Garamond', Georgia, serif;
   --mono:  'DM Mono', monospace;
   --sans:  'DM Sans', sans-serif;
@@ -25,20 +26,21 @@
   --max-w: 1200px;
   --pad:   clamp(24px, 5vw, 80px);
 }
-/* ── LIGHT MODE ── */
+
+/* ── LIGHT MODE (ALABASTER & FOUNTAIN-PEN SAPPHIRE) ── */
 body.light {
---bg:      #ffffff;   /* near-white, just a breath of warmth */
---bg2:     #fdfcfa;   /* cards — almost pure white */
---bg3:     #f2efe9;   /* subtle contrast */
---surface: #ffffff;
-  --border:     rgba(139,111,61,0.22);
-  --text:       #1a1816;
-  --text-muted: #5f5a52;
-  --text-dim:   #8a847a;
---accent:  #4169e1;   /* deep fountain pen blue */
---accent2: #4a7c96;   /* slate blue-grey */
---accent3: #6b4f8a;   /* muted violet */
-  --accent-soft: #e8dcc6;
+  --bg:         #f6f4ef;
+  --bg2:        #fcfbf8;
+  --bg3:        #f2efe8;
+  --surface:    #ffffff;
+  --border:     rgba(43, 78, 168, 0.18);
+  --text:       #181715;
+  --text-muted: #524e48;
+  --text-dim:   #7d776e;
+  --accent:     #2b4ea8;
+  --accent2:    #4a728c;
+  --accent3:    #1d3575;
+  --accent-soft: rgba(43, 78, 168, 0.12);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth;}
