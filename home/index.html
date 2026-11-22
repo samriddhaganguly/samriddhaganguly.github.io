@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="C_Im14mGfPaQwH1G1sTvueh9C_huqQwkSxNMBVBDMaA" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Samriddha Ganguly | Quantum Condensed Matter Physics</title>
   <meta name="description" content="Samriddha Ganguly, BS-MS Physics at IISER Bhopal and CEA Grenoble. Research in unconventional superconductivity, topology, and quantum materials." />
   <meta property="og:title" content="Samriddha Ganguly" />
@@ -25,46 +25,50 @@
 
   <style>
     /* =========================================================================
-       DESIGN TOKENS: SOBER ACADEMIC DARK (OBSIDIAN & GOLD) & LIGHT (ALABASTER & SAPPHIRE)
+       MINIMALIST ARCHITECTURAL PALETTE
+       Dark Mode = Midnight Slate & Soft Sapphire (True Analogue of Light Mode)
+       Light Mode = Warm Alabaster & Fountain-Pen Sapphire
        ========================================================================= */
     :root {
-      --bg: #050911;
-      --bg-surface: rgba(9, 15, 27, 0.78);
-      --bg-surface-strong: rgba(8, 14, 25, 0.9);
-      --bg-card: rgba(16, 25, 43, 0.56);
-      --accent: #c8a96e;
-      --accent-rgb: 200, 169, 110;
-      --accent2: #7b9ea8;
-      --accent2-rgb: 123, 158, 168;
-      --text: #eae6de;
-      --text-muted: #98a2b3;
-      --text-dim: #647084;
-      --border: rgba(200, 169, 110, 0.22);
-      --border-hover: rgba(200, 169, 110, 0.55);
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --shadow-panel: 0 24px 64px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(200, 169, 110, 0.12);
-      --shadow-pill: 0 10px 30px -8px rgba(0, 0, 0, 0.5);
-      --vignette-edge: rgba(2, 5, 11, 0.78);
+      --bg: #0c1017;
+      --bg-surface: rgba(16, 21, 31, 0.78);
+      --bg-surface-strong: rgba(17, 23, 34, 0.92);
+      --bg-card: rgba(25, 33, 48, 0.62);
+      --blur-tint: rgba(12, 16, 23, 0.56);
+      --accent: #7aa2f7;
+      --accent-rgb: 122, 162, 247;
+      --accent2: #8fa6bf;
+      --accent2-rgb: 143, 166, 191;
+      --text: #eceff4;
+      --text-muted: #9aa5b6;
+      --text-dim: #6b7688;
+      --border: rgba(122, 162, 247, 0.2);
+      --border-hover: rgba(122, 162, 247, 0.5);
+      --border-subtle: rgba(236, 239, 244, 0.08);
+      --shadow-panel: 0 24px 60px -14px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(122, 162, 247, 0.12);
+      --shadow-pill: 0 10px 28px -8px rgba(0, 0, 0, 0.45);
+      --vignette-edge: rgba(7, 10, 15, 0.74);
     }
 
     [data-theme="light"] {
       --bg: #f6f4ef;
       --bg-surface: rgba(252, 251, 248, 0.82);
-      --bg-surface-strong: rgba(253, 252, 250, 0.93);
-      --bg-card: rgba(242, 238, 230, 0.72);
+      --bg-surface-strong: rgba(253, 252, 250, 0.94);
+      --bg-card: rgba(242, 239, 232, 0.76);
+      --blur-tint: rgba(246, 244, 239, 0.52);
       --accent: #2b4ea8;
       --accent-rgb: 43, 78, 168;
-      --accent2: #4a778f;
-      --accent2-rgb: 74, 119, 143;
+      --accent2: #4a728c;
+      --accent2-rgb: 74, 114, 140;
       --text: #181715;
-      --text-muted: #524d47;
-      --text-dim: #7c766d;
-      --border: rgba(43, 78, 168, 0.2);
-      --border-hover: rgba(43, 78, 168, 0.52);
+      --text-muted: #524e48;
+      --text-dim: #7d776e;
+      --border: rgba(43, 78, 168, 0.18);
+      --border-hover: rgba(43, 78, 168, 0.48);
       --border-subtle: rgba(24, 23, 21, 0.08);
-      --shadow-panel: 0 24px 56px -12px rgba(24, 28, 42, 0.14), 0 0 0 1px rgba(43, 78, 168, 0.1);
+      --shadow-panel: 0 24px 56px -14px rgba(24, 28, 42, 0.14), 0 0 0 1px rgba(43, 78, 168, 0.1);
       --shadow-pill: 0 8px 24px -6px rgba(24, 28, 42, 0.1);
-      --vignette-edge: rgba(226, 221, 212, 0.68);
+      --vignette-edge: rgba(226, 221, 212, 0.66);
     }
 
     *, *::before, *::after {
@@ -85,7 +89,7 @@
       font-weight: 400;
       -webkit-font-smoothing: antialiased;
       user-select: none;
-      transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
+      transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease;
     }
 
     .font-serif-ed { font-family: 'Cormorant Garamond', Georgia, serif; }
@@ -93,18 +97,16 @@
     .font-sans-ed { font-family: 'DM Sans', sans-serif; }
 
     /* =========================================================================
-       THREE.JS STAGE & SUBTLE ATMOSPHERE
+       DUAL-LAYER 3D STAGE WITH OPTICAL BACKGROUND BLUR ISOLATION
        ========================================================================= */
-    #webgl-stage {
+    #webgl-bg {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: 1;
-      cursor: grab;
-      touch-action: none;
+      pointer-events: none;
     }
-    #webgl-stage:active { cursor: grabbing; }
 
     .atmosphere-vignette {
       position: fixed;
@@ -112,11 +114,50 @@
       z-index: 2;
       pointer-events: none;
       background:
-        radial-gradient(circle at 50% 48%, rgba(var(--accent-rgb), 0.05) 0%, transparent 52%),
+        radial-gradient(circle at 50% 48%, rgba(var(--accent-rgb), 0.045) 0%, transparent 52%),
         radial-gradient(circle at 50% 50%, transparent 58%, var(--vignette-edge) 100%);
-      transition: background 0.5s ease;
+      transition: background 0.45s ease;
     }
 
+    /* Full Background Blur Veil: sits ABOVE background 3D scene and BELOW focused 3D sculpture */
+    #focus-blur-veil {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background: var(--blur-tint);
+      backdrop-filter: blur(18px) saturate(110%);
+      -webkit-backdrop-filter: blur(18px) saturate(110%);
+      opacity: 0;
+      transition: opacity 0.48s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s ease;
+    }
+    #focus-blur-veil.active {
+      opacity: 1;
+    }
+
+    /* Foreground Isolated 3D Canvas (renders ONLY the selected structure sharply above the blur) */
+    #webgl-fg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    /* Unified Pointer Interaction Layer */
+    #interaction-stage {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 8;
+      cursor: grab;
+      touch-action: none;
+    }
+    #interaction-stage:active { cursor: grabbing; }
+
+    /* SVG Leader Lines */
     #tether-svg {
       position: fixed;
       inset: 0;
@@ -127,12 +168,12 @@
     }
 
     /* =========================================================================
-       FLUID GLASS SURFACES & RESPONSIVE TACTILE BUTTONS
+       FLUID GLASS SURFACES & TACTILE BUTTONS
        ========================================================================= */
     .glass-surface {
       background: var(--bg-surface);
-      backdrop-filter: blur(22px) saturate(135%);
-      -webkit-backdrop-filter: blur(22px) saturate(135%);
+      backdrop-filter: blur(22px) saturate(130%);
+      -webkit-backdrop-filter: blur(22px) saturate(130%);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-pill);
       transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
@@ -140,8 +181,8 @@
 
     .glass-panel {
       background: var(--bg-surface-strong);
-      backdrop-filter: blur(26px) saturate(140%);
-      -webkit-backdrop-filter: blur(26px) saturate(140%);
+      backdrop-filter: blur(26px) saturate(135%);
+      -webkit-backdrop-filter: blur(26px) saturate(135%);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-panel);
       transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
@@ -159,11 +200,11 @@
       border-radius: 9999px;
       cursor: pointer;
       transition:
-        color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-        background-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-        border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .ui-btn:hover {
       color: var(--text);
@@ -175,9 +216,9 @@
     }
     .ui-btn.is-active {
       color: var(--accent);
-      background: rgba(var(--accent-rgb), 0.15);
+      background: rgba(var(--accent-rgb), 0.14);
       border-color: var(--border-hover);
-      box-shadow: 0 2px 12px rgba(var(--accent-rgb), 0.14);
+      box-shadow: 0 2px 12px rgba(var(--accent-rgb), 0.12);
     }
 
     .ui-pill {
@@ -193,7 +234,7 @@
       border-radius: 9999px;
       box-shadow: var(--shadow-pill);
       cursor: pointer;
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .ui-pill:hover {
       color: var(--text);
@@ -201,7 +242,7 @@
       transform: translateY(-1px);
     }
     .ui-pill:active {
-      transform: scale(0.96);
+      transform: scale(0.95);
     }
     .ui-pill.is-active {
       color: var(--accent);
@@ -216,9 +257,9 @@
       border: 1px solid var(--border-subtle);
       border-radius: 10px;
       transition:
-        border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-        background-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .card-link:hover {
       border-color: var(--border-hover);
@@ -238,7 +279,7 @@
       transform: translate(-50%, -100%);
       pointer-events: auto;
       cursor: pointer;
-      padding: 5px 12px;
+      padding: 5px 11px;
       border-radius: 9999px;
       background: var(--bg-surface);
       backdrop-filter: blur(14px);
@@ -246,10 +287,10 @@
       border: 1px solid var(--border);
       box-shadow: var(--shadow-pill);
       transition:
-        opacity 0.28s ease,
-        transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
-        border-color 0.22s ease,
-        background-color 0.22s ease;
+        opacity 0.26s ease,
+        transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.2s ease,
+        background-color 0.2s ease;
       white-space: nowrap;
     }
     .projected-tag.is-hovered {
@@ -264,7 +305,7 @@
       pointer-events: none;
       opacity: 0;
       transform: translate(14px, -50%) scale(0.96);
-      transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.2s ease, transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
     }
     #hover-callout.visible {
       opacity: 1;
@@ -272,26 +313,26 @@
     }
 
     /* =========================================================================
-       FLOATING TITLE OVERLAY (MINIMAL, NO HEADER BAR)
+       FLOATING TITLE OVERLAY (NO HEADER BAR)
        ========================================================================= */
     #title-block {
-      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1), transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
     }
     #title-block.compact {
       opacity: 0.72;
       transform: scale(0.94);
       transform-origin: top left;
     }
-    @media (max-width: 767px) {
+    @media (max-width: 1023px) {
       #title-block.compact {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-8px);
         pointer-events: none;
       }
     }
 
     /* =========================================================================
-       DETAIL INSPECTION PANEL (NON-BLOCKING SIDE PANEL ON DESKTOP, BOTTOM SHEET ON MOBILE)
+       DETAIL INSPECTION PANEL (SIDE CARD ON DESKTOP, NATIVE BOTTOM SHEET ON MOBILE)
        ========================================================================= */
     #detail-wrap {
       position: fixed;
@@ -303,11 +344,11 @@
       pointer-events: auto;
       opacity: 0;
       visibility: hidden;
-      transform: translateX(32px) scale(0.97);
+      transform: translateX(30px) scale(0.97);
       transition:
-        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-        visibility 0.32s ease;
+        transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0.3s ease;
       user-select: text;
     }
     #detail-panel.open {
@@ -316,28 +357,58 @@
       transform: translateX(0) scale(1);
     }
 
+    /* Native Mobile Bottom Sheet Layout */
     @media (max-width: 1023px) {
+      #detail-wrap {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        padding: 0;
+      }
       #detail-panel {
-        transform: translateY(36px) scale(0.98);
+        border-radius: 22px 22px 0 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        max-height: 50dvh;
+        transform: translateY(100%);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
       }
       #detail-panel.open {
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
       }
     }
 
-    /* Smooth Tab Content Fade */
+    /* Bottom Dock smoothly hides on mobile when inspecting so sheet has full room */
+    #bottom-dock-wrap {
+      transition: opacity 0.3s ease, transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @media (max-width: 1023px) {
+      #bottom-dock-wrap.mobile-hidden {
+        opacity: 0;
+        transform: translate(-50%, 24px);
+        pointer-events: none;
+      }
+    }
+
+    /* Tab Content Cross-fade */
     @keyframes tabFadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .tab-animate {
-      animation: tabFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: tabFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* Custom Scrollbar */
+    /* Scrollbars */
+    .ed-scroll {
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
     .ed-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
     .ed-scroll::-webkit-scrollbar-track { background: transparent; }
-    .ed-scroll::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), 0.38); border-radius: 99px; }
+    .ed-scroll::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), 0.36); border-radius: 99px; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -352,13 +423,22 @@
   </style>
 </head>
 <body>
-  <!-- Full-Viewport Three.js WebGL Stage -->
-  <div id="webgl-stage" aria-label="Interactive 3D Physics Observatory"></div>
+  <!-- Layer 1: Background 3D Stage (floor, core, non-focused structures) -->
+  <div id="webgl-bg" aria-hidden="true"></div>
 
-  <!-- Subtle Depth Vignette -->
+  <!-- Layer 2: Subtle Vignette -->
   <div class="atmosphere-vignette"></div>
 
-  <!-- Hairline SVG Leader Lines -->
+  <!-- Layer 3: Optical Background Blur Veil (activates when inspecting a structure) -->
+  <div id="focus-blur-veil" aria-hidden="true"></div>
+
+  <!-- Layer 4: Foreground Isolated 3D Stage (renders ONLY the focused structure sharply) -->
+  <div id="webgl-fg" aria-hidden="true"></div>
+
+  <!-- Layer 5: Unified Touch / Pointer Interaction Surface -->
+  <div id="interaction-stage" aria-label="Interactive 3D Physics Observatory"></div>
+
+  <!-- Layer 6: Architectural Hairline Leader Lines -->
   <svg id="tether-svg" aria-hidden="true">
     <polyline id="hover-tether-line" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3" opacity="0" />
     <circle id="hover-tether-dot" r="2.8" fill="var(--accent)" opacity="0" />
@@ -367,10 +447,10 @@
     <circle id="detail-tether-dot" r="3.5" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5" opacity="0" />
   </svg>
 
-  <!-- 3D Projected Floating Tags -->
+  <!-- 3D Projected Floating Labels (Overview Mode) -->
   <div id="projected-labels-layer"></div>
 
-  <!-- Hover Summary Callout -->
+  <!-- Desktop Hover Summary Callout -->
   <div id="hover-callout" class="glass-panel rounded-xl px-4 py-3 max-w-[245px]">
     <div class="font-mono-ed text-[10px] tracking-[0.16em] text-accent" id="hc-code">01 / PROFILE</div>
     <div class="font-serif-ed text-lg font-medium text-main mt-0.5 leading-tight" id="hc-title">Samriddha Ganguly</div>
@@ -381,7 +461,7 @@
   <!-- =========================================================================
        MINIMAL FLOATING TITLE (TOP-LEFT, NO HEADER BAR)
        ========================================================================= -->
-  <div id="title-block" class="fixed top-4 left-4 sm:top-7 sm:left-8 z-30 pointer-events-none">
+  <div id="title-block" class="fixed top-4 left-4 sm:top-7 sm:left-8 z-30 pointer-events-none" style="padding-top: env(safe-area-inset-top, 0px);">
     <div class="pointer-events-auto">
       <div class="font-mono-ed text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-accent flex items-center gap-2">
         <span class="w-4 h-px bg-[var(--accent)]"></span>
@@ -399,7 +479,7 @@
   <!-- =========================================================================
        MINIMAL FLOATING CONTROLS (TOP-RIGHT)
        ========================================================================= -->
-  <div class="fixed top-4 right-4 sm:top-7 sm:right-8 z-30 flex items-center gap-2">
+  <div class="fixed top-4 right-4 sm:top-7 sm:right-8 z-30 flex items-center gap-2" style="padding-top: env(safe-area-inset-top, 0px);">
     <button id="audio-btn" type="button" aria-label="Toggle subtle sound effects" class="ui-pill px-3 py-1.5 sm:px-3.5 sm:py-2 font-mono-ed text-[10px] tracking-[0.14em] uppercase">
       <span id="audio-dot" class="w-1.5 h-1.5 rounded-full bg-[var(--text-dim)] transition-colors"></span>
       <span class="hidden sm:inline">SFX</span>
@@ -411,37 +491,50 @@
     </button>
   </div>
 
-  <!-- Subtle Hint (Bottom-Left on Desktop Overview Only) -->
-  <div id="overview-hint" class="hidden lg:block fixed bottom-[4.75rem] left-1/2 -translate-x-1/2 z-20 pointer-events-none font-mono-ed text-[10px] tracking-[0.18em] uppercase text-dim transition-opacity duration-300">
+  <!-- Mobile Top-Left Back Pill (Appears only on mobile when inspecting a structure) -->
+  <button id="mobile-back-btn" type="button" class="lg:hidden fixed top-4 left-4 z-30 hidden ui-pill px-3 py-1.5 font-mono-ed text-[10px] tracking-[0.14em] uppercase" style="margin-top: env(safe-area-inset-top, 0px);">
+    &larr; Overview
+  </button>
+
+  <!-- Subtle Hint (Desktop Overview Only) -->
+  <div id="overview-hint" class="hidden lg:block fixed bottom-[4.8rem] left-1/2 -translate-x-1/2 z-20 pointer-events-none font-mono-ed text-[10px] tracking-[0.18em] uppercase text-dim transition-opacity duration-300">
     Drag to Orbit &middot; Select a Structure &middot; Scroll or Use Arrows
   </div>
 
-  <!-- =========================================================================
-       FLOATING PREV / NEXT ARROWS (INSPECTION MODE)
-       ========================================================================= -->
-  <button id="nav-prev" type="button" aria-label="Previous Section" class="fixed left-3 sm:left-6 top-1/2 -translate-y-1/2 z-25 hidden ui-pill w-10 h-10 font-mono-ed text-sm">
+  <!-- Desktop Prev / Next Floating Arrows (Hidden on Mobile; Mobile uses sheet header controls) -->
+  <button id="nav-prev" type="button" aria-label="Previous Section" class="hidden fixed left-6 top-1/2 -translate-y-1/2 z-25 ui-pill w-10 h-10 font-mono-ed text-sm">
     &larr;
   </button>
-  <button id="nav-next" type="button" aria-label="Next Section" class="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-25 hidden ui-pill w-10 h-10 font-mono-ed text-sm">
+  <button id="nav-next" type="button" aria-label="Next Section" class="hidden fixed right-6 top-1/2 -translate-y-1/2 z-25 ui-pill w-10 h-10 font-mono-ed text-sm">
     &rarr;
   </button>
 
   <!-- =========================================================================
-       NON-BLOCKING DETAIL PANEL (RIGHT ON DESKTOP, BOTTOM SHEET ON MOBILE)
+       DETAIL INSPECTION PANEL (SIDE CARD ON DESKTOP, BOTTOM SHEET ON MOBILE)
        ========================================================================= -->
-  <div id="detail-wrap" class="inset-x-3 bottom-[4.6rem] sm:bottom-20 lg:inset-auto lg:right-16 lg:top-20 lg:bottom-24 lg:w-[410px] xl:w-[445px] flex items-end lg:items-center justify-center">
-    <section id="detail-panel" class="glass-panel relative w-full max-h-[43dvh] sm:max-h-[46dvh] lg:max-h-[78dvh] rounded-2xl flex flex-col overflow-hidden" aria-live="polite">
+  <div id="detail-wrap" class="lg:right-16 lg:top-20 lg:bottom-24 lg:w-[415px] xl:w-[448px] flex items-end lg:items-center justify-center">
+    <section id="detail-panel" class="glass-panel relative w-full lg:max-h-[78dvh] lg:rounded-2xl flex flex-col overflow-hidden" aria-live="polite">
+      <!-- Subtle Mobile Sheet Handle -->
+      <div class="lg:hidden w-full flex justify-center pt-2.5 pb-1 shrink-0">
+        <span class="w-9 h-1 rounded-full" style="background: var(--border-hover);"></span>
+      </div>
+
       <!-- Panel Header -->
-      <div class="px-4 sm:px-5 py-3.5 sm:py-4 border-b border-soft flex items-center justify-between gap-2 shrink-0">
+      <div class="px-4 sm:px-5 py-3 sm:py-4 border-b border-soft flex items-center justify-between gap-2 shrink-0">
         <div class="min-w-0">
           <div class="font-mono-ed text-[10px] tracking-[0.18em] uppercase text-accent" id="dp-code">01 / PROFILE</div>
           <h2 class="font-serif-ed text-xl sm:text-2xl font-medium text-main truncate leading-tight mt-0.5" id="dp-title">Samriddha Ganguly</h2>
         </div>
+
         <div class="flex items-center gap-1.5 shrink-0">
-          <button id="explode-btn" type="button" class="ui-btn px-3 py-1.5 font-mono-ed text-[10px] tracking-[0.12em] uppercase border border-accent">
+          <!-- Mobile Inline Prev/Next Steppers -->
+          <button id="m-prev-btn" type="button" aria-label="Previous Section" class="lg:hidden ui-btn w-8 h-8 font-mono-ed text-xs border border-soft">&larr;</button>
+          <button id="m-next-btn" type="button" aria-label="Next Section" class="lg:hidden ui-btn w-8 h-8 font-mono-ed text-xs border border-soft">&rarr;</button>
+
+          <button id="explode-btn" type="button" class="ui-btn px-2.5 sm:px-3 py-1.5 font-mono-ed text-[10px] tracking-[0.12em] uppercase border border-accent">
             Explode
           </button>
-          <button id="close-detail-btn" type="button" aria-label="Close panel" class="ui-btn w-8 h-8 font-mono-ed text-xs border border-soft">
+          <button id="close-detail-btn" type="button" aria-label="Close panel" class="hidden lg:inline-flex ui-btn w-8 h-8 font-mono-ed text-xs border border-soft">
             &times;
           </button>
         </div>
@@ -468,56 +561,51 @@
   </div>
 
   <!-- =========================================================================
-       FLUID FLOATING BOTTOM DOCK (SAFE-AREA OPTIMIZED FOR MOBILE)
+       FLUID FLOATING BOTTOM DOCK (RESPONSIVE FOR MOBILE & DESKTOP)
        ========================================================================= -->
-  <nav aria-label="Observatory Sections" class="fixed bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-30 max-w-[calc(100vw-1.25rem)]" style="padding-bottom: env(safe-area-inset-bottom, 0px);">
-    <div class="glass-surface rounded-full p-1 sm:p-1.5 flex items-center gap-1 overflow-x-auto no-scrollbar">
-      <button id="dock-overview" type="button" class="ui-btn is-active px-3 sm:px-4 py-2 font-mono-ed text-[10px] sm:text-[11px] tracking-[0.12em] uppercase shrink-0">
-        Overview
+  <nav id="bottom-dock-wrap" aria-label="Observatory Sections" class="fixed bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-30 w-[calc(100vw-1.25rem)] sm:w-auto max-w-3xl" style="padding-bottom: env(safe-area-inset-bottom, 0px);">
+    <div class="glass-surface rounded-full p-1 sm:p-1.5 flex items-center justify-between sm:justify-center gap-0.5 sm:gap-1 overflow-x-auto no-scrollbar">
+      <button id="dock-overview" type="button" class="ui-btn is-active px-2.5 sm:px-4 py-2 font-mono-ed text-[10px] sm:text-[11px] tracking-[0.1em] uppercase shrink-0">
+        <span class="hidden sm:inline">Overview</span>
+        <span class="sm:hidden">All</span>
       </button>
       <div class="w-px h-4 shrink-0" style="background: var(--border);"></div>
-      <div id="dock-nodes" class="flex items-center gap-1">
+      <div id="dock-nodes" class="flex items-center justify-between sm:justify-start gap-0.5 sm:gap-1 flex-1 sm:flex-initial">
         <!-- 5 Module Pills populated by JS -->
       </div>
     </div>
   </nav>
 
   <!-- =========================================================================
-       THREE.JS 3D OBSERVATORY & FLUID INTERACTION ENGINE
+       DUAL-STAGE THREE.JS ENGINE & FLUID INTERACTION CONTROLLER
        ========================================================================= -->
   <script>
     (function () {
       'use strict';
 
       /* -----------------------------------------------------------------------
-         1. SOBER DUAL-THEME PALETTE (SYNCED WITH SITE LOCALSTORAGE)
+         1. MINIMALIST DUAL-THEME PALETTES (MIDNIGHT SLATE-SAPPHIRE / ALABASTER-SAPPHIRE)
          ----------------------------------------------------------------------- */
       const THEMES = {
         dark: {
           label: 'LIGHT',
-          primaryHex: 0xc8a96e,   // Antique Champagne Gold
-          secondaryHex: 0x7b9ea8, // Steel Blue
-          accentHex: 0xa689c2,    // Soft Amethyst
-          surfaceHex: 0x162238,
-          gridHex: 0x5c7aa3,
-          bgHex: 0x050911,
-          lineOpacity: 0.72,
-          fillOpacity: 0.16,
-          gridOpacity: 0.12,
-          particleOpacity: 0.5
+          primaryHex: 0x7aa2f7,   // Soft Luminous Sapphire (Dark Analogue of #2b4ea8)
+          secondaryHex: 0x8fa6bf, // Cool Silver-Slate (Dark Analogue of #4a728c)
+          accentHex: 0xc2d0e6,    // Mist Platinum Highlight
+          gridHex: 0x4c5d7a,
+          bgHex: 0x0c1017,
+          gridOpacity: 0.14,
+          particleOpacity: 0.45
         },
         light: {
           label: 'DARK',
           primaryHex: 0x2b4ea8,   // Fountain-Pen Sapphire
-          secondaryHex: 0x4a778f, // Slate Blue-Grey
-          accentHex: 0x8f6b32,    // Burnished Brass
-          surfaceHex: 0xdce4f2,
+          secondaryHex: 0x4a728c, // Slate Blue-Grey
+          accentHex: 0x1d3575,    // Deep Ink Indigo
           gridHex: 0x8b99ad,
           bgHex: 0xf6f4ef,
-          lineOpacity: 0.65,
-          fillOpacity: 0.14,
           gridOpacity: 0.16,
-          particleOpacity: 0.42
+          particleOpacity: 0.4
         }
       };
 
@@ -525,7 +613,7 @@
       document.documentElement.setAttribute('data-theme', currentThemeKey);
 
       /* -----------------------------------------------------------------------
-         2. SUBTLE HARMONIC AUDIO (OFF BY DEFAULT)
+         2. SUBTLE HARMONIC WEB AUDIO (OFF BY DEFAULT)
          ----------------------------------------------------------------------- */
       const SoundFX = {
         ctx: null,
@@ -543,7 +631,7 @@
           this.unlocked = true;
         },
 
-        chime(freq = 520, endFreq = null, duration = 0.09, gain = 0.018) {
+        chime(freq = 520, endFreq = null, duration = 0.09, gain = 0.016) {
           if (!this.enabled || !this.unlocked || !this.ctx) return;
           try {
             const t = this.ctx.currentTime;
@@ -562,17 +650,17 @@
           } catch (e) {}
         },
 
-        hover() { this.chime(660, 740, 0.055, 0.012); },
+        hover() { this.chime(660, 740, 0.055, 0.011); },
         select() {
-          this.chime(440, 554, 0.1, 0.018);
-          setTimeout(() => this.chime(659, 659, 0.09, 0.014), 55);
+          this.chime(440, 554, 0.1, 0.016);
+          setTimeout(() => this.chime(659, 659, 0.09, 0.012), 55);
         },
-        tab() { this.chime(587, 659, 0.065, 0.014); },
-        glide() { this.chime(340, 440, 0.14, 0.015); }
+        tab() { this.chime(587, 659, 0.065, 0.012); },
+        glide() { this.chime(340, 440, 0.14, 0.014); }
       };
 
       /* -----------------------------------------------------------------------
-         3. PORTFOLIO MODULES (CONNECTED TO YOUR ACTUAL SITE ROUTES)
+         3. PORTFOLIO MODULES (CONNECTED TO REAL SITE ROUTES)
          ----------------------------------------------------------------------- */
       const MODULES = [
         {
@@ -891,37 +979,54 @@
       ];
 
       /* -----------------------------------------------------------------------
-         4. THREE.JS SCENE & STUDIO LIGHTING
+         4. DUAL THREE.JS SCENES (BACKGROUND + SHARP ISOLATED FOREGROUND)
          ----------------------------------------------------------------------- */
-      const stageEl = document.getElementById('webgl-stage');
-      const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(THEMES[currentThemeKey].bgHex, 0.02);
+      const bgContainer = document.getElementById('webgl-bg');
+      const fgContainer = document.getElementById('webgl-fg');
+      const interactionStage = document.getElementById('interaction-stage');
+      const focusBlurVeil = document.getElementById('focus-blur-veil');
+
+      const bgScene = new THREE.Scene();
+      bgScene.fog = new THREE.FogExp2(THEMES[currentThemeKey].bgHex, 0.019);
+
+      const fgScene = new THREE.Scene();
 
       const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 140);
       camera.position.set(0, 7.6, 18.8);
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      stageEl.appendChild(renderer.domElement);
+      const dpr = Math.min(window.devicePixelRatio, 2);
 
-      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x223355, 0.9);
-      scene.add(hemiLight);
-      const keyLight = new THREE.DirectionalLight(0xffffff, 0.85);
-      keyLight.position.set(12, 18, 14);
-      scene.add(keyLight);
-      const rimLight = new THREE.DirectionalLight(THEMES[currentThemeKey].primaryHex, 0.65);
-      rimLight.position.set(-14, 6, -12);
-      scene.add(rimLight);
+      const bgRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      bgRenderer.setPixelRatio(dpr);
+      bgRenderer.setSize(window.innerWidth, window.innerHeight);
+      bgContainer.appendChild(bgRenderer.domElement);
 
-      // Material Registry for smooth live theme updates
+      const fgRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      fgRenderer.setPixelRatio(dpr);
+      fgRenderer.setSize(window.innerWidth, window.innerHeight);
+      fgContainer.appendChild(fgRenderer.domElement);
+
+      // Identical Studio Lighting in Both Scenes for Seamless Reparenting
+      function addStudioLights(targetScene) {
+        const hemi = new THREE.HemisphereLight(0xffffff, 0x223355, 0.95);
+        const key = new THREE.DirectionalLight(0xffffff, 0.85);
+        key.position.set(12, 18, 14);
+        const rim = new THREE.DirectionalLight(THEMES[currentThemeKey].primaryHex, 0.65);
+        rim.position.set(-14, 6, -12);
+        targetScene.add(hemi, key, rim);
+        return rim;
+      }
+
+      const bgRimLight = addStudioLights(bgScene);
+      const fgRimLight = addStudioLights(fgScene);
+
+      // Material Registry for live Light/Dark switching
       const materialRegistry = [];
 
       function getRoleColor(role, theme = THEMES[currentThemeKey]) {
         if (role === 'primary') return theme.primaryHex;
         if (role === 'secondary') return theme.secondaryHex;
         if (role === 'accent') return theme.accentHex;
-        if (role === 'surface') return theme.surfaceHex;
         return theme.gridHex;
       }
 
@@ -939,8 +1044,8 @@
       function makeGlassMat(role = 'primary', opacity = 0.15) {
         const mat = new THREE.MeshStandardMaterial({
           color: getRoleColor(role),
-          roughness: 0.35,
-          metalness: 0.2,
+          roughness: 0.34,
+          metalness: 0.18,
           transparent: true,
           opacity,
           side: THREE.DoubleSide,
@@ -954,7 +1059,7 @@
         const mat = new THREE.MeshStandardMaterial({
           color: getRoleColor(role),
           roughness: 0.28,
-          metalness: 0.45,
+          metalness: 0.42,
           transparent: opacity < 1,
           opacity
         });
@@ -962,7 +1067,6 @@
         return mat;
       }
 
-      // Helper: Smooth parametric circle loop (zero triangle artifacts)
       function makeCircleLoop(radius, segments = 64, role = 'primary', opacity = 0.72) {
         const pts = [];
         for (let i = 0; i <= segments; i++) {
@@ -973,40 +1077,38 @@
       }
 
       /* -----------------------------------------------------------------------
-         5. ARCHITECTURAL ASTROLABE FLOOR & SUBTLE PARTICLES
+         5. ARCHITECTURAL FLOOR GRID, ASTROLABE RINGS & PARTICLES (BG SCENE)
          ----------------------------------------------------------------------- */
       const floorY = -2.5;
 
-      // Subtle perspective coordinate grid
       const gridPts = [];
       const gridHalf = 22;
       for (let i = -gridHalf; i <= gridHalf; i += 2.75) {
         gridPts.push(new THREE.Vector3(-gridHalf, floorY, i), new THREE.Vector3(gridHalf, floorY, i));
         gridPts.push(new THREE.Vector3(i, floorY, -gridHalf), new THREE.Vector3(i, floorY, gridHalf));
       }
-      const gridMat = makeLineMat('grid', THEMES[currentThemeKey].gridOpacity);
-      scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(gridPts), gridMat));
+      bgScene.add(new THREE.LineSegments(
+        new THREE.BufferGeometry().setFromPoints(gridPts),
+        makeLineMat('grid', THEMES[currentThemeKey].gridOpacity)
+      ));
 
       const pedestalGroup = new THREE.Group();
       pedestalGroup.position.y = floorY + 0.02;
-      scene.add(pedestalGroup);
+      bgScene.add(pedestalGroup);
 
       const calibRings = [];
       [2.1, 4.2, 7.0, 9.6].forEach((r, idx) => {
-        const circle = makeCircleLoop(r, 96, idx === 2 ? 'primary' : 'secondary', idx === 2 ? 0.4 : 0.2);
-        pedestalGroup.add(circle);
+        pedestalGroup.add(makeCircleLoop(r, 96, idx === 2 ? 'primary' : 'secondary', idx === 2 ? 0.4 : 0.2));
 
         const arcGeo = new THREE.RingGeometry(r + 0.12, r + 0.16, 64, 1, 0, Math.PI * 0.85);
         arcGeo.rotateX(-Math.PI / 2);
-        const arc = new THREE.Mesh(arcGeo, makeGlassMat(idx % 2 === 0 ? 'primary' : 'secondary', 0.22));
+        const arc = new THREE.Mesh(arcGeo, makeGlassMat(idx % 2 === 0 ? 'primary' : 'secondary', 0.2));
         arc.userData.speed = (idx % 2 === 0 ? 0.09 : -0.07) * (idx + 1) * 0.35;
         pedestalGroup.add(arc);
         calibRings.push(arc);
       });
 
-      // Sparse atmospheric dust
-      const isMobileInit = window.innerWidth < 768;
-      const particleCount = isMobileInit ? 140 : 240;
+      const particleCount = window.innerWidth < 768 ? 120 : 220;
       const pPos = new Float32Array(particleCount * 3);
       for (let i = 0; i < particleCount; i++) {
         const rad = 2.8 + Math.random() * 17;
@@ -1019,41 +1121,39 @@
       particleGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
       const particleMat = new THREE.PointsMaterial({
         color: THEMES[currentThemeKey].primaryHex,
-        size: 0.06,
+        size: 0.058,
         transparent: true,
         opacity: THEMES[currentThemeKey].particleOpacity,
         depthWrite: false
       });
       materialRegistry.push({ mat: particleMat, role: 'primary', kind: 'points' });
       const particleField = new THREE.Points(particleGeo, particleMat);
-      scene.add(particleField);
+      bgScene.add(particleField);
 
       /* -----------------------------------------------------------------------
-         6. CENTRAL MUSEUM-GRADE BLOCH / ASTROLABE GIMBAL CORE
+         6. CENTRAL GIMBAL CORE (BG SCENE)
          ----------------------------------------------------------------------- */
       const coreGroup = new THREE.Group();
       coreGroup.position.set(0, 0.45, 0);
-      scene.add(coreGroup);
+      bgScene.add(coreGroup);
 
-      // Faceted crystal core with crisp EdgesGeometry (zero diagonal clutter)
       const coreOctGeo = new THREE.OctahedronGeometry(0.68, 0);
-      const coreOctFill = new THREE.Mesh(coreOctGeo, makeGlassMat('primary', 0.2));
+      const coreOctFill = new THREE.Mesh(coreOctGeo, makeGlassMat('primary', 0.18));
       const coreOctEdges = new THREE.LineSegments(new THREE.EdgesGeometry(coreOctGeo), makeLineMat('primary', 0.85));
       coreGroup.add(coreOctFill, coreOctEdges);
 
-      // Three calibrated gimbal hoops
-      const gRing1 = new THREE.Mesh(new THREE.TorusGeometry(1.42, 0.016, 12, 96), makeSolidMat('primary', 0.82));
+      const gRing1 = new THREE.Mesh(new THREE.TorusGeometry(1.42, 0.015, 12, 96), makeSolidMat('primary', 0.8));
       gRing1.rotation.x = Math.PI / 2.4;
-      const gRing2 = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.013, 12, 96), makeSolidMat('secondary', 0.72));
+      const gRing2 = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.012, 12, 96), makeSolidMat('secondary', 0.7));
       gRing2.rotation.y = Math.PI / 3;
       gRing2.rotation.x = -Math.PI / 4;
-      const gRing3 = makeCircleLoop(2.08, 84, 'primary', 0.35);
+      const gRing3 = makeCircleLoop(2.08, 84, 'primary', 0.34);
       gRing3.rotation.z = Math.PI / 6;
 
       coreGroup.add(gRing1, gRing2, gRing3);
 
       /* -----------------------------------------------------------------------
-         7. 5 REFINED ARCHITECTURAL 3D SCULPTURES (ZERO RAW TRIANGLE WIREFRAMES)
+         7. 5 ARCHITECTURAL 3D SCULPTURES (CLEAN PARAMETRIC & EDGES GEOMETRY)
          ----------------------------------------------------------------------- */
       const ORBIT_RADIUS = 7.0;
       const moduleObjects = [];
@@ -1074,52 +1174,42 @@
         const parts = [];
 
         if (index === 0) {
-          // 01 PROFILE: Smooth sculptural Torus-Knot + calibrated orbital rings
-          const knotGeo = new THREE.TorusKnotGeometry(0.62, 0.145, 140, 20);
-          const knotMesh = new THREE.Mesh(knotGeo, makeGlassMat('primary', 0.32));
+          // 01 PROFILE: Smooth Torus-Knot + parametric spine + orbital hoops
+          const knotMesh = new THREE.Mesh(new THREE.TorusKnotGeometry(0.62, 0.14, 140, 20), makeGlassMat('primary', 0.28));
           parts.push(registerPart(container, knotMesh, { hover: [0, 0.08, 0] }));
 
-          // Clean parametric spine curve inside the torus knot
           const spinePts = [];
           for (let i = 0; i <= 180; i++) {
             const t = (i / 180) * Math.PI * 2;
             const r = 0.62 * (0.5 * (2 + Math.cos(3 * t)));
             spinePts.push(new THREE.Vector3(r * Math.cos(2 * t), 0.62 * 0.5 * Math.sin(3 * t), r * Math.sin(2 * t)));
           }
-          const spine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spinePts), makeLineMat('primary', 0.9));
-          parts.push(registerPart(container, spine, { hover: [0, 0.08, 0], explode: [0, 0, 0.35] }));
+          parts.push(registerPart(container, new THREE.Line(new THREE.BufferGeometry().setFromPoints(spinePts), makeLineMat('primary', 0.9)), { hover: [0, 0.08, 0], explode: [0, 0, 0.35] }));
 
-          const hoop1 = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.016, 12, 84), makeSolidMat('secondary', 0.8));
+          const hoop1 = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.015, 12, 84), makeSolidMat('secondary', 0.78));
           hoop1.rotation.x = Math.PI / 2.25;
-          parts.push(registerPart(container, hoop1, { hover: [0, 0.2, 0], focus: [0, 0.14, 0], explode: [0, 0.72, 0.15] }));
+          parts.push(registerPart(container, hoop1, { hover: [0, 0.18, 0], focus: [0, 0.12, 0], explode: [0, 0.68, 0.15] }));
 
-          const hoop2 = makeCircleLoop(1.36, 72, 'accent', 0.65);
+          const hoop2 = makeCircleLoop(1.36, 72, 'accent', 0.62);
           hoop2.rotation.set(-Math.PI / 3, Math.PI / 4, 0);
-          parts.push(registerPart(container, hoop2, { hover: [0, -0.18, 0], focus: [0, -0.14, 0], explode: [0, -0.72, -0.15] }));
+          parts.push(registerPart(container, hoop2, { hover: [0, -0.16, 0], focus: [0, -0.12, 0], explode: [0, -0.68, -0.15] }));
 
         } else if (index === 1) {
-          // 02 RESEARCH: Precision van der Waals Layered Hexagonal Heterostructure
+          // 02 RESEARCH: Layered van der Waals Hexagonal Heterostructure
           const layerYs = [-0.62, 0, 0.62];
           layerYs.forEach((ly, li) => {
             const layerGroup = new THREE.Group();
             layerGroup.position.y = ly;
             const role = li === 1 ? 'secondary' : 'primary';
 
-            // Clean hexagonal slab with crisp EdgesGeometry (no diagonal lines)
             const hexGeo = new THREE.CylinderGeometry(1.0, 1.0, 0.045, 6, 1);
-            const hexFill = new THREE.Mesh(hexGeo, makeGlassMat(role, 0.2));
-            const hexEdges = new THREE.LineSegments(new THREE.EdgesGeometry(hexGeo), makeLineMat(role, 0.88));
-            layerGroup.add(hexFill, hexEdges);
+            layerGroup.add(new THREE.Mesh(hexGeo, makeGlassMat(role, 0.18)));
+            layerGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(hexGeo), makeLineMat(role, 0.88)));
+            layerGroup.add(makeCircleLoop(0.5, 6, role, 0.45));
 
-            // Inner honeycomb ring
-            const innerHex = makeCircleLoop(0.5, 6, role, 0.45);
-            layerGroup.add(innerHex);
-
-            // Lattice atoms at vertices + center
-            const atomGeo = new THREE.SphereGeometry(0.072, 16, 16);
+            const atomGeo = new THREE.SphereGeometry(0.07, 16, 16);
             const atomMat = makeSolidMat(li === 1 ? 'accent' : 'primary', 0.95);
-            const centerAtom = new THREE.Mesh(atomGeo, atomMat);
-            layerGroup.add(centerAtom);
+            layerGroup.add(new THREE.Mesh(atomGeo, atomMat));
 
             for (let v = 0; v < 6; v++) {
               const a = (v / 6) * Math.PI * 2 + Math.PI / 6;
@@ -1130,116 +1220,97 @@
 
             const dir = li - 1;
             parts.push(registerPart(container, layerGroup, {
-              hover: [0, dir * 0.22, 0],
-              focus: [0, dir * 0.3, 0],
-              explode: [0, dir * 0.88, 0]
+              hover: [0, dir * 0.2, 0],
+              focus: [0, dir * 0.26, 0],
+              explode: [0, dir * 0.82, 0]
             }));
           });
 
-          // Clean vertical interlayer coupling pillars
           const pillarPts = [];
           for (let v = 0; v < 6; v++) {
             const a = (v / 6) * Math.PI * 2 + Math.PI / 6;
             pillarPts.push(new THREE.Vector3(Math.cos(a) * 0.98, -0.62, Math.sin(a) * 0.98));
             pillarPts.push(new THREE.Vector3(Math.cos(a) * 0.98, 0.62, Math.sin(a) * 0.98));
           }
-          parts.push(registerPart(container, new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pillarPts), makeLineMat('secondary', 0.4))));
+          parts.push(registerPart(container, new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pillarPts), makeLineMat('secondary', 0.38))));
 
         } else if (index === 2) {
-          // 03 PUBLICATIONS: Architectural Parametric Dirac Dispersion Cones (Zero Triangulation!)
+          // 03 PUBLICATIONS: Parametric Dirac Dispersion Cones (Zero Triangulation)
           const buildDiracHalf = (sign, role) => {
             const halfGroup = new THREE.Group();
-            const maxH = 0.98;
-            const maxR = 0.86;
+            const maxH = 0.96;
+            const maxR = 0.84;
 
-            // Smooth translucent inner cone veil
-            const coneGeo = new THREE.ConeGeometry(maxR, maxH, 48, 1, true);
-            const veil = new THREE.Mesh(coneGeo, makeGlassMat(role, 0.14));
+            const veil = new THREE.Mesh(new THREE.ConeGeometry(maxR, maxH, 48, 1, true), makeGlassMat(role, 0.13));
             if (sign > 0) veil.rotation.x = Math.PI;
             veil.position.y = sign * (maxH * 0.5);
             halfGroup.add(veil);
 
-            // Clean iso-energy circular contour rings (5 levels)
             [0.2, 0.4, 0.6, 0.8, 1.0].forEach((f, fi) => {
-              const ring = makeCircleLoop(maxR * f, 64, role, fi === 4 ? 0.9 : 0.52);
+              const ring = makeCircleLoop(maxR * f, 64, role, fi === 4 ? 0.9 : 0.5);
               ring.position.y = sign * (maxH * f);
               halfGroup.add(ring);
             });
 
-            // 8 clean radial dispersion meridians from apex to rim
             const radPts = [];
             for (let m = 0; m < 8; m++) {
               const a = (m / 8) * Math.PI * 2;
               radPts.push(new THREE.Vector3(0, 0, 0));
               radPts.push(new THREE.Vector3(Math.cos(a) * maxR, sign * maxH, Math.sin(a) * maxR));
             }
-            halfGroup.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(radPts), makeLineMat(role, 0.55)));
+            halfGroup.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(radPts), makeLineMat(role, 0.52)));
             return halfGroup;
           };
 
-          const upperCone = buildDiracHalf(1, 'primary');
-          const lowerCone = buildDiracHalf(-1, 'secondary');
-          parts.push(registerPart(container, upperCone, { hover: [0, 0.14, 0], focus: [0, 0.16, 0], explode: [0, 0.55, 0] }));
-          parts.push(registerPart(container, lowerCone, { hover: [0, -0.14, 0], focus: [0, -0.16, 0], explode: [0, -0.55, 0] }));
+          parts.push(registerPart(container, buildDiracHalf(1, 'primary'), { hover: [0, 0.14, 0], focus: [0, 0.14, 0], explode: [0, 0.52, 0] }));
+          parts.push(registerPart(container, buildDiracHalf(-1, 'secondary'), { hover: [0, -0.14, 0], focus: [0, -0.14, 0], explode: [0, -0.52, 0] }));
 
-          // Dirac Nodal Point at Apex
-          const apex = new THREE.Mesh(new THREE.SphereGeometry(0.11, 20, 20), makeSolidMat('accent', 0.96));
-          parts.push(registerPart(container, apex));
+          parts.push(registerPart(container, new THREE.Mesh(new THREE.SphereGeometry(0.105, 20, 20), makeSolidMat('accent', 0.96))));
 
-          // Horizontal Fermi-Level Reference Ring
-          const fermiRing = new THREE.Mesh(new THREE.TorusGeometry(1.12, 0.014, 12, 84), makeSolidMat('primary', 0.72));
+          const fermiRing = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.014, 12, 84), makeSolidMat('primary', 0.7));
           fermiRing.rotation.x = Math.PI / 2;
-          parts.push(registerPart(container, fermiRing, { explode: [0, 0, 0.48] }));
+          parts.push(registerPart(container, fermiRing, { explode: [0, 0, 0.45] }));
 
         } else if (index === 3) {
-          // 04 ARCHIVE: Clean Brillouin-Zone Dodecahedron with EdgesGeometry + Constellation Nodes
+          // 04 ARCHIVE: Brillouin-Zone Dodecahedron + Constellation Nodes
           const dodecaGeo = new THREE.DodecahedronGeometry(0.84, 0);
-          const hullFill = new THREE.Mesh(dodecaGeo, makeGlassMat('primary', 0.14));
-          const hullEdges = new THREE.LineSegments(new THREE.EdgesGeometry(dodecaGeo), makeLineMat('primary', 0.8));
           const hullGroup = new THREE.Group();
-          hullGroup.add(hullFill, hullEdges);
+          hullGroup.add(new THREE.Mesh(dodecaGeo, makeGlassMat('primary', 0.14)));
+          hullGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(dodecaGeo), makeLineMat('primary', 0.82)));
           parts.push(registerPart(container, hullGroup));
 
           const coords = [
-            [0.95, 0.58, 0.42],
-            [-0.95, 0.52, 0.48],
-            [0.36, -0.86, 0.68],
-            [-0.44, -0.72, -0.76],
-            [0.68, 0.42, -0.8],
-            [-0.74, 0.74, -0.36]
+            [0.94, 0.56, 0.42], [-0.94, 0.5, 0.48], [0.36, -0.84, 0.66],
+            [-0.44, -0.7, -0.74], [0.68, 0.4, -0.78], [-0.72, 0.72, -0.36]
           ];
           const spokePts = [];
-          const nodeGeo = new THREE.SphereGeometry(0.1, 16, 16);
+          const nodeGeo = new THREE.SphereGeometry(0.098, 16, 16);
           coords.forEach((c, ni) => {
             const node = new THREE.Mesh(nodeGeo, makeSolidMat(ni % 2 === 0 ? 'primary' : 'secondary', 0.95));
             node.position.set(...c);
             const dir = new THREE.Vector3(...c).normalize();
             parts.push(registerPart(container, node, {
-              hover: dir.clone().multiplyScalar(0.22).toArray(),
-              focus: dir.clone().multiplyScalar(0.3).toArray(),
-              explode: dir.clone().multiplyScalar(0.75).toArray()
+              hover: dir.clone().multiplyScalar(0.2).toArray(),
+              focus: dir.clone().multiplyScalar(0.28).toArray(),
+              explode: dir.clone().multiplyScalar(0.72).toArray()
             }));
             spokePts.push(new THREE.Vector3(0, 0, 0), new THREE.Vector3(...c));
           });
-          parts.push(registerPart(container, new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(spokePts), makeLineMat('secondary', 0.42))));
+          parts.push(registerPart(container, new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(spokePts), makeLineMat('secondary', 0.4))));
 
         } else {
-          // 05 CONTACT: Parametric Meridian/Latitude Globe (Zero Triangulation!) + Bhopal-Grenoble Arc
+          // 05 CONTACT: Parametric Globe + Bhopal-to-Grenoble Geodesic Arc
           const globeGroup = new THREE.Group();
-          const R = 0.9;
-
-          // Subtle frosted core sphere
+          const R = 0.88;
           globeGroup.add(new THREE.Mesh(new THREE.SphereGeometry(R * 0.97, 32, 24), makeGlassMat('primary', 0.12)));
 
-          // Clean latitude circles
-          [-0.6, -0.3, 0, 0.3, 0.6].forEach((latY, li) => {
+          [-0.58, -0.29, 0, 0.29, 0.58].forEach((latY, li) => {
             const rLat = Math.sqrt(Math.max(0.01, R * R - latY * latY));
             const latLoop = makeCircleLoop(rLat, 64, li === 2 ? 'primary' : 'secondary', li === 2 ? 0.68 : 0.35);
             latLoop.position.y = latY;
             globeGroup.add(latLoop);
           });
 
-          // Clean longitude meridians
           for (let m = 0; m < 6; m++) {
             const mer = makeCircleLoop(R, 64, 'primary', 0.38);
             mer.rotation.z = Math.PI / 2;
@@ -1248,28 +1319,25 @@
           }
           parts.push(registerPart(container, globeGroup));
 
-          const eqOrbit = new THREE.Mesh(new THREE.TorusGeometry(1.18, 0.012, 12, 84), makeSolidMat('secondary', 0.62));
+          const eqOrbit = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.012, 12, 84), makeSolidMat('secondary', 0.6));
           eqOrbit.rotation.x = Math.PI / 2.25;
-          parts.push(registerPart(container, eqOrbit, { hover: [0, 0.16, 0], explode: [0, 0.65, 0] }));
+          parts.push(registerPart(container, eqOrbit, { hover: [0, 0.15, 0], explode: [0, 0.62, 0] }));
 
-          // Geodesic Arc linking Bhopal (India) & Grenoble (France)
-          const pBhopal = new THREE.Vector3(0.45, 0.36, 0.7);
-          const pGrenoble = new THREE.Vector3(-0.34, 0.64, 0.54);
-          const midArc = new THREE.Vector3(0.06, 1.26, 0.98);
+          const pBhopal = new THREE.Vector3(0.44, 0.35, 0.68);
+          const pGrenoble = new THREE.Vector3(-0.34, 0.62, 0.52);
+          const midArc = new THREE.Vector3(0.06, 1.24, 0.96);
           signalCurveRef = new THREE.QuadraticBezierCurve3(pBhopal, midArc, pGrenoble);
-          const arcLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(signalCurveRef.getPoints(48)), makeLineMat('accent', 0.95));
-          parts.push(registerPart(container, arcLine, { hover: [0, 0.14, 0.1], explode: [0, 0.45, 0.4] }));
+          parts.push(registerPart(container, new THREE.Line(new THREE.BufferGeometry().setFromPoints(signalCurveRef.getPoints(48)), makeLineMat('accent', 0.95)), { hover: [0, 0.12, 0.1], explode: [0, 0.42, 0.36] }));
 
-          const m1 = new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 16), makeSolidMat('primary', 0.96));
+          const m1 = new THREE.Mesh(new THREE.SphereGeometry(0.082, 16, 16), makeSolidMat('primary', 0.96));
           m1.position.copy(pBhopal);
-          parts.push(registerPart(container, m1, { explode: [0.35, 0.25, 0.45] }));
+          parts.push(registerPart(container, m1, { explode: [0.32, 0.22, 0.42] }));
 
-          const m2 = new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 16), makeSolidMat('secondary', 0.96));
+          const m2 = new THREE.Mesh(new THREE.SphereGeometry(0.082, 16, 16), makeSolidMat('secondary', 0.96));
           m2.position.copy(pGrenoble);
-          parts.push(registerPart(container, m2, { explode: [-0.35, 0.4, 0.35] }));
+          parts.push(registerPart(container, m2, { explode: [-0.32, 0.38, 0.32] }));
 
-          // Animated signal pulse traveling between Bhopal and Grenoble
-          signalPulseObj = new THREE.Mesh(new THREE.SphereGeometry(0.052, 12, 12), makeSolidMat('accent', 1.0));
+          signalPulseObj = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 12), makeSolidMat('accent', 1.0));
           container.add(signalPulseObj);
         }
 
@@ -1283,20 +1351,17 @@
 
         const root = new THREE.Group();
         root.position.set(x, 0, z);
-        scene.add(root);
+        bgScene.add(root);
 
-        // Floor anchor ring
-        const floorRing = makeCircleLoop(0.95, 56, 'primary', 0.32);
+        const floorRing = makeCircleLoop(0.95, 56, 'primary', 0.3);
         floorRing.position.y = floorY + 0.04;
         root.add(floorRing);
 
-        // Soft vertical light column
-        const beamMat = makeGlassMat('primary', 0.045);
-        const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.82, 0.46, 3.3, 32, 1, true), beamMat);
-        beam.position.y = floorY + 1.7;
+        const beamMat = makeGlassMat('primary', 0.04);
+        const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.44, 3.25, 32, 1, true), beamMat);
+        beam.position.y = floorY + 1.68;
         root.add(beam);
 
-        // Subtle focus/hover halo
         const haloMat = makeLineMat('primary', 0.0);
         const halo = makeCircleLoop(1.22, 64, 'primary', 0.0);
         halo.material = haloMat;
@@ -1309,7 +1374,6 @@
 
         const parts = createSculpture(idx, pivot);
 
-        // Generous invisible raycast target
         const hitMesh = new THREE.Mesh(
           new THREE.SphereGeometry(1.55, 12, 12),
           new THREE.MeshBasicMaterial({ visible: false })
@@ -1323,6 +1387,8 @@
           data: mod,
           root,
           pivot,
+          floorRing,
+          beam,
           beamMat,
           halo,
           haloMat,
@@ -1335,7 +1401,7 @@
       });
 
       /* -----------------------------------------------------------------------
-         8. BUILD PROJECTED TAGS & FLUID BOTTOM DOCK
+         8. PROJECTED LABELS & RESPONSIVE DOCK
          ----------------------------------------------------------------------- */
       const projectedLabelsLayer = document.getElementById('projected-labels-layer');
       const dockNodesEl = document.getElementById('dock-nodes');
@@ -1355,8 +1421,8 @@
 
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'ui-btn px-3 sm:px-3.5 py-2 font-mono-ed text-[10px] sm:text-[11px] tracking-[0.1em] uppercase shrink-0';
-        btn.innerHTML = `<span class="text-accent mr-1">${mod.code}</span><span class="hidden sm:inline">${mod.name}</span>`;
+        btn.className = 'ui-btn px-2.5 sm:px-3.5 py-2 font-mono-ed text-[10px] sm:text-[11px] tracking-[0.08em] uppercase shrink-0 flex-1 sm:flex-initial';
+        btn.innerHTML = `<span class="text-accent sm:mr-1">${mod.code}</span><span class="hidden sm:inline">${mod.name}</span>`;
         btn.setAttribute('aria-label', `${mod.code} ${mod.name}`);
         btn.addEventListener('mouseenter', () => setHovered(idx));
         btn.addEventListener('mouseleave', () => setHovered(-1));
@@ -1366,10 +1432,12 @@
       });
 
       /* -----------------------------------------------------------------------
-         9. NON-BLOCKING CAMERA FRAMING & FLUID INTERACTION ENGINE
+         9. FOREGROUND ISOLATION & NON-BLOCKING CAMERA FRAMING
          ----------------------------------------------------------------------- */
       let hoveredIndex = -1;
       let focusedIndex = -1;
+      let fgIsolatedIndex = -1;
+      let fgRestoreTimer = null;
       let isExploded = false;
 
       let orbitTheta = 0.28;
@@ -1391,10 +1459,14 @@
       const mouseNDC = new THREE.Vector2(-9, -9);
 
       const titleBlock = document.getElementById('title-block');
+      const mobileBackBtn = document.getElementById('mobile-back-btn');
+      const bottomDockWrap = document.getElementById('bottom-dock-wrap');
       const overviewHint = document.getElementById('overview-hint');
       const dockOverviewBtn = document.getElementById('dock-overview');
       const navPrevBtn = document.getElementById('nav-prev');
       const navNextBtn = document.getElementById('nav-next');
+      const mPrevBtn = document.getElementById('m-prev-btn');
+      const mNextBtn = document.getElementById('m-next-btn');
       const detailPanel = document.getElementById('detail-panel');
       const dpCode = document.getElementById('dp-code');
       const dpTitle = document.getElementById('dp-title');
@@ -1404,45 +1476,77 @@
       const dpFullLink = document.getElementById('dp-full-link');
       const explodeBtn = document.getElementById('explode-btn');
 
+      // Isolate the selected structure into fgScene so bgScene blurs cleanly behind it
+      function isolateInForeground(idx) {
+        if (fgRestoreTimer) {
+          clearTimeout(fgRestoreTimer);
+          fgRestoreTimer = null;
+        }
+        // Return any previously isolated module back to bgScene
+        if (fgIsolatedIndex !== -1 && fgIsolatedIndex !== idx) {
+          const prev = moduleObjects[fgIsolatedIndex];
+          prev.floorRing.visible = true;
+          prev.beam.visible = true;
+          bgScene.add(prev.root);
+          fgIsolatedIndex = -1;
+        }
+        if (idx !== -1) {
+          const curr = moduleObjects[idx];
+          // Hide floor ring & beam during isolated inspection for a pure museum-object float
+          curr.floorRing.visible = false;
+          curr.beam.visible = false;
+          fgScene.add(curr.root);
+          fgIsolatedIndex = idx;
+          focusBlurVeil.classList.add('active');
+        } else {
+          focusBlurVeil.classList.remove('active');
+          // Keep sharp during the blur fade-out, then return cleanly to bgScene
+          const toReturn = fgIsolatedIndex;
+          fgRestoreTimer = setTimeout(() => {
+            if (focusedIndex === -1 && toReturn !== -1) {
+              const m = moduleObjects[toReturn];
+              m.floorRing.visible = true;
+              m.beam.visible = true;
+              bgScene.add(m.root);
+              fgIsolatedIndex = -1;
+              fgRenderer.clear();
+            }
+          }, 360);
+        }
+      }
+
       function setHovered(idx) {
         if (hoveredIndex === idx) return;
         hoveredIndex = idx;
         if (idx !== -1 && idx !== focusedIndex) SoundFX.hover();
-        stageEl.style.cursor = idx !== -1 ? 'pointer' : (isPointerDown ? 'grabbing' : 'grab');
+        interactionStage.style.cursor = idx !== -1 ? 'pointer' : (isPointerDown ? 'grabbing' : 'grab');
         projectedLabelEls.forEach((el, i) => el.classList.toggle('is-hovered', i === idx));
       }
 
-      /**
-       * Computes non-blocking camera & lookAt vectors using true camera-right basis:
-       * - Desktop (>=1024px): shifts lookAt to camera-RIGHT so the 3D sculpture sits cleanly
-       *   in the open left-center stage, completely clear of the right-hand panel.
-       * - Mobile (<1024px): shifts lookAt DOWN so the 3D sculpture sits cleanly in the
-       *   open upper viewport, completely clear of the bottom sheet.
-       */
       function computeFocusCamera(idx) {
         const pos = moduleObjects[idx].root.position;
         const outward = new THREE.Vector3(pos.x, 0, pos.z).normalize();
         const isDesktop = window.innerWidth >= 1024;
+        const aspect = window.innerWidth / window.innerHeight;
 
-        const dist = isDesktop ? 7.6 : 8.8;
-        const camY = isDesktop ? 1.55 : 2.05;
+        // Portrait mobile needs slightly more distance so sculpture fits cleanly in upper 48%
+        const dist = isDesktop ? 7.4 : (aspect < 0.65 ? 9.6 : 8.2);
+        const camY = isDesktop ? 1.5 : 1.75;
         const camPos = pos.clone()
           .add(outward.clone().multiplyScalar(dist))
           .add(new THREE.Vector3(0, camY, 0));
 
-        // True camera forward & right vectors
         const forward = pos.clone().sub(camPos).normalize();
         const camRight = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
 
         const lookAt = pos.clone();
         if (isDesktop) {
-          // Shift lookAt toward camera-right -> places sculpture cleanly in the left half
-          const rightShift = window.innerWidth >= 1280 ? 1.65 : 1.45;
-          lookAt.y += 0.65;
+          const rightShift = window.innerWidth >= 1280 ? 1.65 : 1.42;
+          lookAt.y += 0.62;
           lookAt.add(camRight.multiplyScalar(rightShift));
         } else {
-          // Shift lookAt downward -> lifts sculpture cleanly into the upper half above the bottom sheet
-          lookAt.y -= 1.05;
+          // Shift lookAt downward -> centers sculpture cleanly in upper half above the bottom sheet
+          lookAt.y -= (aspect < 0.65 ? 1.25 : 0.95);
         }
 
         targetCamPos.copy(camPos);
@@ -1474,6 +1578,12 @@
         dpBody.innerHTML = `<div class="tab-animate space-y-3">${mod.tabs[tabIdx].html}</div>`;
       }
 
+      function syncDesktopArrows() {
+        const showDesktop = focusedIndex !== -1 && window.innerWidth >= 1024;
+        navPrevBtn.classList.toggle('hidden', !showDesktop);
+        navNextBtn.classList.toggle('hidden', !showDesktop);
+      }
+
       function focusModule(idx) {
         if (idx < 0 || idx >= MODULES.length) return;
         const wasFocused = focusedIndex !== -1;
@@ -1482,14 +1592,16 @@
         explodeBtn.classList.remove('is-active');
         explodeBtn.textContent = 'Explode';
 
+        isolateInForeground(idx);
         computeFocusCamera(idx);
         renderDetailPanel(idx, 0);
 
         detailPanel.classList.add('open');
         titleBlock.classList.add('compact');
+        bottomDockWrap.classList.add('mobile-hidden');
+        mobileBackBtn.classList.remove('hidden');
         if (overviewHint) overviewHint.style.opacity = '0';
-        navPrevBtn.classList.remove('hidden');
-        navNextBtn.classList.remove('hidden');
+        syncDesktopArrows();
 
         dockOverviewBtn.classList.remove('is-active');
         dockBtnEls.forEach((b, i) => b.classList.toggle('is-active', i === idx));
@@ -1505,11 +1617,14 @@
         explodeBtn.classList.remove('is-active');
         explodeBtn.textContent = 'Explode';
 
+        isolateInForeground(-1);
+
         detailPanel.classList.remove('open');
         titleBlock.classList.remove('compact');
+        bottomDockWrap.classList.remove('mobile-hidden');
+        mobileBackBtn.classList.add('hidden');
         if (overviewHint) overviewHint.style.opacity = '1';
-        navPrevBtn.classList.add('hidden');
-        navNextBtn.classList.add('hidden');
+        syncDesktopArrows();
 
         dockOverviewBtn.classList.add('is-active');
         dockBtnEls.forEach(b => b.classList.remove('is-active'));
@@ -1525,9 +1640,12 @@
       }
 
       dockOverviewBtn.addEventListener('click', returnToOverview);
+      mobileBackBtn.addEventListener('click', returnToOverview);
       document.getElementById('close-detail-btn').addEventListener('click', returnToOverview);
       navPrevBtn.addEventListener('click', () => cycleModule(-1));
       navNextBtn.addEventListener('click', () => cycleModule(1));
+      mPrevBtn.addEventListener('click', () => cycleModule(-1));
+      mNextBtn.addEventListener('click', () => cycleModule(1));
 
       explodeBtn.addEventListener('click', () => {
         if (focusedIndex === -1) return;
@@ -1555,17 +1673,20 @@
         }
       }, { passive: true });
 
-      stageEl.addEventListener('pointerdown', (e) => {
+      // Pointer / Touch Drag & Tap on Unified Interaction Layer
+      interactionStage.addEventListener('pointerdown', (e) => {
         isPointerDown = true;
         pointerMoved = false;
         lastPointerX = e.clientX;
         lastPointerY = e.clientY;
+        interactionStage.setPointerCapture(e.pointerId);
       });
 
-      window.addEventListener('pointermove', (e) => {
-        const rect = renderer.domElement.getBoundingClientRect();
-        mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      interactionStage.addEventListener('pointermove', (e) => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        mouseNDC.x = (e.clientX / w) * 2 - 1;
+        mouseNDC.y = -(e.clientY / h) * 2 + 1;
 
         if (isPointerDown) {
           const dx = e.clientX - lastPointerX;
@@ -1577,27 +1698,35 @@
             targetOrbitPhi = Math.max(0.22, Math.min(1.0, targetOrbitPhi + dy * 0.004));
           } else {
             const mod = moduleObjects[focusedIndex];
-            mod.pivot.rotation.y += dx * 0.01;
+            mod.pivot.rotation.y += dx * 0.0105;
             mod.pivot.rotation.x = Math.max(-0.8, Math.min(0.8, mod.pivot.rotation.x + dy * 0.0075));
           }
           lastPointerX = e.clientX;
           lastPointerY = e.clientY;
-        } else if (e.target === renderer.domElement && window.innerWidth >= 768) {
+        } else if (w >= 768 && focusedIndex === -1) {
           raycaster.setFromCamera(mouseNDC, camera);
           const hits = raycaster.intersectObjects(raycastTargets, false);
           setHovered(hits.length > 0 ? hits[0].object.userData.moduleIndex : -1);
         }
       });
 
-      window.addEventListener('pointerup', (e) => {
-        if (isPointerDown && !pointerMoved && e.target === renderer.domElement) {
-          const rect = renderer.domElement.getBoundingClientRect();
-          mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-          mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      interactionStage.addEventListener('pointerup', (e) => {
+        if (isPointerDown && !pointerMoved) {
+          mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+          mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
           raycaster.setFromCamera(mouseNDC, camera);
           const hits = raycaster.intersectObjects(raycastTargets, false);
-          if (hits.length > 0) focusModule(hits[0].object.userData.moduleIndex);
+          if (hits.length > 0) {
+            focusModule(hits[0].object.userData.moduleIndex);
+          } else if (focusedIndex !== -1 && window.innerWidth >= 1024) {
+            // Clicking empty blurred background on desktop returns gently to overview
+            returnToOverview();
+          }
         }
+        isPointerDown = false;
+      });
+
+      interactionStage.addEventListener('pointercancel', () => {
         isPointerDown = false;
       });
 
@@ -1617,8 +1746,9 @@
         localStorage.setItem('theme', key);
         themeLabel.textContent = t.label;
 
-        scene.fog.color.setHex(t.bgHex);
-        rimLight.color.setHex(t.primaryHex);
+        bgScene.fog.color.setHex(t.bgHex);
+        bgRimLight.color.setHex(t.primaryHex);
+        fgRimLight.color.setHex(t.primaryHex);
 
         materialRegistry.forEach(entry => {
           entry.mat.color.setHex(getRoleColor(entry.role, t));
@@ -1646,7 +1776,7 @@
       });
 
       /* -----------------------------------------------------------------------
-         11. 3D-TO-SCREEN PROJECTION & CLEAN LEADER LINES
+         11. 3D-TO-SCREEN PROJECTION & ARCHITECTURAL LEADER LINES
          ----------------------------------------------------------------------- */
       const hoverCalloutEl = document.getElementById('hover-callout');
       const hcCode = document.getElementById('hc-code');
@@ -1675,18 +1805,22 @@
 
         moduleObjects.forEach((modObj, i) => {
           const el = projectedLabelEls[i];
+          // Hide floating tags during inspection mode (and keep mobile overview clean)
           if (focusedIndex !== -1) {
             el.style.opacity = '0';
             el.style.pointerEvents = 'none';
             return;
           }
           const labelWorld = modObj.pivot.getWorldPosition(new THREE.Vector3());
-          labelWorld.y += 1.58;
+          labelWorld.y += 1.56;
           const pt = projectToScreen(labelWorld);
-          if (pt.visible && pt.x > -30 && pt.x < w + 30 && pt.y > 70 && pt.y < h - 76) {
+          const safeTop = w < 768 ? 112 : 76;
+          const safeBottom = h - 78;
+
+          if (pt.visible && pt.x > 24 && pt.x < w - 24 && pt.y > safeTop && pt.y < safeBottom) {
             el.style.left = `${pt.x.toFixed(1)}px`;
             el.style.top = `${pt.y.toFixed(1)}px`;
-            el.style.opacity = hoveredIndex === -1 || hoveredIndex === i ? '1' : '0.42';
+            el.style.opacity = hoveredIndex === -1 || hoveredIndex === i ? '1' : '0.4';
             el.style.pointerEvents = 'auto';
           } else {
             el.style.opacity = '0';
@@ -1694,7 +1828,7 @@
           }
         });
 
-        // Hover callout on desktop overview
+        // Desktop Overview Hover Callout
         if (focusedIndex === -1 && hoveredIndex !== -1 && w >= 768) {
           const modObj = moduleObjects[hoveredIndex];
           const anchor = projectToScreen(modObj.pivot.getWorldPosition(new THREE.Vector3()));
@@ -1712,7 +1846,7 @@
 
           const elbowX = anchor.x + side * 30;
           hoverTetherLine.setAttribute('points', `${anchor.x},${anchor.y} ${elbowX},${cardY} ${side > 0 ? cardX + 14 : cardX - 14},${cardY}`);
-          hoverTetherLine.setAttribute('opacity', '0.65');
+          hoverTetherLine.setAttribute('opacity', '0.62');
           hoverTetherDot.setAttribute('cx', anchor.x);
           hoverTetherDot.setAttribute('cy', anchor.y);
           hoverTetherDot.setAttribute('opacity', '0.9');
@@ -1722,19 +1856,19 @@
           hoverTetherDot.setAttribute('opacity', '0');
         }
 
-        // Clean architectural leader line on desktop inspection mode
+        // Desktop Inspection Architectural Leader Line
         if (focusedIndex !== -1 && w >= 1024) {
           const modObj = moduleObjects[focusedIndex];
           const anchor = projectToScreen(modObj.pivot.getWorldPosition(new THREE.Vector3()));
           const panelRect = detailPanel.getBoundingClientRect();
-          const startX = anchor.x + 86; // Start cleanly at right edge of sculpture halo
+          const startX = anchor.x + 88;
           const targetX = panelRect.left;
           const targetY = panelRect.top + 54;
 
           if (targetX - startX > 36) {
             const midX = startX + (targetX - startX) * 0.45;
             detailTetherLine.setAttribute('points', `${startX},${anchor.y} ${midX},${anchor.y} ${midX + 20},${targetY} ${targetX},${targetY}`);
-            detailTetherLine.setAttribute('opacity', '0.58');
+            detailTetherLine.setAttribute('opacity', '0.55');
             detailTetherDot.setAttribute('cx', startX);
             detailTetherDot.setAttribute('cy', anchor.y);
             detailTetherDot.setAttribute('opacity', '0.9');
@@ -1749,7 +1883,7 @@
       }
 
       /* -----------------------------------------------------------------------
-         12. FRAME-RATE-INDEPENDENT SMOOTH ANIMATION LOOP (60Hz / 120Hz FLUID)
+         12. FLUID FRAME-RATE-INDEPENDENT RENDER LOOP (DUAL PASS)
          ----------------------------------------------------------------------- */
       const clock = new THREE.Clock();
 
@@ -1767,7 +1901,6 @@
         });
         particleField.rotation.y += 0.015 * dt;
 
-        // Animate central gimbal core
         coreOctFill.rotation.y += 0.2 * dt;
         coreOctEdges.rotation.y = coreOctFill.rotation.y;
         gRing1.rotation.z += 0.22 * dt;
@@ -1775,10 +1908,8 @@
         gRing3.rotation.y += 0.12 * dt;
         coreGroup.position.y = 0.45 + Math.sin(t * 1.1) * 0.08;
 
-        // Animate traveling pulse along Bhopal -> Grenoble arc
         if (signalPulseObj && signalCurveRef) {
-          const u = (t * 0.32) % 1;
-          signalPulseObj.position.copy(signalCurveRef.getPoint(u));
+          signalPulseObj.position.copy(signalCurveRef.getPoint((t * 0.32) % 1));
         }
 
         const partDamp = 1 - Math.exp(-7.5 * dt);
@@ -1793,16 +1924,15 @@
           m.explodeAmount = damp(m.explodeAmount, (isFocused && isExploded) ? 1 : 0, 6.5, dt);
 
           const baseFloat = 0.48 + Math.sin(t * 1.15 + idx * 1.25) * 0.075;
-          const targetY = baseFloat + m.hoverAmount * 0.36 + m.focusAmount * 0.32 - (isReceded ? 0.32 : 0);
+          const targetY = baseFloat + m.hoverAmount * 0.34 + m.focusAmount * 0.28 - (isReceded ? 0.3 : 0);
           m.pivot.position.y = damp(m.pivot.position.y, targetY, 8, dt);
 
-          const targetScale = (isReceded ? 0.72 : 1.0) + m.hoverAmount * 0.14 + m.focusAmount * 0.18;
+          const targetScale = (isReceded ? 0.72 : 1.0) + m.hoverAmount * 0.14 + m.focusAmount * 0.16;
           m.pivot.scale.setScalar(damp(m.pivot.scale.x, targetScale, 8, dt));
 
-          const spinRate = 0.18 + m.hoverAmount * 0.48 + m.focusAmount * 0.12;
+          const spinRate = 0.18 + m.hoverAmount * 0.46 + m.focusAmount * 0.12;
           if (!isPointerDown || !isFocused) {
             m.pivot.rotation.y += spinRate * dt;
-            // Smoothly level X tilt back when not focused
             if (!isFocused) m.pivot.rotation.x = damp(m.pivot.rotation.x, 0, 5, dt);
           }
           if (m.subSpinTarget > 0.005) {
@@ -1811,13 +1941,13 @@
             m.subSpinTarget -= step;
           }
 
-          const baseBeam = currentThemeKey === 'dark' ? 0.045 : 0.03;
-          const targetBeamOp = isReceded ? 0.01 : (baseBeam + m.hoverAmount * 0.07 + m.focusAmount * 0.06);
+          const baseBeam = currentThemeKey === 'dark' ? 0.04 : 0.03;
+          const targetBeamOp = isReceded ? 0.01 : (baseBeam + m.hoverAmount * 0.065);
           m.beamMat.opacity = damp(m.beamMat.opacity, targetBeamOp, 8, dt);
 
           const haloActive = Math.max(m.hoverAmount, m.focusAmount);
-          m.haloMat.opacity = haloActive * 0.55;
-          m.halo.scale.setScalar(1 + haloActive * 0.28);
+          m.haloMat.opacity = haloActive * 0.5;
+          m.halo.scale.setScalar(1 + haloActive * 0.24);
 
           m.parts.forEach(part => {
             const dest = part.userData.basePos.clone()
@@ -1828,13 +1958,13 @@
           });
         });
 
-        // Smooth camera motion
         if (focusedIndex === -1) {
           if (!isPointerDown) targetOrbitTheta += 0.028 * dt;
           orbitTheta = damp(orbitTheta, targetOrbitTheta, 5.5, dt);
           orbitPhi = damp(orbitPhi, targetOrbitPhi, 5.5, dt);
 
-          const r = window.innerWidth < 768 ? 22.8 : 18.8;
+          const aspect = window.innerWidth / window.innerHeight;
+          const r = window.innerWidth < 768 ? (aspect < 0.65 ? 25.5 : 22.5) : 18.8;
           targetCamPos.set(
             Math.sin(orbitTheta) * Math.cos(orbitPhi) * r,
             Math.sin(orbitPhi) * r + 1.15,
@@ -1843,21 +1973,32 @@
           targetLookAt.set(0, 0.25, 0);
         }
 
-        const camLerp = 1 - Math.exp(-5.2 * dt);
-        const lookLerp = 1 - Math.exp(-6.0 * dt);
+        const camLerp = 1 - Math.exp(-5.4 * dt);
+        const lookLerp = 1 - Math.exp(-6.2 * dt);
         currentCamPos.lerp(targetCamPos, camLerp);
         currentLookAt.lerp(targetLookAt, lookLerp);
         camera.position.copy(currentCamPos);
         camera.lookAt(currentLookAt);
 
-        renderer.render(scene, camera);
+        // Pass 1: Render background scene
+        bgRenderer.render(bgScene, camera);
+
+        // Pass 2: Render isolated sharp foreground sculpture above the blur veil
+        if (fgIsolatedIndex !== -1) {
+          fgRenderer.render(fgScene, camera);
+        }
+
         updateOverlays();
       }
 
       window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        camera.aspect = w / h;
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        bgRenderer.setSize(w, h);
+        fgRenderer.setSize(w, h);
+        syncDesktopArrows();
         if (focusedIndex !== -1) computeFocusCamera(focusedIndex);
       });
 
