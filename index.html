@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="C_Im14mGfPaQwH1G1sTvueh9C_huqQwkSxNMBVBDMaA" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Samriddha Ganguly | Quantum Condensed Matter Physics</title>
   <meta name="description" content="Samriddha Ganguly, BS-MS Physics at IISER Bhopal and CEA Grenoble. Research in unconventional superconductivity, topology, and quantum materials." />
   <meta property="og:title" content="Samriddha Ganguly" />
@@ -23,10 +23,13 @@
   <!-- Three.js r128 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
+  <!-- Site-wide Search, Keyboard Shortcuts & Radial Theme Controller -->
+  <script src="/site-extras.js" defer></script>
+
   <style>
     /* =========================================================================
        MINIMALIST ARCHITECTURAL PALETTE
-       Dark Mode = Midnight Slate & Soft Sapphire (True Analogue of Light Mode)
+       Dark Mode  = Midnight Slate & Soft Sapphire
        Light Mode = Warm Alabaster & Fountain-Pen Sapphire
        ========================================================================= */
     :root {
@@ -43,7 +46,7 @@
       --text-muted: #9aa5b6;
       --text-dim: #6b7688;
       --border: rgba(122, 162, 247, 0.2);
-      --border-hover: rgba(122, 162, 247, 0.5);
+      --border-hover: rgba(122, 162, 247, 0.52);
       --border-subtle: rgba(236, 239, 244, 0.08);
       --shadow-panel: 0 24px 60px -14px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(122, 162, 247, 0.12);
       --shadow-pill: 0 10px 28px -8px rgba(0, 0, 0, 0.45);
@@ -95,6 +98,22 @@
     .font-serif-ed { font-family: 'Cormorant Garamond', Georgia, serif; }
     .font-mono-ed { font-family: 'DM Mono', monospace; }
     .font-sans-ed { font-family: 'DM Sans', sans-serif; }
+
+    /* =========================================================================
+       RADIAL IRIS THEME TRANSITION (VIEW TRANSITIONS API)
+       ========================================================================= */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+    ::view-transition-new(root) {
+      animation: themeIrisReveal 0.54s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes themeIrisReveal {
+      from { clip-path: circle(0px at var(--sg-tx, 50%) var(--sg-ty, 50%)); }
+      to { clip-path: circle(150vmax at var(--sg-tx, 50%) var(--sg-ty, 50%)); }
+    }
 
     /* =========================================================================
        DUAL-LAYER 3D STAGE WITH OPTICAL BACKGROUND BLUR ISOLATION
@@ -165,6 +184,45 @@
       height: 100%;
       z-index: 14;
       pointer-events: none;
+    }
+
+    /* =========================================================================
+       CENTRAL HOME PORTAL TRANSITION OVERLAY
+       ========================================================================= */
+    #portal-transition-veil {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at var(--px, 50%) var(--py, 50%), rgba(var(--accent-rgb), 0.22) 0%, var(--bg) 58%);
+      clip-path: circle(0px at var(--px, 50%) var(--py, 50%));
+      opacity: 0;
+      transition:
+        clip-path 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.35s ease;
+    }
+    #portal-transition-veil.entering {
+      pointer-events: auto;
+      opacity: 1;
+      clip-path: circle(155vmax at var(--px, 50%) var(--py, 50%));
+    }
+    .portal-caption {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 0.35s ease 0.18s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.18s;
+    }
+    #portal-transition-veil.entering .portal-caption {
+      opacity: 1;
+      transform: scale(1);
     }
 
     /* =========================================================================
@@ -271,7 +329,7 @@
     }
 
     /* =========================================================================
-       3D PROJECTED NODE TAGS & HOVER CALLOUT
+       3D PROJECTED NODE TAGS, CENTRAL HOME PORTAL TAG & HOVER CALLOUT
        ========================================================================= */
     .projected-tag {
       position: fixed;
@@ -290,13 +348,40 @@
         opacity 0.26s ease,
         transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
         border-color 0.2s ease,
-        background-color 0.2s ease;
+        background-color 0.2s ease,
+        box-shadow 0.24s ease;
       white-space: nowrap;
     }
     .projected-tag.is-hovered {
       border-color: var(--accent);
       background: rgba(var(--accent-rgb), 0.14);
       transform: translate(-50%, -118%) scale(1.06);
+    }
+
+    .core-home-tag {
+      padding: 6px 14px;
+      border-color: var(--border-hover);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .core-home-tag.is-hovered {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.18);
+      box-shadow: 0 8px 28px rgba(var(--accent-rgb), 0.24);
+      transform: translate(-50%, -116%) scale(1.07);
+    }
+    .core-pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.8);
+      animation: coreDotPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes coreDotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.75); }
     }
 
     #hover-callout {
@@ -412,6 +497,16 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-old(root),
+      ::view-transition-new(root),
+      #portal-transition-veil,
+      .core-pulse-dot {
+        animation: none !important;
+        transition: opacity 0.2s ease !important;
+      }
+    }
+
     .text-accent { color: var(--accent); }
     .text-accent2 { color: var(--accent2); }
     .text-main { color: var(--text); }
@@ -422,7 +517,6 @@
     .bg-card { background: var(--bg-card); }
   </style>
 </head>
-  <script src="/site-extras.js" defer></script>
 <body>
   <!-- Layer 1: Background 3D Stage (floor, core, non-focused structures) -->
   <div id="webgl-bg" aria-hidden="true"></div>
@@ -449,18 +543,30 @@
   </svg>
 
   <!-- 3D Projected Floating Labels (Overview Mode) -->
-  <div id="projected-labels-layer"></div>
+  <div id="projected-labels-layer">
+    <!-- Central Core Home Portal Tag -->
+    <button id="core-home-tag" type="button" class="projected-tag core-home-tag" aria-label="Enter Classic Home Page">
+      <span class="core-pulse-dot" aria-hidden="true"></span>
+      <span class="font-mono-ed text-[10px] tracking-[0.16em] uppercase text-accent">Home</span>
+      <span class="font-mono-ed text-[10px] text-main">&rarr;</span>
+    </button>
+  </div>
 
   <!-- Desktop Hover Summary Callout -->
   <div id="hover-callout" class="glass-panel rounded-xl px-4 py-3 max-w-[245px]">
     <div class="font-mono-ed text-[10px] tracking-[0.16em] text-accent" id="hc-code">01 / PROFILE</div>
     <div class="font-serif-ed text-lg font-medium text-main mt-0.5 leading-tight" id="hc-title">Samriddha Ganguly</div>
     <div class="font-sans-ed text-xs text-muted mt-1 leading-snug" id="hc-desc">BS-MS Physics at IISER Bhopal and CEA Grenoble.</div>
-    <div class="font-mono-ed text-[9px] text-dim mt-2 uppercase tracking-widest">Click to inspect</div>
+    <div class="font-mono-ed text-[9px] text-dim mt-2 uppercase tracking-widest" id="hc-cta">Click to inspect</div>
+  </div>
+
+  <!-- Portal Transition Overlay for Navigating to /home/ -->
+  <div id="portal-transition-veil" aria-hidden="true">
+    <span class="portal-caption">Entering Home</span>
   </div>
 
   <!-- =========================================================================
-       MINIMAL FLOATING TITLE (TOP-LEFT, NO HEADER BAR)
+       MINIMAL FLOATING TITLE (TOP-LEFT, LINKS TO ROOT LANDING PAGE)
        ========================================================================= -->
   <div id="title-block" class="fixed top-4 left-4 sm:top-7 sm:left-8 z-30 pointer-events-none" style="padding-top: env(safe-area-inset-top, 0px);">
     <div class="pointer-events-auto">
@@ -468,9 +574,11 @@
         <span class="w-4 h-px bg-[var(--accent)]"></span>
         Quantum Condensed Matter
       </div>
-      <h1 class="font-serif-ed text-2xl sm:text-4xl font-normal tracking-tight text-main leading-none mt-1">
-        Samriddha <em class="italic text-accent font-normal">Ganguly</em>
-      </h1>
+      <a href="https://samriddhaganguly.github.io/" class="block no-underline text-main group">
+        <h1 class="font-serif-ed text-2xl sm:text-4xl font-normal tracking-tight text-main group-hover:text-accent transition-colors leading-none mt-1">
+          Samriddha <em class="italic text-accent font-normal">Ganguly</em>
+        </h1>
+      </a>
       <p class="font-mono-ed text-[10px] sm:text-[11px] text-accent2 tracking-wider mt-1.5">
         IISER Bhopal &middot; CEA Grenoble
       </p>
@@ -499,7 +607,7 @@
 
   <!-- Subtle Hint (Desktop Overview Only) -->
   <div id="overview-hint" class="hidden lg:block fixed bottom-[4.8rem] left-1/2 -translate-x-1/2 z-20 pointer-events-none font-mono-ed text-[10px] tracking-[0.18em] uppercase text-dim transition-opacity duration-300">
-    Drag to Orbit &middot; Select a Structure &middot; Scroll or Use Arrows
+    Drag to Orbit &middot; Center Core for Home &middot; Click Any Structure
   </div>
 
   <!-- Desktop Prev / Next Floating Arrows (Hidden on Mobile; Mobile uses sheet header controls) -->
@@ -590,8 +698,8 @@
       const THEMES = {
         dark: {
           label: 'LIGHT',
-          primaryHex: 0x7aa2f7,   // Soft Luminous Sapphire (Dark Analogue of #2b4ea8)
-          secondaryHex: 0x8fa6bf, // Cool Silver-Slate (Dark Analogue of #4a728c)
+          primaryHex: 0x7aa2f7,   // Soft Luminous Sapphire
+          secondaryHex: 0x8fa6bf, // Cool Silver-Slate
           accentHex: 0xc2d0e6,    // Mist Platinum Highlight
           gridHex: 0x4c5d7a,
           bgHex: 0x0c1017,
@@ -655,6 +763,10 @@
         select() {
           this.chime(440, 554, 0.1, 0.016);
           setTimeout(() => this.chime(659, 659, 0.09, 0.012), 55);
+        },
+        portal() {
+          this.chime(392, 587, 0.18, 0.02);
+          setTimeout(() => this.chime(587, 784, 0.24, 0.018), 90);
         },
         tab() { this.chime(587, 659, 0.065, 0.012); },
         glide() { this.chime(340, 440, 0.14, 0.014); }
@@ -857,7 +969,7 @@
           code: '04',
           name: 'Archive',
           panelTitle: 'Initiatives & Archive',
-          shortDesc: 'open_board talks, essays, physics library, courses, and simulations.',
+          shortDesc: 'open_board talks, essays, physics library, courses, gallery, and reading.',
           telemetry: 'PORTFOLIO DIRECTORY',
           fullUrl: '/resources/',
           fullLabel: 'Physics Library',
@@ -894,15 +1006,10 @@
               label: 'Writing & Media',
               html: `
                 <div class="grid grid-cols-2 gap-2">
-                  <a href="/blog/" class="card-link p-3">
+                  <a href="/blog/" class="card-link p-3 col-span-2">
                     <div class="font-mono-ed text-[9px] text-accent">ESSAYS</div>
                     <div class="font-serif-ed text-base font-medium text-main mt-0.5">Blog &rarr;</div>
-                    <p class="text-[11px] text-muted mt-0.5">Condensed matter &amp; Nambu formalism.</p>
-                  </a>
-                  <a href="/simulations.html" class="card-link p-3">
-                    <div class="font-mono-ed text-[9px] text-accent">MODELS</div>
-                    <div class="font-serif-ed text-base font-medium text-main mt-0.5">Simulations &rarr;</div>
-                    <p class="text-[11px] text-muted mt-0.5">Interactive browser visualizers.</p>
+                    <p class="text-[11px] text-muted mt-0.5">Condensed matter, Nambu formalism, and quantum systems.</p>
                   </a>
                   <a href="/gallery/" class="card-link p-3">
                     <div class="font-mono-ed text-[9px] text-accent">PHOTOS</div>
@@ -986,6 +1093,7 @@
       const fgContainer = document.getElementById('webgl-fg');
       const interactionStage = document.getElementById('interaction-stage');
       const focusBlurVeil = document.getElementById('focus-blur-veil');
+      const portalVeil = document.getElementById('portal-transition-veil');
 
       const bgScene = new THREE.Scene();
       bgScene.fog = new THREE.FogExp2(THEMES[currentThemeKey].bgHex, 0.019);
@@ -1086,14 +1194,12 @@
         return new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), makeLineMat(role, opacity));
       }
 
-      // Smooth 3D cylindrical tube ring (true solid geometry instead of 1px WebGL hairline)
       function makeTubeRing(radius, tubeRadius = 0.014, radialSegs = 12, tubularSegs = 96, role = 'primary', opacity = 0.88) {
         const geo = new THREE.TorusGeometry(radius, tubeRadius, radialSegs, tubularSegs);
         geo.rotateX(Math.PI / 2);
         return new THREE.Mesh(geo, makeSolidMat(role, opacity));
       }
 
-      // Smooth 3D cylinder strut connecting point A to point B
       function makeStrut(pA, pB, radius = 0.013, role = 'secondary', opacity = 0.65) {
         const dir = new THREE.Vector3().subVectors(pB, pA);
         const len = dir.length();
@@ -1159,20 +1265,20 @@
       bgScene.add(particleField);
 
       /* -----------------------------------------------------------------------
-         6. CENTRAL GIMBAL CORE (BG SCENE: MACHINED ASTROLABE)
+         6. CENTRAL GIMBAL CORE — INTERACTIVE HOME PORTAL (/home/)
          ----------------------------------------------------------------------- */
+      const raycastTargets = [];
+
       const coreGroup = new THREE.Group();
       coreGroup.position.set(0, 0.45, 0);
       bgScene.add(coreGroup);
 
-      // Inner luminous pearl sphere + faceted crystal cage
-      const corePearl = new THREE.Mesh(new THREE.SphereGeometry(0.34, 32, 32), makeSolidMat('accent', 0.96));
-      const coreOctGeo = new THREE.OctahedronGeometry(0.74, 0);
-      const coreOctFill = new THREE.Mesh(coreOctGeo, makeGlassMat('primary', 0.22));
-      const coreOctEdges = new THREE.LineSegments(new THREE.EdgesGeometry(coreOctGeo), makeLineMat('primary', 0.9));
+      const corePearl = new THREE.Mesh(new THREE.SphereGeometry(0.36, 32, 32), makeSolidMat('accent', 0.98));
+      const coreOctGeo = new THREE.OctahedronGeometry(0.76, 0);
+      const coreOctFill = new THREE.Mesh(coreOctGeo, makeGlassMat('primary', 0.24));
+      const coreOctEdges = new THREE.LineSegments(new THREE.EdgesGeometry(coreOctGeo), makeLineMat('primary', 0.92));
       coreGroup.add(corePearl, coreOctFill, coreOctEdges);
 
-      // Three machined metallic gimbal rings with pivot pins
       const gRing1 = new THREE.Mesh(new THREE.TorusGeometry(1.38, 0.02, 14, 112), makeSolidMat('primary', 0.88));
       gRing1.rotation.x = Math.PI / 2.4;
 
@@ -1183,14 +1289,20 @@
       const gRing3 = new THREE.Mesh(new THREE.TorusGeometry(2.04, 0.012, 12, 112), makeSolidMat('primary', 0.52));
       gRing3.rotation.z = Math.PI / 6;
 
-      coreGroup.add(gRing1, gRing2, gRing3);
+      // Invisible clickable hit sphere for the central Home portal
+      const coreHitMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(1.85, 14, 14),
+        new THREE.MeshBasicMaterial({ visible: false })
+      );
+      coreHitMesh.userData.isCoreHome = true;
+      coreGroup.add(gRing1, gRing2, gRing3, coreHitMesh);
+      raycastTargets.push(coreHitMesh);
 
       /* -----------------------------------------------------------------------
-         7. 5 ARCHITECTURAL 3D SCULPTURES (CLEAN PARAMETRIC & EDGES GEOMETRY)
+         7. 5 ARCHITECTURAL 3D SCULPTURES (CLEAN PARAMETRIC & SOLID MESHES)
          ----------------------------------------------------------------------- */
       const ORBIT_RADIUS = 5.8;
       const moduleObjects = [];
-      const raycastTargets = [];
       let signalPulseObj = null;
       let signalCurveRef = null;
 
@@ -1212,7 +1324,6 @@
           const knotMesh = new THREE.Mesh(knotGeo, makeGlassMat('primary', 0.34));
           parts.push(registerPart(container, knotMesh, { hover: [0, 0.08, 0] }));
 
-          // Smooth 3D tubular core filament tracing the (2,3) torus knot curve
           class KnotCurve extends THREE.Curve {
             getPoint(t) {
               const a = t * Math.PI * 2;
@@ -1226,7 +1337,6 @@
           );
           parts.push(registerPart(container, spineTube, { hover: [0, 0.08, 0], explode: [0, 0, 0.32] }));
 
-          // Primary tilted gyroscopic ring with two opposing satellite nodes
           const hoop1Group = new THREE.Group();
           hoop1Group.rotation.x = Math.PI / 2.25;
           hoop1Group.add(new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.02, 14, 112), makeSolidMat('secondary', 0.88)));
@@ -1238,7 +1348,6 @@
           hoop1Group.add(satA, satB);
           parts.push(registerPart(container, hoop1Group, { hover: [0, 0.18, 0], focus: [0, 0.12, 0], explode: [0, 0.66, 0.14] }));
 
-          // Secondary counter-tilted tubular ring
           const hoop2 = new THREE.Mesh(new THREE.TorusGeometry(1.36, 0.014, 12, 112), makeSolidMat('primary', 0.68));
           hoop2.rotation.set(-Math.PI / 3, Math.PI / 4, 0);
           parts.push(registerPart(container, hoop2, { hover: [0, -0.16, 0], focus: [0, -0.12, 0], explode: [0, -0.66, -0.14] }));
@@ -1251,20 +1360,17 @@
             layerGroup.position.y = ly;
             const role = li === 1 ? 'secondary' : 'primary';
 
-            // Translucent crystalline hexagonal slab + crisp edge frame + perimeter tubular rail
             const hexGeo = new THREE.CylinderGeometry(0.98, 0.98, 0.048, 6, 1);
             layerGroup.add(new THREE.Mesh(hexGeo, makeGlassMat(role, 0.24)));
             layerGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(hexGeo), makeLineMat(role, 0.9)));
 
-            // Inner honeycomb hexagon + radial bond struts from center atom to vertices
             const innerHex = makeCircleLoop(0.48, 6, role, 0.55);
             innerHex.rotation.y = Math.PI / 6;
             layerGroup.add(innerHex);
 
             const atomGeo = new THREE.SphereGeometry(0.082, 24, 24);
             const atomMat = makeSolidMat(li === 1 ? 'accent' : 'primary', 0.98);
-            const centerAtom = new THREE.Mesh(new THREE.SphereGeometry(0.095, 24, 24), atomMat);
-            layerGroup.add(centerAtom);
+            layerGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.095, 24, 24), atomMat));
 
             for (let v = 0; v < 6; v++) {
               const a = (v / 6) * Math.PI * 2 + Math.PI / 6;
@@ -1273,8 +1379,6 @@
               const atom = new THREE.Mesh(atomGeo, atomMat);
               atom.position.set(vx, 0, vz);
               layerGroup.add(atom);
-
-              // Subtle in-plane covalent bond strut
               layerGroup.add(makeStrut(new THREE.Vector3(0, 0, 0), new THREE.Vector3(vx, 0, vz), 0.011, role, 0.52));
             }
 
@@ -1286,7 +1390,6 @@
             }));
           });
 
-          // Smooth 3D cylindrical interlayer van der Waals coupling struts
           for (let v = 0; v < 6; v++) {
             const a = (v / 6) * Math.PI * 2 + Math.PI / 6;
             const vx = Math.cos(a) * 0.98;
@@ -1301,19 +1404,17 @@
           }
 
         } else if (index === 2) {
-          // 03 PUBLICATIONS: Precision Topological Dirac Dispersion Cones (True Tubular Contours + Struts)
+          // 03 PUBLICATIONS: Precision Topological Dirac Dispersion Cones (Tubular Contours + Struts)
           const buildDiracHalf = (sign, role) => {
             const halfGroup = new THREE.Group();
             const maxH = 0.96;
             const maxR = 0.84;
 
-            // Smooth double-sided translucent dispersion surface
             const veil = new THREE.Mesh(new THREE.ConeGeometry(maxR, maxH, 72, 1, true), makeGlassMat(role, 0.16));
             if (sign > 0) veil.rotation.x = Math.PI;
             veil.position.y = sign * (maxH * 0.5);
             halfGroup.add(veil);
 
-            // Solid tubular iso-energy contour rings at 4 quantized levels
             [0.28, 0.52, 0.76, 1.0].forEach((f, fi) => {
               const tubeR = fi === 3 ? 0.018 : 0.011;
               const ring = makeTubeRing(maxR * f, tubeR, 12, 96, role, fi === 3 ? 0.92 : 0.65);
@@ -1321,7 +1422,6 @@
               halfGroup.add(ring);
             });
 
-            // 8 smooth 3D cylindrical dispersion rays from Dirac apex to outer rim
             for (let m = 0; m < 8; m++) {
               const a = (m / 8) * Math.PI * 2;
               halfGroup.add(makeStrut(
@@ -1338,9 +1438,7 @@
           parts.push(registerPart(container, buildDiracHalf(1, 'primary'), { hover: [0, 0.14, 0], focus: [0, 0.14, 0], explode: [0, 0.52, 0] }));
           parts.push(registerPart(container, buildDiracHalf(-1, 'secondary'), { hover: [0, -0.14, 0], focus: [0, -0.14, 0], explode: [0, -0.52, 0] }));
 
-          // Central Dirac Weyl/Dirac Nodal Pearl + Halo Ring
-          const apex = new THREE.Mesh(new THREE.SphereGeometry(0.115, 28, 28), makeSolidMat('accent', 0.98));
-          parts.push(registerPart(container, apex));
+          parts.push(registerPart(container, new THREE.Mesh(new THREE.SphereGeometry(0.115, 28, 28), makeSolidMat('accent', 0.98))));
 
           const fermiRing = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.017, 14, 112), makeSolidMat('primary', 0.82));
           fermiRing.rotation.x = Math.PI / 2;
@@ -1352,10 +1450,7 @@
           const hullGroup = new THREE.Group();
           hullGroup.add(new THREE.Mesh(dodecaGeo, makeGlassMat('primary', 0.2)));
           hullGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(dodecaGeo), makeLineMat('primary', 0.88)));
-
-          // Inner core octahedron for layered architectural depth
-          const innerGeo = new THREE.OctahedronGeometry(0.36, 0);
-          hullGroup.add(new THREE.Mesh(innerGeo, makeSolidMat('secondary', 0.72)));
+          hullGroup.add(new THREE.Mesh(new THREE.OctahedronGeometry(0.36, 0), makeSolidMat('secondary', 0.72)));
           parts.push(registerPart(container, hullGroup));
 
           const coords = [
@@ -1381,7 +1476,6 @@
               explode: dir.clone().multiplyScalar(0.72).toArray()
             }));
 
-            // Solid cylindrical radial spoke from origin to satellite node
             parts.push(registerPart(container, makeStrut(
               new THREE.Vector3(0, 0, 0),
               new THREE.Vector3(...c),
@@ -1397,7 +1491,6 @@
           const R = 0.88;
           globeGroup.add(new THREE.Mesh(new THREE.SphereGeometry(R * 0.96, 48, 36), makeGlassMat('primary', 0.16)));
 
-          // Smooth tubular latitude rings
           [-0.58, -0.29, 0, 0.29, 0.58].forEach((latY, li) => {
             const rLat = Math.sqrt(Math.max(0.01, R * R - latY * latY));
             const isEq = li === 2;
@@ -1406,23 +1499,17 @@
             globeGroup.add(latTube);
           });
 
-          // Smooth tubular longitude meridians
           for (let m = 0; m < 6; m++) {
-            const mer = new THREE.Mesh(
-              new THREE.TorusGeometry(R, 0.009, 10, 96),
-              makeSolidMat('primary', 0.46)
-            );
+            const mer = new THREE.Mesh(new THREE.TorusGeometry(R, 0.009, 10, 96), makeSolidMat('primary', 0.46));
             mer.rotation.y = (m / 6) * Math.PI;
             globeGroup.add(mer);
           }
           parts.push(registerPart(container, globeGroup));
 
-          // Outer orbital ring
           const eqOrbit = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.015, 12, 112), makeSolidMat('secondary', 0.72));
           eqOrbit.rotation.x = Math.PI / 2.25;
           parts.push(registerPart(container, eqOrbit, { hover: [0, 0.15, 0], explode: [0, 0.62, 0] }));
 
-          // Solid 3D Tubular Geodesic Arc linking Bhopal & Grenoble
           const pBhopal = new THREE.Vector3(0.44, 0.35, 0.68);
           const pGrenoble = new THREE.Vector3(-0.34, 0.62, 0.52);
           const midArc = new THREE.Vector3(0.06, 1.24, 0.96);
@@ -1433,7 +1520,6 @@
           );
           parts.push(registerPart(container, arcTube, { hover: [0, 0.12, 0.1], explode: [0, 0.42, 0.36] }));
 
-          // City Beacons with miniature base collars
           const makeBeacon = (pos, role, explodeVec) => {
             const bGroup = new THREE.Group();
             bGroup.position.copy(pos);
@@ -1497,6 +1583,7 @@
           data: mod,
           root,
           pivot,
+          hitMesh,
           floorRing,
           beam,
           beamMat,
@@ -1511,9 +1598,10 @@
       });
 
       /* -----------------------------------------------------------------------
-         8. PROJECTED LABELS & RESPONSIVE DOCK
+         8. PROJECTED LABELS, CENTRAL HOME TAG & RESPONSIVE DOCK
          ----------------------------------------------------------------------- */
       const projectedLabelsLayer = document.getElementById('projected-labels-layer');
+      const coreHomeTag = document.getElementById('core-home-tag');
       const dockNodesEl = document.getElementById('dock-nodes');
       const projectedLabelEls = [];
       const dockBtnEls = [];
@@ -1522,7 +1610,7 @@
         const tag = document.createElement('button');
         tag.type = 'button';
         tag.className = 'projected-tag text-left';
-        tag.innerHTML = `<span class="font-mono-ed text-[10px] text-accent mr-1.5">mod.code</span><spanclass="font-serif-edtext-[13px]font-mediumtracking-widetext-main">{mod.name}</span>`;
+        tag.innerHTML = `<span class="font-mono-ed text-[10px] text-accent mr-1.5">${mod.code}</span><span class="font-serif-ed text-[13px] font-medium tracking-wide text-main">${mod.name}</span>`;
         tag.addEventListener('mouseenter', () => setHovered(idx));
         tag.addEventListener('mouseleave', () => setHovered(-1));
         tag.addEventListener('click', () => focusModule(idx));
@@ -1532,7 +1620,7 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'ui-btn px-2.5 sm:px-3.5 py-2 font-mono-ed text-[10px] sm:text-[11px] tracking-[0.08em] uppercase shrink-0 flex-1 sm:flex-initial';
-        btn.innerHTML = `<span class="text-accent sm:mr-1">mod.code</span><spanclass="hiddensm:inline">{mod.name}</span>`;
+        btn.innerHTML = `<span class="text-accent sm:mr-1">${mod.code}</span><span class="hidden sm:inline">${mod.name}</span>`;
         btn.setAttribute('aria-label', `${mod.code} ${mod.name}`);
         btn.addEventListener('mouseenter', () => setHovered(idx));
         btn.addEventListener('mouseleave', () => setHovered(-1));
@@ -1541,10 +1629,18 @@
         dockBtnEls.push(btn);
       });
 
+      coreHomeTag.addEventListener('mouseenter', () => setCoreHovered(true));
+      coreHomeTag.addEventListener('mouseleave', () => setCoreHovered(false));
+      coreHomeTag.addEventListener('click', () => enterHomePortal());
+
       /* -----------------------------------------------------------------------
-         9. FOREGROUND ISOLATION & NON-BLOCKING CAMERA FRAMING
+         9. FOREGROUND ISOLATION, HOME PORTAL TRANSITION & CAMERA FRAMING
          ----------------------------------------------------------------------- */
       let hoveredIndex = -1;
+      let isCoreHovered = false;
+      let coreHoverAmount = 0;
+      let isEnteringHome = false;
+
       let focusedIndex = -1;
       let fgIsolatedIndex = -1;
       let fgRestoreTimer = null;
@@ -1587,13 +1683,72 @@
       const dpFullLink = document.getElementById('dp-full-link');
       const explodeBtn = document.getElementById('explode-btn');
 
-      // Isolate the selected structure into fgScene so bgScene blurs cleanly behind it
+      function updateCursor() {
+        const overInteractive = hoveredIndex !== -1 || isCoreHovered;
+        interactionStage.style.cursor = overInteractive ? 'pointer' : (isPointerDown ? 'grabbing' : 'grab');
+      }
+
+      function setCoreHovered(state) {
+        if (focusedIndex !== -1 || isEnteringHome) state = false;
+        if (isCoreHovered === state) return;
+        isCoreHovered = state;
+        if (state) {
+          hoveredIndex = -1;
+          projectedLabelEls.forEach(el => el.classList.remove('is-hovered'));
+          SoundFX.hover();
+        }
+        coreHomeTag.classList.toggle('is-hovered', state);
+        updateCursor();
+      }
+
+      function setHovered(idx) {
+        if (isEnteringHome) return;
+        if (idx !== -1 && isCoreHovered) {
+          isCoreHovered = false;
+          coreHomeTag.classList.remove('is-hovered');
+        }
+        if (hoveredIndex === idx) return;
+        hoveredIndex = idx;
+        if (idx !== -1 && idx !== focusedIndex) SoundFX.hover();
+        projectedLabelEls.forEach((el, i) => el.classList.toggle('is-hovered', i === idx));
+        updateCursor();
+      }
+
+      // Smooth dive + radial portal transition into /home/
+      function enterHomePortal() {
+        if (isEnteringHome) return;
+        isEnteringHome = true;
+        setHovered(-1);
+        setCoreHovered(false);
+
+        const corePt = projectToScreen(coreGroup.getWorldPosition(new THREE.Vector3()));
+        portalVeil.style.setProperty('--px', `${corePt.x.toFixed(1)}px`);
+        portalVeil.style.setProperty('--py', `${corePt.y.toFixed(1)}px`);
+
+        // Dive camera smoothly toward the central astrolabe core
+        const diveDir = currentCamPos.clone().sub(coreGroup.position).normalize();
+        targetCamPos.copy(coreGroup.position).add(diveDir.multiplyScalar(2.1));
+        targetLookAt.copy(coreGroup.position);
+
+        SoundFX.portal();
+        portalVeil.classList.add('entering');
+
+        setTimeout(() => {
+          window.location.href = '/home/';
+        }, 580);
+      }
+
+      // Reset portal state cleanly if visitor navigates back via browser bfcache
+      window.addEventListener('pageshow', () => {
+        isEnteringHome = false;
+        portalVeil.classList.remove('entering');
+      });
+
       function isolateInForeground(idx) {
         if (fgRestoreTimer) {
           clearTimeout(fgRestoreTimer);
           fgRestoreTimer = null;
         }
-        // Return any previously isolated module back to bgScene
         if (fgIsolatedIndex !== -1 && fgIsolatedIndex !== idx) {
           const prev = moduleObjects[fgIsolatedIndex];
           prev.floorRing.visible = true;
@@ -1603,7 +1758,6 @@
         }
         if (idx !== -1) {
           const curr = moduleObjects[idx];
-          // Hide floor ring & beam during isolated inspection for a pure museum-object float
           curr.floorRing.visible = false;
           curr.beam.visible = false;
           fgScene.add(curr.root);
@@ -1613,7 +1767,6 @@
           focusBlurVeil.classList.add('active');
         } else {
           focusBlurVeil.classList.remove('active');
-          // Return immediately to bgScene and flush fg canvas in the next animation frame
           if (fgIsolatedIndex !== -1) {
             const m = moduleObjects[fgIsolatedIndex];
             m.floorRing.visible = true;
@@ -1626,21 +1779,12 @@
         }
       }
 
-      function setHovered(idx) {
-        if (hoveredIndex === idx) return;
-        hoveredIndex = idx;
-        if (idx !== -1 && idx !== focusedIndex) SoundFX.hover();
-        interactionStage.style.cursor = idx !== -1 ? 'pointer' : (isPointerDown ? 'grabbing' : 'grab');
-        projectedLabelEls.forEach((el, i) => el.classList.toggle('is-hovered', i === idx));
-      }
-
       function computeFocusCamera(idx) {
         const pos = moduleObjects[idx].root.position;
         const outward = new THREE.Vector3(pos.x, 0, pos.z).normalize();
         const isDesktop = window.innerWidth >= 1024;
         const aspect = window.innerWidth / window.innerHeight;
 
-        // Portrait mobile needs slightly more distance so sculpture fits cleanly in upper 48%
         const dist = isDesktop ? 7.4 : (aspect < 0.65 ? 9.6 : 8.2);
         const camY = isDesktop ? 1.5 : 1.75;
         const camPos = pos.clone()
@@ -1656,7 +1800,6 @@
           lookAt.y += 0.62;
           lookAt.add(camRight.multiplyScalar(rightShift));
         } else {
-          // Shift lookAt downward -> centers sculpture cleanly in upper half above the bottom sheet
           lookAt.y -= (aspect < 0.65 ? 1.25 : 0.95);
         }
 
@@ -1696,9 +1839,11 @@
       }
 
       function focusModule(idx) {
-        if (idx < 0 || idx >= MODULES.length) return;
+        if (idx < 0 || idx >= MODULES.length || isEnteringHome) return;
         const wasFocused = focusedIndex !== -1;
         focusedIndex = idx;
+        isCoreHovered = false;
+        coreHomeTag.classList.remove('is-hovered');
         isExploded = false;
         explodeBtn.classList.remove('is-active');
         explodeBtn.textContent = 'Explode';
@@ -1722,7 +1867,7 @@
       }
 
       function returnToOverview() {
-        if (focusedIndex === -1) return;
+        if (focusedIndex === -1 || isEnteringHome) return;
         focusedIndex = -1;
         isExploded = false;
         explodeBtn.classList.remove('is-active');
@@ -1743,6 +1888,7 @@
       }
 
       function cycleModule(step) {
+        if (isEnteringHome) return;
         if (focusedIndex === -1) {
           focusModule(step > 0 ? 0 : MODULES.length - 1);
         } else {
@@ -1775,7 +1921,7 @@
 
       let wheelCooldown = 0;
       window.addEventListener('wheel', (e) => {
-        if (e.target.closest('#detail-panel')) return;
+        if (e.target.closest('#detail-panel') || isEnteringHome) return;
         const now = performance.now();
         if (now - wheelCooldown < 460) return;
         if (Math.abs(e.deltaY) > 24) {
@@ -1786,6 +1932,7 @@
 
       // Pointer / Touch Drag & Tap on Unified Interaction Layer
       interactionStage.addEventListener('pointerdown', (e) => {
+        if (isEnteringHome) return;
         isPointerDown = true;
         pointerMoved = false;
         lastPointerX = e.clientX;
@@ -1794,6 +1941,7 @@
       });
 
       interactionStage.addEventListener('pointermove', (e) => {
+        if (isEnteringHome) return;
         const w = window.innerWidth;
         const h = window.innerHeight;
         mouseNDC.x = (e.clientX / w) * 2 - 1;
@@ -1817,32 +1965,51 @@
         } else if (w >= 768 && focusedIndex === -1) {
           raycaster.setFromCamera(mouseNDC, camera);
           const hits = raycaster.intersectObjects(raycastTargets, false);
-          setHovered(hits.length > 0 ? hits[0].object.userData.moduleIndex : -1);
+          if (hits.length > 0) {
+            const objData = hits[0].object.userData;
+            if (objData.isCoreHome) {
+              setCoreHovered(true);
+            } else {
+              setHovered(objData.moduleIndex);
+            }
+          } else {
+            setHovered(-1);
+            setCoreHovered(false);
+          }
         }
       });
 
       interactionStage.addEventListener('pointerup', (e) => {
-        if (isPointerDown && !pointerMoved) {
+        if (isPointerDown && !pointerMoved && !isEnteringHome) {
           mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
           mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
           raycaster.setFromCamera(mouseNDC, camera);
-          const hits = raycaster.intersectObjects(raycastTargets, false);
+          const activeTargets = focusedIndex === -1
+            ? raycastTargets
+            : [moduleObjects[focusedIndex].hitMesh];
+          const hits = raycaster.intersectObjects(activeTargets, false);
           if (hits.length > 0) {
-            focusModule(hits[0].object.userData.moduleIndex);
+            const objData = hits[0].object.userData;
+            if (objData.isCoreHome && focusedIndex === -1) {
+              enterHomePortal();
+            } else if (typeof objData.moduleIndex === 'number' && focusedIndex === -1) {
+              focusModule(objData.moduleIndex);
+            }
           } else if (focusedIndex !== -1 && window.innerWidth >= 1024) {
-            // Clicking empty blurred background on desktop returns gently to overview
             returnToOverview();
           }
         }
         isPointerDown = false;
+        updateCursor();
       });
 
       interactionStage.addEventListener('pointercancel', () => {
         isPointerDown = false;
+        updateCursor();
       });
 
       /* -----------------------------------------------------------------------
-         10. LIVE THEME & AUDIO CONTROLS
+         10. LIVE THEME (WITH RADIAL IRIS + SITE-EXTRAS SYNC) & AUDIO CONTROLS
          ----------------------------------------------------------------------- */
       const themeBtn = document.getElementById('theme-btn');
       const themeLabel = document.getElementById('theme-label');
@@ -1854,6 +2021,7 @@
         currentThemeKey = key;
         const t = THEMES[key];
         document.documentElement.setAttribute('data-theme', key);
+        document.body.classList.toggle('light', key === 'light');
         localStorage.setItem('theme', key);
         themeLabel.textContent = t.label;
 
@@ -1867,12 +2035,38 @@
           else if (entry.kind === 'points') entry.mat.opacity = t.particleOpacity;
           entry.mat.needsUpdate = true;
         });
+
+        bgRenderer.render(bgScene, camera);
+        if (fgIsolatedIndex !== -1) {
+          fgRenderer.render(fgScene, camera);
+        }
       }
 
       themeLabel.textContent = THEMES[currentThemeKey].label;
-      themeBtn.addEventListener('click', () => {
-        applyTheme(currentThemeKey === 'dark' ? 'light' : 'dark');
+
+      themeBtn.addEventListener('click', (e) => {
         SoundFX.tab();
+        if (window.SGExtras && typeof window.SGExtras.toggleTheme === 'function') {
+          window.SGExtras.toggleTheme(e);
+        } else {
+          const nextKey = currentThemeKey === 'dark' ? 'light' : 'dark';
+          document.documentElement.style.setProperty('--sg-tx', `${e.clientX || window.innerWidth / 2}px`);
+          document.documentElement.style.setProperty('--sg-ty', `${e.clientY || window.innerHeight / 2}px`);
+          const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (document.startViewTransition && !reduced) {
+            document.startViewTransition(() => applyTheme(nextKey));
+          } else {
+            applyTheme(nextKey);
+          }
+        }
+      });
+
+      // Stay in sync when toggled via keyboard shortcut 'T' in site-extras.js
+      window.addEventListener('site-theme-changed', (e) => {
+        const nextKey = e.detail && e.detail.theme === 'light' ? 'light' : 'dark';
+        if (nextKey !== currentThemeKey) {
+          applyTheme(nextKey);
+        }
       });
 
       audioBtn.addEventListener('click', () => {
@@ -1893,6 +2087,7 @@
       const hcCode = document.getElementById('hc-code');
       const hcTitle = document.getElementById('hc-title');
       const hcDesc = document.getElementById('hc-desc');
+      const hcCta = document.getElementById('hc-cta');
 
       const hoverTetherLine = document.getElementById('hover-tether-line');
       const hoverTetherDot = document.getElementById('hover-tether-dot');
@@ -1913,11 +2108,32 @@
       function updateOverlays() {
         const w = window.innerWidth;
         const h = window.innerHeight;
+        const safeTop = w < 768 ? 112 : 76;
+        const safeBottom = h - 78;
 
+        // 1. Update Central Home Portal Tag
+        if (focusedIndex === -1 && !isEnteringHome) {
+          const corePos = coreGroup.getWorldPosition(new THREE.Vector3());
+          corePos.y += 2.25;
+          const corePt = projectToScreen(corePos);
+          if (corePt.visible && corePt.x > 24 && corePt.x < w - 24 && corePt.y > safeTop && corePt.y < safeBottom) {
+            coreHomeTag.style.left = `${corePt.x.toFixed(1)}px`;
+            coreHomeTag.style.top = `${corePt.y.toFixed(1)}px`;
+            coreHomeTag.style.opacity = (hoveredIndex === -1 || isCoreHovered) ? '1' : '0.45';
+            coreHomeTag.style.pointerEvents = 'auto';
+          } else {
+            coreHomeTag.style.opacity = '0';
+            coreHomeTag.style.pointerEvents = 'none';
+          }
+        } else {
+          coreHomeTag.style.opacity = '0';
+          coreHomeTag.style.pointerEvents = 'none';
+        }
+
+        // 2. Update 5 Orbiting Module Tags
         moduleObjects.forEach((modObj, i) => {
           const el = projectedLabelEls[i];
-          // Hide floating tags during inspection mode (and keep mobile overview clean)
-          if (focusedIndex !== -1) {
+          if (focusedIndex !== -1 || isEnteringHome) {
             el.style.opacity = '0';
             el.style.pointerEvents = 'none';
             return;
@@ -1925,13 +2141,11 @@
           const labelWorld = modObj.pivot.getWorldPosition(new THREE.Vector3());
           labelWorld.y += 1.56;
           const pt = projectToScreen(labelWorld);
-          const safeTop = w < 768 ? 112 : 76;
-          const safeBottom = h - 78;
 
           if (pt.visible && pt.x > 24 && pt.x < w - 24 && pt.y > safeTop && pt.y < safeBottom) {
             el.style.left = `${pt.x.toFixed(1)}px`;
             el.style.top = `${pt.y.toFixed(1)}px`;
-            el.style.opacity = hoveredIndex === -1 || hoveredIndex === i ? '1' : '0.4';
+            el.style.opacity = (hoveredIndex === -1 && !isCoreHovered) || hoveredIndex === i ? '1' : '0.4';
             el.style.pointerEvents = 'auto';
           } else {
             el.style.opacity = '0';
@@ -1939,24 +2153,39 @@
           }
         });
 
-        // Desktop Overview Hover Callout
-        if (focusedIndex === -1 && hoveredIndex !== -1 && w >= 768) {
-          const modObj = moduleObjects[hoveredIndex];
-          const anchor = projectToScreen(modObj.pivot.getWorldPosition(new THREE.Vector3()));
+        // 3. Desktop Overview Hover Callout (for either Central Core or Orbiting Modules)
+        if (focusedIndex === -1 && !isEnteringHome && w >= 768 && (isCoreHovered || hoveredIndex !== -1)) {
+          let anchor, codeStr, titleStr, descStr, ctaStr;
+          if (isCoreHovered) {
+            anchor = projectToScreen(coreGroup.getWorldPosition(new THREE.Vector3()));
+            codeStr = 'PORTAL / HOME';
+            titleStr = 'Main Portfolio';
+            descStr = 'Enter the full editorial home page with bio, news, reading shelf, and coursework.';
+            ctaStr = 'Click to enter home';
+          } else {
+            const modObj = moduleObjects[hoveredIndex];
+            anchor = projectToScreen(modObj.pivot.getWorldPosition(new THREE.Vector3()));
+            codeStr = `${modObj.data.code} / ${modObj.data.name.toUpperCase()}`;
+            titleStr = modObj.data.panelTitle;
+            descStr = modObj.data.shortDesc;
+            ctaStr = 'Click to inspect';
+          }
+
           const side = anchor.x > w * 0.62 ? -1 : 1;
-          const cardX = anchor.x + side * 56;
+          const cardX = anchor.x + side * 62;
           const cardY = Math.max(110, Math.min(h - 135, anchor.y - 20));
 
-          hcCode.textContent = `${modObj.data.code} / ${modObj.data.name.toUpperCase()}`;
-          hcTitle.textContent = modObj.data.panelTitle;
-          hcDesc.textContent = modObj.data.shortDesc;
+          hcCode.textContent = codeStr;
+          hcTitle.textContent = titleStr;
+          hcDesc.textContent = descStr;
+          hcCta.textContent = ctaStr;
 
-          hoverCalloutEl.style.left = side > 0 ? `cardXpx`:`{cardX - 245}px`;
+          hoverCalloutEl.style.left = side > 0 ? `${cardX}px` : `${cardX - 245}px`;
           hoverCalloutEl.style.top = `${cardY}px`;
           hoverCalloutEl.classList.add('visible');
 
-          const elbowX = anchor.x + side * 30;
-          hoverTetherLine.setAttribute('points', `anchor.x,{anchor.y} elbowX,{cardY} side>0?cardX+14:cardX-14,{cardY}`);
+          const elbowX = anchor.x + side * 32;
+          hoverTetherLine.setAttribute('points', `${anchor.x},${anchor.y} ${elbowX},${cardY} ${side > 0 ? cardX + 14 : cardX - 14},${cardY}`);
           hoverTetherLine.setAttribute('opacity', '0.62');
           hoverTetherDot.setAttribute('cx', anchor.x);
           hoverTetherDot.setAttribute('cy', anchor.y);
@@ -1967,8 +2196,8 @@
           hoverTetherDot.setAttribute('opacity', '0');
         }
 
-        // Desktop Inspection Architectural Leader Line
-        if (focusedIndex !== -1 && w >= 1024) {
+        // 4. Desktop Inspection Architectural Leader Line
+        if (focusedIndex !== -1 && !isEnteringHome && w >= 1024) {
           const modObj = moduleObjects[focusedIndex];
           const anchor = projectToScreen(modObj.pivot.getWorldPosition(new THREE.Vector3()));
           const panelRect = detailPanel.getBoundingClientRect();
@@ -1978,7 +2207,7 @@
 
           if (targetX - startX > 36) {
             const midX = startX + (targetX - startX) * 0.45;
-            detailTetherLine.setAttribute('points', `startX,{anchor.y} midX,{anchor.y} midX+20,{targetY} targetX,{targetY}`);
+            detailTetherLine.setAttribute('points', `${startX},${anchor.y} ${midX},${anchor.y} ${midX + 20},${targetY} ${targetX},${targetY}`);
             detailTetherLine.setAttribute('opacity', '0.55');
             detailTetherDot.setAttribute('cx', startX);
             detailTetherDot.setAttribute('cy', anchor.y);
@@ -2012,12 +2241,19 @@
         });
         particleField.rotation.y += 0.015 * dt;
 
-        coreOctFill.rotation.y += 0.2 * dt;
+        // Animate central astrolabe Home portal (smooth spin-up on hover or portal entry)
+        coreHoverAmount = damp(coreHoverAmount, (isCoreHovered || isEnteringHome) ? 1 : 0, 8, dt);
+        const coreBoost = 1 + coreHoverAmount * 1.45 + (isEnteringHome ? 2.5 : 0);
+
+        coreOctFill.rotation.y += 0.2 * coreBoost * dt;
         coreOctEdges.rotation.y = coreOctFill.rotation.y;
-        gRing1.rotation.z += 0.22 * dt;
-        gRing2.rotation.z -= 0.16 * dt;
-        gRing3.rotation.y += 0.12 * dt;
-        coreGroup.position.y = 0.45 + Math.sin(t * 1.1) * 0.08;
+        gRing1.rotation.z += 0.22 * coreBoost * dt;
+        gRing2.rotation.z -= 0.16 * coreBoost * dt;
+        gRing3.rotation.y += 0.12 * coreBoost * dt;
+        coreGroup.position.y = 0.45 + Math.sin(t * 1.1) * 0.08 + coreHoverAmount * 0.16;
+
+        const targetCoreScale = 1 + coreHoverAmount * 0.12 + (isEnteringHome ? 0.22 : 0);
+        coreGroup.scale.setScalar(damp(coreGroup.scale.x, targetCoreScale, 8, dt));
 
         if (signalPulseObj && signalCurveRef) {
           signalPulseObj.position.copy(signalCurveRef.getPoint((t * 0.32) % 1));
@@ -2069,7 +2305,7 @@
           });
         });
 
-        if (focusedIndex === -1) {
+        if (focusedIndex === -1 && !isEnteringHome) {
           if (!isPointerDown) targetOrbitTheta += 0.028 * dt;
           orbitTheta = damp(orbitTheta, targetOrbitTheta, 5.5, dt);
           orbitPhi = damp(orbitPhi, targetOrbitPhi, 5.5, dt);
@@ -2082,21 +2318,18 @@
             Math.sin(orbitPhi) * r + 0.65,
             Math.cos(orbitTheta) * Math.cos(orbitPhi) * r
           );
-          // Lowering lookAt.y lifts the entire 3D orbit cleanly into the center, well above the bottom dock
           targetLookAt.set(0, isSmall ? -0.95 : -0.82, 0);
         }
 
-        const camLerp = 1 - Math.exp(-5.4 * dt);
+        const camLerp = 1 - Math.exp(-(isEnteringHome ? 4.2 : 5.4) * dt);
         const lookLerp = 1 - Math.exp(-6.2 * dt);
         currentCamPos.lerp(targetCamPos, camLerp);
         currentLookAt.lerp(targetLookAt, lookLerp);
         camera.position.copy(currentCamPos);
         camera.lookAt(currentLookAt);
 
-        // Pass 1: Render background scene
         bgRenderer.render(bgScene, camera);
 
-        // Pass 2: Render isolated sharp foreground sculpture above the blur veil, or flush empty canvas
         if (fgIsolatedIndex !== -1) {
           fgRenderer.render(fgScene, camera);
         } else if (fgNeedsFlush) {
@@ -2127,4 +2360,3 @@
   </script>
 </body>
 </html>
-
