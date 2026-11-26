@@ -1,0 +1,2799 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Synthetic Mind &amp; Physical Substrates</title>
+
+  <!-- Three.js r128 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+
+  <!-- KaTeX 0.16.9 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* =========================================================================
+       DESIGN TOKENS: DARK SAPPHIRE ACADEMIC & LIGHT ARCHIVAL
+       ========================================================================= */
+    :root,
+    [data-theme="dark"] {
+      --bg-base: #070f20;
+      --bg-radial: #0d1d3b;
+      --bg-card: #0d1a33;
+      --bg-elevated: #122344;
+      --bg-bar: rgba(7, 15, 32, 0.86);
+      --bg-backdrop: rgba(5, 11, 24, 0.68);
+      --border-subtle: rgba(148, 184, 232, 0.18);
+      --border-strong: rgba(148, 184, 232, 0.34);
+      --text-primary: #e8eef8;
+      --text-secondary: #9db2d1;
+      --text-muted: #728ab0;
+      --accent: #6fa6eb;
+      --accent-ice: #a8cbf8;
+      --accent-soft: rgba(111, 166, 235, 0.15);
+      --done: #57a688;
+      --shadow-card: 0 12px 34px rgba(2, 6, 16, 0.45);
+      --shadow-modal: 0 28px 70px rgba(2, 6, 16, 0.68);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f6f5f0;
+      --bg-radial: #eceae1;
+      --bg-card: #ffffff;
+      --bg-elevated: #f8f7f3;
+      --bg-bar: rgba(255, 255, 255, 0.90);
+      --bg-backdrop: rgba(246, 245, 240, 0.72);
+      --border-subtle: rgba(19, 34, 59, 0.14);
+      --border-strong: rgba(19, 34, 59, 0.28);
+      --text-primary: #13223b;
+      --text-secondary: #4d5e78;
+      --text-muted: #6c7c94;
+      --accent: #1e467a;
+      --accent-ice: #3564a1;
+      --accent-soft: rgba(30, 70, 122, 0.09);
+      --done: #2a7357;
+      --shadow-card: 0 10px 26px rgba(19, 34, 59, 0.08);
+      --shadow-modal: 0 24px 64px rgba(19, 34, 59, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 48%, var(--bg-radial) 0%, var(--bg-base) 100%);
+      color: var(--text-primary);
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.35s ease, color 0.25s ease;
+    }
+
+    .font-serif-prose {
+      font-family: "Times New Roman", Georgia, serif;
+    }
+
+    .font-ui {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Full-Viewport 3D Scene Container */
+    #brain-canvas-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      touch-action: none;
+    }
+    #brain-canvas-wrap canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Projected 2D Node Badges (W1..W11) */
+    #node-labels-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      overflow: hidden;
+      transition: opacity 0.25s ease;
+    }
+
+    .node-badge {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+      cursor: pointer;
+      min-width: 32px;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1.5px solid var(--border-strong);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+      transition: transform 0.18s ease, opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .node-badge:hover,
+    .node-badge.is-highlighted {
+      transform: translate(-50%, -50%) scale(1.14);
+      border-color: var(--accent);
+      z-index: 8;
+    }
+
+    .node-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* Surface Components */
+    .surface-bar {
+      background: var(--bg-bar);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: opacity 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .surface-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+    }
+
+    .surface-elevated {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .ui-btn {
+      transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+    .ui-btn:active {
+      transform: scale(0.98);
+    }
+    .ui-btn:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Desktop Hover Preview Card */
+    #hover-preview {
+      position: fixed;
+      z-index: 20;
+      width: 272px;
+      max-width: calc(100vw - 24px);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.16s ease, transform 0.18s ease;
+    }
+    #hover-preview.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================================================
+       STRICT BLURRED-BACKGROUND POP-UP ISOLATION
+       ========================================================================= */
+    body.modal-open #top-header,
+    body.modal-open #hero-corner-title,
+    body.modal-open #bottom-pill-bar,
+    body.modal-open #node-labels-layer,
+    body.modal-open #hover-preview {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    #modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: var(--bg-backdrop);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.26s ease;
+    }
+    body.modal-open #modal-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #week-modal {
+      width: 100%;
+      max-width: 740px;
+      max-height: calc(100vh - 32px);
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      box-shadow: var(--shadow-modal);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(14px) scale(0.985);
+      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease;
+    }
+    body.modal-open #week-modal {
+      transform: translateY(0) scale(1);
+    }
+
+    /* Smooth Grid-Row Accordions */
+    .acc-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .acc-body.is-open {
+      grid-template-rows: 1fr;
+    }
+    .acc-inner {
+      overflow: hidden;
+    }
+    .acc-chevron {
+      transition: transform 0.22s ease;
+    }
+    .acc-trigger.is-open .acc-chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Scrollbars */
+    .clean-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .clean-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .clean-scroll::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 999px;
+    }
+
+    /* KaTeX Math Styling */
+    .math-box {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding: 4px 0;
+    }
+    .katex {
+      color: var(--text-primary);
+      font-size: 1.02em;
+    }
+    .katex-display {
+      margin: 0.25rem 0 !important;
+    }
+
+    /* File Dropzone Highlight */
+    .dropzone-active {
+      border-color: var(--accent) !important;
+      background: var(--accent-soft) !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Full-Viewport 3D Neural Map Canvas -->
+  <div id="brain-canvas-wrap" aria-label="Interactive 3D Brain and Neural Network"></div>
+
+  <!-- Projected 2D Node Badges (W1..W11) -->
+  <div id="node-labels-layer"></div>
+
+  <!-- Desktop Hover Preview Card -->
+  <div id="hover-preview" class="surface-card rounded-xl p-3.5">
+    <div class="flex items-center justify-between gap-2 mb-1">
+      <span id="hp-week" class="font-ui text-[11px] font-bold uppercase tracking-wider" style="color:var(--accent);">Week 1</span>
+      <span id="hp-status" class="font-ui text-[10px] font-semibold" style="color:var(--text-muted);">Click to open</span>
+    </div>
+    <h4 id="hp-title" class="font-serif-prose text-base font-bold leading-snug" style="color:var(--text-primary);">Title</h4>
+    <div id="hp-path" class="font-ui text-[11px] mt-2 pt-2 border-t leading-relaxed" style="border-color:var(--border-subtle); color:var(--text-secondary);"></div>
+  </div>
+
+  <!-- =========================================================================
+       MINIMAL STICKY TOP HEADER BAR (4 TABS ONLY)
+       ========================================================================= -->
+  <header id="top-header" class="surface-bar fixed top-0 left-0 right-0 z-30">
+    <div class="max-w-7xl mx-auto px-3 sm:px-5 min-h-[54px] py-1.5 flex flex-wrap items-center justify-between gap-2">
+      <!-- Brand -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-2.5 h-2.5 rounded-full shrink-0" style="background:var(--accent);"></div>
+        <span class="font-serif-prose text-sm sm:text-base font-bold truncate" style="color:var(--text-primary);">
+          Synthetic Mind &amp; Physical Substrates
+        </span>
+      </div>
+
+      <!-- 4 Clean Navigation Tabs -->
+      <nav aria-label="Primary Navigation" class="order-3 md:order-2 w-full md:w-auto flex items-center gap-1 overflow-x-auto pb-0.5 md:pb-0">
+        <button data-view="map" class="nav-tab ui-btn min-h-[40px] sm:min-h-[36px] px-3 py-1.5 text-xs font-ui font-semibold rounded-lg shrink-0">Neural Map</button>
+        <button data-view="syllabus" class="nav-tab ui-btn min-h-[40px] sm:min-h-[36px] px-3 py-1.5 text-xs font-ui font-semibold rounded-lg shrink-0">Syllabus</button>
+        <button data-view="library" class="nav-tab ui-btn min-h-[40px] sm:min-h-[36px] px-3 py-1.5 text-xs font-ui font-semibold rounded-lg shrink-0">Library</button>
+        <button data-view="discussions" class="nav-tab ui-btn min-h-[40px] sm:min-h-[36px] px-3 py-1.5 text-xs font-ui font-semibold rounded-lg shrink-0">Summary of Discussions</button>
+      </nav>
+
+      <!-- Theme Toggle -->
+      <div class="order-2 md:order-3 flex items-center gap-2 shrink-0">
+        <button id="btn-theme-toggle" type="button" aria-label="Switch color theme" class="ui-btn min-h-[40px] sm:min-h-[36px] min-w-[40px] px-2.5 py-1.5 rounded-lg border text-xs font-ui font-semibold inline-flex items-center gap-1.5" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">
+          <span id="theme-icon" aria-hidden="true"></span>
+          <span id="theme-label" class="hidden sm:inline">Light</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Subtle Top-Left Homepage Overlay (Neural Map Only) -->
+  <div id="hero-corner-title" class="fixed top-[106px] md:top-[68px] left-4 sm:left-6 z-10 pointer-events-none transition-opacity duration-200">
+    <h1 class="font-serif-prose text-lg sm:text-2xl font-bold leading-tight" style="color:var(--text-primary);">
+      Synthetic Mind &amp; Physical Substrates
+    </h1>
+    <p class="font-ui text-xs mt-0.5" style="color:var(--text-secondary);">
+      11-Week Reading Group
+    </p>
+  </div>
+
+  <!-- Compact Floating Bottom Pill Bar (Neural Map Only) -->
+  <div id="bottom-pill-bar" class="fixed bottom-3.5 left-3 right-3 z-20 pointer-events-none transition-opacity duration-200">
+    <div class="max-w-2xl mx-auto surface-card rounded-full px-3 py-1.5 pointer-events-auto flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+      <span id="pill-progress" class="font-ui text-xs font-semibold px-2.5 py-1 rounded-full" style="background:var(--accent-soft); color:var(--accent-ice);">
+        0/11 done
+      </span>
+      <button id="btn-autorotate" type="button" class="ui-btn min-h-[40px] sm:min-h-[34px] px-3 py-1 rounded-full border text-xs font-ui font-semibold" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">
+        Auto-Rotate: On
+      </button>
+      <button id="btn-reset-view" type="button" class="ui-btn min-h-[40px] sm:min-h-[34px] px-3 py-1 rounded-full border text-xs font-ui font-semibold" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-secondary);">
+        Reset View
+      </button>
+      <span class="hidden md:inline font-ui text-[11px]" style="color:var(--text-muted);">
+        Drag to orbit &middot; Click any node to open week
+      </span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SECONDARY VIEWS CONTAINER (SYLLABUS, LIBRARY, SUMMARY OF DISCUSSIONS)
+       ========================================================================= -->
+  <main id="secondary-views" class="hidden fixed inset-0 z-20 overflow-y-auto clean-scroll pt-[108px] md:pt-[72px] pb-14 px-3 sm:px-6" style="background:var(--bg-base);">
+    <div class="max-w-4xl mx-auto space-y-5">
+
+      <!-- VIEW 2: SYLLABUS (NO SUBHEADINGS, CLEAN WEEK 1-11 STACK) -->
+      <section id="view-syllabus" class="sec-view hidden space-y-4">
+        <div class="surface-card rounded-xl p-4 sm:p-5 space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <h2 class="font-serif-prose text-2xl sm:text-3xl font-bold" style="color:var(--text-primary);">Syllabus</h2>
+            <button id="btn-syl-toggle-all" type="button" class="ui-btn min-h-[44px] sm:min-h-[38px] px-3.5 py-1.5 text-xs font-ui font-semibold rounded-lg border shrink-0" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">
+              Expand All
+            </button>
+          </div>
+
+          <div class="flex flex-col md:flex-row gap-3">
+            <input id="syl-search" type="text" placeholder="Search weeks, equations, books, papers, or DOIs..." class="flex-1 min-h-[44px] px-3.5 py-2 text-sm font-ui rounded-lg border" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">
+            <div class="flex flex-wrap gap-1.5">
+              <button data-topic="all" class="topic-btn ui-btn min-h-[44px] sm:min-h-[38px] px-3 py-1.5 text-xs font-ui font-semibold rounded-lg border">All</button>
+              <button data-topic="foundations" class="topic-btn ui-btn min-h-[44px] sm:min-h-[38px] px-3 py-1.5 text-xs font-ui font-semibold rounded-lg border">Foundations &amp; Hardware</button>
+              <button data-topic="quantum" class="topic-btn ui-btn min-h-[44px] sm:min-h-[38px] px-3 py-1.5 text-xs font-ui font-semibold rounded-lg border">Quantum Systems</button>
+              <button data-topic="consciousness" class="topic-btn ui-btn min-h-[44px] sm:min-h-[38px] px-3 py-1.5 text-xs font-ui font-semibold rounded-lg border">Consciousness</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="syllabus-list" class="space-y-3"></div>
+      </section>
+
+      <!-- VIEW 3: LIBRARY -->
+      <section id="view-library" class="sec-view hidden space-y-5">
+        <div class="surface-card rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <button data-libtab="books" class="lib-tab ui-btn min-h-[44px] sm:min-h-[38px] px-4 py-1.5 text-xs font-ui font-semibold rounded-lg border">Core Textbooks (10)</button>
+            <button data-libtab="papers" class="lib-tab ui-btn min-h-[44px] sm:min-h-[38px] px-4 py-1.5 text-xs font-ui font-semibold rounded-lg border">Papers &amp; References (22)</button>
+          </div>
+          <button id="btn-download-bib" type="button" class="ui-btn min-h-[44px] sm:min-h-[38px] px-4 py-2 text-xs font-ui font-semibold rounded-lg border shrink-0" style="background:var(--accent); border-color:var(--accent); color:#ffffff;">
+            Download .bib
+          </button>
+        </div>
+
+        <!-- Core Textbooks Panel -->
+        <div id="lib-panel-books" class="surface-card rounded-xl p-4 sm:p-6">
+          <div id="library-books-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+        </div>
+
+        <!-- Papers & References Panel -->
+        <div id="lib-panel-papers" class="hidden surface-card rounded-xl p-4 sm:p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input id="lib-search" type="text" placeholder="Search authors, titles, journals, or DOIs..." class="flex-1 min-h-[44px] px-3.5 py-2 text-sm font-ui rounded-lg border" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">
+            <select id="lib-week-filter" aria-label="Filter papers by week" class="min-h-[44px] px-3 py-2 text-xs font-ui font-semibold rounded-lg border" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">
+              <option value="all">All Weeks</option>
+            </select>
+          </div>
+          <div id="lib-count" class="font-ui text-xs" style="color:var(--text-muted);">Showing 22 of 22 papers</div>
+          <div id="library-papers-list" class="space-y-3"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: SUMMARY OF DISCUSSIONS (WEEK 1-11 NOTES & FILE UPLOADS ONLY) -->
+      <section id="view-discussions" class="sec-view hidden space-y-4">
+        <div class="surface-card rounded-xl p-4 sm:p-5">
+          <h2 class="font-serif-prose text-2xl sm:text-3xl font-bold" style="color:var(--text-primary);">Summary of Discussions</h2>
+          <p class="font-serif-prose text-sm sm:text-base mt-1" style="color:var(--text-secondary);">
+            Keep weekly discussion summaries and upload local notes, PDFs, or board photos for Weeks 1 through 11.
+          </p>
+        </div>
+
+        <div id="discussions-list" class="space-y-4"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       ISOLATED BLURRED-BACKGROUND WEEK DOSSIER POP-UP MODAL
+       ========================================================================= -->
+  <div id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div id="week-modal">
+      <!-- Header -->
+      <div class="px-5 py-4 border-b flex items-start justify-between gap-3 shrink-0" style="border-color:var(--border-subtle); background:var(--bg-elevated);">
+        <div class="min-w-0 space-y-1.5">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span id="modal-week-badge" class="font-ui text-xs font-bold px-2.5 py-0.5 rounded-full" style="background:var(--accent-soft); color:var(--accent-ice);">Week 1 of 11</span>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer font-ui text-xs font-semibold" style="color:var(--text-secondary);">
+              <input id="modal-done-checkbox" type="checkbox" class="w-4 h-4 cursor-pointer" style="accent-color:var(--done);">
+              <span>Completed</span>
+            </label>
+          </div>
+          <h2 id="modal-title" class="font-serif-prose text-xl sm:text-2xl font-bold leading-snug" style="color:var(--text-primary);">Week Title</h2>
+        </div>
+        <button id="btn-close-modal" type="button" aria-label="Close week details" class="ui-btn min-w-[44px] min-h-[44px] rounded-lg border flex items-center justify-center shrink-0 text-xl leading-none" style="background:var(--bg-card); border-color:var(--border-subtle); color:var(--text-primary);">
+          &times;
+        </button>
+      </div>
+
+      <!-- Scrollable Body -->
+      <div id="modal-body" class="clean-scroll flex-1 overflow-y-auto p-5 space-y-5"></div>
+
+      <!-- Footer -->
+      <div class="px-4 sm:px-5 py-3 border-t flex flex-wrap items-center justify-between gap-2 shrink-0" style="border-color:var(--border-subtle); background:var(--bg-elevated);">
+        <div class="flex items-center gap-2">
+          <button id="btn-modal-prev" type="button" class="ui-btn min-h-[44px] sm:min-h-[38px] px-3 py-1.5 rounded-lg border text-xs font-ui font-semibold" style="background:var(--bg-card); border-color:var(--border-subtle); color:var(--text-primary);">
+            &larr; Previous Week
+          </button>
+          <button id="btn-modal-next" type="button" class="ui-btn min-h-[44px] sm:min-h-[38px] px-3 py-1.5 rounded-lg border text-xs font-ui font-semibold" style="background:var(--bg-card); border-color:var(--border-subtle); color:var(--text-primary);">
+            Next Week &rarr;
+          </button>
+        </div>
+        <button id="btn-modal-to-notes" type="button" class="ui-btn min-h-[44px] sm:min-h-[38px] px-3.5 py-1.5 rounded-lg border text-xs font-ui font-semibold" style="background:var(--accent); border-color:var(--accent); color:#ffffff;">
+          Go to Discussion Notes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" aria-live="polite" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* =======================================================================
+         1. COMPLETE 11-WEEK CURRICULUM DATA & TEXTBOOKS
+         ======================================================================= */
+      const TEXTBOOKS = [
+        {
+          id: 'tb-1',
+          authors: 'W. Gerstner, W. M. Kistler, R. Naud & L. Paninski',
+          title: 'Neuronal Dynamics: From Single Neurons to Networks and Models of Cognition',
+          publisher: 'Cambridge University Press',
+          year: '2014',
+          isbn: '978-1-107-06083-8',
+          weeks: 'Week 1'
+        },
+        {
+          id: 'tb-2',
+          authors: 'P. Dayan & L. F. Abbott',
+          title: 'Theoretical Neuroscience: Computational and Mathematical Modeling of Neural Systems',
+          publisher: 'MIT Press',
+          year: '2001',
+          isbn: '978-0-262-04199-7',
+          weeks: 'Week 1'
+        },
+        {
+          id: 'tb-3',
+          authors: 'D. Ielmini & R. Waser (Eds.)',
+          title: 'Resistive Switching: From Fundamentals of Nanoionic Redox Processes to Memristive Device Applications',
+          publisher: 'Wiley-VCH',
+          year: '2016',
+          isbn: '978-3-527-33417-9',
+          weeks: 'Week 2'
+        },
+        {
+          id: 'tb-4',
+          authors: 'P. Fazekas',
+          title: 'Lecture Notes on Electron Correlation and Magnetism',
+          publisher: 'World Scientific',
+          year: '1999',
+          isbn: '978-981-02-2474-5',
+          weeks: 'Week 3'
+        },
+        {
+          id: 'tb-5',
+          authors: 'S. Blundell',
+          title: 'Magnetism in Condensed Matter',
+          publisher: 'Oxford University Press',
+          year: '2001',
+          isbn: '978-0-19-850591-4',
+          weeks: 'Week 4'
+        },
+        {
+          id: 'tb-6',
+          authors: 'M. A. Nielsen & I. L. Chuang',
+          title: 'Quantum Computation and Quantum Information',
+          publisher: 'Cambridge University Press',
+          year: '2010',
+          isbn: '978-1-107-00217-3',
+          weeks: 'Weeks 5, 7'
+        },
+        {
+          id: 'tb-7',
+          authors: 'M. Tinkham',
+          title: 'Introduction to Superconductivity (2nd Ed.)',
+          publisher: 'Dover',
+          year: '2004',
+          isbn: '978-0-486-43503-9',
+          weeks: 'Week 6'
+        },
+        {
+          id: 'tb-8',
+          authors: 'H.-P. Breuer & F. Petruccione',
+          title: 'The Theory of Open Quantum Systems',
+          publisher: 'Oxford University Press',
+          year: '2002',
+          isbn: '978-0-19-852063-4',
+          weeks: 'Week 8'
+        },
+        {
+          id: 'tb-9',
+          authors: 'A. Seth',
+          title: 'Being You: A New Science of Consciousness',
+          publisher: 'Dutton',
+          year: '2021',
+          isbn: '978-1-5247-4287-4',
+          weeks: 'Week 9'
+        },
+        {
+          id: 'tb-10',
+          authors: 'C. Koch',
+          title: "The Feeling of Life Itself: Why Consciousness Is Widespread but Can't Be Computed",
+          publisher: 'MIT Press',
+          year: '2019',
+          isbn: '978-0-262-04281-9',
+          weeks: 'Week 10'
+        },
+        {
+          id: 'tb-11',
+          authors: 'T. Parr, G. Pezzulo & K. J. Friston',
+          title: 'Active Inference: The Free Energy Principle in Mind, Brain, and Behavior',
+          publisher: 'MIT Press',
+          year: '2022',
+          isbn: '978-0-262-04535-3',
+          weeks: 'Week 11'
+        }
+      ];
+
+      const WEEKS = [
+        {
+          week: 1,
+          topic: 'foundations',
+          pos: [0.0, -0.74, -0.76],
+          prereqs: [],
+          next: [2, 3, 6],
+          title: 'Biological Neurons and Dynamical Systems',
+          overview: 'Start with the biophysics of excitable membranes as nonlinear RC circuits and see how 4D ion-channel dynamics reduce to clean 2D spiking models.',
+          equation: '$$C_m \\frac{dV}{dt} = -g_L(V - E_L) - g_{\\text{Na}} m^3 h (V - E_{\\text{Na}}) - g_{\\text{K}} n^4 (V - E_{\\text{K}}) + I_{\\text{ext}}$$',
+          eqMeaning: 'Membrane voltage evolves through passive leak current, voltage-gated sodium and potassium conductances, and external drive.',
+          textbook: 'Gerstner, Kistler, Naud & Paninski, Neuronal Dynamics (Cambridge, 2014), Ch. 1-2 & 4 (ISBN 978-1-107-06083-8); Dayan & Abbott, Theoretical Neuroscience (MIT Press, 2001), Ch. 5 (ISBN 978-0-262-04199-7).',
+          papers: [
+            {
+              id: 'p1',
+              bibKey: 'Hodgkin1952',
+              authors: 'A. L. Hodgkin & A. F. Huxley',
+              bibAuthors: 'Hodgkin, A. L. and Huxley, A. F.',
+              year: 1952,
+              title: 'A quantitative description of membrane current and its application to conduction and excitation in nerve',
+              journal: 'J. Physiol.',
+              volume: '117',
+              issue: '',
+              pages: '500-544',
+              doi: '10.1113/jphysiol.1952.sp004764'
+            },
+            {
+              id: 'p2',
+              bibKey: 'Izhikevich2003',
+              authors: 'E. M. Izhikevich',
+              bibAuthors: 'Izhikevich, E. M.',
+              year: 2003,
+              title: 'Simple model of spiking neurons',
+              journal: 'IEEE Trans. Neural Netw.',
+              volume: '14',
+              issue: '6',
+              pages: '1569-1572',
+              doi: '10.1109/TNN.2003.820440'
+            }
+          ],
+          thingsToLearn: [
+            'How an excitable membrane acts like a nonlinear RC circuit with voltage-gated conductances.',
+            'Phase-plane reduction from 4D Hodgkin-Huxley to 2D FitzHugh-Nagumo and Izhikevich models.',
+            'Type I (saddle-node) vs Type II (Hopf) excitability.',
+            'Why spike timing and refractory periods carry information that rate-coded artificial neurons discard.'
+          ],
+          questionsToAsk: [
+            'Which biophysical details of a real neuron actually matter for computation, and which are just evolutionary plumbing?',
+            'How does the energy cost of an action potential compare to a CMOS transistor switch?'
+          ]
+        },
+        {
+          week: 2,
+          topic: 'foundations',
+          pos: [-0.74, -0.26, -1.04],
+          prereqs: [1],
+          next: [3, 4],
+          title: 'Memristors and Resistive Switching Synapses',
+          overview: 'Examine two-terminal resistive switches that store analog synaptic weights directly in ionic configurations and compute matrix-vector products in hardware.',
+          equation: '$$v(t) = R(w)\\,i(t), \\quad \\frac{dw}{dt} = \\mu_V \\frac{R_{\\text{on}}}{D^2}\\,i(t)\\,f(w)$$',
+          eqMeaning: 'Device resistance depends on an internal ionic state variable w whose drift rate is controlled by current and boundary windowing.',
+          textbook: 'D. Ielmini & R. Waser (Eds.), Resistive Switching (Wiley-VCH, 2016), Ch. 1-3 (ISBN 978-3-527-33417-9).',
+          papers: [
+            {
+              id: 'p3',
+              bibKey: 'Strukov2008',
+              authors: 'D. B. Strukov, G. S. Snider, D. R. Stewart & R. S. Williams',
+              bibAuthors: 'Strukov, D. B. and Snider, G. S. and Stewart, D. R. and Williams, R. S.',
+              year: 2008,
+              title: 'The missing memristor found',
+              journal: 'Nature',
+              volume: '453',
+              issue: '',
+              pages: '80-83',
+              doi: '10.1038/nature06932'
+            },
+            {
+              id: 'p4',
+              bibKey: 'Xia2019',
+              authors: 'Q. Xia & J. J. Yang',
+              bibAuthors: 'Xia, Q. and Yang, J. J.',
+              year: 2019,
+              title: 'Memristive crossbar arrays for brain-inspired computing',
+              journal: 'Nature Materials',
+              volume: '18',
+              issue: '',
+              pages: '309-323',
+              doi: '10.1038/s41563-019-0291-x'
+            }
+          ],
+          thingsToLearn: [
+            'How pinched hysteresis loops in the I-V plane encode state-dependent conductance.',
+            'Ionic drift and oxygen-vacancy filament formation in transition-metal oxides.',
+            "Why crossbar arrays perform vector-matrix multiplication via Ohm's and Kirchhoff's laws in O(1) time.",
+            'Practical non-idealities like cycle-to-cycle variability, sneak paths, and conductance drift.'
+          ],
+          questionsToAsk: [
+            'Does co-locating memory and compute genuinely remove the von Neumann bottleneck, or does peripheral ADC/DAC circuitry simply move the energy wall elsewhere?',
+            'When does device stochasticity help learning instead of hurting it?'
+          ]
+        },
+        {
+          week: 3,
+          topic: 'foundations',
+          pos: [-1.06, -0.14, -0.22],
+          prereqs: [1, 2],
+          next: [4, 10],
+          title: 'Mott Insulators and Physical Spiking Neurons',
+          overview: 'Move from non-volatile synapses to volatile threshold switches where metal-insulator transitions generate spiking oscillations directly in solid-state matter.',
+          equation: '$$C_{\\text{th}}\\frac{dT}{dt} = \\frac{V^2}{R(T)} - \\Gamma_{\\text{th}}(T - T_0)$$',
+          eqMeaning: 'Joule heating competes with thermal dissipation to drive the oxide across its sharp resistance drop and back.',
+          textbook: 'P. Fazekas, Lecture Notes on Electron Correlation and Magnetism (World Scientific, 1999), Ch. 1-2 & 5 (ISBN 978-981-02-2474-5).',
+          papers: [
+            {
+              id: 'p5',
+              bibKey: 'Pickett2013',
+              authors: 'M. D. Pickett, G. Medeiros-Ribeiro & R. S. Williams',
+              bibAuthors: 'Pickett, M. D. and Medeiros-Ribeiro, G. and Williams, R. S.',
+              year: 2013,
+              title: 'A scalable neuristor built with Mott memristors',
+              journal: 'Nature Materials',
+              volume: '12',
+              issue: '',
+              pages: '114-117',
+              doi: '10.1038/nmat3510'
+            },
+            {
+              id: 'p6',
+              bibKey: 'Yi2018',
+              authors: 'W. Yi et al.',
+              bibAuthors: 'Yi, W. and Tsang, K. K. and Lam, S. K. and Bai, X. and Crowell, J. A. and Flores, E. A.',
+              year: 2018,
+              title: 'Biological plausibility and stochasticity in scalable VO2 active memristor neurons',
+              journal: 'Nature Communications',
+              volume: '9',
+              issue: '',
+              pages: '4661',
+              doi: '10.1038/s41467-018-07052-w'
+            }
+          ],
+          thingsToLearn: [
+            'The physics of metal-insulator transitions in strongly correlated oxides like VO2 and NbO2.',
+            'Electrothermal feedback and negative differential resistance (NDR).',
+            'How two coupled Mott switches and a capacitor form a Pearson-Anson relaxation oscillator that reproduces all-or-nothing spiking and refractory periods directly in solid-state physics.'
+          ],
+          questionsToAsk: [
+            "What changes conceptually when a neuron's dynamics come from a phase transition in a single oxide nanoscale channel rather than hundreds of CMOS transistors?",
+            'How sensitive are coupled Mott oscillators to thermal crosstalk at high packing densities?'
+          ]
+        },
+        {
+          week: 4,
+          topic: 'foundations',
+          pos: [-0.90, 0.42, -0.54],
+          prereqs: [2, 3],
+          next: [5, 11],
+          title: 'Spintronics, Coupled Oscillators, and Local Physical Learning',
+          overview: 'Explore magnetic tunnel junctions as nanoscale oscillators and probabilistic bits, alongside physical learning rules that avoid global digital backpropagation.',
+          equation: '$$\\frac{d\\mathbf{m}}{dt} = -\\gamma\\,\\mathbf{m} \\times \\mathbf{H}_{\\text{eff}} + \\alpha\\,\\mathbf{m} \\times \\frac{d\\mathbf{m}}{dt} + \\boldsymbol{\\tau}_{\\text{STT}}$$',
+          eqMeaning: 'Landau-Lifshitz-Gilbert dynamics balance precession, Gilbert damping, and spin-transfer torque.',
+          textbook: 'S. Blundell, Magnetism in Condensed Matter (Oxford Univ. Press, 2001), Ch. 5-7 (ISBN 978-0-19-850591-4).',
+          papers: [
+            {
+              id: 'p7',
+              bibKey: 'Grollier2020',
+              authors: 'J. Grollier, D. Querlioz, K. Y. Camsari, K. Everschor-Sitte, S. Fukami & M. D. Stiles',
+              bibAuthors: 'Grollier, J. and Querlioz, D. and Camsari, K. Y. and Everschor-Sitte, K. and Fukami, S. and Stiles, M. D.',
+              year: 2020,
+              title: 'Neuromorphic spintronics',
+              journal: 'Nature Electronics',
+              volume: '3',
+              issue: '',
+              pages: '360-370',
+              doi: '10.1038/s41928-019-0360-9'
+            },
+            {
+              id: 'p8',
+              bibKey: 'Scellier2017',
+              authors: 'B. Scellier & Y. Bengio',
+              bibAuthors: 'Scellier, B. and Bengio, Y.',
+              year: 2017,
+              title: 'Equilibrium Propagation: Bridging the gap between energy-based models and backpropagation',
+              journal: 'Front. Comput. Neurosci.',
+              volume: '11',
+              issue: '',
+              pages: '24',
+              doi: '10.3389/fncom.2017.00024'
+            }
+          ],
+          thingsToLearn: [
+            'Landau-Lifshitz-Gilbert magnetization dynamics and spin-transfer torque in magnetic tunnel junctions (MTJs).',
+            'Using superparamagnetic MTJs as hardware probabilistic bits (p-bits) and spin-torque nano-oscillators for synchronization computing.',
+            'Why backpropagation is hard to implement physically and how Equilibrium Propagation uses local nudging between free and clamped energy minima.'
+          ],
+          questionsToAsk: [
+            'Can physical relaxation to an energy minimum replace digital gradient descent at scale?',
+            'What makes spintronic stochasticity different from pseudo-random numbers in software?'
+          ]
+        },
+        {
+          week: 5,
+          topic: 'quantum',
+          pos: [1.00, 0.14, -0.38],
+          prereqs: [4],
+          next: [6, 8],
+          title: 'Quantum Information Basics and Separating Quantum Hardware from Quantum Biology',
+          overview: 'Establish a disciplined physics boundary between engineered quantum neuromorphic devices and speculative claims about quantum coherence in biological brains.',
+          equation: '$$\\tau_{\\text{dec}} \\approx \\frac{\\hbar^2}{2 m k_B T (\\Delta x)^2}\\,\\tau_{\\text{coll}}$$',
+          eqMeaning: 'Thermal scattering rapidly suppresses spatial superpositions over macroscopic separations at physiological temperatures.',
+          textbook: 'M. A. Nielsen & I. L. Chuang, Quantum Computation and Quantum Information (Cambridge, 2010), Ch. 1-2 & 8 (ISBN 978-1-107-00217-3).',
+          papers: [
+            {
+              id: 'p9',
+              bibKey: 'Markovic2020',
+              authors: 'D. Markovic & J. Grollier',
+              bibAuthors: 'Markovic, D. and Grollier, J.',
+              year: 2020,
+              title: 'Quantum neuromorphic computing',
+              journal: 'Appl. Phys. Lett.',
+              volume: '117',
+              issue: '',
+              pages: '150501',
+              doi: '10.1063/5.0020014'
+            },
+            {
+              id: 'p10',
+              bibKey: 'Tegmark2000',
+              authors: 'M. Tegmark',
+              bibAuthors: 'Tegmark, M.',
+              year: 2000,
+              title: 'Importance of quantum decoherence in brain processes',
+              journal: 'Phys. Rev. E',
+              volume: '61',
+              issue: '',
+              pages: '4194-4206',
+              doi: '10.1103/PhysRevE.61.4194'
+            }
+          ],
+          thingsToLearn: [
+            'Density matrices, entanglement, and why exponential Hilbert-space dimension is only useful if readout does not destroy the advantage.',
+            "Tegmark's decoherence timescale estimates for warm, wet biological microtubules versus engineered cryogenic or photonic quantum hardware.",
+            'Clear boundaries between engineered quantum neuromorphics and speculative quantum-mind claims.'
+          ],
+          questionsToAsk: [
+            'Even if biological brains are effectively classical at physiological temperatures, could an engineered quantum neuromorphic device gain capabilities that classical analog hardware cannot match?',
+            'Where does measurement overhead erase the apparent speedup of quantum neural networks?'
+          ]
+        },
+        {
+          week: 6,
+          topic: 'quantum',
+          pos: [0.64, 0.82, -0.22],
+          prereqs: [1, 5],
+          next: [7],
+          title: 'Superconducting Josephson Junctions as Quantum Spiking Neurons',
+          overview: 'Study how phase slips in superconducting Josephson junctions produce quantized picosecond voltage pulses that act as attojoule artificial action potentials.',
+          equation: '$$I = I_c \\sin\\phi + \\frac{\\hbar}{2eR}\\frac{d\\phi}{dt} + \\frac{\\hbar C}{2e}\\frac{d^2\\phi}{dt^2}$$',
+          eqMeaning: 'The RCSJ equation maps superconducting phase evolution onto a damped driven particle on a tilted washboard potential.',
+          textbook: 'M. Tinkham, Introduction to Superconductivity (2nd Ed., Dover, 2004), Ch. 6 (ISBN 978-0-486-43503-9).',
+          papers: [
+            {
+              id: 'p11',
+              bibKey: 'Crotty2010',
+              authors: 'P. Crotty, D. Schult & K. Segall',
+              bibAuthors: 'Crotty, P. and Schult, D. and Segall, K.',
+              year: 2010,
+              title: 'Josephson junction simulation of neurons',
+              journal: 'Phys. Rev. E',
+              volume: '82',
+              issue: '',
+              pages: '011914',
+              doi: '10.1103/PhysRevE.82.011914'
+            },
+            {
+              id: 'p12',
+              bibKey: 'Schneider2018',
+              authors: 'M. L. Schneider et al.',
+              bibAuthors: 'Schneider, M. L. and Donnelly, C. A. and Russek, S. E. and Baek, B. and Pufall, M. R. and Hopkins, P. F. and Dresselhaus, P. D. and Benz, S. P. and Rippard, W. H.',
+              year: 2018,
+              title: 'Ultralow power artificial synapses using nanotextured magnetic Josephson junctions',
+              journal: 'Science Advances',
+              volume: '4',
+              issue: '1',
+              pages: 'e1701329',
+              doi: '10.1126/sciadv.1701329'
+            }
+          ],
+          thingsToLearn: [
+            'The RCSJ (resistively and capacitively shunted junction) model and tilted washboard potential.',
+            'How a 2-pi phase slip emits a quantized single-flux-quantum (SFQ) voltage pulse lasting picoseconds with attojoule energy dissipation.',
+            'How two coupled junctions mimic sodium-potassium channel dynamics and magnetic Josephson junctions provide tunable cryogenic synaptic weights.'
+          ],
+          questionsToAsk: [
+            'When you include the thermodynamic wall-plug power of a 4 K or dilution refrigerator, at what network scale do superconducting spiking circuits beat room-temperature silicon or oxide memristors?',
+            'How do phase slips map onto firing thresholds in biological excitability?'
+          ]
+        },
+        {
+          week: 7,
+          topic: 'quantum',
+          pos: [-0.68, 0.78, 0.34],
+          prereqs: [6],
+          next: [8],
+          title: 'Quantum Reservoir Computing and Photonic Neural Networks',
+          overview: 'See how fixed disordered spin dynamics and integrated photonic interferometer meshes process temporal data without training deep internal parameters.',
+          equation: '$$\\rho(t_k) = \\mathcal{E}_{\\tau}\\!\\left(\\rho_{\\text{in}}(u_k) \\otimes \\text{Tr}_{\\text{in}}\\!\\left[\\rho(t_{k-1})\\right]\\right)$$',
+          eqMeaning: 'Sequential inputs are injected into a subset of qubits while the remaining reservoir retains fading memory across steps.',
+          textbook: 'M. A. Nielsen & I. L. Chuang, Quantum Computation and Quantum Information (Cambridge, 2010), Ch. 7 (ISBN 978-1-107-00217-3).',
+          papers: [
+            {
+              id: 'p13',
+              bibKey: 'Fujii2017',
+              authors: 'K. Fujii & K. Nakajima',
+              bibAuthors: 'Fujii, K. and Nakajima, K.',
+              year: 2017,
+              title: 'Harnessing disordered-ensemble quantum dynamics for machine learning',
+              journal: 'Phys. Rev. Applied',
+              volume: '8',
+              issue: '',
+              pages: '024030',
+              doi: '10.1103/PhysRevApplied.8.024030'
+            },
+            {
+              id: 'p14',
+              bibKey: 'Shastri2021',
+              authors: 'B. J. Shastri et al.',
+              bibAuthors: 'Shastri, B. J. and Tait, A. N. and Ferreira de Lima, T. and Pernice, W. H. P. and Bhaskaran, H. and Wright, C. D. and Prucnal, P. R.',
+              year: 2021,
+              title: 'Photonics for artificial intelligence and neuromorphic computing',
+              journal: 'Nature Photonics',
+              volume: '15',
+              issue: '',
+              pages: '102-114',
+              doi: '10.1038/s41566-020-00754-y'
+            }
+          ],
+          thingsToLearn: [
+            'How reservoir computing bypasses training internal weights by feeding temporal inputs into a fixed nonlinear dynamical system and training only a linear readout.',
+            'How disordered spin ensembles act as fading-memory quantum reservoirs.',
+            'Mach-Zehnder interferometer meshes and nonlinear optical activation in integrated photonic chips.'
+          ],
+          questionsToAsk: [
+            'Why is reservoir computing such a natural fit for noisy intermediate-scale physical substrates?',
+            "In quantum reservoir computing, how do you balance extracting information via projective measurement against preserving the reservoir's fading memory?"
+          ]
+        },
+        {
+          week: 8,
+          topic: 'quantum',
+          pos: [0.78, 0.58, 0.40],
+          prereqs: [5, 7],
+          next: [9, 11],
+          title: 'Open Quantum Systems, Dissipation, and Thermodynamics of Computation',
+          overview: 'Turn from isolated unitary dynamics to open dissipative systems, examining both Lindblad attractor engineering and Landauer thermodynamic bounds.',
+          equation: '$$\\frac{d\\rho}{dt} = -\\frac{i}{\\hbar}[H, \\rho] + \\sum_k \\gamma_k \\left( L_k \\rho L_k^\\dagger - \\frac{1}{2}\\{L_k^\\dagger L_k, \\rho\\} \\right)$$',
+          eqMeaning: 'Coherent Hamiltonian evolution combines with Markovian jump operators that drive irreversible relaxation into steady states.',
+          textbook: 'H.-P. Breuer & F. Petruccione, The Theory of Open Quantum Systems (Oxford Univ. Press, 2002), Ch. 3 (ISBN 978-0-19-852063-4).',
+          papers: [
+            {
+              id: 'p15',
+              bibKey: 'Verstraete2009',
+              authors: 'F. Verstraete, M. M. Wolf & J. I. Cirac',
+              bibAuthors: 'Verstraete, F. and Wolf, M. M. and Cirac, J. I.',
+              year: 2009,
+              title: 'Quantum computation and quantum-state engineering driven by dissipation',
+              journal: 'Nature Physics',
+              volume: '5',
+              issue: '',
+              pages: '633-636',
+              doi: '10.1038/nphys1342'
+            },
+            {
+              id: 'p16',
+              bibKey: 'Landauer1961',
+              authors: 'R. Landauer',
+              bibAuthors: 'Landauer, R.',
+              year: 1961,
+              title: 'Irreversibility and heat generation in the computing process',
+              journal: 'IBM J. Res. Dev.',
+              volume: '5',
+              issue: '3',
+              pages: '183-191',
+              doi: '10.1147/rd.53.0183'
+            }
+          ],
+          thingsToLearn: [
+            'The GKSL (Lindblad) master equation for Markovian open quantum systems.',
+            'How engineered dissipation can drive a system into steady-state attractors that perform computation or memory storage.',
+            "Landauer's principle linking logical irreversibility (bit erasure) to a minimum heat cost of k_B T ln 2, and why real biological and neuromorphic hardware operate far above or near thermodynamic bounds."
+          ],
+          questionsToAsk: [
+            'Biological brains rely heavily on dissipation, noise, and irreversible chemistry to stabilize attractors. In what sense is decoherence an enemy of computation, and in what sense is dissipation essential for memory and agency?'
+          ]
+        },
+        {
+          week: 9,
+          topic: 'consciousness',
+          pos: [-0.62, 0.22, 1.00],
+          prereqs: [8],
+          next: [10],
+          title: 'Computational Functionalism vs Substrate Dependence',
+          overview: 'Evaluate whether consciousness depends only on abstract functional organization or requires specific physical causal architectures.',
+          equation: '$$P(\\text{Conscious} \\mid \\mathcal{S}) \\stackrel{?}{=} f(\\text{Functional Organization}) \\;\\text{vs.}\\; g(\\text{Physical Causality})$$',
+          eqMeaning: 'The core divide between multiple realizability in software and causal dependence on physical hardware.',
+          textbook: 'A. Seth, Being You: A New Science of Consciousness (Dutton, 2021), Part I & IV (ISBN 978-1-5247-4287-4).',
+          papers: [
+            {
+              id: 'p17',
+              bibKey: 'Butlin2023',
+              authors: 'P. Butlin et al.',
+              bibAuthors: 'Butlin, P. and Long, R. and Elmoznino, E. and Bengio, Y. and Birch, J. and Constant, A. and Deane, G. and Fleming, S. M. and Frith, C. and Ji, X. and Kanai, R. and Klein, C. and Lindsay, G. and Michel, M. and Mudrik, L. and Peters, M. A. K. and Schwitzgebel, E. and Simon, J. and VanRullen, R.',
+              year: 2023,
+              title: 'Consciousness in Artificial Intelligence: Insights from the Science of Consciousness',
+              journal: 'arXiv:2308.08708',
+              volume: '',
+              issue: '',
+              pages: '',
+              doi: '10.48550/arXiv.2308.08708'
+            },
+            {
+              id: 'p18',
+              bibKey: 'Searle1980',
+              authors: 'J. R. Searle',
+              bibAuthors: 'Searle, J. R.',
+              year: 1980,
+              title: 'Minds, brains, and programs',
+              journal: 'Behavioral and Brain Sciences',
+              volume: '3',
+              issue: '3',
+              pages: '417-424',
+              doi: '10.1017/S0140525X00005756'
+            }
+          ],
+          thingsToLearn: [
+            'The distinction between multiple realizability (functionalism) and biological or physical substrate dependence.',
+            'Indicator properties derived from Global Workspace Theory, Recurrent Processing, and Higher-Order Theories.',
+            'The simulation-versus-realization puzzle (why simulating a hurricane on a GPU does not get the lab wet, and whether mind is like a hurricane or like a sorting algorithm).'
+          ],
+          questionsToAsk: [
+            'If a memristive analog network and a digital simulation on a GPU produce identical input-output behavior, what physical grounds could justify treating one differently from the other regarding experience?',
+            'Which indicator properties from Butlin et al. are hardest for standard feedforward transformers to satisfy?'
+          ]
+        },
+        {
+          week: 10,
+          topic: 'consciousness',
+          pos: [0.62, 0.26, 1.02],
+          prereqs: [3, 9],
+          next: [11],
+          title: 'Integrated Information Theory and Recurrent Physical Architectures',
+          overview: 'Analyze how Integrated Information Theory links phenomenal experience to intrinsic cause-effect structure in recurrent physical lattices.',
+          equation: '$$\\varphi_s(s, \\theta) = \\min_{\\theta \\in \\Theta} D\\!\\left(p(S_{t+1} \\mid s_t) \\,\\|\\, p_\\theta(S_{t+1} \\mid s_t)\\right)$$',
+          eqMeaning: 'System integrated information measures the minimum divergence between the full causal transition probability and any partitioned version.',
+          textbook: 'C. Koch, The Feeling of Life Itself (MIT Press, 2019), Ch. 7-10 & 13 (ISBN 978-0-262-04281-9).',
+          papers: [
+            {
+              id: 'p19',
+              bibKey: 'Albantakis2023',
+              authors: 'L. Albantakis et al.',
+              bibAuthors: 'Albantakis, L. and Barbosa, L. and Findlay, G. and Grasso, M. and Haun, A. M. and Marshall, W. and Mayner, W. G. P. and Zaeemzadeh, A. and Boly, M. and Juel, B. E. and Sasai, S. and Fujii, K. and David, I. and Hendren, J. and Lang, J. P. and Tononi, G.',
+              year: 2023,
+              title: 'Integrated information theory (IIT) 4.0: Formulating the properties of phenomenal existence in physical terms',
+              journal: 'PLOS Computational Biology',
+              volume: '19',
+              issue: '10',
+              pages: 'e1011465',
+              doi: '10.1371/journal.pcbi.1011465'
+            },
+            {
+              id: 'p20',
+              bibKey: 'Tononi2016',
+              authors: 'G. Tononi, M. Boly, M. Massimini & C. Koch',
+              bibAuthors: 'Tononi, G. and Boly, M. and Massimini, M. and Koch, C.',
+              year: 2016,
+              title: 'Integrated information theory: from consciousness to its physical substrate',
+              journal: 'Nature Reviews Neuroscience',
+              volume: '17',
+              issue: '',
+              pages: '450-461',
+              doi: '10.1038/nrn.2016.44'
+            }
+          ],
+          thingsToLearn: [
+            'How IIT builds from phenomenal axioms to physical postulates (existence, intrinsicality, information, integration, exclusion).',
+            'Why cause-effect structure depends on actual physical connectivity and recurrence rather than just input-output functions.',
+            'Why IIT predicts near-zero integrated information for strictly feedforward silicon networks and much higher intrinsic causal integration for recurrent analog or neuromorphic lattices.',
+            'Major scientific criticisms of IIT (computational intractability, unfalsifiability debates).'
+          ],
+          questionsToAsk: [
+            'Does IIT give physicists a concrete architectural distinction between software simulation and physical neuromorphic hardware, or does its dependence on discrete transition probability matrices break down for continuous physical fields?',
+            "How could one test IIT's predictions on a small physical oscillator network?"
+          ]
+        },
+        {
+          week: 11,
+          topic: 'consciousness',
+          pos: [0.0, 0.50, 1.30],
+          prereqs: [4, 8, 10],
+          next: [],
+          title: 'Active Inference, Thermodynamic Agency, and Synthesis',
+          overview: 'Bring together nonequilibrium thermodynamics, Markov blankets, and adaptive hardware to ask what physical criteria separate mere dynamics from autonomous agency.',
+          equation: '$$F[q, o] = D_{\\text{KL}}\\!\\left[q(s) \\,\\|\\, p(s \\mid o)\\right] - \\ln p(o)$$',
+          eqMeaning: 'Variational free energy bounds sensory surprise from above and drives coupled belief updating and action selection.',
+          textbook: 'T. Parr, G. Pezzulo & K. J. Friston, Active Inference (MIT Press, 2022), Ch. 1-3 (ISBN 978-0-262-04535-3).',
+          papers: [
+            {
+              id: 'p21',
+              bibKey: 'Friston2010',
+              authors: 'K. Friston',
+              bibAuthors: 'Friston, K.',
+              year: 2010,
+              title: 'The free-energy principle: a unified brain theory?',
+              journal: 'Nature Reviews Neuroscience',
+              volume: '11',
+              issue: '',
+              pages: '127-138',
+              doi: '10.1038/nrn2787'
+            },
+            {
+              id: 'p22',
+              bibKey: 'Friston2013',
+              authors: 'K. Friston',
+              bibAuthors: 'Friston, K.',
+              year: 2013,
+              title: 'Life as we know it',
+              journal: 'J. R. Soc. Interface',
+              volume: '10',
+              issue: '',
+              pages: '20130475',
+              doi: '10.1098/rsif.2013.0475'
+            }
+          ],
+          thingsToLearn: [
+            'Variational free energy as a tractable upper bound on surprise.',
+            'Statistical Markov blankets separating internal, active, sensory, and external states in self-organizing physical systems.',
+            'How nonequilibrium steady states link physical thermodynamics, neuromorphic self-adaptation, and autonomous agency.',
+            'Synthesizing the 11 weeks into concrete physical criteria for non-biological mind.'
+          ],
+          questionsToAsk: [
+            'What separates a thermostat or a self-healing Mott oxide film from a genuinely sentient physical agent?',
+            'If you had to design a small-scale physical experiment or neuromorphic architecture to probe the boundary between mere dynamics and adaptive agency, what would you build?'
+          ]
+        }
+      ];
+
+      // Primary learning backbone + conceptual cross-connections
+      const BACKBONE_EDGES = [
+        [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 10], [10, 11]
+      ];
+      const CROSS_EDGES = [
+        [1, 3], [1, 6], [2, 4], [3, 10], [4, 11], [5, 8], [6, 7], [8, 11]
+      ];
+
+      const ALL_PAPERS = [];
+      WEEKS.forEach((w) => {
+        w.papers.forEach((p) => {
+          ALL_PAPERS.push({ ...p, week: w.week, topic: w.topic });
+        });
+      });
+
+      /* =======================================================================
+         2. STATE & INDEXEDDB FILE STORAGE FOR DISCUSSION UPLOADS
+         ======================================================================= */
+      const STORAGE_KEY = 'synthetic_mind_app_v3';
+      const DEFAULT_STATE = {
+        theme: 'dark',
+        activeView: 'map',
+        autoRotate: true,
+        completedWeeks: {},
+        discussionNotes: {},
+        discussionSavedAt: {},
+        openSyllabusWeeks: { 1: true }
+      };
+
+      let state = loadState();
+      let hoveredWeek = null;
+      let modalWeek = null;
+      let sylTopicFilter = 'all';
+      let sylSearch = '';
+      let libTab = 'books';
+      let libSearch = '';
+      let libWeekFilter = 'all';
+
+      // IndexedDB setup with graceful in-memory fallback
+      const IDB_NAME = 'SyntheticMindDiscussionFiles';
+      const IDB_STORE = 'files';
+      let dbPromise = null;
+      const memoryFiles = {}; // fallback if IndexedDB is blocked
+
+      function openFilesDB() {
+        if (dbPromise) return dbPromise;
+        dbPromise = new Promise((resolve) => {
+          try {
+            if (!window.indexedDB) {
+              resolve(null);
+              return;
+            }
+            const req = window.indexedDB.open(IDB_NAME, 1);
+            req.onupgradeneeded = (e) => {
+              const db = e.target.result;
+              if (!db.objectStoreNames.contains(IDB_STORE)) {
+                const store = db.createObjectStore(IDB_STORE, { keyPath: 'id' });
+                store.createIndex('week', 'week', { unique: false });
+              }
+            };
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => resolve(null);
+          } catch (err) {
+            resolve(null);
+          }
+        });
+        return dbPromise;
+      }
+
+      async function saveUploadedFile(weekNum, file) {
+        const record = {
+          id: `w${weekNum}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+          week: weekNum,
+          name: file.name,
+          size: file.size,
+          type: file.type || 'application/octet-stream',
+          blob: file,
+          createdAt: Date.now()
+        };
+        const db = await openFilesDB();
+        if (!db) {
+          if (!memoryFiles[weekNum]) memoryFiles[weekNum] = [];
+          memoryFiles[weekNum].push(record);
+          return record;
+        }
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(IDB_STORE, 'readwrite');
+          tx.objectStore(IDB_STORE).put(record);
+          tx.oncomplete = () => resolve(record);
+          tx.onerror = () => reject(tx.error);
+        });
+      }
+
+      async function getFilesForWeek(weekNum) {
+        const db = await openFilesDB();
+        if (!db) return memoryFiles[weekNum] || [];
+        return new Promise((resolve) => {
+          const tx = db.transaction(IDB_STORE, 'readonly');
+          const idx = tx.objectStore(IDB_STORE).index('week');
+          const req = idx.getAll(weekNum);
+          req.onsuccess = () => resolve(req.result || []);
+          req.onerror = () => resolve([]);
+        });
+      }
+
+      async function deleteUploadedFile(weekNum, id) {
+        const db = await openFilesDB();
+        if (!db) {
+          if (memoryFiles[weekNum]) {
+            memoryFiles[weekNum] = memoryFiles[weekNum].filter((f) => f.id !== id);
+          }
+          return;
+        }
+        return new Promise((resolve) => {
+          const tx = db.transaction(IDB_STORE, 'readwrite');
+          tx.objectStore(IDB_STORE).delete(id);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => resolve();
+        });
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+          const parsed = JSON.parse(raw);
+          return {
+            ...DEFAULT_STATE,
+            ...parsed,
+            completedWeeks: parsed.completedWeeks || {},
+            discussionNotes: parsed.discussionNotes || {},
+            discussionSavedAt: parsed.discussionSavedAt || {},
+            openSyllabusWeeks: parsed.openSyllabusWeeks || { 1: true }
+          };
+        } catch (err) {
+          return JSON.parse(JSON.stringify(DEFAULT_STATE));
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (err) {
+          // Ignore quota errors
+        }
+      }
+
+      /* =======================================================================
+         3. UTILITIES
+         ======================================================================= */
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatBytes(bytes) {
+        if (!bytes) return '0 B';
+        const units = ['B', 'KB', 'MB', 'GB'];
+        let i = 0;
+        let val = bytes;
+        while (val >= 1024 && i < units.length - 1) {
+          val /= 1024;
+          i++;
+        }
+        return `${val.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
+      }
+
+      function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const el = document.createElement('div');
+        el.className = 'pointer-events-auto px-3.5 py-2 rounded-lg border text-xs font-ui font-semibold shadow-lg transition-all duration-200';
+        el.style.background = 'var(--bg-card)';
+        el.style.borderColor = 'var(--border-strong)';
+        el.style.color = 'var(--text-primary)';
+        el.textContent = msg;
+        container.appendChild(el);
+        setTimeout(() => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(6px)';
+          setTimeout(() => el.remove(), 220);
+        }, 2200);
+      }
+
+      function copyText(text, msg) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          showToast(ok ? (msg || 'Copied') : 'Copy failed');
+        } catch (err) {
+          showToast('Copy failed');
+        }
+      }
+
+      function formatBibTeX(p) {
+        const lines = [
+          `@article{${p.bibKey},`,
+          `  author  = {${p.bibAuthors}},`,
+          `  title   = {{${p.title}}},`,
+          `  journal = {${p.journal}},`,
+          `  year    = {${p.year}},`
+        ];
+        if (p.volume) lines.push(`  volume  = {${p.volume}},`);
+        if (p.issue) lines.push(`  number  = {${p.issue}},`);
+        if (p.pages) lines.push(`  pages   = {${p.pages}},`);
+        lines.push(`  doi     = {${p.doi}}`);
+        lines.push(`}`);
+        return lines.join('\n');
+      }
+
+      function formatCitationHtml(p) {
+        let j = `<em>${escapeHtml(p.journal)}</em>`;
+        if (p.volume) {
+          j += ` <strong>${escapeHtml(p.volume)}</strong>`;
+          if (p.issue) j += `(${escapeHtml(p.issue)})`;
+        }
+        if (p.pages) j += `, ${escapeHtml(p.pages)}`;
+        return `${escapeHtml(p.authors)} (${p.year}), "${escapeHtml(p.title)}", ${j}.`;
+      }
+
+      function renderMath(el) {
+        if (!el || typeof window.renderMathInElement !== 'function') return;
+        try {
+          window.renderMathInElement(el, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false }
+            ],
+            throwOnError: false
+          });
+        } catch (err) {
+          // Ignore KaTeX edge cases
+        }
+      }
+
+      function downloadFile(filename, content, mime) {
+        try {
+          const blob = content instanceof Blob ? content : new Blob([content], { type: mime });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } catch (err) {
+          showToast('Download failed');
+        }
+      }
+
+      /* =======================================================================
+         4. THREE.JS 3D BRAIN (CLEARCOAT SHEEN) + SURROUNDING NEURAL NETWORKS
+         ======================================================================= */
+      const SCENE_PALETTES = {
+        dark: {
+          brainColor: 0x163058,
+          brainEmissive: 0x09162b,
+          wireColor: 0x7cb0ef,
+          wireOpacity: 0.17,
+          dustColor: 0x9bc4f5,
+          dustOpacity: 0.34,
+          axonMain: 0x7bb2f2,
+          axonCross: 0x4b70a3,
+          pulse: 0xd9ebff,
+          nodeDefault: 0x6fa6eb,
+          nodeDone: 0x57a688,
+          nodeHex: '#6fa6eb',
+          doneHex: '#57a688',
+          bgLine: 0x6fa6eb,
+          bgLineOpacity: 0.16,
+          bgNode: 0xa8cbf8,
+          bgNodeOpacity: 0.42,
+          bgPulse: 0xdcecff,
+          keyLight: 0xdbeaff,
+          fillLight: 0x5d90d6,
+          rimLight: 0xa8cbf8
+        },
+        light: {
+          brainColor: 0xd5dfed,
+          brainEmissive: 0x203859,
+          wireColor: 0x234a7d,
+          wireOpacity: 0.18,
+          dustColor: 0x2e5382,
+          dustOpacity: 0.32,
+          axonMain: 0x1e467a,
+          axonCross: 0x6780a3,
+          pulse: 0x13223b,
+          nodeDefault: 0x1e467a,
+          nodeDone: 0x2a7357,
+          nodeHex: '#1e467a',
+          doneHex: '#2a7357',
+          bgLine: 0x2b5080,
+          bgLineOpacity: 0.14,
+          bgNode: 0x1e467a,
+          bgNodeOpacity: 0.34,
+          bgPulse: 0x13223b,
+          keyLight: 0xffffff,
+          fillLight: 0x7a9cc7,
+          rimLight: 0x436da3
+        }
+      };
+
+      let scene, camera, renderer, brainGroup, bgNetGroup;
+      let brainMat, wireMat, dustMat, bgLineMat, bgNodeMat, bgPulseMat;
+      let keyLight, fillLight, rimLight, ambLight;
+      let nodeObjects = [];
+      let axonObjects = [];
+      let signalBeads = [];
+      let bgPulses = [];
+      let badgeElements = {};
+
+      const BRAIN_RADIUS = 1.75;
+      const camState = {
+        theta: 0.56,
+        phi: 1.35,
+        radius: 6.2,
+        baseRadius: 6.2,
+        targetTheta: 0.56,
+        targetPhi: 1.35,
+        targetRadius: 6.2,
+        isDragging: false,
+        lastX: 0,
+        lastY: 0,
+        dragDist: 0,
+        pinchDist: 0,
+        pauseDriftUntil: 0
+      };
+
+      const raycaster = new THREE.Raycaster();
+      const pointerNDC = new THREE.Vector2(-10, -10);
+      const pointerScreen = { x: 0, y: 0 };
+      const parallaxTarget = { x: 0, y: 0 };
+      const parallaxCurrent = { x: 0, y: 0 };
+
+      function computeResponsiveCameraDistance() {
+        if (!camera) return 6.2;
+        const vFov = (camera.fov * Math.PI) / 180;
+        const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+        const isMobilePortrait = window.innerWidth < 640;
+        const margin = isMobilePortrait ? 1.54 : 1.40;
+        const dv = (BRAIN_RADIUS * margin) / Math.sin(vFov / 2);
+        const dh = (BRAIN_RADIUS * margin) / Math.sin(hFov / 2);
+        return Math.max(dv, dh);
+      }
+
+      function createHemisphereGeometry(side) {
+        const geo = new THREE.SphereGeometry(1.0, 48, 36);
+        const pos = geo.attributes.position;
+        const v = new THREE.Vector3();
+
+        for (let i = 0; i < pos.count; i++) {
+          v.fromBufferAttribute(pos, i);
+          const nx = v.x, ny = v.y, nz = v.z;
+
+          let x = nx * 0.88;
+          let y = ny * 0.98;
+          let z = nz * 1.56;
+
+          const isMedial = (side === 1 && nx < 0) || (side === -1 && nx > 0);
+          if (isMedial) x *= 0.24;
+
+          if (nz > 0.25) {
+            const f = (nz - 0.25) / 0.75;
+            x *= (1.0 - 0.20 * f * f);
+            y *= (1.0 - 0.12 * f * f);
+          }
+
+          if (nz < -0.3) {
+            const o = (-nz - 0.3) / 0.7;
+            x *= (1.0 - 0.24 * o * o);
+            y *= (1.0 - 0.16 * o * o);
+          }
+
+          const tempMask = Math.exp(-Math.pow((nz - 0.02) / 0.52, 2)) * Math.exp(-Math.pow((ny + 0.32) / 0.44, 2));
+          if (!isMedial) {
+            x += side * 0.22 * tempMask;
+            y -= 0.12 * tempMask;
+          }
+
+          // Multi-octave organic gyri/sulci folding
+          const fold1 = Math.sin(nx * 10.5 + nz * 8.0) * Math.cos(ny * 9.0 - nz * 5.5);
+          const fold2 = Math.sin(nz * 15.0 - ny * 11.0 + nx * 6.0) * 0.45;
+          const fold3 = Math.cos(nx * 20.0 + ny * 17.0) * 0.18;
+          const amp = isMedial ? 0.014 : 0.044;
+          const disp = (fold1 + fold2 + fold3) * amp;
+
+          x += nx * disp + side * 0.48;
+          y += ny * disp + 0.14;
+          z += nz * disp;
+
+          pos.setXYZ(i, x, y, z);
+        }
+        geo.computeVertexNormals();
+        return geo;
+      }
+
+      function createCerebellumGeometry() {
+        const geo = new THREE.SphereGeometry(0.62, 28, 20);
+        const pos = geo.attributes.position;
+        const v = new THREE.Vector3();
+        for (let i = 0; i < pos.count; i++) {
+          v.fromBufferAttribute(pos, i);
+          let x = v.x * 1.42;
+          let y = v.y * 0.64;
+          let z = v.z * 0.72;
+          const mid = Math.exp(-Math.pow(v.x / 0.22, 2)) * 0.11;
+          z -= mid;
+          const folia = Math.sin(v.y * 26.0) * 0.022;
+          pos.setXYZ(i, x + v.x * folia, y - 0.80, z - 0.94 + v.z * folia);
+        }
+        geo.computeVertexNormals();
+        return geo;
+      }
+
+      function createBrainstemGeometry() {
+        const geo = new THREE.CylinderGeometry(0.22, 0.14, 0.92, 18, 8, true);
+        const pos = geo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+          const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+          const pons = Math.exp(-Math.pow((y - 0.08) / 0.24, 2)) * 0.09;
+          pos.setXYZ(i, x, y - 1.02, z - 0.42 + (z > 0 ? pons : 0));
+        }
+        geo.computeVertexNormals();
+        return geo;
+      }
+
+      function buildAmbientBackgroundNetworks(pal) {
+        bgNetGroup = new THREE.Group();
+        scene.add(bgNetGroup);
+
+        // Place subtle branching neural constellations in a wide spherical shell (radius 3.4 to 7.8)
+        const clusterCenters = [
+          new THREE.Vector3(-4.6, 1.8, -1.8),
+          new THREE.Vector3(4.8, 1.5, -1.6),
+          new THREE.Vector3(-4.2, -1.9, 1.2),
+          new THREE.Vector3(4.4, -1.7, 1.4),
+          new THREE.Vector3(0.2, 3.6, -2.8),
+          new THREE.Vector3(-0.4, -3.5, -2.4)
+        ];
+
+        const allPts = [];
+        const linePositions = [];
+
+        clusterCenters.forEach((center) => {
+          const localPts = [];
+          const count = 14;
+          for (let i = 0; i < count; i++) {
+            const p = center.clone().add(new THREE.Vector3(
+              (Math.random() - 0.5) * 3.4,
+              (Math.random() - 0.5) * 2.6,
+              (Math.random() - 0.5) * 2.8
+            ));
+            // Keep clear of the hero brain core
+            if (p.length() < 3.0) p.normalize().multiplyScalar(3.2);
+            localPts.push(p);
+            allPts.push(p);
+          }
+
+          // Connect nearby nodes within each cluster into delicate synaptic webs
+          for (let i = 0; i < localPts.length; i++) {
+            for (let j = i + 1; j < localPts.length; j++) {
+              const d = localPts[i].distanceTo(localPts[j]);
+              if (d < 1.85) {
+                linePositions.push(
+                  localPts[i].x, localPts[i].y, localPts[i].z,
+                  localPts[j].x, localPts[j].y, localPts[j].z
+                );
+              }
+            }
+          }
+        });
+
+        // A few long-range faint filaments bridging clusters
+        for (let i = 0; i < clusterCenters.length; i++) {
+          const a = clusterCenters[i];
+          const b = clusterCenters[(i + 1) % clusterCenters.length];
+          linePositions.push(a.x, a.y, a.z, b.x, b.y, b.z);
+        }
+
+        const lineGeo = new THREE.BufferGeometry();
+        lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+        bgLineMat = new THREE.LineBasicMaterial({
+          color: pal.bgLine,
+          transparent: true,
+          opacity: pal.bgLineOpacity,
+          depthWrite: false
+        });
+        bgNetGroup.add(new THREE.LineSegments(lineGeo, bgLineMat));
+
+        const nodePosArr = new Float32Array(allPts.length * 3);
+        allPts.forEach((p, idx) => {
+          nodePosArr[idx * 3] = p.x;
+          nodePosArr[idx * 3 + 1] = p.y;
+          nodePosArr[idx * 3 + 2] = p.z;
+        });
+        const nodeGeo = new THREE.BufferGeometry();
+        nodeGeo.setAttribute('position', new THREE.BufferAttribute(nodePosArr, 3));
+        bgNodeMat = new THREE.PointsMaterial({
+          size: 0.075,
+          color: pal.bgNode,
+          transparent: true,
+          opacity: pal.bgNodeOpacity,
+          depthWrite: false
+        });
+        bgNetGroup.add(new THREE.Points(nodeGeo, bgNodeMat));
+
+        // Faint traveling pulses along selected background filaments
+        bgPulseMat = new THREE.MeshBasicMaterial({
+          color: pal.bgPulse,
+          transparent: true,
+          opacity: 0.55
+        });
+        const pulseGeo = new THREE.SphereGeometry(0.028, 8, 8);
+        const segCount = Math.min(18, Math.floor(linePositions.length / 6));
+        for (let i = 0; i < segCount; i++) {
+          const base = i * 18 % (linePositions.length - 6);
+          const a = new THREE.Vector3(linePositions[base], linePositions[base + 1], linePositions[base + 2]);
+          const b = new THREE.Vector3(linePositions[base + 3], linePositions[base + 4], linePositions[base + 5]);
+          const mesh = new THREE.Mesh(pulseGeo, bgPulseMat);
+          bgNetGroup.add(mesh);
+          bgPulses.push({
+            a, b, mesh,
+            t: Math.random(),
+            speed: 0.0018 + Math.random() * 0.0018
+          });
+        }
+      }
+
+      function initThreeBrain() {
+        const wrap = document.getElementById('brain-canvas-wrap');
+        if (!wrap || typeof THREE === 'undefined') return;
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        wrap.appendChild(renderer.domElement);
+
+        const pal = SCENE_PALETTES[state.theme];
+
+        // Three-point + rim lighting to bring out clearcoat sheen on cortical folds
+        ambLight = new THREE.AmbientLight(0xffffff, 0.48);
+        scene.add(ambLight);
+
+        keyLight = new THREE.DirectionalLight(pal.keyLight, 0.95);
+        keyLight.position.set(4.5, 6.0, 5.5);
+        scene.add(keyLight);
+
+        fillLight = new THREE.DirectionalLight(pal.fillLight, 0.45);
+        fillLight.position.set(-5.0, -2.5, 3.5);
+        scene.add(fillLight);
+
+        rimLight = new THREE.DirectionalLight(pal.rimLight, 0.72);
+        rimLight.position.set(0.0, 3.8, -6.0);
+        scene.add(rimLight);
+
+        // Ambient surrounding neural networks
+        buildAmbientBackgroundNetworks(pal);
+
+        brainGroup = new THREE.Group();
+        scene.add(brainGroup);
+
+        // Luminous sapphire-glass / pearlescent clearcoat cortical material
+        brainMat = new THREE.MeshPhysicalMaterial({
+          color: pal.brainColor,
+          emissive: pal.brainEmissive,
+          emissiveIntensity: 0.35,
+          roughness: 0.32,
+          metalness: 0.14,
+          clearcoat: 0.65,
+          clearcoatRoughness: 0.22,
+          transparent: true,
+          opacity: 0.56,
+          depthWrite: false,
+          side: THREE.FrontSide
+        });
+
+        wireMat = new THREE.LineBasicMaterial({
+          color: pal.wireColor,
+          transparent: true,
+          opacity: pal.wireOpacity,
+          depthWrite: false
+        });
+
+        [
+          createHemisphereGeometry(-1),
+          createHemisphereGeometry(1),
+          createCerebellumGeometry(),
+          createBrainstemGeometry()
+        ].forEach((geo) => {
+          brainGroup.add(new THREE.Mesh(geo, brainMat));
+          brainGroup.add(new THREE.LineSegments(new THREE.WireframeGeometry(geo), wireMat));
+        });
+
+        // Subtle interior cortical points
+        const dustCount = 650;
+        const dustPos = new Float32Array(dustCount * 3);
+        for (let i = 0; i < dustCount; i++) {
+          const side = i % 2 === 0 ? -1 : 1;
+          const u = Math.random(), v = Math.random();
+          const theta = u * 2 * Math.PI;
+          const phi = Math.acos(2 * v - 1);
+          const r = 0.42 + 0.50 * Math.cbrt(Math.random());
+          dustPos[i * 3] = side * (0.18 + Math.abs(r * Math.sin(phi) * Math.cos(theta)) * 0.88);
+          dustPos[i * 3 + 1] = 0.12 + r * Math.cos(phi) * 0.80;
+          dustPos[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta) * 1.32;
+        }
+        const dustGeo = new THREE.BufferGeometry();
+        dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+        dustMat = new THREE.PointsMaterial({
+          size: 0.026,
+          color: pal.dustColor,
+          transparent: true,
+          opacity: pal.dustOpacity,
+          depthWrite: false
+        });
+        brainGroup.add(new THREE.Points(dustGeo, dustMat));
+
+        // 11 Neuron Nodes + Floating HTML Badges
+        const labelsLayer = document.getElementById('node-labels-layer');
+        WEEKS.forEach((w) => {
+          const pos = new THREE.Vector3(w.pos[0], w.pos[1], w.pos[2]);
+          const group = new THREE.Group();
+          group.position.copy(pos);
+
+          const col = state.completedWeeks[w.week] ? pal.nodeDone : pal.nodeDefault;
+          const coreMat = new THREE.MeshPhysicalMaterial({
+            color: col,
+            roughness: 0.25,
+            metalness: 0.1,
+            clearcoat: 0.6
+          });
+          const core = new THREE.Mesh(new THREE.SphereGeometry(0.084, 20, 20), coreMat);
+          core.userData = { week: w.week };
+          group.add(core);
+
+          const hit = new THREE.Mesh(
+            new THREE.SphereGeometry(0.24, 12, 12),
+            new THREE.MeshBasicMaterial({ visible: false })
+          );
+          hit.userData = { week: w.week };
+          group.add(hit);
+
+          const ringMat = new THREE.MeshBasicMaterial({
+            color: col,
+            transparent: true,
+            opacity: 0.58,
+            side: THREE.DoubleSide
+          });
+          const ring = new THREE.Mesh(new THREE.RingGeometry(0.118, 0.136, 28), ringMat);
+          group.add(ring);
+
+          brainGroup.add(group);
+          nodeObjects.push({ week: w.week, group, core, hit, ring, coreMat, ringMat, pos });
+
+          const badge = document.createElement('button');
+          badge.type = 'button';
+          badge.className = 'node-badge';
+          badge.innerHTML = `<span class="node-badge-dot"></span><span>W${w.week}</span>`;
+          badge.addEventListener('mouseenter', () => {
+            if (window.matchMedia('(hover: hover)').matches) setHoveredWeek(w.week);
+          });
+          badge.addEventListener('mouseleave', () => setHoveredWeek(null));
+          badge.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openWeekModal(w.week);
+          });
+          labelsLayer.appendChild(badge);
+          badgeElements[w.week] = badge;
+        });
+
+        // Curved 3D Axon Tracts (Primary Backbone + Prerequisite Cross-Connections)
+        function addAxon(aNum, bNum, isMain) {
+          const nA = nodeObjects.find((n) => n.week === aNum);
+          const nB = nodeObjects.find((n) => n.week === bNum);
+          if (!nA || !nB) return;
+
+          const mid = nA.pos.clone().add(nB.pos).multiplyScalar(0.5);
+          mid.multiplyScalar(isMain ? 0.85 : 0.70);
+          const curve = new THREE.CatmullRomCurve3([nA.pos.clone(), mid, nB.pos.clone()]);
+          const pts = curve.getPoints(30);
+          const geo = new THREE.BufferGeometry().setFromPoints(pts);
+          const mat = new THREE.LineBasicMaterial({
+            color: isMain ? pal.axonMain : pal.axonCross,
+            transparent: true,
+            opacity: isMain ? 0.65 : 0.24,
+            depthWrite: false
+          });
+          const line = new THREE.Line(geo, mat);
+          brainGroup.add(line);
+          axonObjects.push({ a: aNum, b: bNum, isMain, curve, line, material: mat });
+
+          if (isMain) {
+            const beadMat = new THREE.MeshBasicMaterial({
+              color: pal.pulse,
+              transparent: true,
+              opacity: 0.85
+            });
+            const bead = new THREE.Mesh(new THREE.SphereGeometry(0.026, 10, 10), beadMat);
+            brainGroup.add(bead);
+            signalBeads.push({
+              curve,
+              mesh: bead,
+              mat: beadMat,
+              t: (aNum * 0.19) % 1,
+              speed: 0.0028,
+              a: aNum,
+              b: bNum
+            });
+          }
+        }
+
+        BACKBONE_EDGES.forEach(([a, b]) => addAxon(a, b, true));
+        CROSS_EDGES.forEach(([a, b]) => addAxon(a, b, false));
+
+        updateScreenFit(true);
+        refreshThreeTheme();
+        bindCanvasEvents(renderer.domElement);
+
+        window.addEventListener('resize', () => updateScreenFit(false));
+        window.addEventListener('orientationchange', () => setTimeout(() => updateScreenFit(false), 120));
+      }
+
+      function updateScreenFit(immediate) {
+        if (!camera || !renderer) return;
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const fitDist = computeResponsiveCameraDistance();
+        camState.baseRadius = fitDist;
+        camState.targetRadius = fitDist;
+        if (immediate) camState.radius = fitDist;
+      }
+
+      function refreshThreeTheme() {
+        const pal = SCENE_PALETTES[state.theme];
+        if (!brainMat) return;
+
+        brainMat.color.setHex(pal.brainColor);
+        brainMat.emissive.setHex(pal.brainEmissive);
+        brainMat.opacity = state.theme === 'dark' ? 0.56 : 0.52;
+
+        wireMat.color.setHex(pal.wireColor);
+        wireMat.opacity = pal.wireOpacity;
+        dustMat.color.setHex(pal.dustColor);
+        dustMat.opacity = pal.dustOpacity;
+
+        if (bgLineMat) {
+          bgLineMat.color.setHex(pal.bgLine);
+          bgLineMat.opacity = pal.bgLineOpacity;
+        }
+        if (bgNodeMat) {
+          bgNodeMat.color.setHex(pal.bgNode);
+          bgNodeMat.opacity = pal.bgNodeOpacity;
+        }
+        if (bgPulseMat) bgPulseMat.color.setHex(pal.bgPulse);
+
+        if (keyLight) keyLight.color.setHex(pal.keyLight);
+        if (fillLight) fillLight.color.setHex(pal.fillLight);
+        if (rimLight) rimLight.color.setHex(pal.rimLight);
+
+        nodeObjects.forEach((n) => {
+          const isDone = !!state.completedWeeks[n.week];
+          const col = isDone ? pal.nodeDone : pal.nodeDefault;
+          const hex = isDone ? pal.doneHex : pal.nodeHex;
+          n.coreMat.color.setHex(col);
+          n.ringMat.color.setHex(col);
+
+          const badge = badgeElements[n.week];
+          if (badge) {
+            const dot = badge.querySelector('.node-badge-dot');
+            if (dot) dot.style.background = hex;
+            badge.style.borderColor = isDone ? pal.doneHex : 'var(--border-strong)';
+          }
+        });
+
+        axonObjects.forEach((ax) => {
+          ax.material.color.setHex(ax.isMain ? pal.axonMain : pal.axonCross);
+        });
+        signalBeads.forEach((b) => {
+          b.mat.color.setHex(pal.pulse);
+        });
+      }
+
+      function bindCanvasEvents(dom) {
+        dom.addEventListener('pointerdown', (e) => {
+          if (document.body.classList.contains('modal-open')) return;
+          camState.isDragging = true;
+          camState.lastX = e.clientX;
+          camState.lastY = e.clientY;
+          camState.dragDist = 0;
+          camState.pauseDriftUntil = performance.now() + 4500;
+        });
+
+        window.addEventListener('pointermove', (e) => {
+          pointerScreen.x = e.clientX;
+          pointerScreen.y = e.clientY;
+          pointerNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+          pointerNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+          // Subtle parallax target for surrounding background networks
+          parallaxTarget.x = pointerNDC.x * 0.24;
+          parallaxTarget.y = pointerNDC.y * 0.18;
+
+          if (camState.isDragging) {
+            const dx = e.clientX - camState.lastX;
+            const dy = e.clientY - camState.lastY;
+            camState.dragDist += Math.hypot(dx, dy);
+            camState.lastX = e.clientX;
+            camState.lastY = e.clientY;
+            camState.targetTheta -= dx * 0.0062;
+            camState.targetPhi = Math.max(0.35, Math.min(2.75, camState.targetPhi - dy * 0.0062));
+            camState.pauseDriftUntil = performance.now() + 4500;
+          }
+        });
+
+        window.addEventListener('pointerup', () => {
+          if (camState.isDragging && camState.dragDist < 8 && state.activeView === 'map' && !document.body.classList.contains('modal-open')) {
+            const hitWeek = raycastNode();
+            if (hitWeek) openWeekModal(hitWeek);
+          }
+          camState.isDragging = false;
+        });
+
+        dom.addEventListener('wheel', (e) => {
+          if (state.activeView !== 'map' || document.body.classList.contains('modal-open')) return;
+          e.preventDefault();
+          const minR = camState.baseRadius * 0.62;
+          const maxR = camState.baseRadius * 1.45;
+          camState.targetRadius = Math.max(minR, Math.min(maxR, camState.targetRadius + e.deltaY * 0.003));
+          camState.pauseDriftUntil = performance.now() + 3000;
+        }, { passive: false });
+
+        dom.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 2) {
+            camState.pinchDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+          }
+        }, { passive: true });
+
+        dom.addEventListener('touchmove', (e) => {
+          if (e.touches.length === 2) {
+            const dist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            const delta = camState.pinchDist - dist;
+            camState.pinchDist = dist;
+            const minR = camState.baseRadius * 0.62;
+            const maxR = camState.baseRadius * 1.45;
+            camState.targetRadius = Math.max(minR, Math.min(maxR, camState.targetRadius + delta * 0.012));
+          }
+        }, { passive: true });
+      }
+
+      function raycastNode() {
+        if (!camera || nodeObjects.length === 0) return null;
+        raycaster.setFromCamera(pointerNDC, camera);
+        const hits = raycaster.intersectObjects(nodeObjects.map((n) => n.hit), false);
+        return hits.length > 0 ? hits[0].object.userData.week : null;
+      }
+
+      function animateBrain(now) {
+        requestAnimationFrame(animateBrain);
+        if (!renderer || !scene || !camera) return;
+
+        const isMapVisible = state.activeView === 'map';
+        const isModalOpen = document.body.classList.contains('modal-open');
+
+        if (isMapVisible && !isModalOpen && state.autoRotate && !camState.isDragging && now > camState.pauseDriftUntil && hoveredWeek === null) {
+          camState.targetTheta += 0.0014;
+        }
+
+        camState.theta += (camState.targetTheta - camState.theta) * 0.08;
+        camState.phi += (camState.targetPhi - camState.phi) * 0.08;
+        camState.radius += (camState.targetRadius - camState.radius) * 0.08;
+
+        const yOffset = window.innerWidth < 640 ? 0.08 : 0.04;
+        camera.position.set(
+          camState.radius * Math.sin(camState.phi) * Math.sin(camState.theta),
+          camState.radius * Math.cos(camState.phi) + yOffset,
+          camState.radius * Math.sin(camState.phi) * Math.cos(camState.theta)
+        );
+        camera.lookAt(0, yOffset, 0);
+
+        // Gentle drift + parallax on surrounding background networks
+        if (bgNetGroup) {
+          parallaxCurrent.x += (parallaxTarget.x - parallaxCurrent.x) * 0.05;
+          parallaxCurrent.y += (parallaxTarget.y - parallaxCurrent.y) * 0.05;
+          bgNetGroup.rotation.y = now * 0.000045 + parallaxCurrent.x * 0.25;
+          bgNetGroup.rotation.x = parallaxCurrent.y * 0.2;
+        }
+
+        bgPulses.forEach((bp) => {
+          bp.t = (bp.t + bp.speed) % 1;
+          bp.mesh.position.lerpVectors(bp.a, bp.b, bp.t);
+        });
+
+        // Desktop hover raycast
+        if (isMapVisible && !isModalOpen && !camState.isDragging && window.matchMedia('(hover: hover)').matches) {
+          const hit = raycastNode();
+          if (hit !== null && hit !== hoveredWeek) {
+            setHoveredWeek(hit);
+          } else if (hit === null && hoveredWeek !== null && !document.querySelector('.node-badge:hover')) {
+            setHoveredWeek(null);
+          }
+        }
+
+        const camDistToOrigin = camera.position.length();
+
+        // Update nodes & projected 2D badges
+        nodeObjects.forEach((n) => {
+          n.ring.lookAt(camera.position);
+          const isHot = n.week === hoveredWeek;
+          const targetScale = isHot ? 1.32 : 1.0;
+          n.group.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
+
+          const badge = badgeElements[n.week];
+          if (badge) {
+            const proj = n.pos.clone().project(camera);
+            const visible = isMapVisible && proj.z < 1;
+            badge.style.display = visible ? 'inline-flex' : 'none';
+            if (visible) {
+              const sx = (proj.x * 0.5 + 0.5) * window.innerWidth;
+              const sy = (-proj.y * 0.5 + 0.5) * window.innerHeight;
+              badge.style.left = `${sx}px`;
+              badge.style.top = `${sy - 18}px`;
+
+              const distToCam = n.pos.distanceTo(camera.position);
+              const isFarSide = distToCam > camDistToOrigin + 0.25;
+              let op = isFarSide ? 0.45 : 0.96;
+              if (isHot) op = 1;
+              badge.style.opacity = String(op);
+              badge.classList.toggle('is-highlighted', isHot);
+            }
+          }
+        });
+
+        // Update axon opacities on hover
+        axonObjects.forEach((ax) => {
+          let targetOp = ax.isMain ? 0.65 : 0.24;
+          if (hoveredWeek !== null) {
+            const connected = ax.a === hoveredWeek || ax.b === hoveredWeek;
+            targetOp = connected ? 0.94 : 0.08;
+          }
+          ax.material.opacity += (targetOp - ax.material.opacity) * 0.14;
+        });
+
+        // Animate signal pulses along backbone
+        signalBeads.forEach((b) => {
+          b.t = (b.t + b.speed) % 1;
+          b.mesh.position.copy(b.curve.getPoint(b.t));
+        });
+
+        renderer.render(scene, camera);
+      }
+
+      /* =======================================================================
+         5. HOVER PREVIEW CARD & BLURRED-BACKGROUND ISOLATED MODAL
+         ======================================================================= */
+      function setHoveredWeek(weekNum) {
+        if (hoveredWeek === weekNum) return;
+        hoveredWeek = weekNum;
+
+        const card = document.getElementById('hover-preview');
+        if (!card) return;
+
+        if (!weekNum || state.activeView !== 'map' || document.body.classList.contains('modal-open')) {
+          card.classList.remove('visible');
+          return;
+        }
+
+        const w = WEEKS.find((item) => item.week === weekNum);
+        if (!w) return;
+
+        document.getElementById('hp-week').textContent = `Week ${w.week}`;
+        document.getElementById('hp-title').textContent = w.title;
+
+        const preStr = w.prereqs.length ? w.prereqs.map((n) => `W${n}`).join(', ') : 'Start';
+        const nextStr = w.next.length ? w.next.map((n) => `W${n}`).join(', ') : 'Synthesis';
+        document.getElementById('hp-path').textContent = `Path: ${preStr} \u2192 W${w.week} \u2192 ${nextStr}`;
+
+        let left = pointerScreen.x + 18;
+        let top = pointerScreen.y - 16;
+        if (left + 280 > window.innerWidth - 12) left = pointerScreen.x - 290;
+        if (left < 12) left = 12;
+        if (top + 140 > window.innerHeight - 12) top = window.innerHeight - 150;
+        if (top < 66) top = 66;
+
+        card.style.left = `${left}px`;
+        card.style.top = `${top}px`;
+        card.classList.add('visible');
+      }
+
+      function openWeekModal(weekNum) {
+        const w = WEEKS.find((item) => item.week === weekNum);
+        if (!w) return;
+        modalWeek = weekNum;
+        setHoveredWeek(null);
+
+        document.getElementById('modal-week-badge').textContent = `Week ${w.week} of 11`;
+        document.getElementById('modal-title').textContent = w.title;
+        const doneCb = document.getElementById('modal-done-checkbox');
+        doneCb.checked = !!state.completedWeeks[w.week];
+
+        const prevBtn = document.getElementById('btn-modal-prev');
+        const nextBtn = document.getElementById('btn-modal-next');
+        prevBtn.disabled = w.week <= 1;
+        nextBtn.disabled = w.week >= 11;
+        prevBtn.style.opacity = prevBtn.disabled ? '0.45' : '1';
+        nextBtn.style.opacity = nextBtn.disabled ? '0.45' : '1';
+
+        const body = document.getElementById('modal-body');
+        body.innerHTML = `
+          <p class="font-serif-prose text-base leading-relaxed" style="color:var(--text-secondary);">
+            ${escapeHtml(w.overview)}
+          </p>
+
+          <!-- Prerequisite & Next Step Chips -->
+          <div class="flex flex-wrap items-center gap-2 text-xs font-ui pb-3 border-b" style="border-color:var(--border-subtle);">
+            ${w.prereqs.length ? `<span style="color:var(--text-muted);">Prerequisites:</span>` + w.prereqs.map((n) => `
+              <button type="button" data-jump-week="${n}" class="ui-btn min-h-[34px] px-2.5 py-1 rounded-md border font-semibold" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">W${n}</button>
+            `).join('') : ''}
+            ${w.next.length ? `<span class="${w.prereqs.length ? 'ml-2' : ''}" style="color:var(--text-muted);">Next Steps:</span>` + w.next.map((n) => `
+              <button type="button" data-jump-week="${n}" class="ui-btn min-h-[34px] px-2.5 py-1 rounded-md border font-semibold" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">W${n}</button>
+            `).join('') : ''}
+          </div>
+
+          <!-- Core Equation -->
+          <div class="surface-elevated rounded-xl p-4 space-y-1.5">
+            <div class="font-ui text-[11px] font-bold uppercase tracking-wider" style="color:var(--text-muted);">Core Equation</div>
+            <div class="math-box text-center">${w.equation}</div>
+            <p class="font-serif-prose text-sm text-center" style="color:var(--text-secondary);">${escapeHtml(w.eqMeaning)}</p>
+          </div>
+
+          <!-- Textbook Reading -->
+          <div class="space-y-1.5">
+            <div class="font-ui text-[11px] font-bold uppercase tracking-wider" style="color:var(--text-muted);">Textbook Reading</div>
+            <div class="surface-elevated rounded-xl p-3.5 font-serif-prose text-base leading-relaxed" style="color:var(--text-primary);">
+              ${escapeHtml(w.textbook)}
+            </div>
+          </div>
+
+          <!-- Core Papers -->
+          <div class="space-y-2.5">
+            <div class="font-ui text-[11px] font-bold uppercase tracking-wider" style="color:var(--text-muted);">Core Papers</div>
+            ${w.papers.map((p) => `
+              <div class="surface-elevated rounded-xl p-3.5 space-y-2">
+                <div class="font-serif-prose text-base leading-snug" style="color:var(--text-primary);">${formatCitationHtml(p)}</div>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <a href="https://doi.org/${encodeURIComponent(p.doi)}" target="_blank" rel="noopener noreferrer" class="font-ui text-xs hover:underline break-all" style="color:var(--accent);">
+                    https://doi.org/${escapeHtml(p.doi)}
+                  </a>
+                  <button type="button" data-copy-bib="${p.id}" class="ui-btn min-h-[36px] px-3 py-1 rounded-lg border text-xs font-ui font-semibold" style="background:var(--bg-card); border-color:var(--border-subtle); color:var(--text-primary);">
+                    Copy BibTeX
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Things to Learn -->
+          <div class="surface-elevated rounded-xl p-4 space-y-2">
+            <h3 class="font-ui text-xs font-bold uppercase tracking-wider" style="color:var(--text-primary);">Things to Learn</h3>
+            <ul class="list-disc list-inside space-y-1.5 font-serif-prose text-base leading-relaxed" style="color:var(--text-secondary);">
+              ${w.thingsToLearn.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
+            </ul>
+          </div>
+
+          <!-- Questions to Ask -->
+          <div class="surface-elevated rounded-xl p-4 space-y-2">
+            <h3 class="font-ui text-xs font-bold uppercase tracking-wider" style="color:var(--text-primary);">Questions to Ask</h3>
+            <ol class="list-decimal list-inside space-y-1.5 font-serif-prose text-base leading-relaxed" style="color:var(--text-secondary);">
+              ${w.questionsToAsk.map((q) => `<li>${escapeHtml(q)}</li>`).join('')}
+            </ol>
+          </div>
+        `;
+
+        body.querySelectorAll('[data-jump-week]').forEach((btn) => {
+          btn.addEventListener('click', () => openWeekModal(parseInt(btn.dataset.jumpWeek, 10)));
+        });
+
+        body.querySelectorAll('[data-copy-bib]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const paper = ALL_PAPERS.find((p) => p.id === btn.dataset.copyBib);
+            if (paper) copyText(formatBibTeX(paper), `Copied BibTeX (${paper.bibKey})`);
+          });
+        });
+
+        document.body.classList.add('modal-open');
+        body.scrollTop = 0;
+        renderMath(body);
+      }
+
+      function closeWeekModal() {
+        document.body.classList.remove('modal-open');
+        modalWeek = null;
+      }
+
+      /* =======================================================================
+         6. VIEW 2: SYLLABUS (CLEAN WEEK 1-11 STACK, NO SUBHEADINGS)
+         ======================================================================= */
+      function renderSyllabus() {
+        const list = document.getElementById('syllabus-list');
+        if (!list) return;
+
+        document.querySelectorAll('.topic-btn').forEach((btn) => {
+          const act = btn.dataset.topic === sylTopicFilter;
+          btn.style.background = act ? 'var(--accent)' : 'var(--bg-elevated)';
+          btn.style.borderColor = act ? 'var(--accent)' : 'var(--border-subtle)';
+          btn.style.color = act ? '#ffffff' : 'var(--text-primary)';
+        });
+
+        const allOpen = WEEKS.every((w) => !!state.openSyllabusWeeks[w.week]);
+        const toggleBtn = document.getElementById('btn-syl-toggle-all');
+        if (toggleBtn) toggleBtn.textContent = allOpen ? 'Collapse All' : 'Expand All';
+
+        const q = sylSearch.trim().toLowerCase();
+        const filtered = WEEKS.filter((w) => {
+          if (sylTopicFilter !== 'all' && w.topic !== sylTopicFilter) return false;
+          if (q) {
+            const hay = [
+              `week ${w.week}`, `w${w.week}`, w.title, w.overview, w.textbook,
+              ...w.thingsToLearn, ...w.questionsToAsk,
+              ...w.papers.map((p) => `${p.authors} ${p.title} ${p.journal} ${p.doi}`)
+            ].join(' ').toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          list.innerHTML = `<div class="surface-card rounded-xl p-8 text-center font-serif-prose text-base" style="color:var(--text-secondary);">No weeks match your search.</div>`;
+          return;
+        }
+
+        list.innerHTML = filtered.map((w) => {
+          const open = !!state.openSyllabusWeeks[w.week];
+          const done = !!state.completedWeeks[w.week];
+          return `
+            <article class="surface-card rounded-xl overflow-hidden">
+              <div class="p-4 sm:p-5 flex items-center justify-between gap-3">
+                <button type="button" data-stoggle="${w.week}" class="acc-trigger ${open ? 'is-open' : ''} flex-1 text-left flex items-center gap-3 min-w-0">
+                  <span class="font-ui text-xs font-bold px-2.5 py-1 rounded-full shrink-0" style="background:var(--accent-soft); color:var(--accent-ice);">W${w.week}</span>
+                  <h3 class="font-serif-prose text-lg sm:text-xl font-bold leading-snug truncate" style="color:var(--text-primary);">${escapeHtml(w.title)}</h3>
+                </button>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button type="button" data-sdone="${w.week}" aria-label="Toggle Week ${w.week} complete" class="ui-btn min-w-[38px] min-h-[38px] rounded-lg border text-xs font-ui font-bold flex items-center justify-center" style="${done ? 'background:var(--done); border-color:var(--done); color:#ffffff;' : 'background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-muted);'}">
+                    ${done ? '\u2713' : ''}
+                  </button>
+                  <button type="button" data-stoggle="${w.week}" aria-label="Expand Week ${w.week}" class="acc-trigger ${open ? 'is-open' : ''} ui-btn min-w-[38px] min-h-[38px] rounded-lg flex items-center justify-center">
+                    <svg class="acc-chevron w-5 h-5" style="color:var(--text-muted);" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div id="syl-body-${w.week}" class="acc-body ${open ? 'is-open' : ''}">
+                <div class="acc-inner">
+                  <div class="px-4 sm:px-5 pb-5 pt-3 border-t space-y-4" style="border-color:var(--border-subtle);">
+                    <p class="font-serif-prose text-base leading-relaxed" style="color:var(--text-secondary);">${escapeHtml(w.overview)}</p>
+
+                    <div class="surface-elevated rounded-xl p-3.5">
+                      <div class="font-ui text-[10px] font-bold uppercase tracking-wider mb-1" style="color:var(--text-muted);">Core Equation</div>
+                      <div class="math-box text-center">${w.equation}</div>
+                    </div>
+
+                    <div class="space-y-2">
+                      <div class="font-ui text-[10px] font-bold uppercase tracking-wider" style="color:var(--text-muted);">Textbook Reading</div>
+                      <div class="font-serif-prose text-base leading-relaxed" style="color:var(--text-primary);">${escapeHtml(w.textbook)}</div>
+                    </div>
+
+                    <div class="space-y-2">
+                      <div class="font-ui text-[10px] font-bold uppercase tracking-wider" style="color:var(--text-muted);">Core Papers</div>
+                      ${w.papers.map((p) => `
+                        <div class="surface-elevated rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <div class="font-serif-prose text-sm sm:text-base leading-snug" style="color:var(--text-primary);">
+                            ${formatCitationHtml(p)}
+                            <a href="https://doi.org/${encodeURIComponent(p.doi)}" target="_blank" rel="noopener noreferrer" class="font-ui text-xs ml-1 hover:underline" style="color:var(--accent);">[DOI]</a>
+                          </div>
+                          <button type="button" data-syl-bib="${p.id}" class="ui-btn min-h-[34px] px-2.5 py-1 rounded-md border text-xs font-ui font-semibold shrink-0 self-start sm:self-center" style="background:var(--bg-card); border-color:var(--border-subtle); color:var(--text-primary);">
+                            Copy BibTeX
+                          </button>
+                        </div>
+                      `).join('')}
+                    </div>
+
+                    <div class="space-y-1.5">
+                      <h4 class="font-ui text-xs font-bold uppercase tracking-wider" style="color:var(--text-primary);">Things to Learn</h4>
+                      <ul class="list-disc list-inside space-y-1 font-serif-prose text-base leading-relaxed" style="color:var(--text-secondary);">
+                        ${w.thingsToLearn.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
+                      </ul>
+                    </div>
+
+                    <div class="space-y-1.5">
+                      <h4 class="font-ui text-xs font-bold uppercase tracking-wider" style="color:var(--text-primary);">Questions to Ask</h4>
+                      <ol class="list-decimal list-inside space-y-1 font-serif-prose text-base leading-relaxed" style="color:var(--text-secondary);">
+                        ${w.questionsToAsk.map((qu) => `<li>${escapeHtml(qu)}</li>`).join('')}
+                      </ol>
+                    </div>
+
+                    <div class="pt-1">
+                      <button type="button" data-open-focus="${w.week}" class="ui-btn min-h-[42px] sm:min-h-[36px] px-4 py-1.5 rounded-lg border text-xs font-ui font-semibold" style="background:var(--accent); border-color:var(--accent); color:#ffffff;">
+                        Open Focus View
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        list.querySelectorAll('[data-stoggle]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const wNum = parseInt(btn.dataset.stoggle, 10);
+            state.openSyllabusWeeks[wNum] = !state.openSyllabusWeeks[wNum];
+            saveState();
+            renderSyllabus();
+          });
+        });
+
+        list.querySelectorAll('[data-sdone]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const wNum = parseInt(btn.dataset.sdone, 10);
+            state.completedWeeks[wNum] = !state.completedWeeks[wNum];
+            saveState();
+            syncProgressUI();
+            renderSyllabus();
+          });
+        });
+
+        list.querySelectorAll('[data-syl-bib]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const paper = ALL_PAPERS.find((p) => p.id === btn.dataset.sylBib);
+            if (paper) copyText(formatBibTeX(paper), `Copied BibTeX (${paper.bibKey})`);
+          });
+        });
+
+        list.querySelectorAll('[data-open-focus]').forEach((btn) => {
+          btn.addEventListener('click', () => openWeekModal(parseInt(btn.dataset.openFocus, 10)));
+        });
+
+        renderMath(list);
+      }
+
+      /* =======================================================================
+         7. VIEW 3: LIBRARY
+         ======================================================================= */
+      function renderLibrary() {
+        document.querySelectorAll('.lib-tab').forEach((btn) => {
+          const act = btn.dataset.libtab === libTab;
+          btn.style.background = act ? 'var(--accent)' : 'var(--bg-elevated)';
+          btn.style.borderColor = act ? 'var(--accent)' : 'var(--border-subtle)';
+          btn.style.color = act ? '#ffffff' : 'var(--text-primary)';
+        });
+
+        document.getElementById('lib-panel-books').classList.toggle('hidden', libTab !== 'books');
+        document.getElementById('lib-panel-papers').classList.toggle('hidden', libTab !== 'papers');
+
+        const booksGrid = document.getElementById('library-books-grid');
+        if (booksGrid) {
+          booksGrid.innerHTML = TEXTBOOKS.map((b) => `
+            <div class="surface-elevated rounded-xl p-4 space-y-1.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-ui text-xs font-bold" style="color:var(--accent);">${escapeHtml(b.weeks)}</span>
+                <span class="font-ui text-[11px]" style="color:var(--text-muted);">ISBN ${escapeHtml(b.isbn)}</span>
+              </div>
+              <div class="font-serif-prose text-base font-bold leading-snug" style="color:var(--text-primary);">${escapeHtml(b.title)}</div>
+              <div class="font-serif-prose text-sm" style="color:var(--text-secondary);">${escapeHtml(b.authors)} (${escapeHtml(b.publisher)}, ${escapeHtml(b.year)})</div>
+            </div>
+          `).join('');
+        }
+
+        const papersList = document.getElementById('library-papers-list');
+        const countEl = document.getElementById('lib-count');
+        if (!papersList) return;
+
+        const q = libSearch.trim().toLowerCase();
+        const filtered = ALL_PAPERS.filter((p) => {
+          if (libWeekFilter !== 'all' && String(p.week) !== String(libWeekFilter)) return false;
+          if (q) {
+            const hay = `${p.authors} ${p.title} ${p.journal} ${p.year} ${p.doi}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        if (countEl) countEl.textContent = `Showing ${filtered.length} of ${ALL_PAPERS.length} papers`;
+
+        papersList.innerHTML = filtered.map((p) => `
+          <div class="surface-elevated rounded-xl p-4 flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+            <div class="min-w-0 flex-1 space-y-1">
+              <span class="font-ui text-[11px] font-bold px-2 py-0.5 rounded-full inline-block" style="background:var(--accent-soft); color:var(--accent-ice);">Week ${p.week}</span>
+              <div class="font-serif-prose text-base leading-snug" style="color:var(--text-primary);">${formatCitationHtml(p)}</div>
+              <a href="https://doi.org/${encodeURIComponent(p.doi)}" target="_blank" rel="noopener noreferrer" class="font-ui text-xs hover:underline break-all inline-block" style="color:var(--accent);">
+                https://doi.org/${escapeHtml(p.doi)}
+              </a>
+            </div>
+            <button type="button" data-lib-copy="${p.id}" class="ui-btn min-h-[40px] sm:min-h-[36px] px-3 py-1.5 rounded-lg border text-xs font-ui font-semibold shrink-0 self-start" style="background:var(--bg-card); border-color:var(--border-subtle); color:var(--text-primary);">
+              Copy BibTeX
+            </button>
+          </div>
+        `).join('');
+
+        papersList.querySelectorAll('[data-lib-copy]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const paper = ALL_PAPERS.find((p) => p.id === btn.dataset.libCopy);
+            if (paper) copyText(formatBibTeX(paper), `Copied BibTeX (${paper.bibKey})`);
+          });
+        });
+      }
+
+      /* =======================================================================
+         8. VIEW 4: SUMMARY OF DISCUSSIONS (WEEK 1-11 NOTES & FILE UPLOADS ONLY)
+         ======================================================================= */
+      async function renderDiscussionFiles(weekNum) {
+        const container = document.getElementById(`disc-files-${weekNum}`);
+        if (!container) return;
+        const files = await getFilesForWeek(weekNum);
+        if (files.length === 0) {
+          container.innerHTML = `<div class="font-ui text-xs" style="color:var(--text-muted);">No files uploaded yet.</div>`;
+          return;
+        }
+        container.innerHTML = files.map((f) => `
+          <div class="surface-elevated rounded-lg px-3 py-2 flex flex-wrap items-center justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <div class="font-ui text-xs font-semibold truncate" style="color:var(--text-primary);">${escapeHtml(f.name)}</div>
+              <div class="font-ui text-[11px]" style="color:var(--text-muted);">${formatBytes(f.size)}</div>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" data-file-view="${f.id}" data-file-week="${weekNum}" class="ui-btn min-h-[34px] px-2.5 py-1 rounded-md border text-xs font-ui font-semibold" style="background:var(--bg-card); border-color:var(--border-subtle); color:var(--accent);">
+                View / Download
+              </button>
+              <button type="button" data-file-del="${f.id}" data-file-week="${weekNum}" class="ui-btn min-h-[34px] px-2.5 py-1 rounded-md border text-xs font-ui font-semibold" style="background:var(--bg-card); border-color:var(--border-subtle); color:var(--text-secondary);">
+                Remove
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        container.querySelectorAll('[data-file-view]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const list = await getFilesForWeek(weekNum);
+            const rec = list.find((item) => item.id === btn.dataset.fileView);
+            if (!rec || !rec.blob) return;
+            const url = URL.createObjectURL(rec.blob);
+            if (rec.type.startsWith('image/') || rec.type === 'application/pdf' || rec.type.startsWith('text/')) {
+              window.open(url, '_blank', 'noopener');
+              setTimeout(() => URL.revokeObjectURL(url), 15000);
+            } else {
+              downloadFile(rec.name, rec.blob, rec.type);
+            }
+          });
+        });
+
+        container.querySelectorAll('[data-file-del]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            await deleteUploadedFile(weekNum, btn.dataset.fileDel);
+            renderDiscussionFiles(weekNum);
+            showToast('Removed file');
+          });
+        });
+      }
+
+      function renderDiscussions() {
+        const list = document.getElementById('discussions-list');
+        if (!list) return;
+
+        list.innerHTML = WEEKS.map((w) => {
+          const savedAt = state.discussionSavedAt[w.week] || '';
+          return `
+            <article id="disc-week-${w.week}" class="surface-card rounded-xl p-4 sm:p-5 space-y-3.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <span class="font-ui text-xs font-bold px-2.5 py-1 rounded-full shrink-0" style="background:var(--accent-soft); color:var(--accent-ice);">Week ${w.week}</span>
+                  <h3 class="font-serif-prose text-lg sm:text-xl font-bold leading-snug" style="color:var(--text-primary);">${escapeHtml(w.title)}</h3>
+                </div>
+                <span id="disc-saved-${w.week}" class="font-ui text-[11px]" style="color:var(--text-muted);">${savedAt ? `Saved ${escapeHtml(savedAt)}` : ''}</span>
+              </div>
+
+              <textarea data-disc-note="${w.week}" rows="4" placeholder="Discussion summary notes..." class="w-full p-3.5 text-base font-serif-prose rounded-xl border leading-relaxed" style="background:var(--bg-elevated); border-color:var(--border-subtle); color:var(--text-primary);">${escapeHtml(state.discussionNotes[w.week] || '')}</textarea>
+
+              <!-- Upload Notes Dropzone -->
+              <div data-dropzone="${w.week}" class="rounded-xl border-2 border-dashed p-3.5 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3" style="border-color:var(--border-subtle); background:var(--bg-elevated);">
+                <div class="font-ui text-xs" style="color:var(--text-secondary);">
+                  Drop files here or click to upload notes (.md, .txt, .pdf, .doc, .docx, .png, .jpg)
+                </div>
+                <label class="ui-btn cursor-pointer min-h-[40px] sm:min-h-[36px] px-3.5 py-1.5 rounded-lg border text-xs font-ui font-semibold inline-flex items-center justify-center shrink-0" style="background:var(--bg-card); border-color:var(--border-strong); color:var(--text-primary);">
+                  Upload Notes
+                  <input type="file" multiple data-file-input="${w.week}" accept=".md,.txt,.pdf,.doc,.docx,.png,.jpg,.jpeg,.webp" class="hidden">
+                </label>
+              </div>
+
+              <div id="disc-files-${w.week}" class="space-y-2"></div>
+            </article>
+          `;
+        }).join('');
+
+        // Bind auto-saving textareas
+        list.querySelectorAll('[data-disc-note]').forEach((ta) => {
+          ta.addEventListener('input', () => {
+            const wNum = parseInt(ta.dataset.discNote, 10);
+            state.discussionNotes[wNum] = ta.value;
+            const stamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            state.discussionSavedAt[wNum] = stamp;
+            saveState();
+            const ind = document.getElementById(`disc-saved-${wNum}`);
+            if (ind) ind.textContent = `Saved ${stamp}`;
+          });
+        });
+
+        // Bind file inputs & drag-and-drop zones
+        async function handleFiles(weekNum, fileList) {
+          if (!fileList || fileList.length === 0) return;
+          for (let i = 0; i < fileList.length; i++) {
+            await saveUploadedFile(weekNum, fileList[i]);
+          }
+          renderDiscussionFiles(weekNum);
+          showToast(`Uploaded ${fileList.length} file${fileList.length > 1 ? 's' : ''} to Week ${weekNum}`);
+        }
+
+        list.querySelectorAll('[data-file-input]').forEach((inp) => {
+          inp.addEventListener('change', async () => {
+            const wNum = parseInt(inp.dataset.fileInput, 10);
+            await handleFiles(wNum, inp.files);
+            inp.value = '';
+          });
+        });
+
+        list.querySelectorAll('[data-dropzone]').forEach((zone) => {
+          const wNum = parseInt(zone.dataset.dropzone, 10);
+          zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            zone.classList.add('dropzone-active');
+          });
+          zone.addEventListener('dragleave', () => zone.classList.remove('dropzone-active'));
+          zone.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            zone.classList.remove('dropzone-active');
+            await handleFiles(wNum, e.dataTransfer.files);
+          });
+        });
+
+        WEEKS.forEach((w) => renderDiscussionFiles(w.week));
+      }
+
+      /* =======================================================================
+         9. THEME, VIEW SWITCHING & PROGRESS SYNC
+         ======================================================================= */
+      function applyTheme(theme) {
+        state.theme = theme === 'light' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', state.theme);
+        saveState();
+
+        const icon = document.getElementById('theme-icon');
+        const label = document.getElementById('theme-label');
+        if (state.theme === 'dark') {
+          icon.textContent = '\u2600';
+          label.textContent = 'Light';
+        } else {
+          icon.textContent = '\u263E';
+          label.textContent = 'Dark';
+        }
+
+        refreshThreeTheme();
+        if (state.activeView === 'syllabus') renderSyllabus();
+        if (state.activeView === 'library') renderLibrary();
+      }
+
+      function syncProgressUI() {
+        const count = WEEKS.filter((w) => !!state.completedWeeks[w.week]).length;
+        const pill = document.getElementById('pill-progress');
+        if (pill) pill.textContent = `${count}/11 done`;
+        refreshThreeTheme();
+      }
+
+      function syncAutoRotateUI() {
+        const btn = document.getElementById('btn-autorotate');
+        if (btn) btn.textContent = `Auto-Rotate: ${state.autoRotate ? 'On' : 'Off'}`;
+      }
+
+      function switchView(viewName) {
+        state.activeView = viewName;
+        saveState();
+        setHoveredWeek(null);
+
+        const isMap = viewName === 'map';
+        document.getElementById('hero-corner-title').classList.toggle('hidden', !isMap);
+        document.getElementById('bottom-pill-bar').classList.toggle('hidden', !isMap);
+        document.getElementById('secondary-views').classList.toggle('hidden', isMap);
+
+        document.querySelectorAll('.sec-view').forEach((sec) => {
+          sec.classList.toggle('hidden', sec.id !== `view-${viewName}`);
+        });
+
+        document.querySelectorAll('.nav-tab').forEach((btn) => {
+          const act = btn.dataset.view === viewName;
+          btn.style.background = act ? 'var(--accent-soft)' : 'transparent';
+          btn.style.color = act ? 'var(--text-primary)' : 'var(--text-secondary)';
+        });
+
+        if (viewName === 'syllabus') renderSyllabus();
+        if (viewName === 'library') renderLibrary();
+        if (viewName === 'discussions') renderDiscussions();
+      }
+
+      /* =======================================================================
+         10. EVENT BINDING & BOOTSTRAP
+         ======================================================================= */
+      function bindEvents() {
+        document.querySelectorAll('.nav-tab').forEach((btn) => {
+          btn.addEventListener('click', () => switchView(btn.dataset.view));
+        });
+
+        document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+          applyTheme(state.theme === 'dark' ? 'light' : 'dark');
+        });
+
+        document.getElementById('btn-autorotate').addEventListener('click', () => {
+          state.autoRotate = !state.autoRotate;
+          saveState();
+          syncAutoRotateUI();
+        });
+
+        document.getElementById('btn-reset-view').addEventListener('click', () => {
+          camState.targetTheta = 0.56;
+          camState.targetPhi = 1.35;
+          camState.targetRadius = camState.baseRadius;
+        });
+
+        // Modal controls
+        document.getElementById('btn-close-modal').addEventListener('click', closeWeekModal);
+        document.getElementById('modal-backdrop').addEventListener('click', (e) => {
+          if (e.target.id === 'modal-backdrop') closeWeekModal();
+        });
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.body.classList.contains('modal-open')) closeWeekModal();
+        });
+
+        document.getElementById('modal-done-checkbox').addEventListener('change', (e) => {
+          if (!modalWeek) return;
+          state.completedWeeks[modalWeek] = e.target.checked;
+          saveState();
+          syncProgressUI();
+          if (state.activeView === 'syllabus') renderSyllabus();
+        });
+
+        document.getElementById('btn-modal-prev').addEventListener('click', () => {
+          if (modalWeek && modalWeek > 1) openWeekModal(modalWeek - 1);
+        });
+        document.getElementById('btn-modal-next').addEventListener('click', () => {
+          if (modalWeek && modalWeek < 11) openWeekModal(modalWeek + 1);
+        });
+        document.getElementById('btn-modal-to-notes').addEventListener('click', () => {
+          const targetWeek = modalWeek;
+          closeWeekModal();
+          switchView('discussions');
+          setTimeout(() => {
+            const el = document.getElementById(`disc-week-${targetWeek}`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        });
+
+        // Syllabus controls
+        document.getElementById('syl-search').addEventListener('input', (e) => {
+          sylSearch = e.target.value;
+          renderSyllabus();
+        });
+        document.querySelectorAll('.topic-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            sylTopicFilter = btn.dataset.topic;
+            renderSyllabus();
+          });
+        });
+        document.getElementById('btn-syl-toggle-all').addEventListener('click', () => {
+          const allOpen = WEEKS.every((w) => !!state.openSyllabusWeeks[w.week]);
+          WEEKS.forEach((w) => { state.openSyllabusWeeks[w.week] = !allOpen; });
+          saveState();
+          renderSyllabus();
+        });
+
+        // Library controls
+        const weekSel = document.getElementById('lib-week-filter');
+        WEEKS.forEach((w) => {
+          const opt = document.createElement('option');
+          opt.value = String(w.week);
+          opt.textContent = `Week ${w.week}`;
+          weekSel.appendChild(opt);
+        });
+
+        document.querySelectorAll('.lib-tab').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            libTab = btn.dataset.libtab;
+            renderLibrary();
+          });
+        });
+        document.getElementById('lib-search').addEventListener('input', (e) => {
+          libSearch = e.target.value;
+          renderLibrary();
+        });
+        weekSel.addEventListener('change', (e) => {
+          libWeekFilter = e.target.value;
+          renderLibrary();
+        });
+        document.getElementById('btn-download-bib').addEventListener('click', () => {
+          const content = '% Synthetic Mind & Physical Substrates BibTeX\n\n' + ALL_PAPERS.map(formatBibTeX).join('\n\n') + '\n';
+          downloadFile('synthetic_mind_references.bib', content, 'application/x-bibtex;charset=utf-8');
+          showToast('Downloaded .bib file');
+        });
+      }
+
+      window.addEventListener('load', () => {
+        initThreeBrain();
+        bindEvents();
+        applyTheme(state.theme || 'dark');
+        syncProgressUI();
+        syncAutoRotateUI();
+        switchView(state.activeView || 'map');
+        requestAnimationFrame(animateBrain);
+      });
+    })();
+  </script>
+</body>
+</html>
